@@ -1,0 +1,24 @@
+User: Super Admin
+1. Login page
+2. Dashboard
+3. Company Management
+	> Company list [Show first]
+	> Company add
+	> Company edit
+	> Company delete
+4. Assign a c_admin to a company
+
+
+
+
+
+
+
+Reference: OrangeHRM, workcloud
+
+User Heirarchy:
+1. Super User [priority: 1]
+2. Admin (speculation) [priority: 2]
+3. Client -> Company
+	> Company Admin (c_admin) [priority: 3]
+	> Employee [priority: 5]
