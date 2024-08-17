@@ -30,9 +30,12 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <Navbar />
+          {/* <Navbar /> */}
           <div
-            className={"relative flex flex-col bg-no-repeat bg-center bg-cover"}
+            className={cn(
+              "relative flex flex-col bg-no-repeat bg-center bg-cover",
+              nunito.className
+            )}
           >
             {children}
           </div>

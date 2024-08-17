@@ -8,11 +8,14 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import Image from "next/image";
 import Footer from "./Components/Footer";
+import Navbar from "./Components/Navbar/Navbar";
 
 export default function Home() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [AutoScroll()]);
   return (
     <main>
+      <Navbar />
+
       <div className="bg-[url('/blurred-hotel-reception-with-people-sitting.jpg')] bg-no-repeat gap-4 bg-center bg-cover grid grid-cols-2 px-16 py-8 h-[512px]">
         <div className="flex flex-col justify-center  rounded-[2rem] px-8 gap-2">
           <h1 className="text-4xl font-extrabold text-primary">

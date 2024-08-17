@@ -106,6 +106,11 @@ import {
   ChartArea,
   List,
   Play,
+  Bell,
+  Building2,
+  Scale,
+  FileX,
+  Contact,
 } from "lucide-react";
 import React from "react";
 
@@ -193,6 +198,12 @@ const AnalyticsIcon = React.forwardRef<SVGElement, SVGAttributes>(
 AnalyticsIcon.displayName = "AnalyticsIcon";
 
 const Icons = {
+  contact: Contact,
+  handshake: Handshake,
+  fileX: FileX,
+  scale: Scale,
+  company: Building2,
+  bell: Bell,
   play: Play,
   list: List,
   chart: ChartArea,
