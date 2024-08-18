@@ -40,11 +40,104 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import "chart.js/auto";
+import { Calendar } from "@/components/ui/calendar";
+const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
+  ssr: false,
+});
+const Bar = dynamic(() => import("react-chartjs-2").then((mod) => mod.Bar), {
+  ssr: false,
+});
+
+const dataDoughnut = {
+  labels: ["Red", "Blue", "Yellow"],
+  datasets: [
+    {
+      label: "Example Dataset",
+      data: [300, 50, 100],
+      backgroundColor: [
+        "rgb(255, 99, 132)",
+        "rgb(54, 162, 235)",
+        "rgb(255, 205, 86)",
+      ],
+      hoverOffset: 4,
+    },
+  ],
+};
+
+const dataBar = {
+  labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6"],
+  datasets: [
+    {
+      label: "Present",
+      data: [12, 19, 17, 20, 18, 13],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(255, 159, 64, 0.2)",
+      ],
+      borderColor: [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)",
+      ],
+      borderWidth: 1,
+    },
+    {
+      label: "Absent",
+      data: [8, 1, 3, 0, 2, 7],
+      backgroundColor: [
+        "rgba(255, 159, 64, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 99, 132, 0.2)",
+      ],
+      borderColor: [
+        "rgba(255, 159, 64, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 99, 132, 1)",
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
+
+const dataLine = {
+  labels: ["March", "April", "May", "Jun", "Jul", "Aug"],
+  datasets: [
+    {
+      label: "Revenue",
+      data: [65, 59, 80, 81, 56, 92],
+      fill: false,
+      borderColor: "rgb(75, 192, 192)",
+      tension: 0.1,
+    },
+    {
+      label: "Expenditure",
+      data: [30, 47, 42, 93, 67, 59],
+      fill: false,
+      borderColor: "rgb(195, 45, 75)",
+      tension: 0.1,
+    },
+  ],
+};
 
 export default function DashboardPage() {
   const [showMore, setShowMore] = useState<boolean>(false);
   return (
-    <main className="container">
+    <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Dashboard</p>
       <div className="flex flex-col lg:flex-row gap-2">
         <div className="h-fit flex flex-col gap-1">
@@ -434,12 +527,110 @@ export default function DashboardPage() {
               </ScrollArea>
             </CardContent>
             <CardFooter>
-              <Button variant={"outline"} className="w-full">
+              <Button variant={"outline"} className="w-full rounded-full">
                 Create new schedule
               </Button>
             </CardFooter>
           </Card>
         </div>
+      </div>
+      {/* Example graph here */}
+      <div className="mt-8 grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-1">
+          <Label className="mt-4 text-lg font-semibold">Example Chart 1</Label>
+          <Line data={dataLine} />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label className="mt-4 text-lg font-semibold">Example Chart 2</Label>
+          <Bar data={dataBar} />
+        </div>
+        <div className="flex flex-col gap-1 border rounded-md py-4 px-6">
+          <Label className="mt-4 text-lg font-semibold">Leave balance</Label>
+          <Table>
+            <TableCaption>Leave Balance</TableCaption>
+            <TableHeader>
+              <TableRow className="bg-blue-500 hover:bg-blue-400 *:text-white">
+                <TableHead>Name</TableHead>
+                <TableHead>Designation</TableHead>
+                <TableHead>Leave Type</TableHead>
+                <TableHead>Taken</TableHead>
+                <TableHead>Balance</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: 5 }, (_, index) => index + 1).map(
+                (item) => (
+                  <TableRow
+                    className="even:bg-accent"
+                    key={`example-leave-table-${item}`}
+                  >
+                    <TableCell>John Doe #{item}</TableCell>
+                    <TableCell>Example designation</TableCell>
+                    <TableCell>
+                      <p>Sick leave</p>
+                      <Separator />
+                      <p>Rest and recreation leave</p>
+                      <Separator />
+                      <p>Earned leave</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>{Math.floor(Math.random() * 10)}</p>
+                      <Separator />
+                      <p>{Math.floor(Math.random() * 10)}</p>
+                      <Separator />
+                      <p>{Math.floor(Math.random() * 10)}</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>{Math.floor(Math.random() * 10)}</p>
+                      <Separator />
+                      <p>{Math.floor(Math.random() * 10)}</p>
+                      <Separator />
+                      <p>{Math.floor(Math.random() * 10)}</p>
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        <Card className="h-fit">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">
+              Notice board
+            </CardTitle>
+            <Separator />
+            <CardDescription className="sr-only">
+              Notice board Card
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              {Array.from({ length: 5 }, (_, index) => index + 1).map(
+                (item) => (
+                  <div
+                    key={`example-notice-#${item}`}
+                    className="p-4 rounded-md border flex justify-between"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <p className="text-lg">Example notice</p>
+                      <p className="text-xs">Today, 11:30 AM</p>
+                    </div>
+                    <Button variant={"ghost"} size={"icon"}>
+                      <Icons.more />
+                    </Button>
+                  </div>
+                )
+              )}
+            </div>
+          </CardContent>
+
+          <CardFooter>
+            <Button className="w-full rounded-full" variant={"outline"}>
+              View all
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </main>
   );

@@ -11,7 +11,7 @@ interface Props {
 export function Providers({ children }: Props) {
   return (
     // <UserContextProvider>
-    <ThemeProvider attribute="class" defaultTheme="dark">
+    <ThemeProvider attribute="class" defaultTheme="light">
       {/* <LanguageContextProvider> */}
       {children}
       <Toaster />
