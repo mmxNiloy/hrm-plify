@@ -9,6 +9,7 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import Link from "next/link";
 import React from "react";
 
 export default function DashboardNavMenu() {
@@ -20,7 +21,9 @@ export default function DashboardNavMenu() {
           <MenubarSub>
             <MenubarSubTrigger>Employee Management</MenubarSubTrigger>
             <MenubarSubContent>
-              <MenubarItem>Dashboard</MenubarItem>
+              <Link className="w-full h-full" href="/dashboard/employee">
+                <MenubarItem className="cursor-pointer">Dashboard</MenubarItem>
+              </Link>
               <MenubarSeparator />
               <MenubarItem>All Employees</MenubarItem>
               <MenubarSub>

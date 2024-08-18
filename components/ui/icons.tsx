@@ -111,6 +111,8 @@ import {
   Scale,
   FileX,
   Contact,
+  Printer,
+  User2,
 } from "lucide-react";
 import React from "react";
 
@@ -198,6 +200,8 @@ const AnalyticsIcon = React.forwardRef<SVGElement, SVGAttributes>(
 AnalyticsIcon.displayName = "AnalyticsIcon";
 
 const Icons = {
+  employee: User2,
+  printer: Printer,
   contact: Contact,
   handshake: Handshake,
   fileX: FileX,
