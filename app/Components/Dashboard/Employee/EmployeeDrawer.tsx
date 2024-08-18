@@ -73,7 +73,7 @@ export default function EmployeeDrawer() {
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee/list"
+                  path === "/dashboard/employee/all"
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}
