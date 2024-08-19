@@ -116,6 +116,8 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Users2,
+  ChevronsUpDown,
 } from "lucide-react";
 import React from "react";
 
@@ -232,6 +234,8 @@ const ExcelIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 ExcelIcon.displayName = "ExcelIcon";
 const Icons = {
+  chevronsUpDown: ChevronsUpDown,
+  employees: Users2,
   arrowUpDown: ArrowUpDown,
   arrowUp: ArrowUp,
   arrowDown: ArrowDown,

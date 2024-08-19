@@ -78,7 +78,27 @@ export default function EmployeeDrawer() {
                     : ""
                 )}
               >
-                <Icons.employee /> Employee
+                <Icons.employees /> All Employees
+              </Button>
+            </DrawerClose>
+          </Link>
+
+          <Link
+            href={"/dashboard/employee/migrant"}
+            className="w-full"
+            passHref
+          >
+            <DrawerClose asChild>
+              <Button
+                variant="ghost"
+                className={cn(
+                  "w-full gap-4 justify-start hover:underline",
+                  path === "/dashboard/employee/migrant"
+                    ? "bg-blue-500 hover:bg-blue-400 text-white"
+                    : ""
+                )}
+              >
+                <Icons.users /> Migrant Employees
               </Button>
             </DrawerClose>
           </Link>

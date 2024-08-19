@@ -1,4 +1,3 @@
-import EmployeeCreationDialog from "@/app/Components/Dashboard/Employee/EmployeeCreationDialog";
 import EmployeesDataTable from "@/app/Components/Dashboard/Employee/EmployeesDataTable";
 import {
   Breadcrumb,
@@ -14,10 +13,10 @@ import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { IEmployee } from "@/schema/EmployeeSchema";
 import React from "react";
 
-export default function AllEmployeePage() {
+export default function MigrantEmployeePage() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
+      <p className="text-xl font-semibold">Migrant Employees</p>
       <div className="flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>
@@ -32,12 +31,17 @@ export default function AllEmployeePage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>All Employees</BreadcrumbPage>
+              <BreadcrumbPage>Migrant Employees</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <EmployeeCreationDialog />
+        <Button
+          size={"sm"}
+          className="hidden text-white rounded-full bg-blue-500 hover:bg-blue-400 gap-1"
+        >
+          <Icons.plus /> Add Employee
+        </Button>
       </div>
 
       {/* Main content, a table of employees */}

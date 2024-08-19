@@ -9,8 +9,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  GlobalFilterTableState,
   SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -23,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./button";
 import Icons from "./icons";
-import { useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { Label } from "./label";
 import {
   Select,
@@ -34,6 +36,13 @@ import {
   SelectValue,
 } from "./select";
 import { Input } from "./input";
+import { useDebouncedCallback } from "use-debounce";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -51,6 +60,9 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -62,12 +74,26 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       pagination,
       sorting,
       columnFilters,
+      globalFilter,
+      columnVisibility,
+      rowSelection,
     },
   });
+
+  const handleFilterChange = useDebouncedCallback(
+    useCallback(
+      (e: ChangeEvent<HTMLInputElement>) => setGlobalFilter(e.target.value),
+      []
+    ),
+    300
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -75,7 +101,6 @@ export function DataTable<TData, TValue>({
         <div className="flex flex-col gap-2">
           <Label>Page size</Label>
           <Select
-            defaultValue={pagination.pageSize.toString()}
             onValueChange={(val) => {
               const mPagination = { ...pagination };
               mPagination.pageSize = Number.parseInt(val);
@@ -95,8 +120,46 @@ export function DataTable<TData, TValue>({
         </div>
 
         <div className="flex flex-col gap-2">
+          <Label>Visible Columns</Label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="items-center gap-4 justify-between"
+              >
+                Visible Columns
+                <Icons.chevronsUpDown className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex flex-col gap-2">
           <Label htmlFor="search-input">Search</Label>
-          <Input type="search" placeholder="Search..." />
+          <Input
+            type="search"
+            placeholder="Search..."
+            onChange={handleFilterChange}
+          />
         </div>
       </div>
       <div className="rounded-md border">
