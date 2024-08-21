@@ -9,8 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Icons from "@/components/ui/icons";
 import { IEmployee } from "@/schema/EmployeeSchema";
-import { Column, ColumnDef } from "@tanstack/react-table";
-import { useState } from "react";
+import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<IEmployee>[] = [
   {

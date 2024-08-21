@@ -75,7 +75,7 @@ export default function ServiceDetailForm() {
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="doj-input">Date of Joining</Label>
-        <Input id="doj-input" type="date" name="doj" />
+        <Input id="doj-input" type="date" name="date_of_joining" />
       </div>
 
       <div className="flex flex-col gap-2">
@@ -100,7 +100,7 @@ export default function ServiceDetailForm() {
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="doc-input">Date of Confirmation</Label>
-        <Input id="doc-input" type="date" name="doc" />
+        <Input id="doc-input" type="date" name="date_of_confirmation" />
       </div>
 
       <div className="flex flex-col gap-2">
@@ -128,7 +128,7 @@ export default function ServiceDetailForm() {
         <Input id="job-location-input" name="job_location" />
       </div>
 
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <Label htmlFor="reporting-authority-input">Reporting Authority</Label>
         <ComboBox
           id="reporting-authority-input"
@@ -140,9 +140,9 @@ export default function ServiceDetailForm() {
           label="Reporting Authority"
           placeholder="Search an employee..."
         />
-      </div>
+      </div> */}
 
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <Label htmlFor="leave-sanction-authority-input">
           Leave Sanction Authority
         </Label>
@@ -156,13 +156,7 @@ export default function ServiceDetailForm() {
           label="Leave Sanction Authority"
           placeholder="Search an employee..."
         />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="profile-picture-input">Profile Picture</Label>
-        <AvatarPicker className="size-32" />
-        {/* <Input type='file' placeholder="Profile Picture" name="profile_picture"/> */}
-      </div>
+      </div> */}
     </div>
   );
 }

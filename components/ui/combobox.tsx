@@ -15,11 +15,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   label?: string;
   items: string[];
+  onValueChange?: (value: string) => void;
 }
 
 const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
-    const { label, placeholder, items } = props;
+    const { label, placeholder, items, onValueChange } = props;
     const [selectedValue, setSelectedValue] = useState<string>("");
     const [open, setOpen] = useState<boolean>(false);
 
@@ -56,6 +57,8 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
                       onSelect={() => {
                         setSelectedValue(item);
                         setOpen(false);
+
+                        if (onValueChange) onValueChange(item);
                       }}
                       key={`${item}-#${index}`}
                       value={item}

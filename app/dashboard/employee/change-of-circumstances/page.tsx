@@ -1,5 +1,5 @@
-import EmployeeCreationDialog from "@/app/Components/Dashboard/Employee/EmployeeCreationDialog";
-import EmployeesDataTable from "@/app/Components/Dashboard/Employee/EmployeesDataTable";
+import ChangeOfCircumstancesCreationDialog from "@/app/Components/Dashboard/Employee/ChangeOfCircumstances/ChangeOfCircumstancesCreationDialog";
+import ChangeOfCircumstancesTable from "@/app/Components/Dashboard/Employee/ChangeOfCircumstances/ChangeOfCircumstanecsTable";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,12 +8,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { DataTable } from "@/components/ui/data-table";
 import React from "react";
 
-export default function AllEmployeePage() {
+export default function ChangeOfCircumstancesPage() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
+      <p className="text-xl font-semibold">Change of Circumstances</p>
       <div className="flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>
@@ -28,16 +29,15 @@ export default function AllEmployeePage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>All Employees</BreadcrumbPage>
+              <BreadcrumbPage>Change of Circumstances</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <EmployeeCreationDialog />
+        <ChangeOfCircumstancesCreationDialog />
       </div>
 
-      {/* Main content, a table of employees */}
-      <EmployeesDataTable />
+      <ChangeOfCircumstancesTable />
     </main>
   );
 }

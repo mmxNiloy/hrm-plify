@@ -22,3 +22,13 @@ User Heirarchy:
 3. Client -> Company
 	> Company Admin (c_admin) [priority: 3]
 	> Employee [priority: 5]
+
+# Create an employee details
+Personal details -> 
+1. First name, last name, mid name
+email, number, nationality
+gender(optional), profile pic [x]
+Service details ->
+Reporting auth [not needed], leave sanction auth [not needed] [x]
+
+Manually show login info (dev mode)

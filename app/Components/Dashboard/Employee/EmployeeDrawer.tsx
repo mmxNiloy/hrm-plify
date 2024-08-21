@@ -103,65 +103,25 @@ export default function EmployeeDrawer() {
             </DrawerClose>
           </Link>
 
-          <Accordion
-            type="single"
-            collapsible
-            defaultValue={
-              path === "/dashboard/employee/change-of-circumstances" ||
-              path == "/dashboard/employee/change-of-circumstances/add"
-                ? "change-of-circumstances"
-                : undefined
-            }
+          <Link
+            href={"/dashboard/employee/change-of-circumstances"}
+            className="w-full"
+            passHref
           >
-            <AccordionItem value="change-of-circumstances">
-              <AccordionTrigger>
-                <Button variant="ghost" className="w-full gap-4 justify-start">
-                  <Icons.edit /> Change of Circumstances
-                </Button>
-              </AccordionTrigger>
-              <AccordionContent>
-                <Link
-                  href={"?_ref=change_of_circumstances_add"}
-                  className="w-full"
-                  passHref
-                >
-                  <DrawerClose asChild>
-                    <Button
-                      variant="ghost"
-                      className={cn(
-                        "w-full gap-4 justify-start hover:underline",
-                        path ===
-                          "/dashboard/employee/change-of-circumstances/add"
-                          ? "bg-blue-500 hover:bg-blue-400 text-white"
-                          : ""
-                      )}
-                    >
-                      <Icons.plus /> Add
-                    </Button>
-                  </DrawerClose>
-                </Link>
-                <Link
-                  href={"?_ref=change_of_circumstances_view"}
-                  className="w-full"
-                  passHref
-                >
-                  <DrawerClose asChild>
-                    <Button
-                      variant="ghost"
-                      className={cn(
-                        "w-full gap-4 justify-start hover:underline",
-                        path === "/dashboard/employee/change-of-circumstances"
-                          ? "bg-blue-500 hover:bg-blue-400 text-white"
-                          : ""
-                      )}
-                    >
-                      <Icons.visible /> View
-                    </Button>
-                  </DrawerClose>
-                </Link>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+            <DrawerClose asChild>
+              <Button
+                variant="ghost"
+                className={cn(
+                  "w-full gap-4 justify-start hover:underline",
+                  path === "/dashboard/employee/change-of-circumstances"
+                    ? "bg-blue-500 hover:bg-blue-400 text-white"
+                    : ""
+                )}
+              >
+                <Icons.files /> Change of Circumstances
+              </Button>
+            </DrawerClose>
+          </Link>
 
           <Link href={"?_ref=contract-agreement"} className="w-full" passHref>
             <DrawerClose asChild>

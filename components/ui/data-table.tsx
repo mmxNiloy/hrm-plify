@@ -47,11 +47,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  showOptions?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  showOptions = true,
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -97,71 +99,73 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-2">
-          <Label>Page size</Label>
-          <Select
-            onValueChange={(val) => {
-              const mPagination = { ...pagination };
-              mPagination.pageSize = Number.parseInt(val);
-              setPagination(mPagination);
-            }}
-          >
-            <SelectTrigger className="w-16">
-              <SelectValue placeholder={5} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label>Visible Columns</Label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="items-center gap-4 justify-between"
+      {showOptions && (
+        <div className="flex items-center justify-between">
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-2">
+              <Label>Page size</Label>
+              <Select
+                onValueChange={(val) => {
+                  const mPagination = { ...pagination };
+                  mPagination.pageSize = Number.parseInt(val);
+                  setPagination(mPagination);
+                }}
               >
-                Visible Columns
-                <Icons.chevronsUpDown className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <SelectTrigger className="w-16">
+                  <SelectValue placeholder={5} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Visible Columns</Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="items-center gap-4 justify-between"
+                  >
+                    Visible Columns
+                    <Icons.chevronsUpDown className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="search-input">Search</Label>
+            <Input
+              type="search"
+              placeholder="Search..."
+              onChange={handleFilterChange}
+            />
+          </div>
         </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="search-input">Search</Label>
-          <Input
-            type="search"
-            placeholder="Search..."
-            onChange={handleFilterChange}
-          />
-        </div>
-      </div>
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader className="bg-blue-500">
@@ -216,32 +220,34 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <p className="text-sm">
-          Showing page: {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
-        </p>
-        <div className="flex flex-row gap-2">
-          <Button
-            className="rounded-full gap-2"
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <Icons.chevronLeft /> Previous
-          </Button>
-          <Button
-            className="rounded-full gap-2"
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next <Icons.chevronRight />
-          </Button>
+      {showOptions && (
+        <div className="flex items-center justify-between space-x-2 py-4">
+          <p className="text-sm">
+            Showing page: {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </p>
+          <div className="flex flex-row gap-2">
+            <Button
+              className="rounded-full gap-2"
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <Icons.chevronLeft /> Previous
+            </Button>
+            <Button
+              className="rounded-full gap-2"
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next <Icons.chevronRight />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -249,13 +255,18 @@ export function DataTable<TData, TValue>({
 export function SortableHeader<TData, TValue>({
   name,
   column,
+  title,
+  hasOverflow,
 }: {
   name: string;
   column: Column<TData, TValue>;
+  hasOverflow?: boolean;
+  title?: string;
 }) {
   const sortState = column.getIsSorted();
   return (
     <Button
+      title={title}
       className="gap-1 hover:bg-transparent text-xs p-0"
       variant={"ghost"}
       onClick={() => {
@@ -278,6 +289,7 @@ export function SortableHeader<TData, TValue>({
       ) : (
         <Icons.arrowUpDown className="size-4" />
       )}
+      {hasOverflow && <Icons.help className="ml-4 size-4" />}
     </Button>
   );
 }

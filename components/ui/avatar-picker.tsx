@@ -28,7 +28,10 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
             inputRef.current.click();
           }
         }}
-        className="size-fit rounded-full border overflow-hidden p-2 flex flex-col relative cursor-pointer group items-center justify-center"
+        className={cn(
+          "size-fit aspect-square rounded-full border overflow-hidden p-2 flex flex-col relative cursor-pointer group items-center justify-center",
+          className
+        )}
       >
         <input
           type="file"
@@ -44,18 +47,17 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
             height={0}
             width={0}
             alt={props.alt ?? "Avatar preview"}
-            className={cn(
-              "rounded-full w-full aspect-square bg-accent object-contain object-center",
-              className
-            )}
+            className={
+              "rounded-full w-full aspect-square bg-accent object-contain object-center"
+            }
             src={URL.createObjectURL(selectedImage)}
           />
         ) : (
-          <Icons.user className={cn("w-full aspect-square", className)} />
+          <Icons.user className={"group-hover:invisible size-1/2"} />
         )}
 
-        <div className="absolute hidden group-hover:flex size-full bg-accent/25 flex-col items-center justify-center">
-          <Icons.imageUp />
+        <div className="absolute hidden group-hover:flex backdrop-blur-sm bg-accent/25 size-full  flex-col items-center justify-center">
+          <Icons.imageUp className="size-1/2" />
         </div>
       </div>
     );

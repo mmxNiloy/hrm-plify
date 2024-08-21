@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 import { useToast } from "@/components/ui/use-toast";
 import { IUser } from "@/schema/UserSchema";
 
