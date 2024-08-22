@@ -21,10 +21,15 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { IChangeOfCircumstances } from "@/schema/EmployeeSchema";
 import { countryNames, nationalities } from "@/utils/Misc";
 import React, { useState } from "react";
 
-export default function NIDAndOtherDetailForm() {
+export default function NIDAndOtherDetailForm({
+  defaultData,
+}: {
+  defaultData?: IChangeOfCircumstances;
+}) {
   const [otherDocuments, setOtherDocuments] = useState<string[]>([
     "New Document",
   ]);
@@ -41,6 +46,7 @@ export default function NIDAndOtherDetailForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="national-id-number-input">National ID No.</Label>
           <Input
+            defaultValue={defaultData?.national_id_number ?? ""}
             placeholder="National ID Number"
             id="national-id-number-input"
             name="national_id_number"
@@ -50,6 +56,7 @@ export default function NIDAndOtherDetailForm() {
         <div className="flex flex-col gap-2">
           <Label>Select Nationality</Label>
           <ComboBox
+            defaultValue={defaultData?.nationality ?? ""}
             placeholder="Search nationality..."
             label="Select Nationality"
             items={nationalities}
@@ -60,6 +67,7 @@ export default function NIDAndOtherDetailForm() {
         <div className="flex flex-col gap-2">
           <Label>Select Country of Residence</Label>
           <ComboBox
+            defaultValue={defaultData?.country ?? ""}
             placeholder="Search country..."
             label="Select Country of Residence"
             items={countryNames}
@@ -70,6 +78,9 @@ export default function NIDAndOtherDetailForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="date-issued-input">Date Issued</Label>
           <Input
+            defaultValue={
+              defaultData?.nid_date_issued?.toLocaleDateString("en-GB") ?? ""
+            }
             id="date-issued-input"
             placeholder="Date Issued"
             name="nid_date_issued"
@@ -80,6 +91,9 @@ export default function NIDAndOtherDetailForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="expiry-date-input">Expiry Date</Label>
           <Input
+            defaultValue={
+              defaultData?.nid_expiry_date?.toLocaleDateString("en-GB") ?? ""
+            }
             id="expiry-date-input"
             placeholder="Expiry Date"
             name="nid_expiry_date"
@@ -92,6 +106,11 @@ export default function NIDAndOtherDetailForm() {
             Eligible Review Date
           </Label>
           <Input
+            defaultValue={
+              defaultData?.nid_eligible_review_date?.toLocaleDateString(
+                "en-GB"
+              ) ?? ""
+            }
             id="eligible-review-date-input"
             readOnly
             placeholder="Eligible Review Date"
@@ -117,7 +136,11 @@ export default function NIDAndOtherDetailForm() {
           <Label htmlFor="current-passport-radio">
             Is this your current status?
           </Label>
-          <RadioGroup id="current-passport-radio" name="nid_is_current_status">
+          <RadioGroup
+            defaultValue={defaultData?.nid_current_status ?? "yes"}
+            id="current-passport-radio"
+            name="nid_current_status"
+          >
             <div className="flex gap-2 items-center">
               <RadioGroupItem value="yes" id="option-yes" />
               <Label htmlFor="option-yes">Yes</Label>
@@ -131,7 +154,12 @@ export default function NIDAndOtherDetailForm() {
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="remarks-input">Remarks</Label>
-          <Input placeholder="Remarks" id="remarks-input" name="nid_remarks" />
+          <Input
+            defaultValue={defaultData?.nid_remarks ?? ""}
+            placeholder="Remarks"
+            id="remarks-input"
+            name="nid_remarks"
+          />
         </div>
       </div>
 

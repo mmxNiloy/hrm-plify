@@ -2,6 +2,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { IChangeOfCircumstances } from "@/schema/EmployeeSchema";
 import React from "react";
 import { columns } from "./columns";
+import { ColumnDef } from "@tanstack/react-table";
 
 const exampleEmployees: IChangeOfCircumstances[] = Array.from<
   unknown,
@@ -29,6 +30,17 @@ const exampleEmployees: IChangeOfCircumstances[] = Array.from<
   };
 });
 
-export default function ChangeOfCircumstancesTable() {
-  return <DataTable data={exampleEmployees} columns={columns} />;
+export default function ChangeOfCircumstancesTable({
+  data,
+  defaultColumns,
+}: {
+  data?: IChangeOfCircumstances[];
+  defaultColumns?: ColumnDef<IChangeOfCircumstances, unknown>[];
+}) {
+  return (
+    <DataTable
+      data={data ?? exampleEmployees}
+      columns={defaultColumns ?? columns}
+    />
+  );
 }

@@ -9,6 +9,7 @@ import AutoScroll from "embla-carousel-auto-scroll";
 import Image from "next/image";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar/Navbar";
+import Link from "next/link";
 
 export default function Home() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [AutoScroll()]);
@@ -40,7 +41,7 @@ export default function Home() {
         </div>
 
         <div className="flex items-center justify-center">
-          <Card className="bg-muted/60">
+          <Card className="bg-muted/60 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Login</CardTitle>
             </CardHeader>
@@ -50,9 +51,11 @@ export default function Home() {
               <p className="text-center mt-4 mb-2">
                 Don&apos;t have an account?
               </p>
-              <Button className="w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white">
-                <Icons.badgeCheck /> Register
-              </Button>
+              <Link href="/register" passHref>
+                <Button className="gap-2 w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white">
+                  <Icons.badgeCheck /> Register
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

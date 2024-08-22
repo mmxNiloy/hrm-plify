@@ -123,7 +123,11 @@ export default function EmployeeDrawer() {
             </DrawerClose>
           </Link>
 
-          <Link href={"?_ref=contract-agreement"} className="w-full" passHref>
+          <Link
+            href={"/dashboard/employee/contract-agreement"}
+            className="w-full"
+            passHref
+          >
             <DrawerClose asChild>
               <Button
                 variant="ghost"

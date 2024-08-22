@@ -14,10 +14,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { IChangeOfCircumstances } from "@/schema/EmployeeSchema";
 import { nationalities } from "@/utils/Misc";
 import React from "react";
 
-export default function EUSSAndDBSDetailForm() {
+export default function EUSSAndDBSDetailForm({
+  defaultData,
+}: {
+  defaultData?: IChangeOfCircumstances;
+}) {
   return (
     <div className="flex flex-col gap-4">
       <div className="border rounded-md p-4 grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-2">
@@ -29,6 +34,7 @@ export default function EUSSAndDBSDetailForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="reference-number-input">Reference No.</Label>
           <Input
+            defaultValue={defaultData?.euss_reference_number ?? ""}
             id="reference-number-input"
             placeholder="Reference Number"
             name="euss_reference_number"
@@ -38,6 +44,7 @@ export default function EUSSAndDBSDetailForm() {
         <div className="flex flex-col gap-2">
           <Label>Select Nationality</Label>
           <ComboBox
+            defaultValue={defaultData?.nationality ?? ""}
             placeholder="Search nationality..."
             label="Select Nationality"
             items={nationalities}
@@ -48,6 +55,7 @@ export default function EUSSAndDBSDetailForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="date-issued-input">Date Issued</Label>
           <Input
+            defaultValue={defaultData?.euss_date_issued ?? ""}
             id="date-issued-input"
             placeholder="Date Issued"
             name="euss_date_issued"
@@ -58,6 +66,9 @@ export default function EUSSAndDBSDetailForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="expiry-date-input">Expiry Date</Label>
           <Input
+            defaultValue={
+              defaultData?.euss_expiry_date?.toLocaleDateString("en-GB") ?? ""
+            }
             id="expiry-date-input"
             placeholder="Expiry Date"
             name="euss_expiry_date"
@@ -70,6 +81,11 @@ export default function EUSSAndDBSDetailForm() {
             Eligible Review Date
           </Label>
           <Input
+            defaultValue={
+              defaultData?.euss_eligible_review_date?.toLocaleDateString(
+                "en-GB"
+              ) ?? ""
+            }
             id="eligible-review-date-input"
             readOnly
             placeholder="Eligible Review Date"
@@ -94,7 +110,11 @@ export default function EUSSAndDBSDetailForm() {
           <Label htmlFor="current-passport-radio">
             Is this your current status?
           </Label>
-          <RadioGroup id="current-passport-radio" name="euss_is_current_status">
+          <RadioGroup
+            defaultValue={defaultData?.euss_current_status ?? "yes"}
+            id="current-passport-radio"
+            name="euss_current_status"
+          >
             <div className="flex gap-2 items-center">
               <RadioGroupItem value="yes" id="option-yes" />
               <Label htmlFor="option-yes">Yes</Label>
@@ -107,7 +127,12 @@ export default function EUSSAndDBSDetailForm() {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="remarks-input">Remarks</Label>
-          <Input placeholder="Remarks" id="remarks-input" name="euss_remarks" />
+          <Input
+            defaultValue={defaultData?.euss_remarks}
+            placeholder="Remarks"
+            id="remarks-input"
+            name="euss_remarks"
+          />
         </div>
       </div>
 

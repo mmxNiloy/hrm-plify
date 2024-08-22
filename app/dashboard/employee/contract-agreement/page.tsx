@@ -1,6 +1,4 @@
-import ChangeOfCircumstancesCreationDialog from "@/app/Components/Dashboard/Employee/ChangeOfCircumstances/ChangeOfCircumstancesCreationDialog";
-import ChangeOfCircumstancesTable from "@/app/Components/Dashboard/Employee/ChangeOfCircumstances/ChangeOfCircumstanecsTable";
-import FindChangeOfCircumstancesByIDDialog from "@/app/Components/Dashboard/Employee/ChangeOfCircumstances/FindChangeOfCircumstancesByIDDialog";
+import EmployeesDataTable from "@/app/Components/Dashboard/Employee/EmployeesDataTable";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,13 +7,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { DataTable } from "@/components/ui/data-table";
+import Icons from "@/components/ui/icons";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import ContractAgreementTable from "@/app/Components/Dashboard/Employee/ContractAgreementTable";
 
-export default function ChangeOfCircumstancesPage() {
+export default function ContactAgreementPage() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Change of Circumstances</p>
+      <p className="text-xl font-semibold">Contract Agreement</p>
       <div className="flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>
@@ -30,19 +30,14 @@ export default function ChangeOfCircumstancesPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Change of Circumstances</BreadcrumbPage>
+              <BreadcrumbPage>Contract Agreement</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-
-        <div className="flex flex-row gap-4">
-          <FindChangeOfCircumstancesByIDDialog />
-
-          <ChangeOfCircumstancesCreationDialog />
-        </div>
       </div>
 
-      <ChangeOfCircumstancesTable />
+      {/* Main content, a table of employees */}
+      <ContractAgreementTable />
     </main>
   );
 }

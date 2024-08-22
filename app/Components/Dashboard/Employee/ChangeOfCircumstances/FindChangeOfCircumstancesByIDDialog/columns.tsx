@@ -10,7 +10,6 @@ import {
 import Icons from "@/components/ui/icons";
 import { IChangeOfCircumstances, IEmployee } from "@/schema/EmployeeSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import ChangeOfCircumstancesEditDialog from "../ChangeOfCircumstancesEditDialog/CahangeOfCircumstacesEditDialog";
 
 export const columns: ColumnDef<IChangeOfCircumstances>[] = [
   {
@@ -134,9 +133,49 @@ export const columns: ColumnDef<IChangeOfCircumstances>[] = [
     ),
   },
   {
-    id: "action",
+    accessorKey: "annual_reminder_date",
+    header: ({ column }) => (
+      <SortableHeader
+        title="Annual Reminder Date"
+        name="Annual Reminder Date"
+        column={column}
+      />
+    ),
+    cell: ({ row }) => (
+      <>
+        {row.original.annual_reminder_date?.toLocaleDateString("en-GB") ??
+          "N/A"}
+      </>
+    ),
+  },
+  {
+    id: "action-view",
     cell: ({ row }) => {
-      return <ChangeOfCircumstancesEditDialog data={row.original} />;
+      return (
+        <Button
+          className="rounded-full"
+          variant={"ghost"}
+          size={"icon"}
+          title="View"
+        >
+          <Icons.visible />
+        </Button>
+      );
+    },
+  },
+  {
+    id: "action-send",
+    cell: ({ row }) => {
+      return (
+        <Button
+          className="rounded-full"
+          variant={"ghost"}
+          size={"icon"}
+          title="Send as Email"
+        >
+          <Icons.send />
+        </Button>
+      );
     },
   },
 ];

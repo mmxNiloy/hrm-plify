@@ -21,19 +21,28 @@ export default function DashboardNavMenu() {
           <MenubarSub>
             <MenubarSubTrigger>Employee Management</MenubarSubTrigger>
             <MenubarSubContent>
-              <Link className="w-full h-full" href="/dashboard/employee">
+              <Link className="w-full" href="/dashboard/employee">
                 <MenubarItem className="cursor-pointer">Dashboard</MenubarItem>
               </Link>
               <MenubarSeparator />
-              <MenubarItem>All Employees</MenubarItem>
-              <MenubarSub>
-                <MenubarSubTrigger>Change of Circumstances</MenubarSubTrigger>
-                <MenubarSubContent>
-                  <MenubarItem>Add</MenubarItem>
-                  <MenubarItem>View</MenubarItem>
-                </MenubarSubContent>
-              </MenubarSub>
-              <MenubarItem>Contract Agreement</MenubarItem>
+              <Link className="w-full" href="/dashboard/employee/all">
+                <MenubarItem>All Employees</MenubarItem>
+              </Link>
+              <Link className="w-full" href="/dashboard/employee/migrant">
+                <MenubarItem>Migrant Employees</MenubarItem>
+              </Link>
+              <Link
+                className="w-full"
+                href="/dashboard/employee/change-of-circumstances"
+              >
+                <MenubarItem>Change of Circumstances</MenubarItem>
+              </Link>
+              <Link
+                className="w-full"
+                href="/dashboard/employee/contract-agreement"
+              >
+                <MenubarItem>Contract Agreement</MenubarItem>
+              </Link>
               <MenubarSeparator />
               <MenubarItem>Employee Corner</MenubarItem>
             </MenubarSubContent>
