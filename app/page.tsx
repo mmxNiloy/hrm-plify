@@ -27,14 +27,14 @@ export default function Home() {
             sophisticated HR software
           </p>
 
-          <div className="flex flex-row items-center justify-center">
+          <div className="mt-8 flex flex-row items-center justify-center has-[input]:focus-within:ring-2 ring-offset-2 ring-primary rounded-full">
             <Input
               type="email"
-              className="mt-8 rounded-s-full focus-visible:ring-0"
+              className="rounded-s-full ring-0 focus-visible:ring-0 focus:ring-0 focus-within:ring-0"
               placeholder="Enter your email"
             />
 
-            <Button className="mt-8 bg-blue-500 hover:bg-blue-400 text-white rounded-e-full">
+            <Button className="bg-blue-500 hover:bg-blue-400 text-white rounded-e-full ring-0 focus-visible:ring-0 focus:ring-0 focus-within:ring-0">
               Subscribe to our newsletter
             </Button>
           </div>

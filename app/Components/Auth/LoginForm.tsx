@@ -38,9 +38,9 @@ export default function LoginForm() {
         >
           Password
         </Label>
-        <div className="flex flex-row">
+        <div className="flex flex-row rounded-full has-[input]:focus-within:ring-2 ring-offset-2 ring-primary">
           <Input
-            className="rounded-s-full border-e-0 border-y border-s border-primary/30"
+            className="rounded-s-full border-e-0 border-primary/30 ring-0 focus:ring-0 focus-within:ring-0 focus-visible:ring-0"
             required
             minLength={8}
             id="password-input"
@@ -49,7 +49,7 @@ export default function LoginForm() {
             name="password"
           />
           <Button
-            className="px-2 rounded-e-full border-s-0 border-y border-e border-primary/30"
+            className="px-2 rounded-e-full border-s-0 border-primary/30 ring-0 focus:ring-0 focus-within:ring-0 focus-visible:ring-0"
             onClick={() => setPasswordVisible(!passwordVisible)}
             type="button"
             variant={"outline"}

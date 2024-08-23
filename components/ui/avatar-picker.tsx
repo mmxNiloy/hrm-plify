@@ -29,7 +29,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
           }
         }}
         className={cn(
-          "size-fit aspect-square rounded-full border overflow-hidden p-2 flex flex-col relative cursor-pointer group items-center justify-center",
+          "size-fit bg-background aspect-square rounded-full border overflow-hidden p-2 flex flex-col relative cursor-pointer group items-center justify-center",
           className
         )}
       >
