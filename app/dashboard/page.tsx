@@ -147,6 +147,16 @@ export default function DashboardPage() {
             } lg:flex-grow gap-2`}
           >
             <div className="grid grid-cols-3 gap-2">
+              <div className="p-4 rounded-md bg-amber-300/60 flex flex-col gap-1">
+                <p className="font-bold text-xl flex gap-1">
+                  <Icons.company /> Company Management
+                </p>
+                <span className="flex-grow" />
+                <Button className="rounded-full bg-blue-500 hover:bg-blue-400 gap-1">
+                  <Icons.login /> Go to dashboard
+                </Button>
+              </div>
+
               <div className="p-4 rounded-md bg-red-300/60 flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.company /> Organization Profile

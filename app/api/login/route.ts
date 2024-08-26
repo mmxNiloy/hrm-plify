@@ -1,3 +1,6 @@
+import { ILoginResponse } from "@/schema/UserSchema";
+import { encrypt } from "@/utils/Security";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -6,8 +9,45 @@ export async function POST(req: NextRequest) {
   const password = fd.get("password");
   const rememberMe = fd.get("remember-me");
 
-  return NextResponse.json(
-    { message: "Form data", email, password, rememberMe },
-    { status: 200 }
-  );
+  try {
+    const apiRes = await fetch(`${process.env.API_BASE_URL}/login`, {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (apiRes.ok) {
+      const data = (await apiRes.json()) as ILoginResponse;
+      // Send a cookie w\ user data
+      cookies().set(process.env.COOKIE_SESSION_KEY!, data.token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      });
+      cookies().set(process.env.COOKIE_USER_KEY!, JSON.stringify(data.user), {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      });
+
+      return NextResponse.json(
+        { message: "Login successful" },
+        { status: 200 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Invalid credentials" },
+      { status: apiRes.status }
+    );
+  } catch (_) {
+    return NextResponse.json(
+      {
+        message: "Failed to make request (or server responded with an error).",
+      },
+      { status: 500 }
+    );
+  }
 }

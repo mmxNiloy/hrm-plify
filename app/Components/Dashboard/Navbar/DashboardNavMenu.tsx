@@ -102,6 +102,9 @@ export default function DashboardNavMenu() {
       <MenubarMenu>
         <MenubarTrigger>Administration</MenubarTrigger>
         <MenubarContent>
+          <Link href={"/dashboard/company"}>
+            <MenubarItem>Company Management</MenubarItem>
+          </Link>
           <MenubarSub>
             <MenubarSubTrigger>Organization Profile</MenubarSubTrigger>
             <MenubarSubContent>

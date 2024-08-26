@@ -32,3 +32,13 @@ Service details ->
 Reporting auth [not needed], leave sanction auth [not needed] [x]
 
 Manually show login info (dev mode)
+
+
+Signup
+fname lname mname
+no contact field on initial reg
+register on the same page
+
+work on organization profile
+super admin dashboard
+companies table/grid

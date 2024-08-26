@@ -29,6 +29,8 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@react-spring/types": "^9.7.4",
+    "@react-spring/web": "^9.7.4",
     "@tanstack/react-table": "^8.20.1",
     "active-table-react": "^1.1.5",
     "chart.js": "^4.4.3",

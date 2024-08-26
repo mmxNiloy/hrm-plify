@@ -10,6 +10,8 @@ import Image from "next/image";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar/Navbar";
 import Link from "next/link";
+import RegistrationForm from "./Components/Auth/RegistrationForm";
+import AuthCard from "./Components/Auth/AuthCard";
 
 export default function Home() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [AutoScroll()]);
@@ -17,8 +19,8 @@ export default function Home() {
     <main>
       <Navbar />
 
-      <div className="bg-[url('/blurred-hotel-reception-with-people-sitting.jpg')] bg-no-repeat gap-4 bg-center bg-cover grid grid-cols-2 px-16 py-8 h-[512px]">
-        <div className="flex flex-col justify-center  rounded-[2rem] px-8 gap-2">
+      <div className="bg-[url('/blurred-hotel-reception-with-people-sitting.jpg')] bg-no-repeat gap-4 bg-center bg-cover flex flex-row px-16 py-8 h-[512px]">
+        <div className="w-1/2 flex flex-col justify-center  rounded-[2rem] px-8 gap-2">
           <h1 className="text-4xl font-extrabold text-primary">
             Amplify your productivity with HRMplify!
           </h1>
@@ -40,24 +42,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center">
-          <Card className="bg-muted/60 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle>Login</CardTitle>
-            </CardHeader>
-            <CardContent className="w-96">
-              <LoginForm />
-
-              <p className="text-center mt-4 mb-2">
-                Don&apos;t have an account?
-              </p>
-              <Link href="/register" passHref>
-                <Button className="gap-2 w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white">
-                  <Icons.badgeCheck /> Register
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+        <div className="w-1/2 flex items-center justify-center">
+          <AuthCard />
         </div>
       </div>
 

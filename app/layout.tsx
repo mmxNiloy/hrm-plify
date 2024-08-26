@@ -4,8 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Providers } from "@/providers/Providers";
 import SiteConfig from "@/utils/SiteConfig";
-import TailwindIndicator from "@/providers/TailwindIndicator";
-import Navbar from "@/app/Components/Navbar/Navbar";
 
 const nunito = Nunito({
   subsets: ["latin"],
