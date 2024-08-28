@@ -17,8 +17,6 @@ export const columns: ColumnDef<IEmployee>[] = [
     header: ({ column }) => (
       <SortableHeader name="Employee ID" column={column} />
     ),
-    enableColumnFilter: true,
-    enableGlobalFilter: true,
   },
   {
     accessorKey: "employee_name",

@@ -15,6 +15,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useCallback, useState } from "react";
 import PersonalDetailForm from "./Forms/PersonalDetailForm";
 import ServiceDetailForm from "./Forms/ServiceDetailForm";
+import { ButtonBlue } from "@/styles/button.tailwind";
+import {
+  DialogContentWidth,
+  DialogTitleStyles,
+} from "@/styles/dialog.tailwind";
 
 type TabValue = "personal-details" | "service-details";
 
@@ -36,17 +41,14 @@ export default function EmployeeCreationDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          size="sm"
-          className="bg-blue-500 hover:bg-blue-400 text-white rounded-full gap-1"
-        >
+        <Button size="sm" className={ButtonBlue}>
           <Icons.plus /> Add an Employee
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="lg:max-w-2xl xl:max-w-4xl">
+      <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle className="flex gap-1 items-center">
+          <DialogTitle className={DialogTitleStyles}>
             <Icons.employee /> Add an Employee
           </DialogTitle>
           <DialogDescription>

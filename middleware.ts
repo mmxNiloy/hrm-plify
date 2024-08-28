@@ -3,8 +3,16 @@ import { validateSession } from "@/middlewares/validateSession";
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname.startsWith("/dashboard") && !validateSession(req)) {
+  const session = validateSession(req);
+
+  // redirect unauthorized users
+  if (req.nextUrl.pathname.startsWith("/dashboard") && !session) {
     return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // redirect logged in users to the dashboard
+  if (session && !req.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   // For company route, check role and redirect accordingly
@@ -12,12 +20,14 @@ export function middleware(req: NextRequest) {
     const userRole = checkRole(req);
 
     if (!userRole) {
-      return NextResponse.redirect(new URL(`/`, req.url));
+      return NextResponse.redirect(
+        new URL("/dashboard?_ref=permission-denied", req.url)
+      );
     } else if (
       userRole.role.role_name !== "Super Admin" &&
       userRole.role.role_name !== "Admin"
     ) {
-      return NextResponse.redirect(
+      return NextResponse.rewrite(
         new URL(`/dashboard/company/${userRole.company_id}`, req.url)
       );
     }
@@ -25,5 +35,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/dashboard/company/:path*"],
+  matcher: ["/", "/dashboard/:path*", "/dashboard/company/:path*"],
 };
