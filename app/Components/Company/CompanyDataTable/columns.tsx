@@ -77,17 +77,24 @@ export const columns: ColumnDef<ICompany>[] = [
               <Icons.more />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="*:gap-2">
-            <DropdownMenuItem>
-              <Icons.edit /> Edit
-            </DropdownMenuItem>
+          <DropdownMenuContent>
+            <Link
+              href={`/dashboard/company/${row.original.company_id}`}
+              passHref
+            >
+              <DropdownMenuItem className="gap-2">
+                <Icons.visible /> View
+              </DropdownMenuItem>
+            </Link>
 
-            <DropdownMenuItem>
-              <Icons.pdf /> Download PDF
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Icons.excel /> Download Excel
-            </DropdownMenuItem>
+            <Link
+              href={`/dashboard/company/${row.original.company_id}/edit`}
+              passHref
+            >
+              <DropdownMenuItem className="gap-2">
+                <Icons.edit /> Edit
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -173,25 +180,9 @@ export const column_skeletons: ColumnDef<ICompany>[] = [
     id: "action",
     cell: ({ row }) => {
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger disabled asChild>
-            <Button className="rounded-full" variant="ghost" size="icon">
-              <Icons.more />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="*:gap-2">
-            <DropdownMenuItem>
-              <Icons.edit /> Edit
-            </DropdownMenuItem>
-
-            <DropdownMenuItem>
-              <Icons.pdf /> Download PDF
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Icons.excel /> Download Excel
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button disabled className="rounded-full" variant="ghost" size="icon">
+          <Icons.more />
+        </Button>
       );
     },
   },

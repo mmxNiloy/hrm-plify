@@ -21,7 +21,7 @@ export default function UserContextProvider({
 
     if (req.ok) {
       toast({
-        title: `Welcome, ${user.firstName}`,
+        title: `Welcome, ${user.first_name}`,
         duration: 1500,
         className: "bg-green-500 left-0 top-4",
       });
