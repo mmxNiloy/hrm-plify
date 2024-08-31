@@ -301,6 +301,10 @@ interface NetworkedDataTableProps<TData, TValue>
   skeleton?: React.JSX.Element;
 }
 
+interface IPaginatedTableData<T> extends IPaginatedResponse {
+  data: T[];
+}
+
 export function NetworkedDataTable<TData, TValue>({
   src,
   columns,
@@ -354,7 +358,7 @@ export function NetworkedDataTable<TData, TValue>({
         `/api/${src}?page=${currentPage}&limit=${pagination.pageSize}`
       );
       if (apiRes.ok) {
-        const resData = (await apiRes.json()) as IPaginatedResponse<TData>;
+        const resData = (await apiRes.json()) as IPaginatedTableData<TData>;
         setData(resData.data);
         setTotalPage(resData.total_page);
       } else {
@@ -391,8 +395,10 @@ export function NetworkedDataTable<TData, TValue>({
               <Select
                 disabled={loading}
                 onValueChange={(val) => {
+                  setCurrentPage(1);
                   const mPagination = { ...pagination };
                   mPagination.pageSize = Number.parseInt(val);
+                  mPagination.pageIndex = 1;
                   setPagination(mPagination);
                 }}
               >
