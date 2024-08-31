@@ -119,6 +119,7 @@ import {
   Users2,
   ChevronsUpDown,
   Filter,
+  RefreshCcw,
 } from "lucide-react";
 import React from "react";
 
@@ -250,6 +251,7 @@ const WordIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 WordIcon.displayName = "WordIcon";
 const Icons = {
+  update: RefreshCcw,
   word: WordIcon,
   filter: Filter,
   chevronsUpDown: ChevronsUpDown,

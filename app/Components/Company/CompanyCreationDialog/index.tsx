@@ -26,7 +26,7 @@ import {
 } from "@/styles/dialog.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
-import CompanyEditForm from "../CompanyEditDialog/edit-form";
+import CompanyProfileFormFragment from "../CompanyEditDialog/CompanyProfileEditDialog/form-fragment";
 
 export default function CompanyCreationDialog() {
   const router = useRouter();
@@ -102,7 +102,9 @@ export default function CompanyCreationDialog() {
         <form onSubmit={handleCreateCompany}>
           {/* Company Creation form */}
           <ScrollArea className="h-[70vh]">
-            <CompanyEditForm disabled={loading} />
+            <div className="p-1 flex flex-col gap-4">
+              <CompanyProfileFormFragment disabled={loading} />
+            </div>
           </ScrollArea>
 
           <DialogFooter>

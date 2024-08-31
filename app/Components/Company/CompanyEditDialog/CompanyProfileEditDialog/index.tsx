@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,49 +11,48 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  ButtonBase,
-  ButtonBlue,
-  ButtonSuccess,
-} from "@/styles/button.tailwind";
-import React from "react";
-import CompanyEditForm from "./edit-form";
 import { ICompany } from "@/schema/CompanySchema";
+import { ButtonWarn } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
+import React from "react";
+import CompanyProfileFormFragment from "./form-fragment";
 
-export default function CompanyEditDialog({ data }: { data: ICompany }) {
+export default function CompanyProfileEditDialog({ data }: { data: ICompany }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className={ButtonBlue} size="sm">
-          <Icons.edit /> Edit
+        <Button className={ButtonWarn} size={"sm"}>
+          <Icons.edit /> Edit Profile
         </Button>
       </DialogTrigger>
 
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle className="flex gap-2">
-            <Icons.edit /> Edit Company Details
-          </DialogTitle>
-          <DialogDescription>Fill out the form accordingly.</DialogDescription>
+          <DialogTitle>Edit Company Profile</DialogTitle>
+          <DialogDescription>
+            Update your company profile by filling out the form.
+          </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="h-[70vh]">
-          <CompanyEditForm data={data} />
+          <div className="p-1 flex flex-col gap-4">
+            <CompanyProfileFormFragment data={data} />
+          </div>
         </ScrollArea>
 
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              type="button"
               variant={"destructive"}
-              className={ButtonBase}
+              className="rounded-full gap-1"
+              size={"sm"}
             >
               <Icons.cross /> Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" className={ButtonSuccess}>
-            <Icons.check /> Submit
+
+          <Button className={ButtonWarn} size={"sm"}>
+            <Icons.update /> Update
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -2,7 +2,7 @@
 import { ICompanyDetails } from "@/schema/CompanySchema";
 import React, { useMemo, useState } from "react";
 import CompanyAddressTab from "@/app/Components/Company/CompanyDetailTabs/CompanyAddressTab";
-import CompanyAuthorizationTab from "@/app/Components/Company/CompanyDetailTabs/CompanyAuthorizationTab";
+import CompanyAuthorityTab from "@/app/Components/Company/CompanyDetailTabs/CompanyAuthorityTab";
 import CompanyDocumentsTab from "@/app/Components/Company/CompanyDetailTabs/CompanyDocumentsTab";
 import CompanyProfileTab from "@/app/Components/Company/CompanyDetailTabs/CompanyProfileTab";
 import CompanyTradeTab from "@/app/Components/Company/CompanyDetailTabs/CompanyTradeTab";
@@ -41,14 +41,14 @@ export default function CompanyDetailTabs({
         value: "auth",
         title: "Authority",
         content: (
-          <CompanyAuthorizationTab data={company.company_authorised_details} />
+          <CompanyAuthorityTab data={company.company_authorised_details} />
         ),
       },
       {
         value: "key-contact",
         title: "Key Contact",
         content: (
-          <CompanyAuthorizationTab
+          <CompanyAuthorityTab
             title="Key Contact"
             data={company.company_key_contact}
           />
@@ -58,7 +58,7 @@ export default function CompanyDetailTabs({
         value: "l1-user",
         title: "Level 1 User",
         content: (
-          <CompanyAuthorizationTab
+          <CompanyAuthorityTab
             title="Level 1 User"
             data={company.company_l1_user}
           />

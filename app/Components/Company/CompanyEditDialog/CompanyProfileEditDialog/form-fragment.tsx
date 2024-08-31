@@ -1,19 +1,16 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ICompany } from "@/schema/CompanySchema";
+import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 
-export default function CompanyEditForm({
-  readOnly,
+export default function CompanyProfileFormFragment({
   data,
+  readOnly,
   disabled,
-}: {
-  readOnly?: boolean;
-  disabled?: boolean;
-  data?: ICompany;
-}) {
+}: IFormFragmentProps<ICompany>) {
   return (
-    <div className="flex flex-col gap-4 px-1">
+    <>
       <div className="flex flex-col gap-2">
         <Label htmlFor="company-name-input">Company Name</Label>
         <Input
@@ -67,8 +64,8 @@ export default function CompanyEditForm({
         />
       </div>
 
-      <div className="flex items-center justify-center gap-4">
-        <div className="w-1/2 flex flex-col gap-2">
+      <div className="flex flex-row gap-4 items-center justify-between">
+        <div className="flex-grow flex flex-col gap-2">
           <Label htmlFor="founded-year-input">Founded Year</Label>
           <Input
             disabled={disabled}
@@ -84,7 +81,7 @@ export default function CompanyEditForm({
           />
         </div>
 
-        <div className="w-1/2 flex flex-col gap-2">
+        <div className="flex-grow flex flex-col gap-2">
           <Label htmlFor="website-input">Website</Label>
           <Input
             disabled={disabled}
@@ -112,6 +109,6 @@ export default function CompanyEditForm({
           className="rounded-full"
         />
       </div>
-    </div>
+    </>
   );
 }

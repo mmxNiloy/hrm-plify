@@ -73,34 +73,17 @@ export const columns: ColumnDef<ICompany>[] = [
   {
     id: "action",
     cell: ({ row }) => {
-      const employee = row.original;
+      // const employee = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="rounded-full" variant="ghost" size="icon">
-              <Icons.more />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <Link
-              href={`/dashboard/company/${row.original.company_id}`}
-              passHref
-            >
-              <DropdownMenuItem className="gap-2">
-                <Icons.visible /> View
-              </DropdownMenuItem>
-            </Link>
-
-            <Link
-              href={`/dashboard/company/${row.original.company_id}/edit`}
-              passHref
-            >
-              <DropdownMenuItem className="gap-2">
-                <Icons.edit /> Edit
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Link
+          href={`/dashboard/company/${row.original.company_id}`}
+          passHref
+          title="View"
+        >
+          <Button size={"icon"} variant={"ghost"}>
+            <Icons.visible />
+          </Button>
+        </Link>
       );
     },
   },
