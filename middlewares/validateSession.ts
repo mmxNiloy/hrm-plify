@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
 export function validateSession(req: NextRequest) {
+  console.log("Middleware > validateSession > Trying to validate session");
   try {
     const sessionID = req.cookies.get(process.env.COOKIE_SESSION_KEY!);
     const c = cookies().get(process.env.COOKIE_SESSION_KEY!);
@@ -17,6 +18,7 @@ export function validateSession(req: NextRequest) {
       return true;
     }
   } catch (_) {
+    console.log("Middleware > validateSession > Errors encountered", _);
     return false;
   }
 }
