@@ -4,8 +4,10 @@ import { NextRequest } from "next/server";
 export function validateSession(req: NextRequest) {
   console.log("Middleware > validateSession > Trying to validate session");
   try {
-    const sessionID = req.cookies.get(process.env.COOKIE_SESSION_KEY!);
-    const c = cookies().get(process.env.COOKIE_SESSION_KEY!);
+    const sessionID = req.cookies.get(
+      process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY!
+    );
+    const c = cookies().get(process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY!);
     console.log("Middleware > validateSession > Session ID", {
       sessionID,
       cookieSessionID: c,
