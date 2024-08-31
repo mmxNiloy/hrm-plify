@@ -40,7 +40,11 @@ export const columns: ColumnDef<ICompany>[] = [
     accessorKey: "website",
     header: ({ column }) => <SortableHeader name="Website" column={column} />,
     cell: ({ row }) => {
-      const url = row.original.website.trim();
+      const website = row.original.website;
+
+      if (!website) return <>N/A</>;
+
+      const url = website.trim();
       return (
         <Link
           href={!/^https?:\/\//i.test(url) ? `https://${url}` : url}

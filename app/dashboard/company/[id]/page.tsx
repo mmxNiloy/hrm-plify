@@ -1,6 +1,6 @@
 "use server";
-import CompanyEditDialog from "@/app/Components/Company/CompanyEditDialog";
-import CompanyEditForm from "@/app/Components/Company/CompanyEditDialog/edit-form";
+import CompanyDetailTabs from "@/app/Components/Company/CompanyDetailTabs";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,15 +9,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ICompany } from "@/schema/CompanySchema";
+import { ICompanyDetails } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import React from "react";
 
 interface Props {
@@ -32,7 +26,7 @@ export default async function CompanyByIDPage({ params }: Props) {
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
   const companyRes = await fetch(
-    `https://artemis-production.up.railway.app/api/companies/${params.id}`,
+    `https://artemis-production.up.railway.app/api/my-company/details/${params.id}`,
     {
       method: "GET",
       headers: {
@@ -40,7 +34,7 @@ export default async function CompanyByIDPage({ params }: Props) {
       },
     }
   );
-  const company = (await companyRes.json()) as ICompany;
+  const company = (await companyRes.json()) as ICompanyDetails;
 
   return (
     <main className="container flex flex-col gap-2">
@@ -66,14 +60,15 @@ export default async function CompanyByIDPage({ params }: Props) {
           </BreadcrumbList>
         </Breadcrumb>
 
-        {user.user_roles.roles.role_name !== "Employee" && (
+        {/* {user.user_roles.roles.role_name !== "Employee" && (
           <CompanyEditDialog data={company} />
-        )}
+        )} */}
       </div>
 
-      <div className="flex flex-col gap-4">
-        <CompanyEditForm readOnly data={company} />
-      </div>
+      <CompanyDetailTabs company={company} />
+
+      {/* Empty space at the bottom */}
+      <span className="h-1" />
     </main>
   );
 }
