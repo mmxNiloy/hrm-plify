@@ -8,14 +8,14 @@ const data = Array.from({ length: 10 }, (_, index): ICompany => {
     company_id: 0,
     company_name: "",
     contact_number: "",
-    created_at: "",
+    created_at: new Date(),
     founded_year: 0,
     headquarters: "",
     industry: "",
     is_active: 0,
     logo: "",
     website: "",
-    updated_at: "",
+    updated_at: new Date(),
   };
 });
 
