@@ -7,14 +7,16 @@ import CompanyDocumentEditDialog from "../../CompanyEditDialog/CompanyDocumentEd
 
 export default function CompanyDocumentsTab({
   data,
+  company_id,
 }: {
   data?: ICompanyDoc[];
+  company_id: number;
 }) {
   return (
     <div className="flex flex-col gap-4 p-8 border rounded-md">
       <div className="flex felx-row items-center justify-between">
         <p className="text-lg font-semibold">Company Documents</p>
-        <CompanyDocumentEditDialog type="create" />
+        <CompanyDocumentEditDialog company_id={company_id} type="create" />
       </div>
 
       <DataTable data={data ?? []} columns={columns} />

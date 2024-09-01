@@ -89,7 +89,7 @@ export default function CompanyTradeFormFragment({
           Has the organization/trading name changed in the last 5 years?
         </Label>
         <Select
-          name="change_of_nae_5"
+          name="change_of_name_5"
           disabled={readOnly || disabled}
           defaultValue={data?.change_of_name_5 ?? ""}
         >

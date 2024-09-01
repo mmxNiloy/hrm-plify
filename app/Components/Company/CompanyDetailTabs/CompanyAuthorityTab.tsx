@@ -14,16 +14,22 @@ import CompanyAuthorityFormFragment from "../CompanyEditDialog/CompanyAuthorityE
 export default function CompanyAuthorityTab({
   data,
   title = "Authorised Personnel",
+  company_id,
 }: {
   data?: ICompanyAuthorisedDetails;
   title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
+  company_id: number;
 }) {
   return (
     <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
       <div className="col-span-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">{title}</p>
 
-        <CompanyAuthorityEditDialog title={title} data={data} />
+        <CompanyAuthorityEditDialog
+          company_id={company_id}
+          title={title}
+          data={data}
+        />
       </div>
 
       <CompanyAuthorityFormFragment data={data} readOnly />

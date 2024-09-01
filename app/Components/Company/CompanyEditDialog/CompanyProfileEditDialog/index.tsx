@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,10 +15,31 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ICompany } from "@/schema/CompanySchema";
 import { ButtonWarn } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import React from "react";
+import React, { useCallback } from "react";
 import CompanyProfileFormFragment from "./form-fragment";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function CompanyProfileEditDialog({ data }: { data: ICompany }) {
+  const { toast } = useToast();
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const fd = new FormData(e.currentTarget);
+      const apiRes = await fetch(`/api/company/profile/${data.company_id}`, {
+        method: "PUT",
+        body: fd,
+      });
+      const res = await apiRes.json();
+      toast({
+        title: res.message,
+        description: JSON.stringify(res.data),
+      });
+    },
+    [data.company_id, toast]
+  );
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -34,27 +56,29 @@ export default function CompanyProfileEditDialog({ data }: { data: ICompany }) {
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-[70vh]">
-          <div className="p-1 flex flex-col gap-4">
-            <CompanyProfileFormFragment data={data} />
-          </div>
-        </ScrollArea>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <ScrollArea className="h-[70vh]">
+            <div className="p-1 flex flex-col gap-4">
+              <CompanyProfileFormFragment data={data} />
+            </div>
+          </ScrollArea>
 
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant={"destructive"}
-              className="rounded-full gap-1"
-              size={"sm"}
-            >
-              <Icons.cross /> Cancel
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                variant={"destructive"}
+                className="rounded-full gap-1"
+                size={"sm"}
+              >
+                <Icons.cross /> Cancel
+              </Button>
+            </DialogClose>
+
+            <Button className={ButtonWarn} size={"sm"}>
+              <Icons.update /> Update
             </Button>
-          </DialogClose>
-
-          <Button className={ButtonWarn} size={"sm"}>
-            <Icons.update /> Update
-          </Button>
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

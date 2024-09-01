@@ -1,6 +1,8 @@
+import { ComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ICompanyAddress } from "@/schema/CompanySchema";
+import { countryNames } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 
@@ -77,10 +79,11 @@ export default function CompanyAddressFormFragment({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="country-input">Country</Label>
-        <Input
+        <ComboBox
+          items={countryNames}
           className="rounded-full"
           readOnly={readOnly}
-          disabled={disabled}
+          disabled={readOnly}
           placeholder="Country"
           defaultValue={data?.country ?? ""}
           name="country"

@@ -7,8 +7,10 @@ import CompanyTradeEditDialog from "../CompanyEditDialog/CompanyTradeEditDialog"
 
 export default function CompanyTradeTab({
   data,
+  company_id,
 }: {
   data?: ICompanyTradeDetails;
+  company_id: number;
 }) {
   return (
     <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
@@ -16,7 +18,7 @@ export default function CompanyTradeTab({
         <p className="text-lg font-semibold col-span-full">
           Company Trade Details
         </p>
-        <CompanyTradeEditDialog data={data} />
+        <CompanyTradeEditDialog company_id={company_id} data={data} />
       </div>
 
       <CompanyTradeFormFragment data={data} readOnly />

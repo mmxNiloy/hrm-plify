@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,29 +13,57 @@ import {
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ICompanyDoc } from "@/schema/CompanySchema";
-import { ButtonWarn } from "@/styles/button.tailwind";
+import {
+  ButtonBlue,
+  ButtonSuccess,
+  ButtonWarn,
+} from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import React from "react";
+import React, { useCallback } from "react";
 import CompanyDocumentFormFragment from "./form-fragment";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function CompanyDocumentEditDialog({
   data,
   asIcon,
   type = "edit",
+  company_id,
 }: {
   data?: ICompanyDoc;
   asIcon?: boolean;
   type?: "edit" | "create";
+  company_id: number;
 }) {
+  const { toast } = useToast();
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const fd = new FormData(e.currentTarget);
+      const apiRes = await fetch(`/api/company/document/${company_id}`, {
+        method: type === "edit" ? "PUT" : "POST",
+        body: fd,
+      });
+      const res = await apiRes.json();
+      toast({
+        title: res.message,
+        description: JSON.stringify(res.data),
+      });
+    },
+    [company_id, toast, type]
+  );
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
           variant={asIcon ? "ghost" : "default"}
-          className={ButtonWarn}
+          className={type === "edit" ? ButtonWarn : ButtonBlue}
           size={asIcon ? "icon" : "sm"}
         >
-          <Icons.edit /> {!asIcon && "Update Information"}
+          {type === "edit" ? <Icons.edit /> : <Icons.plus />}{" "}
+          {!asIcon &&
+            (type === "edit" ? "Update Document" : "Create a Document")}
         </Button>
       </DialogTrigger>
 
@@ -48,27 +77,40 @@ export default function CompanyDocumentEditDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-[70vh]">
-          <div className="p-1 flex flex-col gap-4">
-            <CompanyDocumentFormFragment data={data} />
-          </div>
-        </ScrollArea>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <ScrollArea className="h-[70vh]">
+            <div className="p-1 flex flex-col gap-4">
+              <CompanyDocumentFormFragment data={data} />
+            </div>
+          </ScrollArea>
 
-        <DialogFooter>
-          <DialogClose asChild>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                variant={"destructive"}
+                className="rounded-full gap-1"
+                size={"sm"}
+              >
+                <Icons.cross /> Cancel
+              </Button>
+            </DialogClose>
+
             <Button
-              variant={"destructive"}
-              className="rounded-full gap-1"
+              className={type === "edit" ? ButtonWarn : ButtonSuccess}
               size={"sm"}
             >
-              <Icons.cross /> Cancel
+              {type === "edit" ? (
+                <>
+                  <Icons.update /> Update
+                </>
+              ) : (
+                <>
+                  <Icons.check /> Submit
+                </>
+              )}
             </Button>
-          </DialogClose>
-
-          <Button className={ButtonWarn} size={"sm"}>
-            <Icons.update /> Update
-          </Button>
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

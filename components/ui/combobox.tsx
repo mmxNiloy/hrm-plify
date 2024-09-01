@@ -36,7 +36,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger disabled={props.disabled || props.readOnly} asChild>
             <Button
               variant={"outline"}
               role="combobox"

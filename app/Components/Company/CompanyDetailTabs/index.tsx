@@ -41,7 +41,10 @@ export default function CompanyDetailTabs({
         value: "auth",
         title: "Authority",
         content: (
-          <CompanyAuthorityTab data={company.company_authorised_details} />
+          <CompanyAuthorityTab
+            company_id={company.company_id}
+            data={company.company_authorised_details}
+          />
         ),
       },
       {
@@ -49,6 +52,7 @@ export default function CompanyDetailTabs({
         title: "Key Contact",
         content: (
           <CompanyAuthorityTab
+            company_id={company.company_id}
             title="Key Contact"
             data={company.company_key_contact}
           />
@@ -59,6 +63,7 @@ export default function CompanyDetailTabs({
         title: "Level 1 User",
         content: (
           <CompanyAuthorityTab
+            company_id={company.company_id}
             title="Level 1 User"
             data={company.company_l1_user}
           />
@@ -67,17 +72,32 @@ export default function CompanyDetailTabs({
       {
         value: "address",
         title: "Address",
-        content: <CompanyAddressTab data={company.company_address} />,
+        content: (
+          <CompanyAddressTab
+            company_id={company.company_id}
+            data={company.company_address}
+          />
+        ),
       },
       {
         value: "trade",
         title: "Trade",
-        content: <CompanyTradeTab data={company.company_trade_details} />,
+        content: (
+          <CompanyTradeTab
+            company_id={company.company_id}
+            data={company.company_trade_details}
+          />
+        ),
       },
       {
         value: "documents",
         title: "Documents",
-        content: <CompanyDocumentsTab data={company.company_doc_db} />,
+        content: (
+          <CompanyDocumentsTab
+            company_id={company.company_id}
+            data={company.company_doc_db}
+          />
+        ),
       },
     ],
     [company]

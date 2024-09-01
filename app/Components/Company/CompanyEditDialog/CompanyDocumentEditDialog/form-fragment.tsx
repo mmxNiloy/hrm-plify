@@ -42,8 +42,14 @@ export default function CompanyDocumentFormFragment({
   return (
     <>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="doc-name-input">Document Name</Label>
+        <Label
+          htmlFor="doc-name-input"
+          className="after:text-red-500 after:ml-2 after:content-['*']"
+        >
+          Document Name
+        </Label>
         <Input
+          required
           className="rounded-full"
           id="doc-name-input"
           name="doc_name"
@@ -55,8 +61,14 @@ export default function CompanyDocumentFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="doc-type-select">Document Type</Label>
+        <Label
+          htmlFor="doc-type-select"
+          className="after:text-red-500 after:ml-2 after:content-['*']"
+        >
+          Document Type
+        </Label>
         <Select
+          required
           name="doc_type"
           defaultValue={data?.doc_name ?? ""}
           disabled={readOnly || disabled}
@@ -79,8 +91,14 @@ export default function CompanyDocumentFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="doc-name-input">Document File</Label>
+        <Label
+          htmlFor="doc-name-input"
+          className="after:text-red-500 after:ml-2 after:content-['*']"
+        >
+          Document File
+        </Label>
         <Input
+          required
           className="rounded-full"
           id="doc-file-input"
           name="doc_file"
