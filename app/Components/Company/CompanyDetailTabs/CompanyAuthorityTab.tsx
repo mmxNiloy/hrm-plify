@@ -23,7 +23,7 @@ export default function CompanyAuthorityTab({
       <div className="col-span-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">{title}</p>
 
-        <CompanyAuthorityEditDialog data={data} />
+        <CompanyAuthorityEditDialog title={title} data={data} />
       </div>
 
       <CompanyAuthorityFormFragment data={data} readOnly />

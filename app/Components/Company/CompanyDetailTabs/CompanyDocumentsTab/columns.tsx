@@ -6,6 +6,7 @@ import { ICompanyDoc } from "@/schema/CompanySchema";
 import { ButtonBase } from "@/styles/button.tailwind";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import CompanyDocumentEditDialog from "../../CompanyEditDialog/CompanyDocumentEditDialog";
 
 export const columns: ColumnDef<ICompanyDoc>[] = [
   {
@@ -43,5 +44,9 @@ export const columns: ColumnDef<ICompanyDoc>[] = [
         </Button>
       </Link>
     ),
+  },
+  {
+    id: "edit",
+    cell: ({ row }) => <CompanyDocumentEditDialog asIcon data={row.original} />,
   },
 ];

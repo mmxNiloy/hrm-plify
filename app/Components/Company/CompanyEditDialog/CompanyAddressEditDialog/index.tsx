@@ -10,19 +10,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
-import { ButtonWarn } from "@/styles/button.tailwind";
-import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import React from "react";
-import { ICompanyAuthorisedDetails } from "@/schema/CompanySchema";
-import CompanyAuthorityFormFragment from "./form-fragment";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ICompanyAddress } from "@/schema/CompanySchema";
+import { ButtonWarn } from "@/styles/button.tailwind";
+import React from "react";
+import CompanyAddressFormFragment from "./form-fragment";
+import { DialogContentWidth } from "@/styles/dialog.tailwind";
 
-export default function CompanyAuthorityEditDialog({
+export default function CompanyAddressEditDialog({
   data,
-  title = "Authorised Personnel",
 }: {
-  data?: ICompanyAuthorisedDetails;
-  title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
+  data?: ICompanyAddress;
 }) {
   return (
     <Dialog>
@@ -34,16 +32,15 @@ export default function CompanyAuthorityEditDialog({
 
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle>Edit {title} Details</DialogTitle>
+          <DialogTitle>Edit Company Address</DialogTitle>
           <DialogDescription>
-            Update your company&apos;s {title.toLowerCase()} details by filling
-            out the form.
+            Update your company&apos;s address by filling out the form.
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="h-[70vh]">
           <div className="p-1 grid grid-cols-2 gap-4">
-            <CompanyAuthorityFormFragment data={data} />
+            <CompanyAddressFormFragment data={data} />
           </div>
         </ScrollArea>
 

@@ -10,40 +10,47 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ICompanyDoc } from "@/schema/CompanySchema";
 import { ButtonWarn } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React from "react";
-import { ICompanyAuthorisedDetails } from "@/schema/CompanySchema";
-import CompanyAuthorityFormFragment from "./form-fragment";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import CompanyDocumentFormFragment from "./form-fragment";
 
-export default function CompanyAuthorityEditDialog({
+export default function CompanyDocumentEditDialog({
   data,
-  title = "Authorised Personnel",
+  asIcon,
+  type = "edit",
 }: {
-  data?: ICompanyAuthorisedDetails;
-  title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
+  data?: ICompanyDoc;
+  asIcon?: boolean;
+  type?: "edit" | "create";
 }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className={ButtonWarn} size={"sm"}>
-          <Icons.edit /> Update Information
+        <Button
+          variant={asIcon ? "ghost" : "default"}
+          className={ButtonWarn}
+          size={asIcon ? "icon" : "sm"}
+        >
+          <Icons.edit /> {!asIcon && "Update Information"}
         </Button>
       </DialogTrigger>
 
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle>Edit {title} Details</DialogTitle>
+          <DialogTitle>
+            {type === "edit" ? "Edit" : "Create a"} Company Document
+          </DialogTitle>
           <DialogDescription>
-            Update your company&apos;s {title.toLowerCase()} details by filling
-            out the form.
+            Update your company&apos;s document by filling out the form.
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="h-[70vh]">
-          <div className="p-1 grid grid-cols-2 gap-4">
-            <CompanyAuthorityFormFragment data={data} />
+          <div className="p-1 flex flex-col gap-4">
+            <CompanyDocumentFormFragment data={data} />
           </div>
         </ScrollArea>
 

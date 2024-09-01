@@ -3,6 +3,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { ICompanyDoc } from "@/schema/CompanySchema";
 import React from "react";
 import { columns } from "./columns";
+import CompanyDocumentEditDialog from "../../CompanyEditDialog/CompanyDocumentEditDialog";
 
 export default function CompanyDocumentsTab({
   data,
@@ -11,7 +12,10 @@ export default function CompanyDocumentsTab({
 }) {
   return (
     <div className="flex flex-col gap-4 p-8 border rounded-md">
-      <p className="text-lg font-semibold">Company Documents</p>
+      <div className="flex felx-row items-center justify-between">
+        <p className="text-lg font-semibold">Company Documents</p>
+        <CompanyDocumentEditDialog type="create" />
+      </div>
 
       <DataTable data={data ?? []} columns={columns} />
     </div>
