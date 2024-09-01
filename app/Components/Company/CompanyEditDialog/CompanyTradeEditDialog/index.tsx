@@ -33,7 +33,7 @@ export default function CompanyTradeEditDialog({
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
-      const apiRes = await fetch(`/api/company/authority/${company_id}`, {
+      const apiRes = await fetch(`/api/company/trade/${company_id}`, {
         method: "PUT",
         body: fd,
       });
