@@ -47,6 +47,12 @@ export const columns: ColumnDef<ICompanyDoc>[] = [
   },
   {
     id: "edit",
-    cell: ({ row }) => <CompanyDocumentEditDialog asIcon data={row.original} />,
+    cell: ({ row }) => (
+      <CompanyDocumentEditDialog
+        company_id={row.original.company_id}
+        asIcon
+        data={row.original}
+      />
+    ),
   },
 ];
