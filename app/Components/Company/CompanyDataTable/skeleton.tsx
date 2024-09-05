@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable, DataTableSkeleton } from "@/components/ui/data-table";
 import React from "react";
 import { column_skeletons } from "./columns";
 import { ICompany } from "@/schema/CompanySchema";
@@ -20,5 +20,5 @@ const data = Array.from({ length: 10 }, (_, index): ICompany => {
 });
 
 export default function CompanyDataTableSkeleton() {
-  return <DataTable columns={column_skeletons} data={data} />;
+  return <DataTableSkeleton columns={column_skeletons} showOptions />;
 }

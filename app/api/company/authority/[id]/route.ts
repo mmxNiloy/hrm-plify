@@ -11,7 +11,7 @@ export async function POST(
   const phone = fd.get("phone"); // string
   const email = fd.get("email"); // string
   const document = fd.get("document"); // file
-  const offence_history = fd.get("offence_history"); // string
+  const offense_history = fd.get("offense_history"); // string
   const type = fd.get("type") as string;
 
   return NextResponse.json(
@@ -26,7 +26,7 @@ export async function POST(
         phone: phone as string,
         email: email as string,
         document: (document as File).name,
-        offence_history: offence_history as string,
+        offense_history: offense_history as string,
       },
     },
     { status: 501 }
@@ -44,7 +44,7 @@ export async function PUT(
   const phone = fd.get("phone"); // string
   const email = fd.get("email"); // string
   const document = fd.get("document"); // file
-  const offence_history = fd.get("offence_history"); // string
+  const offense_history = fd.get("offense_history"); // string
   const type = fd.get("type") as string;
 
   return NextResponse.json(
@@ -59,7 +59,7 @@ export async function PUT(
         phone: phone as string,
         email: email as string,
         document: (document as File).name,
-        offence_history: offence_history as string,
+        offense_history: offense_history as string,
       },
     },
     { status: 501 }

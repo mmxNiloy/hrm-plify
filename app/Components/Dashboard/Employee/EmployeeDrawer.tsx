@@ -22,7 +22,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-export default function EmployeeDrawer() {
+export default function EmployeeDrawer({ companyId }: { companyId: number }) {
   const path = usePathname();
   return (
     <Drawer direction="left">
@@ -51,13 +51,18 @@ export default function EmployeeDrawer() {
         </DrawerHeader>
         <Separator />
         <div className="flex flex-col gap-2">
-          <Link href={"/dashboard/employee"} className="w-full" passHref>
+          <Link
+            href={`/dashboard/employee/company/${companyId}`}
+            className="w-full"
+            passHref
+          >
             <DrawerClose asChild>
               <Button
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee"
+                  path === "/dashboard/employee" ||
+                    path === `/dashboard/employee/company/${companyId}`
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}

@@ -43,6 +43,8 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "chart.js/auto";
 import { Calendar } from "@/components/ui/calendar";
+import LeaveBalanceCard from "../Components/Dashboard/Leave/LeaveBalanceCard";
+import { IEmployeeLeave, ILeaveBalance } from "@/schema/LeaveSchema";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
   ssr: false,
 });
@@ -547,65 +549,29 @@ export default function DashboardPage() {
       {/* Example graph here */}
       <div className="mt-8 grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-1">
-          <Label className="mt-4 text-lg font-semibold">Example Chart 1</Label>
+          <Label className="text-lg font-semibold">Example Chart 1</Label>
           <Line data={dataLine} />
         </div>
         <div className="flex flex-col gap-1">
-          <Label className="mt-4 text-lg font-semibold">Example Chart 2</Label>
+          <Label className="text-lg font-semibold">Example Chart 2</Label>
           <Bar data={dataBar} />
         </div>
-        <div className="flex flex-col gap-1 border rounded-md py-4 px-6">
-          <Label className="mt-4 text-lg font-semibold">Leave balance</Label>
-          <Table>
-            <TableCaption>Leave Balance</TableCaption>
-            <TableHeader>
-              <TableRow className="bg-blue-500 hover:bg-blue-400 *:text-white">
-                <TableHead>Name</TableHead>
-                <TableHead>Designation</TableHead>
-                <TableHead>Leave Type</TableHead>
-                <TableHead>Taken</TableHead>
-                <TableHead>Balance</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: 5 }, (_, index) => index + 1).map(
-                (item) => (
-                  <TableRow
-                    className="even:bg-accent"
-                    key={`example-leave-table-${item}`}
-                  >
-                    <TableCell>John Doe #{item}</TableCell>
-                    <TableCell>Example designation</TableCell>
-                    <TableCell>
-                      <p>Sick leave</p>
-                      <Separator />
-                      <p>Rest and recreation leave</p>
-                      <Separator />
-                      <p>Earned leave</p>
-                    </TableCell>
-                    <TableCell>
-                      <p>{Math.floor(Math.random() * 10)}</p>
-                      <Separator />
-                      <p>{Math.floor(Math.random() * 10)}</p>
-                      <Separator />
-                      <p>{Math.floor(Math.random() * 10)}</p>
-                    </TableCell>
-                    <TableCell>
-                      <p>{Math.floor(Math.random() * 10)}</p>
-                      <Separator />
-                      <p>{Math.floor(Math.random() * 10)}</p>
-                      <Separator />
-                      <p>{Math.floor(Math.random() * 10)}</p>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        <LeaveBalanceCard
+          data={Array.from({ length: 3 }, (_: ILeaveBalance, index) => ({
+            employee_id: index + 1,
+            employee_name: `Example Employee #${index + 1}`,
+            designation: "Example Designation",
+            leaves: Array.from({ length: 3 }, (_: IEmployeeLeave, idx) => ({
+              employee_id: index,
+              leave_type: `Example Leave Type #${idx}`,
+              total: 10 + idx * 5,
+              leave_taken: 2 + idx * 3,
+            })),
+          }))}
+        />
 
         <Card className="h-fit">
-          <CardHeader>
+          <CardHeader className="py-4">
             <CardTitle className="text-lg font-semibold">
               Notice board
             </CardTitle>

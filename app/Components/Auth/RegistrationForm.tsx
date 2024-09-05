@@ -77,7 +77,7 @@ export default function RegistrationForm() {
       encType="multipart/form-data"
       className="w-full h-fit flex flex-col gap-1 md:gap-4"
     >
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="first-name-input">First Name</Label>
           <Input
@@ -89,7 +89,7 @@ export default function RegistrationForm() {
           />
         </div>
 
-        <div className="hidden flex-col gap-2">
+        <div className="flex-col gap-2">
           <Label htmlFor="middle-name-input">Middle Name</Label>
           <Input
             id="first-name-input"

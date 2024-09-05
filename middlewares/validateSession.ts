@@ -1,18 +1,26 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function validateSession(req: NextRequest) {
   try {
     const sessionID = req.cookies.get(
-      process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY!
+      process.env.COOKIE_SESSION_KEY ??
+        process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ??
+        "hrmplify_session_token"
     );
 
     if (!sessionID) {
-      return false;
+      return NextResponse.json(
+        { message: "Token expired. Login again" },
+        { status: 401 }
+      );
     } else {
-      // TODO: Verify session ID here
-      return true;
+      return sessionID.value;
     }
-  } catch (_) {
-    return false;
+  } catch (err) {
+    console.error("middlewares > validateSession()", err);
+    return NextResponse.json(
+      { message: "Internal server error. Check logs for details." },
+      { status: 500 }
+    );
   }
 }

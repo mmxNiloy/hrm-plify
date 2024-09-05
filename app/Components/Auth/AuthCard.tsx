@@ -46,7 +46,7 @@ export default function AuthCard() {
         <CardHeader>
           <CardTitle>Login</CardTitle>
         </CardHeader>
-        <CardContent className="w-96">
+        <CardContent className="w-[32rem]">
           <LoginForm />
 
           <p className="text-center mt-4 mb-2">Don&apos;t have an account?</p>
@@ -66,7 +66,7 @@ export default function AuthCard() {
         <CardHeader>
           <CardTitle>Sign-up</CardTitle>
         </CardHeader>
-        <CardContent className="w-96">
+        <CardContent className="w-[32rem]">
           <RegistrationForm />
 
           <p className="text-center mt-4 mb-2">Already have an account?</p>

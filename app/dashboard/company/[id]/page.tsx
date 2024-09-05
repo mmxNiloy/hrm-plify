@@ -47,7 +47,7 @@ export default async function CompanyByIDPage({ params }: Props) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard/company">
+              <BreadcrumbLink href="/dashboard/company/">
                 Company Management
               </BreadcrumbLink>
             </BreadcrumbItem>

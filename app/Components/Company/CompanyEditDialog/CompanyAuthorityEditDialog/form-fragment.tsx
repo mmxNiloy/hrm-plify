@@ -109,7 +109,7 @@ export default function CompanyAuthorityFormFragment({
         <Label htmlFor="offence-input">Previous Offences</Label>
         <Textarea
           id="offence-input"
-          name="offence_history"
+          name="offense_history"
           className="rounded-md resize-none"
           readOnly={readOnly}
           disabled={disabled}

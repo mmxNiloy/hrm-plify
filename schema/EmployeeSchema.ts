@@ -5,7 +5,7 @@ export interface IEmployee {
   mobile: string;
   email: string;
   designation?: string;
-  nationaility?: string;
+  nationality?: string;
   ni_number?: string;
   visa_expired?: Date;
   passport_number: string;

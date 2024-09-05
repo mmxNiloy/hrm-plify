@@ -1,6 +1,4 @@
-"use server";
-import CompanyCreationDialog from "@/app/Components/Company/CompanyCreationDialog";
-import CompanyDataTable from "@/app/Components/Company/CompanyDataTable";
+import CompanyDataTableSkeleton from "@/app/Components/Company/CompanyDataTable/skeleton";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,12 +7,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { toast, useToast } from "@/components/ui/use-toast";
-import { wait } from "@/utils/wait";
+import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
-export default async function CompanyDashboardPage() {
-  // await wait(5000);
+export default function CompanyPageLoading() {
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Management</p>
@@ -30,11 +26,9 @@ export default async function CompanyDashboardPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-
-        <CompanyCreationDialog />
       </div>
 
-      <CompanyDataTable />
+      <CompanyDataTableSkeleton />
     </main>
   );
 }

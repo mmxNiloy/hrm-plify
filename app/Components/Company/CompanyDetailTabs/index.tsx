@@ -85,7 +85,10 @@ export default function CompanyDetailTabs({
         content: (
           <CompanyTradeTab
             company_id={company.company_id}
-            data={company.company_trade_details}
+            data={{
+              company_trade_details: company.company_trade_details,
+              company_trading_hour: company.company_trading_hour,
+            }}
           />
         ),
       },

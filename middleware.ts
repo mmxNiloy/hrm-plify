@@ -4,9 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const session = validateSession(req);
+  const hasSession = typeof session === "string";
 
   // redirect unauthorized users
-  if (req.nextUrl.pathname.startsWith("/dashboard") && !session) {
+  if (req.nextUrl.pathname.startsWith("/dashboard") && !hasSession) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

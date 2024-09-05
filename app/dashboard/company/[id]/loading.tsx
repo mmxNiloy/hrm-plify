@@ -1,3 +1,4 @@
+import SiteLoading from "@/app/loading";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -107,49 +108,7 @@ export default function CompanyDetailsLoading() {
           </Button>
         </TabsList>
       </Tabs>
-      <div className="flex flex-col gap-4 p-8 border rounded-md">
-        <p className="text-lg font-semibold">Company Profile</p>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="company-name-input">Company Name</Label>
-          <Skeleton className="w-full rounded-full h-10" />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="industry-input">Industry</Label>
-          <Skeleton className="w-full rounded-full h-10" />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="headquarters-input">Headquarters</Label>
-          <Skeleton className="w-full rounded-full h-10" />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="contact-number-input">Contact Number</Label>
-          <Skeleton className="w-full rounded-full h-10" />
-        </div>
-
-        <div className="flex flex-row gap-4 items-center justify-between">
-          <div className="flex-grow flex flex-col gap-2">
-            <Label htmlFor="founded-year-input">Founded Year</Label>
-            <Skeleton className="w-1/2 rounded-full h-10" />
-          </div>
-
-          <div className="flex-grow flex flex-col gap-2">
-            <Label htmlFor="website-input">Website</Label>
-            <Skeleton className="w-1/2 rounded-full h-10" />
-          </div>
-        </div>
-
-        {/* TODO: Replace logo with a file/image picker here */}
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="logo-input">Logo</Label>
-          <Skeleton className="w-full rounded-full h-10" />
-        </div>
-      </div>
-
-      {/* Empty space at the bottom */}
-      <span className="h-1" />
+      <SiteLoading />
     </main>
   );
 }

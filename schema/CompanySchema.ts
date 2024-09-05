@@ -108,13 +108,16 @@ export interface ICompanyLeaveApprover {
   updated_at: Date;
 }
 
-export interface ICompanyDetails extends ICompany {
+export interface ICompanyTradeData {
+  company_trade_details?: ICompanyTradeDetails;
+  company_trading_hour: ICompanyTradingHour[];
+}
+
+export interface ICompanyDetails extends ICompany, ICompanyTradeData {
   company_address?: ICompanyAddress;
   company_authorised_details?: ICompanyAuthorisedDetails;
   company_doc_db?: ICompanyDoc[];
   company_key_contact?: ICompanyKeyContact;
   company_l1_user?: ICompanyL1User;
-  company_trade_details?: ICompanyTradeDetails;
-  company_trading_hour?: ICompanyTradingHour;
   leave_approvers?: ICompanyLeaveApprover[];
 }

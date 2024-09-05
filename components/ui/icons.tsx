@@ -251,6 +251,7 @@ const WordIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 WordIcon.displayName = "WordIcon";
 const Icons = {
+  user2: User2,
   update: RefreshCcw,
   word: WordIcon,
   filter: Filter,
