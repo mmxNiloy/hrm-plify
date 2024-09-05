@@ -1,4 +1,5 @@
 import { validateSession } from "@/middlewares/validateSession";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -9,9 +10,13 @@ interface Props {
 export async function GET(req: NextRequest, { params }: Props) {
   try {
     // Check token
-    const sessionId = validateSession(req);
+    const sessionId = cookies().get(process.env.COOKIE_SESSION_KEY!);
     // Invalid token/error encountered
-    if (typeof sessionId !== "string") return sessionId;
+    if (!sessionId || sessionId.value.length < 1)
+      return NextResponse.json(
+        { message: "Session Expired. Login again." },
+        { status: 401 }
+      );
 
     const page = Number.parseInt(req.nextUrl.searchParams.get("page") ?? "1");
     const limit = Number.parseInt(

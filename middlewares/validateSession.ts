@@ -9,18 +9,12 @@ export function validateSession(req: NextRequest) {
     );
 
     if (!sessionID) {
-      return NextResponse.json(
-        { message: "Token expired. Login again" },
-        { status: 401 }
-      );
+      return false;
     } else {
-      return sessionID.value;
+      return true;
     }
   } catch (err) {
     console.error("middlewares > validateSession()", err);
-    return NextResponse.json(
-      { message: "Internal server error. Check logs for details." },
-      { status: 500 }
-    );
+    return false;
   }
 }
