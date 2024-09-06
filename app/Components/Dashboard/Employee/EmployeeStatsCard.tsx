@@ -65,7 +65,11 @@ export default function EmployeeStatsCard() {
       </CardHeader>
 
       <CardContent>
-        <Bar data={empStats} />
+        <Bar
+          className="min-w-full"
+          style={{ aspectRatio: "2/1" }}
+          data={empStats}
+        />
       </CardContent>
       <CardFooter>
         <div className="flex-grow flex flex-col gap-1">

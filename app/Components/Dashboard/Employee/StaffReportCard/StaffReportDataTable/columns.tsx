@@ -54,3 +54,54 @@ export const columns: ColumnDef<IEmployee>[] = [
     },
   },
 ];
+
+export const column_skeletons: ColumnDef<IEmployee>[] = [
+  {
+    accessorKey: "employee_id",
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Employee ID" />
+    ),
+  },
+  {
+    accessorKey: "employee_name",
+    header: ({ column }) => <SortableHeader column={column} name="Full name" />,
+  },
+  {
+    accessorKey: "designation",
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Designation" />
+    ),
+  },
+  {
+    accessorKey: "address",
+    header: ({ column }) => <SortableHeader column={column} name="Address" />,
+  },
+  {
+    id: "view-action",
+    cell: ({ row }) => {
+      return (
+        <Button
+          disabled
+          className="text-xs gap-1 rounded-full bg-blue-500 hover:bg-blue-400 text-white"
+          size={"icon"}
+        >
+          <Icons.visible className="size-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    id: "view-action",
+    cell: ({ row }) => {
+      return (
+        <Button
+          disabled
+          className="text-xs gap-1 rounded-full bg-amber-500 hover:bg-amber-400 text-white"
+          size="icon"
+        >
+          <Icons.printer className="size-4" />
+        </Button>
+      );
+    },
+  },
+];

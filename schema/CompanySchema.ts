@@ -14,6 +14,12 @@ export interface ICompany {
   is_active: number;
 }
 
+export interface ICompanyWithEmployeeMeta extends ICompany {
+  total_employees: number;
+  total_migrant_employees: number;
+  company_authorized_details?: ICompanyAuthorisedDetails;
+}
+
 export interface ICompanyCreationBody {
   company_name: string;
   industry: string;

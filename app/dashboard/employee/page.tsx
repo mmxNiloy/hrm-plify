@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
+import EmployeePageCompanyDataTable from "@/app/Components/Dashboard/Employee/EmployeePageCompanyDataTable";
 const Bar = dynamic(() => import("react-chartjs-2").then((mod) => mod.Bar), {
   ssr: false,
 });
@@ -85,6 +86,12 @@ export default function EmployeeDashboard() {
       </Breadcrumb>
 
       <div className="grid lg:grid-cols-2 gap-2">
+        {/* List of companies goes here */}
+        <div className="col-span-full">
+          <EmployeePageCompanyDataTable />
+        </div>
+
+        {/* Placeholder content */}
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Employee Statistics</CardTitle>
