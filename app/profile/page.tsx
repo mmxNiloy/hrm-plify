@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
 import DashboardNavbar from "../Components/Dashboard/Navbar/DashboardNavbar";
 import Image from "next/image";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
@@ -9,8 +8,6 @@ import Footer from "../Components/Footer";
 import { Progress } from "@/components/ui/progress";
 
 export default function ProfilePage() {
-  const [progressValue, setProgressValue] = useState<number>(69);
-
   return (
     <main className="bg-pink-50/75">
       <DashboardNavbar />
@@ -70,7 +67,7 @@ export default function ProfilePage() {
                   information to complete setting up your profile and start
                   making the most of HRMplify.
                 </p>
-                <Progress
+                {/* <Progress
                   max={100}
                   value={progressValue}
                   className={`${
@@ -82,7 +79,7 @@ export default function ProfilePage() {
                       ? "[&>*]:bg-orange-500"
                       : "[&>*]:bg-red-500"
                   }`}
-                />
+                /> */}
 
                 <Button
                   size="sm"
