@@ -15,7 +15,7 @@ import ContractAgreementDataTableSkeleton from "@/app/Components/Dashboard/Emplo
 export default function EmployeeContractAgreementPageLoading() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
+      <p className="text-xl font-semibold">Contract Agreement</p>
       <div className="flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>

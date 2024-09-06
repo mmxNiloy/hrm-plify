@@ -13,7 +13,7 @@ import EmployeesDataTableSkeleton from "@/app/Components/Dashboard/Employee/Empl
 export default function MigrantEmployeePageLoading() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
+      <p className="text-xl font-semibold">Migrant Employees</p>
       <div className="flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>

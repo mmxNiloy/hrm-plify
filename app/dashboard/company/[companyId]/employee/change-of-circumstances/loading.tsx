@@ -14,7 +14,7 @@ import ChangeOfCircumstancesDataTableSkeleton from "@/app/Components/Dashboard/E
 export default function EmployeeChangeOfCircumstancesPageLoading() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
+      <p className="text-xl font-semibold">Change of Circumstances</p>
       <div className="flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>
