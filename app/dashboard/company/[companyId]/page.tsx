@@ -1,3 +1,5 @@
+"use server";
+
 import CompanyDetailTabs from "@/app/Components/Company/CompanyDetailTabs";
 
 import {
@@ -14,18 +16,6 @@ import { cookies } from "next/headers";
 import React from "react";
 import { CompanyByIDPageProps } from "./PageProps";
 import { redirect } from "next/navigation";
-
-export const revalidate = 60;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  const apiRes = await fetch(`${process.env.API_BASE_URL}/stats/count/company`);
-  const data = (await apiRes.json()) as { total_companies: number };
-  return Array.from(
-    { length: data.total_companies },
-    (_, index) => `${index + 1}`
-  );
-}
 
 export default async function CompanyByIDPage({
   params,
