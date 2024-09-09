@@ -37,6 +37,7 @@ export default function CompanyTradeTab({
         <div className="flex flex-row items-center justify-between">
           <p className="text-lg font-semibold">Trading Hours</p>
           <CompanyTradingHoursEditDialog
+            company_id={company_id}
             data={data?.company_trading_hour ?? []}
           />
         </div>

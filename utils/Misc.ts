@@ -413,3 +413,20 @@ export const weekDays: string[] = [
   "Saturday",
   "Sunday",
 ];
+
+export function convertTo12Hour(time: string): string {
+  // Split the time string by colon
+  const [hours, minutes, seconds] = time.split(":");
+
+  // Convert the hours to a number
+  let hour = parseInt(hours);
+
+  // Determine AM or PM
+  const period = hour >= 12 ? "PM" : "AM";
+
+  // Convert hour to 12-hour format
+  hour = hour % 12 || 12; // If hour is 0 or 12, show 12
+
+  // Return formatted time with optional seconds
+  return `${hour}:${minutes}${seconds ? ":" + seconds : ""} ${period}`;
+}

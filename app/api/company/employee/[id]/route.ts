@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params }: Props) {
 
     // Make api call
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL!}/company/employee/${
+      `${process.env.API_BASE_URL!}/companies/my/get-employee/${
         params.id
       }?page=${page}&limit=${limit}`,
       {

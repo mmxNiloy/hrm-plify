@@ -16,6 +16,7 @@ import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { wait } from "@/utils/wait";
+import UserDataTable from "@/app/Components/Dashboard/Employee/UserDataTable";
 
 export default async function AllEmployeePage({
   params,
@@ -83,7 +84,7 @@ export default async function AllEmployeePage({
       </div>
 
       {/* Main content, a table of employees */}
-      <EmployeesDataTable />
+      <UserDataTable company_id={params.companyId} />
     </main>
   );
 }

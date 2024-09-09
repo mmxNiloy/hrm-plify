@@ -32,6 +32,10 @@ const tabList = [
     title: "Level 1 User",
   },
   {
+    value: "departments",
+    title: "Departments",
+  },
+  {
     value: "address",
     title: "Address",
   },

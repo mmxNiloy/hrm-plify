@@ -11,6 +11,9 @@ import {
   CommandItem,
   CommandList,
 } from "./command";
+import { cn } from "@/lib/utils";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   label?: string;
@@ -28,28 +31,40 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <>
-        <input
-          type={type}
-          value={selectedValue}
-          className="hidden"
-          ref={ref}
-          {...props}
-        />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger disabled={props.disabled || props.readOnly} asChild>
             <Button
               variant={"outline"}
               role="combobox"
-              className="justify-between"
+              className={cn(className, "justify-between")}
             >
-              {selectedValue.length > 0
+              <input
+                readOnly
+                type={type}
+                value={selectedValue}
+                placeholder={
+                  selectedValue.length > 0
+                    ? selectedValue
+                    : label ?? "Select an option"
+                }
+                className="bg-transparent hover:bg-transparent cursor-pointer focus:outline-none caret-transparent border-none flex-grow"
+                ref={ref}
+                {...props}
+              />
+              {/* {selectedValue.length > 0
                 ? selectedValue
-                : label ?? "Select an option"}
+                : label ?? "Select an option"} */}
               <Icons.chevronsUpDown className="size-4 text-muted-foreground" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent>
-            <Command>
+          <PopoverPrimitive.Content
+            align={"center"}
+            sideOffset={4}
+            className={
+              "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+            }
+          >
+            <Command className="max-h-72">
               <CommandInput placeholder={placeholder ?? "Search..."} />
               <CommandList>
                 <CommandEmpty>No results.</CommandEmpty>
@@ -74,7 +89,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
                 </CommandGroup>
               </CommandList>
             </Command>
-          </PopoverContent>
+          </PopoverPrimitive.Content>
         </Popover>
       </>
     );
