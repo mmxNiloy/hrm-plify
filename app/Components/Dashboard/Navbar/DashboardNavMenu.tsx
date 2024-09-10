@@ -58,7 +58,9 @@ export default async function DashboardNavMenu() {
             <MenubarSub>
               <MenubarSubTrigger>Recruitment</MenubarSubTrigger>
               <MenubarSubContent>
-                <MenubarItem>Dashboard</MenubarItem>
+                <MenubarItem>
+                  <Link href="/dashboard/job">Dashboard</Link>
+                </MenubarItem>
                 <MenubarSeparator />
                 <MenubarSub>
                   <MenubarSubTrigger>Job</MenubarSubTrigger>

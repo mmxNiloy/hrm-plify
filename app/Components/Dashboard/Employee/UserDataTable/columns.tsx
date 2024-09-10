@@ -1,30 +1,38 @@
 "use client";
 import { SortableHeader } from "@/components/ui/data-table";
-import { IUser } from "@/schema/UserSchema";
+import { ICompanyUser, IUser } from "@/schema/UserSchema";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<IUser>[] = [
+export const columns: ColumnDef<ICompanyUser>[] = [
   {
     accessorKey: "user_id",
     header: ({ column }) => <SortableHeader column={column} name="ID" />,
   },
   {
-    accessorKey: "first_name",
+    id: "first_name",
     header: ({ column }) => (
       <SortableHeader column={column} name="First name" />
     ),
+    cell: ({ row }) => row.original.users.first_name,
   },
   {
-    accessorKey: "last_name",
+    id: "middle_name",
     header: ({ column }) => <SortableHeader column={column} name="Last name" />,
+    cell: ({ row }) => row.original.users.middle_name,
   },
   {
-    accessorKey: "status",
+    id: "last_name",
+    header: ({ column }) => <SortableHeader column={column} name="Last name" />,
+    cell: ({ row }) => row.original.users.last_name,
+  },
+  {
+    id: "email",
     header: ({ column }) => <SortableHeader column={column} name="Status" />,
+    cell: ({ row }) => row.original.users.email,
   },
   {
-    accessorKey: "user_roles",
+    id: "role",
     header: ({ column }) => <SortableHeader column={column} name="Role" />,
-    cell: ({ row }) => row.original.user_roles.roles.role_name,
+    cell: ({ row }) => row.original.roles.role_name,
   },
 ];

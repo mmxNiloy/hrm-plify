@@ -9,6 +9,8 @@ import {
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import EmployeesDataTableSkeleton from "@/app/Components/Dashboard/Employee/EmployeesDataTable/skleton";
+import { DataTableSkeleton } from "@/components/ui/data-table";
+import { columns } from "@/app/Components/Dashboard/Employee/UserDataTable/columns";
 
 export default function AllEmployeePageLoading() {
   return (
@@ -39,7 +41,7 @@ export default function AllEmployeePageLoading() {
       </div>
 
       {/* Main content, a table of employees */}
-      <EmployeesDataTableSkeleton />
+      <DataTableSkeleton columns={columns} />
     </main>
   );
 }

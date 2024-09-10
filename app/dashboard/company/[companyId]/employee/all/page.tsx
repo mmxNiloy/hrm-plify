@@ -9,14 +9,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import React from "react";
+import React, { Suspense } from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { redirect, usePathname } from "next/navigation";
-import { ICompany } from "@/schema/CompanySchema";
+import { ICompany, IDepartment } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { wait } from "@/utils/wait";
 import UserDataTable from "@/app/Components/Dashboard/Employee/UserDataTable";
+import EmployeeOnboardingDialog from "@/app/Components/Dashboard/Employee/EmployeeOnboardingDialog";
+import EmployeeOnboardingDialogSkeleton from "@/app/Components/Dashboard/Employee/EmployeeOnboardingDialog/skeleton";
+import EmployeeOnboardingDialogWrapper from "@/app/Components/Dashboard/Employee/EmployeeOnboardingDialog/wrapper";
 
 export default async function AllEmployeePage({
   params,
@@ -80,7 +83,13 @@ export default async function AllEmployeePage({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <EmployeeCreationDialog />
+        {/* <EmployeeCreationDialog /> */}
+        <Suspense fallback={<EmployeeOnboardingDialogSkeleton />}>
+          <EmployeeOnboardingDialogWrapper
+            session={session}
+            company_id={params.companyId}
+          />
+        </Suspense>
       </div>
 
       {/* Main content, a table of employees */}

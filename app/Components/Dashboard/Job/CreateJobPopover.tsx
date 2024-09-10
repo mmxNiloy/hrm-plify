@@ -1,40 +1,23 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { IDepartment } from "@/schema/CompanySchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
-import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import { PopoverClose } from "@radix-ui/react-popover";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
-export default function DepartmentCreationPopover({
+export default function CreateJobPopover({
   company_id,
-  onSuccess,
 }: {
   company_id: number;
-  onSuccess?: (arg0: number) => void;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -51,7 +34,7 @@ export default function DepartmentCreationPopover({
       setLoading(true);
 
       try {
-        const apiRes = await fetch(`/api/company/department`, {
+        const apiRes = await fetch(`/api/job`, {
           method: "POST",
           body: fd,
         });
@@ -64,12 +47,7 @@ export default function DepartmentCreationPopover({
             title: "Update Successful",
             className: ToastSuccess,
           });
-
-          const data = res as {
-            message: string;
-            data: IDepartment;
-          };
-          if (onSuccess) onSuccess(data.data.department_id);
+          // if (onSuccess) onSuccess(data.data.department_id);
 
           router.refresh();
           setOpen(false);
@@ -91,14 +69,14 @@ export default function DepartmentCreationPopover({
 
       setLoading(false);
     },
-    [onSuccess, router, toast]
+    [router, toast]
   );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button className={ButtonBlue}>
-          <Icons.plus /> Add a New Department
+          <Icons.plus /> Add a new Designation
         </Button>
       </PopoverTrigger>
 
@@ -126,9 +104,9 @@ export default function DepartmentCreationPopover({
               {/* <Label htmlFor="department-name-input">Department Name</Label> */}
               <Input
                 className="rounded-full"
-                name="dpt_name"
+                name="designation_name"
                 id="department-name-input"
-                placeholder="Department Name"
+                placeholder="Designation"
                 required
               />
             </div>
