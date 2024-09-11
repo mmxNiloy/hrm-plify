@@ -1,3 +1,4 @@
+import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const apiRes = await fetch(
-      `http://localhost:5000/api/employee/admin/on-board-employee`,
+      `${process.env.API_BASE_URL}/employee/admin/on-board-employee`,
       {
         method: "POST",
         headers: {

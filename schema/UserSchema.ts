@@ -1,3 +1,5 @@
+import { IEmployee } from "./EmployeeSchema";
+
 export interface ILoginResponse {
   token: string;
   user: IUser;
@@ -38,6 +40,7 @@ export interface ICompanyUser {
   isActive: boolean;
   users: IUserBase;
   roles: ICompanyUserRoles;
+  employee?: IEmployee; // Check json to verify
 }
 
 export interface ICompanyUserRoles {

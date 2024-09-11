@@ -1,15 +1,47 @@
+import { IUser, IUserBase } from "./UserSchema";
+
 export interface IEmployee {
-  employee_id: string;
-  employee_name: string;
-  dob?: Date;
-  mobile: string;
-  email: string;
-  designation?: string;
+  employee_id: number;
+  user_id: number;
+  employee_code: string;
+  job_title?: string;
+  hire_date?: Date;
+  created_at: Date;
+  updated_at: Date;
+  company_id: number;
+  image?: string;
+  gender?: string;
+  ni_num: string;
+  date_of_birth?: Date;
+  marital_status?: string;
   nationality?: string;
-  ni_number?: string;
-  visa_expired?: Date;
-  passport_number: string;
-  address: string;
+  alternative_number?: string;
+  contact_number?: string;
+  contract_start_date?: Date;
+  employment_type?: number;
+  is_verified?: number;
+  department_id: number;
+  designation_id: number;
+  contract_end_date?: Date;
+  date_of_confirmaton?: Date;
+  date_of_joining?: Date;
+}
+
+export interface IEmployeeWithPersonalInfo extends IEmployee {
+  users: IUserBase;
+}
+
+export interface IEmployeeContactInfo {
+  contact_id: number;
+  employee_id: number;
+  postcode?: string;
+  address_line?: string;
+  additional_address_1?: string;
+  additional_address_2?: string;
+  country?: string;
+  proof_address_doc_link?: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface IChangeOfCircumstances {

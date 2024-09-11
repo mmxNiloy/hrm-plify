@@ -1,12 +1,18 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
+import Icons from "@/components/ui/icons";
 import { ICompanyUser, IUser } from "@/schema/UserSchema";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 
 export const columns: ColumnDef<ICompanyUser>[] = [
   {
-    accessorKey: "user_id",
-    header: ({ column }) => <SortableHeader column={column} name="ID" />,
+    id: "employee_code",
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Employee Code" />
+    ),
+    cell: ({ row }) => row.original.employee?.employee_code,
   },
   {
     id: "first_name",
@@ -34,5 +40,23 @@ export const columns: ColumnDef<ICompanyUser>[] = [
     id: "role",
     header: ({ column }) => <SortableHeader column={column} name="Role" />,
     cell: ({ row }) => row.original.roles.role_name,
+  },
+  {
+    id: "edit-employee",
+    cell: ({ row }) => (
+      <Link
+        href={`/dashboard/employee/edit/${row.original.employee?.employee_id}`}
+        passHref
+      >
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className="rounded-full"
+          name="Edit Info"
+        >
+          <Icons.edit />
+        </Button>
+      </Link>
+    ),
   },
 ];

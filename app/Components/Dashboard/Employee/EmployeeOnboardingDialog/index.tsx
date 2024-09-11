@@ -33,7 +33,7 @@ import {
 } from "@/styles/dialog.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 export default function EmployeeOnboardingDialog({
   company_id,
@@ -50,50 +50,53 @@ export default function EmployeeOnboardingDialog({
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    const fd = new FormData(e.currentTarget);
+      const fd = new FormData(e.currentTarget);
 
-    setLoading(true);
+      setLoading(true);
 
-    try {
-      const apiRes = await fetch(`/api/employee`, {
-        method: "POST",
-        body: fd,
-      });
-
-      const res = await apiRes.json();
-
-      if (apiRes.ok) {
-        // Close dialog, show toast, refresh parent ssc
-        toast({
-          title: "Creation Successful",
-          className: ToastSuccess,
+      try {
+        const apiRes = await fetch(`/api/employee`, {
+          method: "POST",
+          body: fd,
         });
-        // if (onSuccess) onSuccess(data.data.department_id);
 
-        router.refresh();
-        setOpen(false);
-      } else {
-        // show a failure dialog
+        const res = await apiRes.json();
+
+        if (apiRes.ok) {
+          // Close dialog, show toast, refresh parent ssc
+          toast({
+            title: "Creation Successful",
+            className: ToastSuccess,
+          });
+          // if (onSuccess) onSuccess(data.data.department_id);
+
+          router.refresh();
+          setOpen(false);
+        } else {
+          // show a failure dialog
+          toast({
+            title: "Creation Failed",
+            description: JSON.stringify(res.message),
+            variant: "destructive",
+          });
+        }
+      } catch (err) {
+        console.error("Failed to create employee.", err);
         toast({
           title: "Creation Failed",
-          description: JSON.stringify(res.message),
           variant: "destructive",
         });
       }
-    } catch (err) {
-      console.error("Failed to create employee.", err);
-      toast({
-        title: "Creation Failed",
-        variant: "destructive",
-      });
-    }
 
-    setLoading(false);
-  };
+      setLoading(false);
+    },
+    [router, toast]
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

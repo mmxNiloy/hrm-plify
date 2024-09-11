@@ -414,6 +414,14 @@ export const weekDays: string[] = [
   "Sunday",
 ];
 
+export const maritalStatus: string[] = [
+  "Unmarried",
+  "Married",
+  "Separated",
+  "Divorced",
+  "Widowed",
+];
+
 export function convertTo12Hour(time: string): string {
   // Split the time string by colon
   const [hours, minutes, seconds] = time.split(":");
@@ -429,4 +437,14 @@ export function convertTo12Hour(time: string): string {
 
   // Return formatted time with optional seconds
   return `${hour}:${minutes}${seconds ? ":" + seconds : ""} ${period}`;
+}
+
+export function toYYYYMMDD(date?: Date) {
+  if (!date) return "";
+
+  return `${date.getFullYear().toString().padStart(4, "0")}-${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
