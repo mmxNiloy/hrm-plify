@@ -123,3 +123,17 @@ export interface IContractAgreement {
   agreement_word_document_url?: string;
   agreement_pdf_document_url?: string;
 }
+
+export interface IEmployeeEducationalDetail {
+  education_id: number; // auto-generated
+  employee_id: number; // Immutable
+  institution_name: string;
+  qualification: string;
+  subject?: string;
+  passing_year?: string;
+  grade?: string;
+  transcript_link?: string;
+  certificate_link?: string;
+  created_at?: Date; // auto-generated
+  updated_at?: Date; // auto-generated
+}
