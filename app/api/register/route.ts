@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const fd = await req.formData();
+  const reqBod = await req.json();
 
-  return NextResponse.json(
-    {
-      message: "Data received. TODO: API calls for registration.",
-      data: {
-        first_name: fd.get("first_name"),
-        last_name: fd.get("last_name"),
-        middle_name: fd.get("middle_name"),
-        email: fd.get("email"),
-        password: fd.get("password"),
+  console.log("POST > Register > Request body >", reqBod);
+
+  // HIT the api
+  try {
+    const apiRes = await fetch(`${process.env.API_BASE_URL}/register`, {
+      method: "POST",
+      body: JSON.stringify(reqBod),
+      headers: {
+        "Content-Type": "application/json",
       },
-    },
-    { status: 200 }
-  );
+    });
+
+    return NextResponse.json(await apiRes.json(), { status: apiRes.status });
+  } catch (err) {
+    console.error("POST > Register > Failed to register >", err);
+    return NextResponse.json(
+      { message: "Registration failed." },
+      { status: 500 }
+    );
+  }
 }

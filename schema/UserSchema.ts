@@ -19,7 +19,7 @@ export interface IUserBase {
 
 export interface IUser extends IUserBase {
   company_id?: number;
-  user_roles: IUserRoles;
+  user_roles?: IUserRoles;
 }
 
 export interface IUserRoles {

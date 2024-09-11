@@ -19,7 +19,7 @@ export default async function DashboardNavMenu() {
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const role = user.user_roles.roles.role_name;
+  const role = user.user_roles?.roles.role_name;
 
   if (role === "Super Admin" || role === "Admin") {
     // Simplified menu

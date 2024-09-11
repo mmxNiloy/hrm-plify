@@ -11,9 +11,6 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import DashboardNavMenu from "./DashboardNavMenu";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { useTheme } from "next-themes";
 import NavProfile from "./NavProfile";
 
 export default async function DashboardNavbar() {
