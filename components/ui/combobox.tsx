@@ -39,6 +39,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
               className={cn(className, "justify-between")}
             >
               <input
+                tabIndex={-1}
                 readOnly
                 type={type}
                 value={selectedValue}

@@ -4,6 +4,9 @@ import { EditEmployeeByUserIdProps } from "../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { IEmployeeContactInfo } from "@/schema/EmployeeSchema";
+import ContactInfoEditDialog from "@/app/Components/Employee/EditDialog/ContactInfoEditDialog";
+import ContactInfoFormFragment from "@/app/Components/Employee/EditDialog/ContactInfoEditDialog/form-fragment";
+import { redirect } from "next/navigation";
 
 export default async function ContactInfoSlot({
   params,
@@ -13,8 +16,7 @@ export default async function ContactInfoSlot({
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var contactInfo: { contact_information: IEmployeeContactInfo } | undefined =
-    undefined;
+  var contactInfo: IEmployeeContactInfo | undefined = undefined;
 
   try {
     const apiRes = await fetch(
@@ -27,15 +29,30 @@ export default async function ContactInfoSlot({
     );
 
     if (!apiRes.ok) {
-      console.error("Data not found");
+      console.error("Edit Employee > Contact Info > Data not found");
+      redirect("/not-found");
     } else {
-      contactInfo = (await apiRes.json()) as {
-        contact_information: IEmployeeContactInfo;
+      const data = (await apiRes.json()) as {
+        contact_information?: IEmployeeContactInfo;
       };
+
+      contactInfo = data.contact_information;
     }
   } catch (err) {
-    console.error("Failed to fetch company information", err);
-    // redirect("/not-found");
+    console.error("Edit Employee > Contact Info > Data not found");
+    redirect("/not-found");
   }
-  return <div>ContactInfoSlot Status: {contactInfo ? "OK" : "Empty"}</div>;
+
+  return (
+    <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
+      <div className="col-span-full w-full flex flex-row items-center justify-between">
+        <p className="text-lg font-semibold">Contact Information</p>
+        <ContactInfoEditDialog
+          data={contactInfo}
+          employeeId={params.employeeId}
+        />
+      </div>
+      <ContactInfoFormFragment data={contactInfo} readOnly />
+    </div>
+  );
 }
