@@ -3,15 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
-import { ICompany } from "@/schema/CompanySchema";
+import { ICompany, ICompanyWithDesignationMeta } from "@/schema/CompanySchema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-interface ICompanyDetailsWithJobCount extends ICompany {
-  job_count: number;
-}
-
-export const columns: ColumnDef<ICompanyDetailsWithJobCount>[] = [
+export const columns: ColumnDef<ICompanyWithDesignationMeta>[] = [
   {
     accessorKey: "company_id",
     header: ({ column }) => <SortableHeader column={column} name="ID" />,
@@ -23,7 +19,7 @@ export const columns: ColumnDef<ICompanyDetailsWithJobCount>[] = [
     ),
   },
   {
-    accessorKey: "job_count",
+    accessorKey: "totalDesignations",
     header: ({ column }) => (
       <SortableHeader column={column} name="Total Designations" />
     ),

@@ -358,7 +358,7 @@ export function NetworkedDataTable<TData, TValue>({
 
     try {
       const apiRes = await fetch(
-        `${src}${src.search(/\\?/) ? "&" : "?"}page=${currentPage}&limit=${
+        `${src}${src.includes("?") ? "&" : "?"}page=${currentPage}&limit=${
           pagination.pageSize
         }`
       );

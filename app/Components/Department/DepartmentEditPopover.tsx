@@ -1,25 +1,40 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { IDepartment } from "@/schema/CompanySchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
+import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { PopoverClose } from "@radix-ui/react-popover";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
-export default function EditJobPopover({
-  designation_name,
-  designation_id,
+export default function DepartmentEditPopover({
+  data,
+  onSuccess,
 }: {
-  designation_name: string;
-  designation_id: number;
+  data: IDepartment;
+  onSuccess?: (arg0: number) => void;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -32,13 +47,16 @@ export default function EditJobPopover({
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
-
+      const reqBody = {
+        department_id: data.department_id,
+        dpt_name: fd.get("dpt_name") as string,
+      };
       setLoading(true);
 
       try {
-        const apiRes = await fetch(`/api/job`, {
+        const apiRes = await fetch(`/api/company/department`, {
           method: "PUT",
-          body: fd,
+          body: JSON.stringify(reqBody),
         });
 
         const res = await apiRes.json();
@@ -49,7 +67,12 @@ export default function EditJobPopover({
             title: "Update Successful",
             className: ToastSuccess,
           });
-          // if (onSuccess) onSuccess(data.data.department_id);
+
+          const data = res as {
+            message: string;
+            data: IDepartment;
+          };
+          if (onSuccess) onSuccess(data.data.department_id);
 
           router.refresh();
           setOpen(false);
@@ -71,18 +94,13 @@ export default function EditJobPopover({
 
       setLoading(false);
     },
-    [router, toast]
+    [onSuccess, router, toast]
   );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          className="rounded-full"
-          title="Edit Designation"
-        >
+        <Button variant={"ghost"} size={"icon"} className={"rounded-full"}>
           <Icons.edit />
         </Button>
       </PopoverTrigger>
@@ -96,25 +114,15 @@ export default function EditJobPopover({
         }}
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
-            <Input
-              readOnly
-              name="designation_id"
-              id="company-id-input"
-              placeholder="Designation ID"
-              defaultValue={designation_id}
-            />
-          </div>
-
           <div className="flex flex-row gap-2 items-center justify-center">
             <div className="flex-grow flex felx-col gap-2">
               {/* <Label htmlFor="department-name-input">Department Name</Label> */}
               <Input
                 className="rounded-full"
-                name="designation_name"
+                name="dpt_name"
                 id="department-name-input"
-                placeholder="Designation"
-                defaultValue={designation_name}
+                placeholder="Department Name"
+                defaultValue={data.dpt_name}
                 required
               />
             </div>

@@ -1,3 +1,5 @@
+import { ICompany, ICompanyWithDesignationMeta } from "@/schema/CompanySchema";
+import { IDesignation } from "@/schema/DesignationSchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,7 +18,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/company-job-stats?page=${page}&limit=${limit}`,
+      `${process.env.API_BASE_URL}/admin/dashboard/get-companies-designations?page=${page}&limit=${limit}`,
       {
         method: "GET",
         headers: {
@@ -25,7 +27,20 @@ export async function GET(req: NextRequest) {
       }
     );
 
-    return NextResponse.json(await apiRes.json(), { status: apiRes.status });
+    const res = (await apiRes.json()) as {
+      companies: ICompanyWithDesignationMeta[];
+      totalCompanies: number;
+      totalPages: number;
+      currentPage: number;
+      limit: number;
+    };
+
+    console.log(`GET > Company Designations > Data found`, res);
+
+    return NextResponse.json(
+      { data: res.companies, total_page: res.totalPages },
+      { status: apiRes.status }
+    );
   } catch (error) {
     // Code
     console.error("GET > Get company job count/stats\n", error);

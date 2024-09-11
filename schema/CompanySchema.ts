@@ -1,3 +1,4 @@
+import { IDesignation } from "./DesignationSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface ICompany {
@@ -32,6 +33,11 @@ export interface ICompanyCreationBody {
 
 export interface IPaginatedCompany extends IPaginatedResponse {
   data: ICompany[];
+}
+
+export interface ICompanyWithDesignationMeta extends ICompany {
+  totalDesignations: number;
+  designations: IDesignation[];
 }
 
 export interface ICompanyAddressBase {

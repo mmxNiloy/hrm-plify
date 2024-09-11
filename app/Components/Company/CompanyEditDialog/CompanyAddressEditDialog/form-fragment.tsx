@@ -1,3 +1,4 @@
+"use client";
 import { ComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

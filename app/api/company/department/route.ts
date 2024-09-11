@@ -1,3 +1,4 @@
+import { IDepartment } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -79,6 +80,43 @@ export async function POST(req: NextRequest) {
           company_id: Number.parseInt(company_id),
           dpt_name,
         }),
+      }
+    );
+
+    return NextResponse.json(await apiRes.json(), { status: apiRes.status });
+  } catch (err) {
+    console.error(
+      "POST > Create Company Department > Failed to create department\n",
+      err
+    );
+    return NextResponse.json(
+      { message: "Failed to create depatment!" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  if (!session || session.value.length < 1) {
+    return NextResponse.json(
+      { message: "Session expired. Login again." },
+      { status: 401 }
+    );
+  }
+
+  const bod = (await req.json()) as IDepartment;
+
+  try {
+    const apiRes = await fetch(
+      `${process.env.API_BASE_URL}/company/operation/update-deparment`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${session.value}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bod),
       }
     );
 

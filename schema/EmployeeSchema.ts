@@ -150,3 +150,15 @@ export interface IEmployeePassportDetail {
   created_at?: Date; // Auto-generated
   updated_at?: Date; // Auto-generated
 }
+
+export interface IEmployeeEmergencyContact {
+  contact_id: number; // Auto generated
+  employee_id: number; // Immutable
+  contact_name: string;
+  relationship: string;
+  phone_number: string;
+  email?: string;
+  address?: string;
+  created_at?: Date; // Auto generated
+  updated_at?: Date; // Auto generated
+}

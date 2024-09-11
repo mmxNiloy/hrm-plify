@@ -7,7 +7,7 @@ interface Props {
   personalInfo: React.ReactNode;
   educationalInfo: React.ReactNode;
   passportInfo: React.ReactNode;
-  nextKin: React.ReactNode;
+  emergencyContactInfo: React.ReactNode;
 }
 
 export default function EditEmployeeInfoByUserIdPageLayout({
@@ -15,7 +15,7 @@ export default function EditEmployeeInfoByUserIdPageLayout({
   contactInfo,
   personalInfo,
   educationalInfo,
-  nextKin,
+  emergencyContactInfo,
   passportInfo,
 }: Props) {
   return (
@@ -30,6 +30,9 @@ export default function EditEmployeeInfoByUserIdPageLayout({
           </TabsTrigger>
           <TabsTrigger value="passport-info">Passport Information</TabsTrigger>
           <TabsTrigger value="contact-info">Contact Information</TabsTrigger>
+          <TabsTrigger value="emergency-contact-info">
+            Emergency Contact Information
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="personal-info">{personalInfo}</TabsContent>
@@ -39,6 +42,10 @@ export default function EditEmployeeInfoByUserIdPageLayout({
         <TabsContent value="passport-info">{passportInfo}</TabsContent>
 
         <TabsContent value="contact-info">{contactInfo}</TabsContent>
+
+        <TabsContent value="emergency-contact-info">
+          {emergencyContactInfo}
+        </TabsContent>
       </Tabs>
     </main>
   );
