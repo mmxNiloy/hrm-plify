@@ -146,10 +146,10 @@ export default function DashboardPage() {
           <div
             className={`flex flex-col ${
               showMore ? "" : "h-72 overflow-hidden"
-            } lg:flex-grow gap-2`}
+            } lg:flex-grow gap-2 transition-all`}
           >
             <div className="grid grid-cols-3 gap-2">
-              <div className="p-4 rounded-md bg-amber-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md bg-gradient-to-br from-amber-300 to-purple-200 flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.company /> Company Management
                 </p>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-red-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md bg-gradient-to-br from-pink-300 to-blue-200 flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.company /> Organization Profile
                 </p>
@@ -173,7 +173,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-green-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-green-300 to-rose-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.users /> Employees
                 </p>
@@ -184,7 +184,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-blue-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-blue-300 to-orange-300 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.users /> Migrant Employees
                 </p>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-amber-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-amber-300 to-violet-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.scale /> Right to work checks
                 </p>
@@ -205,7 +205,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-red-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-red-300 to-sky-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.search /> Recruitment process
                 </p>
@@ -215,7 +215,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-green-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-green-300 to-rose-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.logout /> Leave management
                 </p>
@@ -225,7 +225,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-blue-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-sky-300 to-purple-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.money /> Payroll
                 </p>
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-amber-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-amber-300 to-fuchsia-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.contact /> Key Contact
                 </p>
@@ -245,7 +245,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-red-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-red-300 to-sky-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.handshake />
                   Sponsor Management Dossier
@@ -256,7 +256,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-green-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-green-300 to-rose-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.visible />
                   Monitoring & reporting
@@ -267,7 +267,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-blue-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-blue-300 to-amber-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.message /> Message center
                 </p>
@@ -277,7 +277,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-amber-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-amber-300 to-purple-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.list /> Staff report
                 </p>
@@ -287,7 +287,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-red-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-red-300 to-sky-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.fileX /> Absent report
                 </p>
@@ -297,7 +297,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-green-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-teal-300 to-purple-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.todo /> Change of Circumstances
                 </p>
@@ -307,7 +307,7 @@ export default function DashboardPage() {
                 </Button>
               </div>
 
-              <div className="p-4 rounded-md bg-blue-300/60 flex flex-col gap-1">
+              <div className="p-4 rounded-md from-blue-300 to-rose-200 bg-gradient-to-br flex flex-col gap-1">
                 <p className="font-bold text-xl flex gap-1">
                   <Icons.handshake /> Contract agreement
                 </p>

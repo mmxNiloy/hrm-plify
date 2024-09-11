@@ -31,36 +31,38 @@ export default async function DashboardNavMenu() {
             <MenubarSub>
               <MenubarSubTrigger>Employee Management</MenubarSubTrigger>
               <MenubarSubContent>
-                <MenubarItem>
-                  <Link className="w-full" href={`/dashboard/employee`}>
+                <Link href={`/dashboard/employee`}>
+                  <MenubarItem className="cursor-pointer">
                     Dashboard
-                  </Link>
-                </MenubarItem>
+                  </MenubarItem>
+                </Link>
                 <MenubarSeparator />
-                <MenubarItem>
-                  <Link className="w-full" href={`/dashboard/employee/create`}>
+                <Link href={`/dashboard/employee/create`}>
+                  <MenubarItem className="cursor-pointer">
                     Create a new Employee Account
-                  </Link>
-                </MenubarItem>
-                <MenubarItem>
-                  <Link className="w-full" href={`/dashboard/employee/edit`}>
+                  </MenubarItem>
+                </Link>
+                <Link href={`/dashboard/employee/edit`}>
+                  <MenubarItem className="cursor-pointer">
                     Edit Employee Information
-                  </Link>
-                </MenubarItem>
-                <MenubarItem>
-                  <Link className="w-full" href={`/dashboard/employee/assign`}>
+                  </MenubarItem>
+                </Link>
+                <Link href={`/dashboard/employee/assign`}>
+                  <MenubarItem className="cursor-pointer">
                     Assign Roles
-                  </Link>
-                </MenubarItem>
+                  </MenubarItem>
+                </Link>
               </MenubarSubContent>
             </MenubarSub>
 
             <MenubarSub>
               <MenubarSubTrigger>Recruitment</MenubarSubTrigger>
               <MenubarSubContent>
-                <MenubarItem>
-                  <Link href="/dashboard/job">Dashboard</Link>
-                </MenubarItem>
+                <Link href="/dashboard/job">
+                  <MenubarItem className="cursor-pointer">
+                    Dashboard
+                  </MenubarItem>
+                </Link>
                 <MenubarSeparator />
                 <MenubarSub>
                   <MenubarSubTrigger>Job</MenubarSubTrigger>
@@ -97,7 +99,11 @@ export default async function DashboardNavMenu() {
             <MenubarSub>
               <MenubarSubTrigger>Leave Management</MenubarSubTrigger>
               <MenubarSubContent>
-                <MenubarItem>Dashboard</MenubarItem>
+                <Link href={"/dashboard/leave"}>
+                  <MenubarItem className="cursor-pointer">
+                    Dashboard
+                  </MenubarItem>
+                </Link>
                 <MenubarSeparator />
                 <MenubarItem>Manage Leave Type</MenubarItem>
                 <MenubarItem>Leave Rule</MenubarItem>
@@ -172,7 +178,9 @@ export default async function DashboardNavMenu() {
                 </MenubarSub>
               </MenubarSubContent>
             </MenubarSub>
-            <MenubarItem>Tasks</MenubarItem>
+            <Link href={"/dashboard/task"}>
+              <MenubarItem className="cursor-pointer">Tasks</MenubarItem>
+            </Link>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
