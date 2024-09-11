@@ -8,7 +8,7 @@ export default function EducationalInfoTable({
 }: {
   data: IEmployeeEducationalDetail[];
 }) {
-  console.log("EducationalInfoTable > Data found", data);
+  // console.log("EducationalInfoTable > Data found", data);
 
   return (
     <DataTable

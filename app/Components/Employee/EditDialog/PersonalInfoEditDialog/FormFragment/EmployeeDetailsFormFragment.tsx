@@ -1,3 +1,4 @@
+"use client";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { ComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";

@@ -1,6 +1,4 @@
-import DepartmentSelect from "@/app/Components/Department/DepartmentSelect";
-import DesignationSelect from "@/app/Components/Department/DesignationSelect";
-import { SelectSkeleton } from "@/app/Components/Department/SelectSkeleton";
+"use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,9 +14,7 @@ import { cn } from "@/lib/utils";
 import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
 import { toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
-import React, { Suspense } from "react";
-import CompanyNameInput from "../../../CompanyNameInput";
-import CompanyNameSkeleton from "../../../CompanyNameSkeleton";
+import React from "react";
 import { ICompany, IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 

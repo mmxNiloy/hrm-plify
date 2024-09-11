@@ -6,6 +6,7 @@ interface Props {
   contactInfo: React.ReactNode;
   personalInfo: React.ReactNode;
   educationalInfo: React.ReactNode;
+  passportInfo: React.ReactNode;
   nextKin: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ export default function EditEmployeeInfoByUserIdPageLayout({
   personalInfo,
   educationalInfo,
   nextKin,
+  passportInfo,
 }: Props) {
   return (
     <main className="container grid grid-cols-2 gap-2">
@@ -26,12 +28,15 @@ export default function EditEmployeeInfoByUserIdPageLayout({
           <TabsTrigger value="educational-info">
             Educational Information
           </TabsTrigger>
+          <TabsTrigger value="passport-info">Passport Information</TabsTrigger>
           <TabsTrigger value="contact-info">Contact Information</TabsTrigger>
         </TabsList>
 
         <TabsContent value="personal-info">{personalInfo}</TabsContent>
 
         <TabsContent value="educational-info">{educationalInfo}</TabsContent>
+
+        <TabsContent value="passport-info">{passportInfo}</TabsContent>
 
         <TabsContent value="contact-info">{contactInfo}</TabsContent>
       </Tabs>

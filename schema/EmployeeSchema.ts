@@ -137,3 +137,16 @@ export interface IEmployeeEducationalDetail {
   created_at?: Date; // auto-generated
   updated_at?: Date; // auto-generated
 }
+
+export interface IEmployeePassportDetail {
+  passport_id: number; // Auto-generated
+  employee_id: number; // Immutable
+  passport_number: string;
+  issue_date: Date;
+  expiry_date: Date;
+  place_of_birth: string;
+  document?: string; // It's a link
+  remark?: string;
+  created_at?: Date; // Auto-generated
+  updated_at?: Date; // Auto-generated
+}

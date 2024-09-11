@@ -1,5 +1,4 @@
-import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
-import { error } from "console";
+import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,11 +12,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IEmployeeEducationalDetail;
+  const data = (await req.json()) as IEmployeePassportDetail;
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/create-education-data/`,
+      `${process.env.API_BASE_URL}/employee/create-passport-data/`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -30,16 +29,16 @@ export async function POST(req: NextRequest) {
 
     const res = await apiRes.json();
     if (res.error) {
-      console.error(`POST > Create Educational Detail > Error`, res.error);
+      console.error(`POST > Create Passport Detail > Error`, res.error);
     }
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
     console.error(
-      "POST > Create Educationa Detail of Employee > Failed to create educational detail",
-      error
+      "POST > Create Passport Detail of Employee > Failed to create passport detail",
+      err
     );
     return NextResponse.json(
-      { message: "Failed to create educational information" },
+      { message: "Failed to create passport information" },
       { status: 500 }
     );
   }
@@ -55,11 +54,11 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IEmployeeEducationalDetail;
+  const data = (await req.json()) as IEmployeePassportDetail;
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/update-education-data/`,
+      `${process.env.API_BASE_URL}/employee/update-passport-data/`,
       {
         method: "PATCH",
         body: JSON.stringify(data),
@@ -74,11 +73,11 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
     console.error(
-      "PATCH > Update Educationa Detail of Employee > Failed to update educational detail",
+      "PATCH > Update Passport Detail of Employee > Failed to update passport detail",
       err
     );
     return NextResponse.json(
-      { message: "Failed to update educational information" },
+      { message: "Failed to update passport information" },
       { status: 500 }
     );
   }

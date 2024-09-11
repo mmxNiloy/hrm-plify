@@ -37,7 +37,7 @@ export default async function EducationalInfoSlot({
         data: IEmployeeEducationalDetail[];
       };
       educationalInfo = result.data;
-      console.log("Data found", educationalInfo);
+      // console.log("Data found", educationalInfo);
     }
   } catch (err) {
     console.error("Edit Employee > Contact Info > Data not found");
