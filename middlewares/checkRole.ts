@@ -11,7 +11,7 @@ export function checkRole(
     );
     const userData = JSON.parse(userCookie?.value ?? "") as IUser;
     return {
-      role: userData.user_roles.roles,
+      role: userData.user_roles?.roles ?? { role_name: "Employee" },
       company_id: userData.company_id ?? 0,
     };
   } catch (_) {
