@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { EditEmployeeByUserIdProps } from "../PageProps";
+import { EditEmployeeByIdProps } from "../PageProps";
 import PassportDetailsEditDialog from "@/app/Components/Employee/EditDialog/PassportDetailsEditDialog";
 import PassportDetailsTable from "@/app/Components/Employee/PassportDetailsTable";
 import { redirect } from "next/navigation";
@@ -11,7 +11,7 @@ import PassportDetailsFormFragment from "@/app/Components/Employee/EditDialog/Pa
 
 export default async function PassportInfoSlot({
   params,
-}: EditEmployeeByUserIdProps) {
+}: EditEmployeeByIdProps) {
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"

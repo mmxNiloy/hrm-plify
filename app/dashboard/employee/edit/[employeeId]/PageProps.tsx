@@ -1,4 +1,4 @@
-export interface EditEmployeeByUserIdProps {
+export interface EditEmployeeByIdProps {
   params: {
     employeeId: number;
   };

@@ -12,7 +12,7 @@ export const columns: ColumnDef<ICompanyUser>[] = [
     header: ({ column }) => (
       <SortableHeader column={column} name="Employee Code" />
     ),
-    cell: ({ row }) => row.original.employee?.employee_code,
+    cell: ({ row }) => row.original.users.employee_data.employee_code,
   },
   {
     id: "first_name",
@@ -45,7 +45,7 @@ export const columns: ColumnDef<ICompanyUser>[] = [
     id: "edit-employee",
     cell: ({ row }) => (
       <Link
-        href={`/dashboard/employee/edit/${row.original.employee?.employee_id}`}
+        href={`/dashboard/employee/edit/${row.original.users.employee_data.employee_id}`}
         passHref
       >
         <Button

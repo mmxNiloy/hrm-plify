@@ -4,12 +4,12 @@ import { IEmployeeEmergencyContact } from "@/schema/EmployeeSchema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
-import { EditEmployeeByUserIdProps } from "../PageProps";
+import { EditEmployeeByIdProps } from "../PageProps";
 import EmergencyContactFormFragment from "@/app/Components/Employee/EditDialog/EmergencyContactEditDialog/form-fragment";
 
 export default async function EmergencyContactInfoSlot({
   params,
-}: EditEmployeeByUserIdProps) {
+}: EditEmployeeByIdProps) {
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
   let emergencyContact: IEmployeeEmergencyContact | undefined = undefined;

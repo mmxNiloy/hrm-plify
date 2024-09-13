@@ -1,6 +1,6 @@
 "use server";
 import React, { Suspense } from "react";
-import { EditEmployeeByUserIdProps } from "../PageProps";
+import { EditEmployeeByIdProps } from "../PageProps";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { IEmployee, IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
@@ -16,7 +16,7 @@ import ServiceInformationEditDialogWrapper from "@/app/Components/Employee/EditD
 
 export default async function PersonalInfoSlot({
   params,
-}: EditEmployeeByUserIdProps) {
+}: EditEmployeeByIdProps) {
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"

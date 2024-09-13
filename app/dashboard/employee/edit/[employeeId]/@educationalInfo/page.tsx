@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { EditEmployeeByUserIdProps } from "../PageProps";
+import { EditEmployeeByIdProps } from "../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
@@ -10,7 +10,7 @@ import EducationalInfoEditDialog from "@/app/Components/Employee/EditDialog/Educ
 
 export default async function EducationalInfoSlot({
   params,
-}: EditEmployeeByUserIdProps) {
+}: EditEmployeeByIdProps) {
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"

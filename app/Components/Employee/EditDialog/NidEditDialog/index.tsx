@@ -12,21 +12,27 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/components/ui/use-toast";
-import { IEmployeeContactInfo } from "@/schema/EmployeeSchema";
-import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
-import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import { ToastSuccess } from "@/styles/toast.tailwind";
-import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
-import ContactInfoFormFragment from "./form-fragment";
+import { DialogContentWidth } from "@/styles/dialog.tailwind";
+import {
+  ButtonBlue,
+  ButtonSuccess,
+  ButtonWarn,
+} from "@/styles/button.tailwind";
+import { IEmployeeNid } from "@/schema/EmployeeSchema";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { ToastSuccess } from "@/styles/toast.tailwind";
+import NidFormFragment from "./form-fragment";
 
-export default function ContactInfoEditDialog({
+export default function NidEditDialog({
+  employee_id,
   data,
-  employeeId,
+  asIcon,
 }: {
-  data?: IEmployeeContactInfo;
-  employeeId: number;
+  employee_id: number;
+  data?: IEmployeeNid;
+  asIcon?: boolean;
 }) {
   const { toast } = useToast();
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,25 +45,24 @@ export default function ContactInfoEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const nidDetails = {
+        employee_id: Number.parseInt(`${employee_id}`),
+        nid_number: fd.get("nid_number") as string,
+        issue_date: new Date(fd.get("issue_date") as string),
+        expiry_date: new Date(fd.get("expiry_date") as string),
+        nationality: fd.get("nationality") as string,
+        document: "", // TODO: Handle file upload here,
+        country_of_residence: fd.get("country_of_residence") as string,
+        remark: (fd.get("remark") as string | null) ?? "",
+        isCurrent: (fd.get("isCurrent") as "yes" | "no") === "yes" ? 1 : 0,
+      } as IEmployeeNid;
 
-      const contactInfo = {
-        postcode: fd.get("postcode") as string,
-        address_line: fd.get("address_line") as string,
-        additional_address_1: fd.get("additional_address_1") as string,
-        additional_address_2: fd.get("additional_address_2") as string,
-        country: fd.get("country") as string,
-        proof_of_address_doc: fd.get("proof_of_address_doc") as File | null, // File input will return a file object
-      };
-
-      const reqBod = data
-        ? Object.assign(data, contactInfo)
-        : { employee_id: employeeId, ...contactInfo };
-      console.log("Request body", reqBod);
+      const reqBod = data ? Object.assign(data, nidDetails) : nidDetails;
 
       setLoading(true);
       // Request api here
       try {
-        const apiRes = await fetch(`/api/employee/contact-info`, {
+        const apiRes = await fetch(`/api/employee/nid-info`, {
           method: data ? "PATCH" : "POST",
           body: JSON.stringify(reqBod),
         });
@@ -68,14 +73,11 @@ export default function ContactInfoEditDialog({
             title: "Update Successful",
             className: ToastSuccess,
           });
-          // if (onSuccess) onSuccess(data.data.department_id);
-
           router.refresh();
           setOpen(false);
         } else {
           // show a failure dialog
           const res = await apiRes.json();
-
           toast({
             title: "Update Failed",
             description: JSON.stringify(res.message),
@@ -83,7 +85,6 @@ export default function ContactInfoEditDialog({
           });
         }
       } catch (err) {
-        // console.error("Failed to update employee personal information.", err);
         toast({
           title: "Update Failed",
           variant: "destructive",
@@ -91,14 +92,21 @@ export default function ContactInfoEditDialog({
       }
       setLoading(false);
     },
-    [data, employeeId, router, toast]
+    [data, employee_id, router, toast]
   );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={ButtonWarn}>
-          <Icons.edit /> Edit Contact Information
-        </Button>
+        {asIcon ? (
+          <Button variant={"ghost"} size="icon" className="rounded-full">
+            <Icons.edit />
+          </Button>
+        ) : (
+          <Button className={ButtonWarn}>
+            <Icons.edit /> Edit NID Information
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent
@@ -108,16 +116,20 @@ export default function ContactInfoEditDialog({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Edit Contact Information</DialogTitle>
+          <DialogTitle>Edit NID Information</DialogTitle>
           <DialogDescription>
             Fill out the form appropriately.
+          </DialogDescription>
+          <DialogDescription>
+            Fields marked by an asterisk (
+            <span className="text-red-500">*</span>) are required.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <ContactInfoFormFragment data={data} />
+              <NidFormFragment data={data} />
             </div>
           </ScrollArea>
 

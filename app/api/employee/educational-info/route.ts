@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error(
       "POST > Create Educationa Detail of Employee > Failed to create educational detail",
-      error
+      err
     );
     return NextResponse.json(
       { message: "Failed to create educational information" },

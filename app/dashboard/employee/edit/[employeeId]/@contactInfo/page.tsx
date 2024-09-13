@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { EditEmployeeByUserIdProps } from "../PageProps";
+import { EditEmployeeByIdProps } from "../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { IEmployeeContactInfo } from "@/schema/EmployeeSchema";
@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 
 export default async function ContactInfoSlot({
   params,
-}: EditEmployeeByUserIdProps) {
+}: EditEmployeeByIdProps) {
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"

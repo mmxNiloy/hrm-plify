@@ -8,6 +8,9 @@ interface Props {
   educationalInfo: React.ReactNode;
   passportInfo: React.ReactNode;
   emergencyContactInfo: React.ReactNode;
+  visaBrpDetails: React.ReactNode;
+  eussDbsDetails: React.ReactNode;
+  nidDetails: React.ReactNode;
 }
 
 export default function EditEmployeeInfoByUserIdPageLayout({
@@ -17,6 +20,9 @@ export default function EditEmployeeInfoByUserIdPageLayout({
   educationalInfo,
   emergencyContactInfo,
   passportInfo,
+  visaBrpDetails,
+  eussDbsDetails,
+  nidDetails,
 }: Props) {
   return (
     <main className="container grid grid-cols-2 gap-2">
@@ -28,7 +34,9 @@ export default function EditEmployeeInfoByUserIdPageLayout({
           <TabsTrigger value="educational-info">
             Educational Information
           </TabsTrigger>
-          <TabsTrigger value="passport-info">Passport Information</TabsTrigger>
+          <TabsTrigger value="passport-info">Passport & VISA</TabsTrigger>
+          <TabsTrigger value="euss-dbs-info">EUSS & DBS</TabsTrigger>
+          <TabsTrigger value="nid-info">NID Information</TabsTrigger>
           <TabsTrigger value="contact-info">Contact Information</TabsTrigger>
           <TabsTrigger value="emergency-contact-info">
             Emergency Contact Information
@@ -39,7 +47,16 @@ export default function EditEmployeeInfoByUserIdPageLayout({
 
         <TabsContent value="educational-info">{educationalInfo}</TabsContent>
 
-        <TabsContent value="passport-info">{passportInfo}</TabsContent>
+        <TabsContent value="passport-info">
+          <div className="flex flex-col gap-4">
+            {passportInfo}
+            {visaBrpDetails}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="euss-dbs-info">{eussDbsDetails}</TabsContent>
+
+        <TabsContent value="nid-info">{nidDetails}</TabsContent>
 
         <TabsContent value="contact-info">{contactInfo}</TabsContent>
 

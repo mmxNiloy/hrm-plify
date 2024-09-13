@@ -17,6 +17,10 @@ export interface IUserBase {
   middle_name: string;
 }
 
+export interface IUserWithEmployeeData extends IUserBase {
+  employee_data: IEmployee;
+}
+
 export interface IUser extends IUserBase {
   company_id?: number;
   user_roles?: IUserRoles;
@@ -38,9 +42,8 @@ export interface ICompanyUser {
   created_at: string;
   updated_at: string;
   isActive: boolean;
-  users: IUserBase;
+  users: IUserWithEmployeeData;
   roles: ICompanyUserRoles;
-  employee?: IEmployee; // Check json to verify
 }
 
 export interface ICompanyUserRoles {

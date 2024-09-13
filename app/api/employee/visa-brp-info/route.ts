@@ -1,14 +1,6 @@
+import { IEmployeeVisaBrp } from "@/schema/EmployeeSchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
-interface IContactInfoReqBody {
-  postcode: string;
-  address_line: string;
-  additional_address_1: string;
-  additional_address_2: string;
-  country: string;
-  proof_of_address_doc: File | null;
-}
 
 export async function POST(req: NextRequest) {
   // Check if the user is logged in
@@ -20,11 +12,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IContactInfoReqBody;
+  const data = (await req.json()) as IEmployeeVisaBrp;
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/create-contact-data/`,
+      `${process.env.API_BASE_URL}/employee/create-visa-brp-data/`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -36,14 +28,17 @@ export async function POST(req: NextRequest) {
     );
 
     const res = await apiRes.json();
+    if (res.error) {
+      console.error(`POST > Create Visa/BRP Detail > Error`, res.error);
+    }
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
     console.error(
-      "POST > Create Contact Information of Employee > Failed to create contact information",
+      "POST > Create Visa/BRP Detail of Employee > Failed to create Visa/BRP detail",
       err
     );
     return NextResponse.json(
-      { message: "Failed to create contact information" },
+      { message: "Failed to create Visa/BRP information" },
       { status: 500 }
     );
   }
@@ -59,11 +54,11 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IContactInfoReqBody;
+  const data = (await req.json()) as IEmployeeVisaBrp;
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/update-contact-data/`,
+      `${process.env.API_BASE_URL}/employee/update-visa-brp-data/`,
       {
         method: "PATCH",
         body: JSON.stringify(data),
@@ -78,11 +73,11 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
     console.error(
-      "PATCH > Update Contact Information of Employee > Failed to update contact information",
+      "PATCH > Update Visa/BRP Detail of Employee > Failed to update Visa/BRP detail",
       err
     );
     return NextResponse.json(
-      { message: "Failed to update contact information" },
+      { message: "Failed to update Visa/BRP information" },
       { status: 500 }
     );
   }

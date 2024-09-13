@@ -162,3 +162,53 @@ export interface IEmployeeEmergencyContact {
   created_at?: Date; // Auto generated
   updated_at?: Date; // Auto generated
 }
+
+export interface IEmployeeVisaBrp {
+  visa_brp_id: number;
+  employee_id: number;
+  visa_brp_number: string;
+  issue_date?: Date;
+  expiry_date?: Date;
+  issued_by?: string;
+  country_of_residence?: string;
+  nationality: string;
+  visa_brp_photo_back?: string;
+  remarks?: string;
+  iscurrent?: number;
+  visa_brp_photo_front?: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface IEmployeeEussDbsData {
+  id: number; // Auto-generated
+  employee_id: number; // Auto-generated
+  euss_time_linit_ref_num: string; // typo: linit; ignore typo. label: Reference No.
+  nationality: string; // ComboBox, items: nationalities (import from @util/Misc)
+  euss_issue_date: Date; // All dates are to be converted using the toYYYYMMDD function from @util/Misc
+  euss_expiry_date: Date;
+  euss_doc?: string; // File link
+  euss_remarks: string;
+  dbs_type: string; // Enum: <basic, standard, advanced>; Render as Select, select value in lowercase, select item content as uppercase
+  dbs_ref_no: string; // Label: Reference No.
+  dbs_issue_date: Date;
+  dbs_expiry_date: Date;
+  dbs_doc?: string; // File link
+  dbs_is_current: number; // Enum: <yes, no>; 0 represents no, 1 represents yes. Render as select, select value as 'yes' or 'no' string, select item content as uppercase, convert y/n selection back to number representation in the dialog component; label: Is this your current status?; same placeholder, select group label
+  euss_is_current: number; // Enum: <yes, no>; 0 represents no, 1 represents yes. Render as select, select value as 'yes' or 'no' string, select item content as uppercase, convert y/n selection back to number representation in the dialog component; label: Is this your current status?; same placeholder, select group label
+}
+
+export interface IEmployeeNid {
+  emp_nid_id: number; // Auto-generated
+  employee_id: number; // Auto-generated
+  nid_number: string;
+  issue_date: Date;
+  expiry_date: Date;
+  nationality: string;
+  document?: string;
+  country_of_residence: string;
+  remark?: string;
+  created_at?: Date; // Auto-generated
+  updated_at?: Date; // Auto-generated
+  isCurrent?: number;
+}
