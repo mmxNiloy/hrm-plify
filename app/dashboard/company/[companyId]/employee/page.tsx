@@ -20,36 +20,10 @@ import { wait } from "@/utils/wait";
 export default async function EmployeeDashboard({
   params,
 }: CompanyByIDPageProps) {
-  // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var company: ICompany;
-
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
-
-  // await wait(5000);
-
   return (
-    <main className="container flex flex-col gap-2">
+    <main className="transition-all container flex flex-col gap-2">
       <p className="text-xl font-semibold">Employee Dashboard</p>
-      <Breadcrumb>
+      {/* <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -68,7 +42,7 @@ export default async function EmployeeDashboard({
             <BreadcrumbPage>Employee</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
-      </Breadcrumb>
+      </Breadcrumb> */}
 
       <div className="grid lg:grid-cols-2 gap-2">
         <EmployeeStatsCard />
