@@ -98,7 +98,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="p-8 bg-[url('/bg-white-yellow-shapes.jpg')] bg-cover bg-center bg-no-repeat grid grid-cols-2 gap-x-4 gap-y-32">
+      {/* <div className="p-8 bg-[url('/bg-white-yellow-shapes.jpg')] bg-cover bg-center bg-no-repeat grid grid-cols-2 gap-x-4 gap-y-32">
         <div className="flex flex-col gap-2 w-full">
           <Image
             unoptimized
@@ -262,7 +262,7 @@ export default function Home() {
             Register
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <Footer />
     </main>

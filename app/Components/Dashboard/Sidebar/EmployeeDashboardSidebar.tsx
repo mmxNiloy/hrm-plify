@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Sidebar, SidebarHeader } from "./Sidebar";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,141 +23,79 @@ export default function EmployeeDashboardSidebar({
       onMouseEnter={(e) => setHovered(true)}
       onMouseLeave={(e) => setHovered(false)}
     >
-      <SidebarHeader
-        title={company.company_name}
-        className={
-          "flex flex-row gap-2 items-center justify-center rounded-md p-2 mb-4"
-        }
-      >
-        <p
-          className={cn(
-            "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
-            open || hovered ? "" : "hidden"
-          )}
-        >
-          {company.company_name}
-        </p>
-        <Button
+      <SidebarContent>
+        <SidebarHeader
           onClick={(e) => setOpen(!open)}
-          variant={"ghost"}
-          size={"icon"}
-          className="flex relative rounded-full"
+          title={company.company_name}
+          className={
+            "bg-accent space-y-0 cursor-pointer flex flex-row gap-2 items-center justify-center rounded-md mb-4"
+          }
         >
-          <Icons.chevronLeft
+          <p
             className={cn(
-              "absolute transition-all",
-              open ? "rotate-0 scale-100" : "rotate-180 scale-0"
+              "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
+              open || hovered ? "" : "hidden"
             )}
-          />
-          <Icons.chevronRight
-            className={cn(
-              "transition-all",
-              open ? "rotate-180 scale-0" : "rotate-0 scale-100"
-            )}
-          />
-        </Button>
-      </SidebarHeader>
+          >
+            {company.company_name}
+          </p>
+          <span className="size-10 flex relative rounded-full items-center justify-center">
+            <Icons.chevronLeft
+              className={cn(
+                "absolute transition-all",
+                open ? "rotate-0 scale-100" : "rotate-180 scale-0"
+              )}
+            />
+            <Icons.chevronRight
+              className={cn(
+                "transition-all",
+                open ? "rotate-180 scale-0" : "rotate-0 scale-100"
+              )}
+            />
+          </span>
+        </SidebarHeader>
 
-      <Link
-        href={`/dashboard/company/${company.company_id}/employee`}
-        className="w-full"
-        passHref
-      >
-        <Button
-          onClick={(e) => setOpen(true)}
-          variant="ghost"
-          className={cn(
-            "w-full gap-4 hover:underline",
-            open || hovered ? "justify-start" : "justify-center",
-            path === `/dashboard/company/${company.company_id}/employee`
-              ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
-              : ""
-          )}
-        >
-          <Icons.home /> {open || hovered ? "Employee Dashboard" : ""}
-        </Button>
-      </Link>
+        <SidebarLink href={`/dashboard/company/${company.company_id}/employee`}>
+          <Icons.home />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Employee Dashboard
+          </span>
+        </SidebarLink>
 
-      <div className="flex flex-col gap-4">
-        <Link
+        <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/all`}
-          className="w-full"
-          passHref
         >
-          <Button
-            variant="ghost"
-            className={cn(
-              "w-full gap-4 hover:underline",
-              open || hovered ? "justify-start" : "justify-center",
-              path === `/dashboard/company/${company.company_id}/employee/all`
-                ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
-                : ""
-            )}
-          >
-            <Icons.employees /> {open || hovered ? "All Employees" : ""}
-          </Button>
-        </Link>
+          <Icons.employees />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            All Employees
+          </span>
+        </SidebarLink>
 
-        <Link
+        <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/migrant`}
-          className="w-full"
-          passHref
         >
-          <Button
-            variant="ghost"
-            className={cn(
-              "w-full gap-4 justify-start hover:underline",
-              open || hovered ? "justify-start" : "justify-center",
-              path ===
-                `/dashboard/company/${company.company_id}/employee/migrant`
-                ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
-                : ""
-            )}
-          >
-            <Icons.users /> {open || hovered ? "Migrant Employees" : ""}
-          </Button>
-        </Link>
-
-        <Link
+          <Icons.users />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Migrant Employees
+          </span>
+        </SidebarLink>
+        <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/change-of-circumstances`}
-          className="w-full"
-          passHref
         >
-          <Button
-            variant="ghost"
-            className={cn(
-              "w-full gap-4 justify-start hover:underline",
-              open || hovered ? "justify-start" : "justify-center",
-              path ===
-                `/dashboard/company/${company.company_id}/employee/change-of-circumstances`
-                ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
-                : ""
-            )}
-          >
-            <Icons.files /> {open || hovered ? "Change of Circumstances" : ""}
-          </Button>
-        </Link>
-
-        <Link
+          <Icons.files />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Change of Circumstnces
+          </span>
+        </SidebarLink>
+        <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/contract-agreement`}
-          className="w-full"
-          passHref
         >
-          <Button
-            variant="ghost"
-            className={cn(
-              "w-full gap-4 justify-start hover:underline",
-              open || hovered ? "justify-start" : "justify-center",
-              path ===
-                `/dashboard/company/${company.company_id}/employee/contract-agreement`
-                ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
-                : ""
-            )}
-          >
-            <Icons.handshake /> {open || hovered ? "Contract Agreement" : ""}
-          </Button>
-        </Link>
-      </div>
+          <Icons.handshake />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Contract Agreement
+          </span>
+        </SidebarLink>
+      </SidebarContent>
     </Sidebar>
   );
 }

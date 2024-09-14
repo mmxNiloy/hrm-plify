@@ -78,11 +78,14 @@ export default function JobDashboardStatisticsCard() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="relative flex items-center justify-center w-full h-auto">
         <Bar
-          className="min-w-full"
-          style={{ aspectRatio: "2/1" }}
           data={empStats}
+          options={{
+            maintainAspectRatio: true,
+            responsive: true,
+            aspectRatio: 2,
+          }}
         />
       </CardContent>
     </Card>

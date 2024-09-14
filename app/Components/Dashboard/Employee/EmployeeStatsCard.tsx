@@ -64,10 +64,13 @@ export default function EmployeeStatsCard() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="relative flex h-auto w-full items-center justify-center">
         <Bar
-          className="min-w-full"
-          style={{ aspectRatio: "2/1" }}
+          options={{
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2 / 1,
+          }}
           data={empStats}
         />
       </CardContent>

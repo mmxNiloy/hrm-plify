@@ -1,56 +1,17 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
-import { cookies } from "next/headers";
-import { IUser } from "@/schema/UserSchema";
-import { ICompany } from "@/schema/CompanySchema";
-import { redirect } from "next/navigation";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import JobDashboardStatisticsCard from "@/app/Components/Dashboard/Job/JobDashboardStatsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import Icons from "@/components/ui/icons";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 export default async function JobDashboardPage({
   params,
 }: CompanyByIDPageProps) {
-  // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var company: ICompany;
-
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
-
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Designations Dashboard</p>
-      <Breadcrumb>
+      {/* <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -69,7 +30,7 @@ export default async function JobDashboardPage({
             <BreadcrumbPage>Designations</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
-      </Breadcrumb>
+      </Breadcrumb> */}
 
       <div className="grid lg:grid-cols-2 gap-2">
         <JobDashboardStatisticsCard />

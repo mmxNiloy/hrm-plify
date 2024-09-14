@@ -44,7 +44,7 @@ export default async function EmployeeLayout({ children, params }: Props) {
   // await wait(5000);
 
   return (
-    <div className="space-x-2">
+    <div>
       {/* Navbar has h-16 */}
       <EmployeeDashboardSidebar company={company} />
 
