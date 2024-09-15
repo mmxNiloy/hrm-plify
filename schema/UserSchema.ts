@@ -31,7 +31,7 @@ export interface IUserRoles {
 }
 
 export interface IRoles {
-  role_name: "Super Admin" | "Admin" | "Company Admin" | "Employee";
+  role_name: "Super Admin" | "Admin" | "Company Admin" | "Employee" | "Guest";
 }
 
 export interface ICompanyUser {

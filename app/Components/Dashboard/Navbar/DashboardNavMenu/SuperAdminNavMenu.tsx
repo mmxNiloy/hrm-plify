@@ -62,30 +62,11 @@ export default function SuperAdminNavMenu() {
                   <MenubarItem>Absent report</MenubarItem>
                 </MenubarSubContent>
               </MenubarSub>
-              <MenubarSub>
-                <MenubarSubTrigger>Rota</MenubarSubTrigger>
-                <MenubarSubContent>
-                  <MenubarItem>Dashboard</MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarSub>
-                    <MenubarSubTrigger>Time shift management</MenubarSubTrigger>
-                    <MenubarSubContent>
-                      <MenubarItem>Shift management</MenubarItem>
-                      <MenubarItem>Late policy</MenubarItem>
-                      <MenubarItem>Day off</MenubarItem>
-                      <MenubarItem>Grace period</MenubarItem>
-                      <MenubarItem>Duty roster</MenubarItem>
-                    </MenubarSubContent>
-                  </MenubarSub>
-                  <MenubarSub>
-                    <MenubarSubTrigger>Visitor</MenubarSubTrigger>
-                    <MenubarSubContent>
-                      <MenubarItem>Visitor register link</MenubarItem>
-                      <MenubarItem>Visitor register</MenubarItem>
-                    </MenubarSubContent>
-                  </MenubarSub>
-                </MenubarSubContent>
-              </MenubarSub>
+
+              <Link href={`/dashboard/rota`}>
+                <MenubarItem className="cursor-pointer">Rota</MenubarItem>
+              </Link>
+
               <MenubarSub>
                 <MenubarSubTrigger>Holiday Management</MenubarSubTrigger>
                 <MenubarSubContent>

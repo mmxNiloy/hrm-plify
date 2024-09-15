@@ -9,10 +9,14 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   /// Where to position the sidebar, default left
   position?: "left" | "right";
   open?: boolean;
+  hasNavbar?: boolean;
 }
 
 const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
-  ({ className, position = "left", open = false, ...props }, ref) => {
+  (
+    { className, position = "left", hasNavbar = true, open = false, ...props },
+    ref
+  ) => {
     return (
       <div
         data-state={open ? "open" : "closed"}
@@ -20,6 +24,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         data-position-state={`${position}-${open ? "open" : "closed"}`}
         className={cn(
           "peer/sidebar group/sidebar fixed transition-all duration-100 data-[state=closed]:w-[5vw] data-[state=closed]:2xl:w-[6vw] data-[state=open]:w-1/6 data-[state=open]:2xl:w-1/5 h-screen data-[position=left]:border-e data-[position=left]:left-0 data-[position=right]:border-s data-[position=right]:right-0 drop-shadow-sm",
+          hasNavbar ? "top-16" : "",
           className
         )}
         ref={ref}

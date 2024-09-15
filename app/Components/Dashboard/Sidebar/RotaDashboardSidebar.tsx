@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { ICompany } from "@/schema/CompanySchema";
 
-export default function EmployeeDashboardSidebar({
+export default function RotaDashboardSidebar({
   company,
 }: {
   company: ICompany;
@@ -53,44 +53,44 @@ export default function EmployeeDashboardSidebar({
           </span>
         </SidebarHeader>
 
-        <SidebarLink href={`/dashboard/company/${company.company_id}/employee`}>
+        <SidebarLink href={`/dashboard/company/${company.company_id}/rota`}>
           <Icons.home />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Employee Dashboard
+            Rota
           </span>
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/employee/all`}
+          href={`/dashboard/company/${company.company_id}/rota/shift`}
         >
-          <Icons.employees />
+          <Icons.clock />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            All Employees
+            Shift Management
           </span>
         </SidebarLink>
 
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/employee/migrant`}
+        {/* <SidebarLink
+          href={`/dashboard/company/${company.company_id}/rota/late-policy`}
         >
-          <Icons.users />
+          <Icons.late />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Migrant Employees
+            Late Policy
+          </span>
+        </SidebarLink> */}
+        <SidebarLink
+          href={`/dashboard/company/${company.company_id}/rota/off-days`}
+        >
+          <Icons.calendarDays />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Off Days
           </span>
         </SidebarLink>
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/employee/change-of-circumstances`}
+          href={`/dashboard/company/${company.company_id}/rota/duty-roster`}
         >
-          <Icons.files />
+          <Icons.calendarClock />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Change of Circumstnces
-          </span>
-        </SidebarLink>
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/employee/contract-agreement`}
-        >
-          <Icons.handshake />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Contract Agreement
+            Duty Roster
           </span>
         </SidebarLink>
       </SidebarContent>

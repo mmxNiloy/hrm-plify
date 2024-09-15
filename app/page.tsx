@@ -12,6 +12,7 @@ import Navbar from "./Components/Navbar/Navbar";
 import Link from "next/link";
 import RegistrationForm from "./Components/Auth/RegistrationForm";
 import AuthCard from "./Components/Auth/AuthCard";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function Home() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [AutoScroll()]);
@@ -22,7 +23,7 @@ export default function Home() {
       <div className="bg-[url('/blurred-hotel-reception-with-people-sitting.jpg')] bg-no-repeat gap-4 bg-center bg-cover flex flex-row px-16 py-8 h-[512px]">
         <div className="w-1/2 flex flex-col justify-center  rounded-[2rem] px-8 gap-2">
           <h1 className="text-4xl font-extrabold text-primary">
-            Amplify your productivity with HRMplify!
+            Amplify your productivity with {SiteConfig.siteName}!
           </h1>
           <p className="font-semibold text-lg text-secondary-foreground">
             Enhance performance of your HR team and strengthen your people with
@@ -71,25 +72,25 @@ export default function Home() {
         <Image
           height={0}
           width={0}
-          src={"/logo.svg"}
+          src={"/site-logo.svg"}
           className="h-16 w-fit"
-          alt={"HRMplify logo"}
+          alt={`${SiteConfig.siteName} logo`}
         />
         <div className="container px-32">
-          <h1 className="text-4xl font-extrabold text-center text-[#ed1c24]">
+          <h1 className="text-4xl font-extrabold text-center text-rose-600">
             HR Simplified
           </h1>
 
           <p className="text-center text-xl font-semibold text-muted-foreground">
-            HRMplify delivers an exceptional HR management experience, equipping
-            you and your team with the tools to excel in every aspect of human
-            resources.
+            {SiteConfig.siteName} delivers an exceptional HR management
+            experience, equipping you and your team with the tools to excel in
+            every aspect of human resources.
           </p>
 
           <p className="text-center text-xl font-semibold text-muted-foreground">
             From employee engagement to performance management, and from payroll
-            to compliance, HRMplify empowers organizations worldwide to create
-            outstanding workplaces where people thrive.
+            to compliance, {SiteConfig.siteName} empowers organizations
+            worldwide to create outstanding workplaces where people thrive.
           </p>
         </div>
 

@@ -37,8 +37,8 @@ Manually show login info (dev mode)
 Signup
 fname lname mname
 no contact field on initial reg
-register on the same page
+register on the same page [x]
 
-work on organization profile
-super admin dashboard
-companies table/grid
+work on organization profile [x]
+super admin dashboard [x]
+companies table/grid [x]

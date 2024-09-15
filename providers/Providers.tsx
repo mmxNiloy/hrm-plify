@@ -15,7 +15,7 @@ export function Providers({ children }: Props) {
       {/* <LanguageContextProvider> */}
       {children}
       <Toaster />
-      <TailwindIndicator />
+      {/* <TailwindIndicator /> */}
       {/* </LanguageContextProvider> */}
     </ThemeProvider>
     // </UserContextProvider>
