@@ -413,3 +413,38 @@ export const weekDays: string[] = [
   "Saturday",
   "Sunday",
 ];
+
+export const maritalStatus: string[] = [
+  "Unmarried",
+  "Married",
+  "Separated",
+  "Divorced",
+  "Widowed",
+];
+
+export function convertTo12Hour(time: string): string {
+  // Split the time string by colon
+  const [hours, minutes, seconds] = time.split(":");
+
+  // Convert the hours to a number
+  let hour = parseInt(hours);
+
+  // Determine AM or PM
+  const period = hour >= 12 ? "PM" : "AM";
+
+  // Convert hour to 12-hour format
+  hour = hour % 12 || 12; // If hour is 0 or 12, show 12
+
+  // Return formatted time with optional seconds
+  return `${hour}:${minutes}${seconds ? ":" + seconds : ""} ${period}`;
+}
+
+export function toYYYYMMDD(date?: Date) {
+  if (!date) return "";
+
+  return `${date.getFullYear().toString().padStart(4, "0")}-${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+}

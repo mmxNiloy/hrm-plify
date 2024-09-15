@@ -64,8 +64,15 @@ export default function EmployeeStatsCard() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
-        <Bar data={empStats} />
+      <CardContent className="relative flex h-auto w-full items-center justify-center">
+        <Bar
+          options={{
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2 / 1,
+          }}
+          data={empStats}
+        />
       </CardContent>
       <CardFooter>
         <div className="flex-grow flex flex-col gap-1">

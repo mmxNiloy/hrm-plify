@@ -358,7 +358,9 @@ export function NetworkedDataTable<TData, TValue>({
 
     try {
       const apiRes = await fetch(
-        `${src}?page=${currentPage}&limit=${pagination.pageSize}`
+        `${src}${src.includes("?") ? "&" : "?"}page=${currentPage}&limit=${
+          pagination.pageSize
+        }`
       );
       if (apiRes.ok) {
         const resData = (await apiRes.json()) as IPaginatedTableData<TData>;

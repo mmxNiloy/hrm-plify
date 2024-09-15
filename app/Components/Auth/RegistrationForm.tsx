@@ -3,16 +3,25 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import React, { useState, useCallback } from "react";
 
 export default function RegistrationForm() {
+  // Field states
+  const [firstName, setFirstName] = useState<string>("");
+  const [middleName, setMiddleName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [pwdErrorMsg, setPwdErrorMsg] = useState<string>("");
   const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
   const [contactErrorMsg, setContactErrorMsg] = useState<string>("");
 
-  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const { toast } = useToast();
 
   const handlePasswordChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +56,7 @@ export default function RegistrationForm() {
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const email = e.target.value.trim();
+      setEmail(email);
       if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
         setEmailErrorMsg("");
       } else setEmailErrorMsg("Invalid Email address");
@@ -70,20 +80,68 @@ export default function RegistrationForm() {
     },
     []
   );
+
+  const handleRegister = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setLoading(true);
+
+      // Try to call api from here
+      try {
+        const apiRes = await fetch("/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fname: firstName,
+            middleName,
+            lname: lastName,
+            email,
+            password,
+          }),
+        });
+
+        if (apiRes.ok) {
+          toast({
+            title: "Registered!",
+            description: "Your account has been registered. Try logging in!",
+            className: "bg-green-500 text-white",
+          });
+        } else {
+          toast({
+            title: "Registration failed",
+            description: JSON.stringify(await apiRes.json()),
+            variant: "destructive",
+          });
+        }
+      } catch (_) {
+        toast({
+          title: "Registration failed!",
+          description:
+            "We're having trouble processing your request. Try again later.",
+          variant: "destructive",
+        });
+      }
+
+      setLoading(false);
+    },
+    [toast]
+  );
+
   return (
-    <form
-      action="/api/register"
-      method="POST"
-      encType="multipart/form-data"
-      className="w-full h-fit flex flex-col gap-1 md:gap-4"
-    >
+    <form className="w-full h-fit flex flex-col gap-1 md:gap-4">
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="first-name-input">First Name</Label>
           <Input
+            disabled={loading}
             id="first-name-input"
             placeholder="First Name"
             required
+            onChange={(e) => setFirstName(e.target.value.trim())}
             name="first_name"
             className="rounded-full valid:border-green-500 valid:focus-within:ring-green-500"
           />
@@ -92,6 +150,8 @@ export default function RegistrationForm() {
         <div className="flex-col gap-2">
           <Label htmlFor="middle-name-input">Middle Name</Label>
           <Input
+            onChange={(e) => setMiddleName(e.target.value.trim())}
+            disabled={loading}
             id="first-name-input"
             placeholder="Middle Name"
             name="middle_name"
@@ -102,6 +162,8 @@ export default function RegistrationForm() {
         <div className="flex flex-col gap-2">
           <Label htmlFor="last-name-input">Last Name</Label>
           <Input
+            onChange={(e) => setLastName(e.target.value.trim())}
+            disabled={loading}
             id="last-name-input"
             placeholder="Last Name"
             required
@@ -113,6 +175,7 @@ export default function RegistrationForm() {
       <div className="flex-col gap-2 hidden">
         <Label htmlFor="contact-input">Contact</Label>
         <Input
+          disabled={loading}
           id="contact-input"
           type="tel"
           placeholder="Contact"
@@ -134,6 +197,7 @@ export default function RegistrationForm() {
       <div className="flex flex-col gap-2">
         <Label htmlFor="email-input">Email</Label>
         <Input
+          disabled={loading}
           id="email-input"
           type="email"
           placeholder="Email"
@@ -164,6 +228,7 @@ export default function RegistrationForm() {
           )}
         >
           <Input
+            disabled={loading}
             id="password-input"
             type={passwordVisible ? "text" : "password"}
             placeholder="Password"
@@ -182,6 +247,7 @@ export default function RegistrationForm() {
             )}
           />
           <Button
+            disabled={loading}
             type="button"
             onClick={() => setPasswordVisible(!passwordVisible)}
             size="icon"
@@ -205,15 +271,21 @@ export default function RegistrationForm() {
 
       <Button
         disabled={
+          loading ||
           contactErrorMsg.length > 0 ||
           emailErrorMsg.length > 0 ||
           pwdErrorMsg.length > 0
         }
-        type="submit"
+        onClick={handleRegister}
         size="sm"
         className="w-full rounded-full bg-green-500 hover:bg-green-400 gap-2"
       >
-        <Icons.badgeCheck /> Sign-up
+        {loading ? (
+          <Icons.spinner className="animate-spin ease-in-out" />
+        ) : (
+          <Icons.badgeCheck />
+        )}{" "}
+        {loading ? "Processing..." : "Sign-up"}
       </Button>
     </form>
   );

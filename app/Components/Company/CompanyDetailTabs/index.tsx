@@ -9,12 +9,14 @@ import CompanyTradeTab from "@/app/Components/Company/CompanyDetailTabs/CompanyT
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CompanyDepartmentsTab from "./CompanyDepartmentsTab";
 
 type TabValue =
   | "profile"
   | "auth"
   | "key-contact"
   | "l1-user"
+  | "departments"
   | "address"
   | "trade"
   | "documents";
@@ -42,6 +44,7 @@ export default function CompanyDetailTabs({
         title: "Authority",
         content: (
           <CompanyAuthorityTab
+            id={company.company_authorised_details?.authorised_id}
             company_id={company.company_id}
             data={company.company_authorised_details}
           />
@@ -52,6 +55,7 @@ export default function CompanyDetailTabs({
         title: "Key Contact",
         content: (
           <CompanyAuthorityTab
+            id={company.company_key_contact?.key_contact_id}
             company_id={company.company_id}
             title="Key Contact"
             data={company.company_key_contact}
@@ -63,11 +67,17 @@ export default function CompanyDetailTabs({
         title: "Level 1 User",
         content: (
           <CompanyAuthorityTab
+            id={company.company_l1_user?.l1_user_id}
             company_id={company.company_id}
             title="Level 1 User"
             data={company.company_l1_user}
           />
         ),
+      },
+      {
+        value: "departments",
+        title: "Departments",
+        content: <CompanyDepartmentsTab company_id={company.company_id} />,
       },
       {
         value: "address",

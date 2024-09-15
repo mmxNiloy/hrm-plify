@@ -1,3 +1,4 @@
+"use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { ICompanyTradeDetails } from "@/schema/CompanySchema";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
@@ -20,8 +22,17 @@ export default function CompanyTradeFormFragment({
   return (
     <>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="company-reg-input">Registration No.</Label>
+        <Label
+          className={cn(
+            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
+          )}
+          htmlFor="company-reg-input"
+        >
+          Registration No.
+        </Label>
         <Input
+          required
+          key={`company-reg-${data?.company_reg}`}
           className="rounded-full"
           readOnly={readOnly}
           disabled={disabled}
@@ -33,8 +44,17 @@ export default function CompanyTradeFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="type-of-company-input">Company Type</Label>
+        <Label
+          className={cn(
+            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
+          )}
+          htmlFor="type-of-company-input"
+        >
+          Company Type
+        </Label>
         <Input
+          required
+          key={`company-type-${data?.type_of_company}`}
           className="rounded-full"
           readOnly={readOnly}
           disabled={disabled}
@@ -46,8 +66,17 @@ export default function CompanyTradeFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="trade-name-input">Trade</Label>
+        <Label
+          className={cn(
+            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
+          )}
+          htmlFor="trade-name-input"
+        >
+          Trade
+        </Label>
         <Input
+          required
+          key={`company-trade-name-${data?.trade_name}`}
           className="rounded-full"
           readOnly={readOnly}
           disabled={disabled}
@@ -59,8 +88,17 @@ export default function CompanyTradeFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="sector-input">Sector</Label>
+        <Label
+          className={cn(
+            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
+          )}
+          htmlFor="sector-input"
+        >
+          Sector
+        </Label>
         <Input
+          required
+          key={`company-sector-${data?.sector}`}
           className="rounded-full"
           readOnly={readOnly}
           disabled={disabled}
@@ -72,8 +110,17 @@ export default function CompanyTradeFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="org-email-input">Organization Email</Label>
+        <Label
+          className={cn(
+            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
+          )}
+          htmlFor="org-email-input"
+        >
+          Organization Email
+        </Label>
         <Input
+          required
+          key={`company-org-email-${data?.org_email}`}
           className="rounded-full"
           readOnly={readOnly}
           disabled={disabled}
@@ -89,9 +136,10 @@ export default function CompanyTradeFormFragment({
           Has the organization/trading name changed in the last 5 years?
         </Label>
         <Select
+          key={`company-change-of-name-${data?.change_of_name_5}`}
           name="change_of_name_5"
           disabled={readOnly || disabled}
-          defaultValue={data?.change_of_name_5 ?? ""}
+          defaultValue={data?.change_of_name_5 ?? "no"}
         >
           <SelectTrigger id="change-of-name-select" className="rounded-full">
             <SelectValue placeholder="Has name changed?" />
@@ -109,9 +157,10 @@ export default function CompanyTradeFormFragment({
           Has the organization faced a penalty in the last 3 years?
         </Label>
         <Select
+          key={`company-faced-penalty-${data?.faced_penaly_org}`}
           name="faced_penaly_org"
           disabled={readOnly || disabled}
-          defaultValue={data?.faced_penaly_org ?? ""}
+          defaultValue={data?.faced_penaly_org ?? "no"}
         >
           <SelectTrigger id="faced-penalty-select" className="rounded-full">
             <SelectValue placeholder="Has the organization faced a penalty? (e.g., for recruiting illegal employees)" />

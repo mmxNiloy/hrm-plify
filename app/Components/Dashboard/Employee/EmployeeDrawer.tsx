@@ -52,7 +52,7 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
         <Separator />
         <div className="flex flex-col gap-2">
           <Link
-            href={`/dashboard/employee/company/${companyId}`}
+            href={`/dashboard/company/${companyId}/employee`}
             className="w-full"
             passHref
           >
@@ -61,8 +61,8 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee" ||
-                    path === `/dashboard/employee/company/${companyId}`
+
+                  path === `/dashboard/company/${companyId}/employee`
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}
@@ -72,13 +72,17 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
             </DrawerClose>
           </Link>
 
-          <Link href={"/dashboard/employee/all"} className="w-full" passHref>
+          <Link
+            href={`/dashboard/company/${companyId}/employee/all`}
+            className="w-full"
+            passHref
+          >
             <DrawerClose asChild>
               <Button
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee/all"
+                  path === `/dashboard/company/${companyId}/employee/all`
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}
@@ -89,7 +93,7 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
           </Link>
 
           <Link
-            href={"/dashboard/employee/migrant"}
+            href={`/dashboard/company/${companyId}/employee/migrant`}
             className="w-full"
             passHref
           >
@@ -98,7 +102,7 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee/migrant"
+                  path === `/dashboard/company/${companyId}/employee/migrant`
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}
@@ -109,7 +113,7 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
           </Link>
 
           <Link
-            href={"/dashboard/employee/change-of-circumstances"}
+            href={`/dashboard/company/${companyId}/employee/change-of-circumstances`}
             className="w-full"
             passHref
           >
@@ -118,7 +122,8 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee/change-of-circumstances"
+                  path ===
+                    `/dashboard/company/${companyId}/employee/change-of-circumstances`
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}
@@ -129,7 +134,7 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
           </Link>
 
           <Link
-            href={"/dashboard/employee/contract-agreement"}
+            href={`/dashboard/company/${companyId}/employee/contract-agreement`}
             className="w-full"
             passHref
           >
@@ -138,7 +143,8 @@ export default function EmployeeDrawer({ companyId }: { companyId: number }) {
                 variant="ghost"
                 className={cn(
                   "w-full gap-4 justify-start hover:underline",
-                  path === "/dashboard/employee/contract-agreement"
+                  path ===
+                    `/dashboard/company/${companyId}/employee/contract-agreement`
                     ? "bg-blue-500 hover:bg-blue-400 text-white"
                     : ""
                 )}

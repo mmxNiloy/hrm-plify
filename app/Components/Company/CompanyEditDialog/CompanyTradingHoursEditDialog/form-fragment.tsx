@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { ICompanyTradingHour } from "@/schema/CompanySchema";
 import { weekDays } from "@/utils/Misc";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 export default function CompanyTradingHoursFormFragment({
   data,
@@ -21,7 +21,7 @@ export default function CompanyTradingHoursFormFragment({
   const getStatusString = useCallback(
     (day: string) => {
       const t = data.find((th) => th.day_name === day);
-      return t ? (t.trade_status == 0 ? "close" : "open") : "";
+      return t ? (t.trade_status == 0 ? "close" : "open") : "close";
     },
     [data]
   );
@@ -45,6 +45,24 @@ export default function CompanyTradingHoursFormFragment({
     },
     [data, getStatusString]
   );
+
+  const [status, setStatus] = useState<boolean[]>(
+    Array.from({ length: 7 }, (_, index) => {
+      if (data.find((th) => weekDays[index] == th.day_name)?.trade_status == 1)
+        return true;
+      return false;
+    })
+  );
+
+  const [startTime, setStartTime] = useState<string[]>(
+    Array.from({ length: 7 }, (_) => "")
+  );
+
+  const getID = (day: string) => {
+    const t = data.find((th) => th.day_name === day);
+    return t ? t.id : -1;
+  };
+
   return (
     <>
       <p>Day</p>
@@ -53,8 +71,19 @@ export default function CompanyTradingHoursFormFragment({
       <p>Closing Time</p>
       {weekDays.map((day, index) => (
         <React.Fragment key={`${day}-trading-hour-input`}>
-          <Input readOnly defaultValue={day} name="day_name" />
-          <Select name="trade_status" defaultValue={getStatusString(day)}>
+          <Input readOnly tabIndex={-1} defaultValue={day} name="day_name" />
+          <Select
+            key={`${day}-trading-hour-status-${getStatusString(day)}`}
+            name="trade_status"
+            defaultValue={getStatusString(day)}
+            onValueChange={(val: ReturnType<typeof getStatusString>) => {
+              setStatus((oldStatus) =>
+                oldStatus.map((flag, idx) =>
+                  idx == index ? (val === "open" ? true : false) : flag
+                )
+              );
+            }}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select Trade Status" />
             </SelectTrigger>
@@ -69,15 +98,25 @@ export default function CompanyTradingHoursFormFragment({
           </Select>
 
           <Input
+            required={status[index]}
+            key={`${day}-trading-hour-starting-time-${getOpeningTime(day)}`}
             type="time"
-            disabled={getOpeningTime(day) === "Closed"}
+            disabled={!status[index]}
             name="opening_time"
             defaultValue={getOpeningTime(day)}
             placeholder={getOpeningTime(day)}
+            onChange={(e) => {
+              const val = e.target.value;
+              setStartTime((oldVal) =>
+                oldVal.map((t, idx) => (idx == index ? val : t))
+              );
+            }}
           />
           <Input
+            required={status[index]}
+            key={`${day}-trading-hour-closing-time-${getClosingTime(day)}`}
             type="time"
-            disabled={getClosingTime(day) === "Closed"}
+            disabled={!status[index]}
             name="closing_time"
             defaultValue={getClosingTime(day)}
             placeholder={getClosingTime(day)}

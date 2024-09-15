@@ -1,9 +1,11 @@
 import { checkRole } from "@/middlewares/checkRole";
 import { validateSession } from "@/middlewares/validateSession";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const session = validateSession(req);
+  const userRole = checkRole(req);
 
   // redirect unauthorized users
   if (req.nextUrl.pathname.startsWith("/dashboard") && !session) {
@@ -15,13 +17,41 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
+  // Default dashboard of each user
+  if (req.nextUrl.pathname.endsWith("/dashboard")) {
+    if (!userRole) {
+      cookies().delete(
+        process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ?? "hrmplify_session_token"
+      );
+      cookies().delete(
+        process.env.NEXT_PUBLIC_COOKIE_USER_KEY ?? "hrmplify_user_data"
+      );
+      return NextResponse.redirect(
+        new URL("/?_ref=permission-denied", req.url)
+      );
+    } else if (userRole.role.role_name === "Guest") {
+      return NextResponse.rewrite(new URL("/dashboard/guest", req.url));
+    } else if (userRole.role.role_name === "Employee") {
+      return NextResponse.rewrite(
+        new URL(
+          `/dashboard/company/${userRole.company_id}/employee/home`,
+          req.url
+        )
+      );
+    }
+  }
+
   // For company route, check role and redirect accordingly
   if (req.nextUrl.pathname.startsWith("/dashboard/company")) {
-    const userRole = checkRole(req);
-
     if (!userRole) {
+      cookies().delete(
+        process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ?? "hrmplify_session_token"
+      );
+      cookies().delete(
+        process.env.NEXT_PUBLIC_COOKIE_USER_KEY ?? "hrmplify_user_data"
+      );
       return NextResponse.redirect(
-        new URL("/dashboard?_ref=permission-denied", req.url)
+        new URL("/?_ref=permission-denied", req.url)
       );
     } else if (
       userRole.role.role_name !== "Super Admin" &&

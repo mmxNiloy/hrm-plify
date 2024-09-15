@@ -1,9 +1,11 @@
+import { IEmployee } from "./EmployeeSchema";
+
 export interface ILoginResponse {
   token: string;
   user: IUser;
 }
 
-export interface IUser {
+export interface IUserBase {
   user_id: number;
   email: string;
   password_hash: string;
@@ -13,8 +15,15 @@ export interface IUser {
   created_at: string;
   updated_at: string;
   middle_name: string;
+}
+
+export interface IUserWithEmployeeData extends IUserBase {
+  employee_data: IEmployee;
+}
+
+export interface IUser extends IUserBase {
   company_id?: number;
-  user_roles: IUserRoles;
+  user_roles?: IUserRoles;
 }
 
 export interface IUserRoles {
@@ -22,5 +31,25 @@ export interface IUserRoles {
 }
 
 export interface IRoles {
-  role_name: "Super Admin" | "Admin" | "Company Admin" | "Employee" | string;
+  role_name: "Super Admin" | "Admin" | "Company Admin" | "Employee" | "Guest";
+}
+
+export interface ICompanyUser {
+  user_company_id: number;
+  user_id: number;
+  company_id: number;
+  company_role_id: number;
+  created_at: string;
+  updated_at: string;
+  isActive: boolean;
+  users: IUserWithEmployeeData;
+  roles: ICompanyUserRoles;
+}
+
+export interface ICompanyUserRoles {
+  role_id: number;
+  role_name: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
 }

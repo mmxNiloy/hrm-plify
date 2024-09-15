@@ -1,0 +1,108 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { ComboBox } from "@/components/ui/combobox";
+import Icons from "@/components/ui/icons";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { IEmployeeContactInfo } from "@/schema/EmployeeSchema";
+import { ButtonBlue } from "@/styles/button.tailwind";
+import { countryNames } from "@/utils/Misc";
+import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
+import React from "react";
+
+export default function ContactInfoFormFragment({
+  data,
+  readOnly,
+  disabled,
+}: IFormFragmentProps<IEmployeeContactInfo>) {
+  return (
+    <>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="post-code-input">Post Code</Label>
+        <Input
+          id="post-code-input"
+          key={`post-code-${data?.postcode}`}
+          name="postcode"
+          readOnly={readOnly}
+          disabled={disabled}
+          defaultValue={data?.postcode}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="address-input">Address</Label>
+        <Input
+          id="address-input"
+          key={`address-line-${data?.address_line}`}
+          name="address_line"
+          readOnly={readOnly}
+          disabled={disabled}
+          defaultValue={data?.address_line}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="additional-address-1-input">Additional Address</Label>
+        <Input
+          id="additional-address-1-input"
+          key={`additional-address-1-${data?.additional_address_1}`}
+          name="additional_address_1"
+          readOnly={readOnly}
+          disabled={disabled}
+          defaultValue={data?.additional_address_1}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="additional-address-2-input">Additional Address</Label>
+        <Input
+          id="additional-address-2-input"
+          key={`additional-address-2-${data?.additional_address_2}`}
+          name="additional_address_2"
+          readOnly={readOnly}
+          disabled={disabled}
+          defaultValue={data?.additional_address_2}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="country-input">Country</Label>
+        <ComboBox
+          items={countryNames}
+          id="country-input"
+          key={`country-${data?.country}`}
+          name="country"
+          readOnly={readOnly}
+          disabled={disabled}
+          defaultValue={data?.country}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="proof-of-address-input">Proof of Address</Label>
+        {!readOnly ? (
+          <Input
+            disabled={disabled}
+            id="proof-of-address-input"
+            type="file"
+            name="proof_of_address_doc"
+          />
+        ) : (
+          <Link
+            className="w-full"
+            href={data?.proof_address_doc_link ?? "#proof-of-address-download"}
+            passHref
+          >
+            <Button
+              id="proof-of-address-download"
+              disabled={!data || !data.proof_address_doc_link}
+              className={cn(ButtonBlue, "w-full")}
+            >
+              <Icons.download /> View Document
+            </Button>
+          </Link>
+        )}
+      </div>
+    </>
+  );
+}

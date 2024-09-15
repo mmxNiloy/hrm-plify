@@ -13,49 +13,98 @@ import {
 import Icons from "@/components/ui/icons";
 import { ButtonWarn } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import React, { useCallback } from "react";
-import { ICompanyAuthorisedDetails } from "@/schema/CompanySchema";
+import React, { useCallback, useState } from "react";
+import {
+  ICompanyAuthorisedDetails,
+  ICompanyAuthorizedDetailsBase,
+  ICompanyKeyContact,
+  ICompanyL1User,
+} from "@/schema/CompanySchema";
 import CompanyAuthorityFormFragment from "./form-fragment";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { ToastSuccess } from "@/styles/toast.tailwind";
 
 export default function CompanyAuthorityEditDialog({
   data,
   title = "Authorised Personnel",
   company_id,
+  id,
 }: {
-  data?: ICompanyAuthorisedDetails;
+  data?: ICompanyAuthorizedDetailsBase;
   title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
   company_id: number;
+  id?: number;
 }) {
   const { toast } = useToast();
+  const router = useRouter();
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [updating, setUpdating] = useState<boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
-      const apiRes = await fetch(`/api/company/authority/${company_id}`, {
-        method: "PUT",
-        body: fd,
-      });
-      const res = await apiRes.json();
-      toast({
-        title: res.message,
-        description: JSON.stringify(res.data),
-      });
+
+      setUpdating(true);
+
+      try {
+        const apiRes = await fetch(
+          `/api/company/authority/${id ?? company_id}`,
+          {
+            method: data ? "PUT" : "POST",
+            body: fd,
+          }
+        );
+
+        const res = await apiRes.json();
+
+        if (apiRes.ok) {
+          // Close dialog, show toast, refresh parent ssc
+          toast({
+            title: "Update Successful",
+            className: ToastSuccess,
+          });
+
+          router.refresh();
+          setOpen(false);
+        } else {
+          // show a failure dialog
+          toast({
+            title: "Update Failed",
+            description: res.message,
+            variant: "destructive",
+          });
+        }
+      } catch (err) {
+        toast({
+          title: "Update Failed",
+          variant: "destructive",
+        });
+      }
+
+      setUpdating(false);
     },
-    [company_id, toast]
+    [company_id, data, id, router, toast]
   );
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className={ButtonWarn} size={"sm"}>
           <Icons.edit /> Update Information
         </Button>
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        className={DialogContentWidth}
+        onInteractOutside={(e) => {
+          if (updating) e.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Edit {title} Details</DialogTitle>
           <DialogDescription>
@@ -68,7 +117,7 @@ export default function CompanyAuthorityEditDialog({
           <input className="hidden" name="type" defaultValue={title} />
           <ScrollArea className="h-[70vh]">
             <div className="p-1 grid grid-cols-2 gap-4">
-              <CompanyAuthorityFormFragment data={data} />
+              <CompanyAuthorityFormFragment disabled={updating} data={data} />
             </div>
           </ScrollArea>
 
@@ -84,8 +133,18 @@ export default function CompanyAuthorityEditDialog({
               </Button>
             </DialogClose>
 
-            <Button className={ButtonWarn} size={"sm"}>
-              <Icons.update /> Update
+            <Button disabled={updating} className={ButtonWarn} size={"sm"}>
+              {updating ? (
+                <>
+                  <Icons.update className="animate-spin ease-in-out" />
+                  {" Updating..."}
+                </>
+              ) : (
+                <>
+                  <Icons.update />
+                  {" Update"}
+                </>
+              )}
             </Button>
           </DialogFooter>
         </form>

@@ -1,3 +1,4 @@
+import { IDesignation } from "./DesignationSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface ICompany {
@@ -14,6 +15,12 @@ export interface ICompany {
   is_active: number;
 }
 
+export interface ICompanyWithEmployeeMeta extends ICompany {
+  total_employees: number;
+  total_migrant_employees: number;
+  company_authorized_details?: ICompanyAuthorisedDetails;
+}
+
 export interface ICompanyCreationBody {
   company_name: string;
   industry: string;
@@ -28,21 +35,28 @@ export interface IPaginatedCompany extends IPaginatedResponse {
   data: ICompany[];
 }
 
-export interface ICompanyAddress {
-  address_id: number;
-  company_id: number;
+export interface ICompanyWithDesignationMeta extends ICompany {
+  totalDesignations: number;
+  designations: IDesignation[];
+}
+
+export interface ICompanyAddressBase {
   postcode: string;
   address_line_1?: string;
   address_line_2?: string;
   address_line_3?: string;
   city_county: string;
   country?: string;
+}
+
+export interface ICompanyAddress extends ICompanyAddressBase {
+  address_id: number;
+  company_id: number;
   created_at: Date;
   updated_at: Date;
 }
 
-export interface ICompanyAuthorisedDetails {
-  authorised_id: number;
+export interface ICompanyAuthorizedDetailsBase {
   company_id: number;
   fname: string;
   lname: string;
@@ -51,8 +65,13 @@ export interface ICompanyAuthorisedDetails {
   email: string;
   doc_link?: string;
   offence_history?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface ICompanyAuthorisedDetails
+  extends ICompanyAuthorizedDetailsBase {
+  authorised_id: number;
 }
 
 export interface ICompanyDoc {
@@ -65,19 +84,15 @@ export interface ICompanyDoc {
   updated_at: Date;
 }
 
-export interface ICompanyKeyContact
-  extends Exclude<ICompanyAuthorisedDetails, "authorised_id"> {
+export interface ICompanyKeyContact extends ICompanyAuthorizedDetailsBase {
   key_contact_id: number;
 }
 
-export interface ICompanyL1User
-  extends Exclude<ICompanyAuthorisedDetails, "authorised_id"> {
+export interface ICompanyL1User extends ICompanyAuthorizedDetailsBase {
   l1_user_id: number;
 }
 
-export interface ICompanyTradeDetails {
-  id: number;
-  company_id: number;
+export interface ICompanyTradeDetailsBase {
   company_reg: string;
   type_of_company: string;
   trade_name: string;
@@ -85,17 +100,32 @@ export interface ICompanyTradeDetails {
   sector: string;
   change_of_name_5?: string;
   faced_penaly_org?: string;
+}
+
+export interface ICompanyTradeDetails extends ICompanyTradeDetailsBase {
+  id: number;
+  company_id: number;
   created_at: Date;
   updated_at: Date;
 }
 
-export interface ICompanyTradingHour {
-  id: number;
+export interface ICompanyTradingHourBase {
   company_id: number;
-  day_name: string;
+  day_name:
+    | "Sunday"
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday";
   trade_status: number;
   opening_time?: string;
   closing_time?: string;
+}
+
+export interface ICompanyTradingHour extends ICompanyTradingHourBase {
+  id: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -120,4 +150,12 @@ export interface ICompanyDetails extends ICompany, ICompanyTradeData {
   company_key_contact?: ICompanyKeyContact;
   company_l1_user?: ICompanyL1User;
   leave_approvers?: ICompanyLeaveApprover[];
+}
+
+export interface IDepartment {
+  department_id: number;
+  company_id: number;
+  created_at?: Date;
+  updated_at?: Date;
+  dpt_name: string;
 }
