@@ -46,28 +46,28 @@ export const columns: ColumnDef<IDutyRoster>[] = [
     header: ({ column }) => (
       <SortableHeader name="Work In Time" column={column} />
     ),
-    cell: ({ row }) => row.original.shift.work_in_time,
+    cell: ({ row }) => row.original.shift.start_time,
   },
   {
     id: "work_out_time",
     header: ({ column }) => (
       <SortableHeader name="Work Out Time" column={column} />
     ),
-    cell: ({ row }) => row.original.shift.work_out_time,
+    cell: ({ row }) => row.original.shift.end_time,
   },
   {
     id: "break_time_start",
     header: ({ column }) => (
       <SortableHeader name="Break Time From" column={column} />
     ),
-    cell: ({ row }) => row.original.shift.break_time_start,
+    cell: ({ row }) => row.original.shift.break_start,
   },
   {
     id: "break_time_end",
     header: ({ column }) => (
       <SortableHeader name="Break Time To" column={column} />
     ),
-    cell: ({ row }) => row.original.shift.break_time_end,
+    cell: ({ row }) => row.original.shift.break_end,
   },
   {
     id: "from_date",

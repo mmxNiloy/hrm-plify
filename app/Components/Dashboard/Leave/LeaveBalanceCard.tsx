@@ -12,10 +12,11 @@ import {
 import { ILeaveBalance } from "@/schema/LeaveSchema";
 import React from "react";
 
+//! Deprecated
 export default function LeaveBalanceCard({ data }: { data: ILeaveBalance[] }) {
   return (
     <div className="flex flex-col gap-1 border rounded-md py-4 px-6">
-      <Label className="text-lg font-semibold">Leave balance</Label>
+      {/* <Label className="text-lg font-semibold">Leave balance</Label>
       <Table className="mt-4">
         <TableCaption>Leave Balance</TableCaption>
         <TableHeader>
@@ -74,7 +75,8 @@ export default function LeaveBalanceCard({ data }: { data: ILeaveBalance[] }) {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table> */}
+      WIP
     </div>
   );
 }

@@ -1,16 +1,24 @@
 import { IDepartment } from "./CompanySchema";
 import { IDesignation } from "./DesignationSchema";
 import { IEmployee, IEmployeeWithPersonalInfo } from "./EmployeeSchema";
+import { IPaginatedResponse } from "./PaginatedResponse";
 
-//! Subject to change, change depends on the database
 export interface IShift {
-  id: number;
-  shift_code: string;
-  shift_description: string;
-  work_in_time: string;
-  work_out_time: string;
-  break_time_start: string;
-  break_time_end: string;
+  shift_id: number;
+  company_id: number;
+  shift_name: string;
+  start_time: string;
+  end_time: string;
+  break_start: string;
+  break_end: string;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+//! Subject to change
+export interface IPaginatedShift extends IPaginatedResponse {
+  message: string;
+  data: IShift[];
 }
 
 export interface IDutyBase {

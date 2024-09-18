@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { IShift } from "@/schema/RotaSchema";
+import { stripSeconds } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React, { Suspense } from "react";
 
@@ -26,7 +27,7 @@ export default function ShiftManagementFormFragment({
 }: IFormFragmentProps<IShift>) {
   return (
     <>
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <Label
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
@@ -82,26 +83,25 @@ export default function ShiftManagementFormFragment({
             </SelectGroup>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
-      <div className="flex flex-col gap-2">
+      <div className="col-span-full flex flex-col gap-2">
         <Label
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
-          htmlFor="work-in-time-input"
+          htmlFor="shift-name-input"
         >
-          Clock In Time
+          Shift Name
         </Label>
         <Input
-          id="work-in-time-input"
-          key={`work-in-time-${data?.work_in_time}`}
+          id="shift-name-input"
+          key={`shift-name-${data?.shift_name}`}
           required
           readOnly={readOnly}
           disabled={disabled}
-          name="work_in_time"
-          type="time"
-          defaultValue={data?.work_in_time}
+          name="shift_name"
+          defaultValue={data?.shift_name}
         />
       </div>
 
@@ -110,19 +110,19 @@ export default function ShiftManagementFormFragment({
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
-          htmlFor="work-out-time-input"
+          htmlFor="shift-start-time-input"
         >
-          Clock Out Time
+          Shift Start
         </Label>
         <Input
-          id="work-out-time-input"
-          key={`work-out-time-${data?.work_out_time}`}
+          id="shift-start-time-input"
+          key={`shift-start-time-${data?.start_time}`}
           required
           readOnly={readOnly}
           disabled={disabled}
-          name="work_out_time"
+          name="start_time"
           type="time"
-          defaultValue={data?.work_out_time}
+          defaultValue={data?.start_time && stripSeconds(data.start_time)}
         />
       </div>
 
@@ -131,19 +131,40 @@ export default function ShiftManagementFormFragment({
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
-          htmlFor="break-time-start-input"
+          htmlFor="shift-end-time-input"
+        >
+          Shift End
+        </Label>
+        <Input
+          id="shift-end-time-input"
+          key={`shift-end-time-${data?.end_time}`}
+          required
+          readOnly={readOnly}
+          disabled={disabled}
+          name="end_time"
+          type="time"
+          defaultValue={data?.end_time && stripSeconds(data.end_time)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label
+          className={cn(
+            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
+          )}
+          htmlFor="break-start-input"
         >
           Break Time Start
         </Label>
         <Input
-          id="break-time-start-input"
-          key={`break-time-start-${data?.break_time_start}`}
+          id="break-start-input"
+          key={`break-start-${data?.break_start}`}
           required
           readOnly={readOnly}
           disabled={disabled}
-          name="break_time_start"
+          name="break_start"
           type="time"
-          defaultValue={data?.break_time_start}
+          defaultValue={data?.break_start && stripSeconds(data.break_start)}
         />
       </div>
 
@@ -152,36 +173,36 @@ export default function ShiftManagementFormFragment({
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
-          htmlFor="break-time-end-input"
+          htmlFor="break-end-input"
         >
           Break Time End
         </Label>
         <Input
-          id="break-time-end-input"
-          key={`break-time-end-${data?.break_time_end}`}
+          id="break-end-input"
+          key={`break-end-${data?.break_end}`}
           required
           readOnly={readOnly}
           disabled={disabled}
-          name="break_time_end"
+          name="break_end"
           type="time"
-          defaultValue={data?.break_time_end}
+          defaultValue={data?.break_end && stripSeconds(data.break_end)}
         />
       </div>
 
-      <div className="flex flex-col gap-2 col-span-full">
+      {/* <div className="flex flex-col gap-2 col-span-full">
         <Label htmlFor="shift-description-textarea">Shift Description</Label>
         <Textarea
           className="resize-none"
           id="shift-description-textarea"
-          key={`shift-description-${data?.shift_description}`}
+          key={`shift-description-${data?.shift_name}`}
           required
           readOnly={readOnly}
           disabled={disabled}
           name="shift_description"
           rows={5}
-          defaultValue={data?.shift_description}
+          defaultValue={data?.shift_name}
         />
-      </div>
+      </div> */}
     </>
   );
 }

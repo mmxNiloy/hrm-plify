@@ -80,7 +80,7 @@ export default function OffDaysFormFragment({
         </Label>
         <Select
           required
-          defaultValue={`${data?.shift.id ?? ""}`}
+          defaultValue={`${data?.shift.shift_id ?? ""}`}
           name="shift_id"
           disabled={disabled || readOnly}
         >

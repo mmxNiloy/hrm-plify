@@ -1,3 +1,5 @@
+import { ISearchParams } from "./Types";
+
 export const nationalities: string[] = [
   "Afghan",
   "Albanian",
@@ -422,7 +424,7 @@ export const maritalStatus: string[] = [
   "Widowed",
 ];
 
-export function convertTo12Hour(time: string): string {
+export function convertTo12Hour(time: string, showSeconds?: boolean): string {
   // Split the time string by colon
   const [hours, minutes, seconds] = time.split(":");
 
@@ -436,7 +438,17 @@ export function convertTo12Hour(time: string): string {
   hour = hour % 12 || 12; // If hour is 0 or 12, show 12
 
   // Return formatted time with optional seconds
-  return `${hour}:${minutes}${seconds ? ":" + seconds : ""} ${period}`;
+  return `${hour}:${minutes}${
+    seconds && showSeconds ? ":" + seconds : ""
+  } ${period}`;
+}
+
+export function stripSeconds(time: string): string {
+  // Split the time string by colon
+  const [hours, minutes, seconds] = time.split(":");
+
+  // Return formatted time with optional seconds
+  return `${hours}:${minutes}`;
 }
 
 export function toYYYYMMDD(date?: Date) {
@@ -447,4 +459,27 @@ export function toYYYYMMDD(date?: Date) {
   )
     .toString()
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+}
+
+export function getPaginationParams(searchParams: ISearchParams): {
+  page: number;
+  limit: number;
+} {
+  var page = 1;
+  var limit = 5;
+  try {
+    page = Math.max(
+      1,
+      Number.parseInt((searchParams.page as string | undefined) ?? "1") || 0
+    );
+    limit = Math.max(
+      5,
+      Number.parseInt((searchParams.limit as string | undefined) ?? "5") || 0
+    );
+  } catch (_) {
+    page = 1;
+    limit = 5;
+  }
+
+  return { page, limit };
 }

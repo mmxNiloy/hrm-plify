@@ -323,7 +323,98 @@ const RunningLateIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 RunningLateIcon.displayName = "RunningLateIcon";
 
+const CategoryIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      className={cn(className, "lucide")}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        opacity=".34"
+        d="M5 10h2q3 0 3-3V5q0-3-3-3H5Q2 2 2 5v2q0 3 3 3"
+        stroke="#292D32"
+        stroke-width="1.5"
+        stroke-miterlimit="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M17 10h2q3 0 3-3V5q0-3-3-3h-2q-3 0-3 3v2q0 3 3 3"
+        stroke="#292D32"
+        stroke-width="1.5"
+        stroke-miterlimit="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        opacity=".34"
+        d="M17 22h2q3 0 3-3v-2q0-3-3-3h-2q-3 0-3 3v2q0 3 3 3"
+        stroke="#292D32"
+        stroke-width="1.5"
+        stroke-miterlimit="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5 22h2q3 0 3-3v-2q0-3-3-3H5q-3 0-3 3v2q0 3 3 3"
+        stroke="#292D32"
+        stroke-width="1.5"
+        stroke-miterlimit="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )
+);
+CategoryIcon.displayName = "CategoryIcon";
+
+const DistributionIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      className={cn(className, "lucide")}
+      width="24"
+      height="24"
+      viewBox="18 24 64 52"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M62 20H38a.89.89 0 0 0-.87.88v2.91a.89.89 0 0 0 .87.88h24a.9.9 0 0 0 .87-.88v-2.91A.9.9 0 0 0 62 20m-18.71 7H38a.89.89 0 0 0-.87.88v1.74a.89.89 0 0 0 .87.88h5.25a.9.9 0 0 0 .88-.88v-1.74a.9.9 0 0 0-.84-.88m9.33 0h-5.24a.9.9 0 0 0-.88.88v1.74a.9.9 0 0 0 .88.88h5.24a.9.9 0 0 0 .88-.88v-1.74a.9.9 0 0 0-.88-.88M62 27h-5.29a.9.9 0 0 0-.88.88v1.74a.9.9 0 0 0 .88.88H62a.9.9 0 0 0 .87-.88v-1.74A.9.9 0 0 0 62 27m-18.71 5.83H38a.89.89 0 0 0-.87.88v1.75a.89.89 0 0 0 .87.87h5.25a.9.9 0 0 0 .88-.87v-1.75a.9.9 0 0 0-.84-.88m9.33 0h-5.24a.9.9 0 0 0-.88.88v1.75a.9.9 0 0 0 .88.87h5.24a.9.9 0 0 0 .88-.87v-1.75a.9.9 0 0 0-.88-.88m9.38 0h-5.29a.9.9 0 0 0-.88.88v1.75a.9.9 0 0 0 .88.87H62a.9.9 0 0 0 .87-.87v-1.75a.9.9 0 0 0-.87-.88m-18.71 5.84H38a.89.89 0 0 0-.87.87v1.75a.89.89 0 0 0 .87.88h5.25a.9.9 0 0 0 .88-.88v-1.75a.9.9 0 0 0-.84-.87m9.33 0h-5.24a.9.9 0 0 0-.88.87v1.75a.9.9 0 0 0 .88.88h5.24a.9.9 0 0 0 .88-.88v-1.75a.9.9 0 0 0-.88-.87m9.38 0h-5.29a.9.9 0 0 0-.88.87v1.75a.9.9 0 0 0 .88.88H62a.9.9 0 0 0 .87-.88v-1.75a.9.9 0 0 0-.87-.87M43.29 44.5H38a.89.89 0 0 0-.87.88v1.75A.89.89 0 0 0 38 48h5.25a.9.9 0 0 0 .88-.87v-1.75a.9.9 0 0 0-.84-.88m9.33 0h-5.24a.9.9 0 0 0-.88.88v1.75a.9.9 0 0 0 .88.87h5.24a.9.9 0 0 0 .88-.87v-1.75a.9.9 0 0 0-.88-.88m9.38 0h-5.29a.9.9 0 0 0-.88.88v1.75a.9.9 0 0 0 .88.87H62a.9.9 0 0 0 .87-.87v-1.75a.9.9 0 0 0-.87-.88m13.11 12.95H51.5v-5.32a1.5 1.5 0 1 0-3 0v5.32H24.89a1.5 1.5 0 0 0-1.5 1.5v7.86a1.5 1.5 0 0 0 3 0v-6.36H48.5v5.16a1.5 1.5 0 0 0 3 0v-5.16h22.11v6.36a1.5 1.5 0 0 0 3 0V59a1.5 1.5 0 0 0-1.5-1.55" />
+      <circle cx="24.89" cy="74.71" r="4.89" />
+      <circle cx="49.82" cy="74.71" r="4.89" />
+      <circle cx="75.11" cy="74.71" r="4.89" />
+    </svg>
+  )
+);
+DistributionIcon.displayName = "DistributionIcon";
+
+const LawBuilding = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      className={cn(className, "lucide")}
+      width="24"
+      height="24"
+      viewBox="0 0 48 48"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g data-name="Layer 2">
+        <path fill="none" data-name="invisible box" d="M0 0h48v48H0z" />
+        <path
+          d="M5 36h38v4H5zm39 6H4a2 2 0 0 0-2 2v2h44v-2a2 2 0 0 0-2-2M10 18h4v16h-4zm12 0h4v16h-4zm12 0h4v16h-4zm10.9-6.6L24 2 3.1 11.4A2.1 2.1 0 0 0 2 13.2v.8a2 2 0 0 0 2 2h40a2 2 0 0 0 2-2v-.8a2.1 2.1 0 0 0-1.1-1.8m-33.3.6L24 6.4 36.4 12Z"
+          data-name="Q3 icons"
+        />
+      </g>
+    </svg>
+  )
+);
+LawBuilding.displayName = "LawBuilding";
+
 const Icons = {
+  lawBuilding: LawBuilding,
+  distribution: DistributionIcon,
+  category: CategoryIcon,
   calendarClock: LucideCalendarClock,
   calendarDays: CalendarDaysIcon,
   late: RunningLateIcon,

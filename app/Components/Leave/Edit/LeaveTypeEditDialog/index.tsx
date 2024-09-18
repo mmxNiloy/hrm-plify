@@ -12,21 +12,18 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { IDutyRoster, IOffDays } from "@/schema/RotaSchema";
+import { ILeaveType } from "@/schema/LeaveSchema";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
-import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useState } from "react";
-import OffDaysFormFragment from "./form-fragment";
-import DutyRosterFormFragment from "./form-fragment";
+import LeaveTypeFormFragment from "./form-fragment";
+import { DialogContentWidth } from "@/styles/dialog.tailwind";
 
-export default function DutyRosterEditDialog({
+export default function LeaveTypeEditDialog({
   data,
   asIcon = false,
-  type = "designation",
 }: {
-  data?: IDutyRoster;
+  data?: ILeaveType;
   asIcon?: boolean;
-  type?: "designation" | "employee";
 }) {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,15 +41,14 @@ export default function DutyRosterEditDialog({
           </Button>
         ) : (
           <Button className={ButtonBlue}>
-            <Icons.plus /> Create a Duty Roster (
-            {type === "designation" ? "By Designation" : "By Employee"})
+            <Icons.plus /> Create a Leave Type
           </Button>
         )}
       </DialogTrigger>
 
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle>{data ? "Update" : "Create"} a Duty Roster</DialogTitle>
+          <DialogTitle>{data ? "Update" : "Create"} a Leave Type</DialogTitle>
           <DialogDescription>
             Fill out the form appropriately.
           </DialogDescription>
@@ -64,11 +60,8 @@ export default function DutyRosterEditDialog({
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
-            <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <DutyRosterFormFragment
-                showEmployee={type === "employee"}
-                data={data}
-              />
+            <div className="grid grid-cols-1 p-4 gap-4">
+              <LeaveTypeFormFragment data={data} />
             </div>
           </ScrollArea>
 

@@ -6,10 +6,12 @@ export interface IEmployeeLeave {
 }
 
 export interface ILeaveBalance {
+  id: number;
   employee_id: number;
+  employee_code: string;
   employee_name: string;
-  designation: string;
-  leaves: IEmployeeLeave[];
+  leave_type: string;
+  leave_balance: number;
 }
 
 export interface ILeaveType {

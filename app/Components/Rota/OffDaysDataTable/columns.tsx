@@ -30,7 +30,7 @@ export const columns: ColumnDef<IOffDays>[] = [
     header: ({ column }) => (
       <SortableHeader name="Shift Name" column={column} />
     ),
-    cell: ({ row }) => row.original.shift.shift_description,
+    cell: ({ row }) => row.original.shift.shift_name,
   },
   {
     id: "shift-day-monday",
