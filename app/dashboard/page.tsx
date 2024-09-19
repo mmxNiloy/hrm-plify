@@ -556,7 +556,7 @@ export default function DashboardPage() {
           <Label className="text-lg font-semibold">Example Chart 2</Label>
           <Bar data={dataBar} />
         </div>
-        <LeaveBalanceCard
+        {/* <LeaveBalanceCard
           data={Array.from({ length: 3 }, (_: ILeaveBalance, index) => ({
             employee_id: index + 1,
             employee_name: `Example Employee #${index + 1}`,
@@ -568,7 +568,7 @@ export default function DashboardPage() {
               leave_taken: 2 + idx * 3,
             })),
           }))}
-        />
+        /> */}
 
         <Card className="h-fit">
           <CardHeader className="py-4">
