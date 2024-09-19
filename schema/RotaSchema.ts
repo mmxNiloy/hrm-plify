@@ -1,6 +1,10 @@
-import { IDepartment } from "./CompanySchema";
+import { ICompanyExtraData, IDepartment } from "./CompanySchema";
 import { IDesignation } from "./DesignationSchema";
-import { IEmployee, IEmployeeWithPersonalInfo } from "./EmployeeSchema";
+import {
+  IEmployee,
+  IEmployeeWithPersonalInfo,
+  IEmployeeWithUserMetadata,
+} from "./EmployeeSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface IShift {
@@ -27,14 +31,64 @@ export interface IDutyBase {
   designation: IDesignation;
 }
 
-export interface IOffDays extends IDutyBase {
+export interface IOffDaysBase {
   id: number;
-  days: boolean[];
+  shift_id: number;
+  company_id: number;
+
+  sunday: 0 | 1;
+  monday: 0 | 1;
+  tuesday: 0 | 1;
+  wednesday: 0 | 1;
+  thursday: 0 | 1;
+  friday: 0 | 1;
+  saturday: 0 | 1;
 }
 
-export interface IDutyRoster extends IDutyBase {
-  id: number;
-  employee: IEmployeeWithPersonalInfo;
-  from_date?: Date;
-  to_date?: Date;
+export interface IOffDays extends IOffDaysBase {
+  created_at?: Date;
+  updated_at?: Date;
+
+  shift: IShift;
+}
+
+export interface IOffDaysWithShifts extends IOffDays {
+  shifts: IShift[];
+}
+
+export interface IPaginatedOffDays extends IPaginatedResponse {
+  data: IOffDays[];
+  message?: string;
+}
+
+export interface IDutyRosterBase {
+  roaster_id: number;
+  shift_id: number;
+  department_id: number;
+  employee_id: number;
+  designation_id: number;
+  from_date: Date;
+  end_date: Date;
+  created_at?: Date;
+  updated_at?: Date;
+  company_id: number;
+}
+
+export interface IDutyRoster extends IDutyRosterBase {
+  // Additional data
+  departments: IDepartment;
+  shift_db: IShift;
+  // designation: IDesignation;
+  employees: IEmployeeWithUserMetadata;
+}
+
+export interface IPaginatedDutyRosters extends IPaginatedResponse {
+  data: IDutyRoster[];
+  message?: string;
+}
+
+export interface IDutyRosterWithEditData extends IDutyRoster {
+  company_shifts: IShift[];
+  company_departments: IDepartment[];
+  company_employees: IEmployeeWithUserMetadata[];
 }

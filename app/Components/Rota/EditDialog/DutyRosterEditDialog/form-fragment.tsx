@@ -1,4 +1,5 @@
 "use client";
+import { ComboBox, LabelledComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,14 +11,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IDutyRoster } from "@/schema/RotaSchema";
+import { IDepartment } from "@/schema/CompanySchema";
+import { IDesignation } from "@/schema/DesignationSchema";
+import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
+import {
+  IDutyRoster,
+  IDutyRosterWithEditData,
+  IShift,
+} from "@/schema/RotaSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { toYYYYMMDD } from "@/utils/Misc";
+import { convertTo12Hour, toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
-import React from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 interface Props extends IFormFragmentProps<IDutyRoster> {
   showEmployee?: boolean;
+  departments?: IDepartment[];
+  designations?: IDesignation[];
+  employees?: IEmployeeWithUserMetadata[];
+  shifts?: IShift[];
 }
 
 export default function DutyRosterFormFragment({
@@ -25,16 +37,66 @@ export default function DutyRosterFormFragment({
   readOnly,
   disabled,
   showEmployee,
+  departments = [],
+  designations = [],
+  employees = [],
+  shifts = [],
 }: Props) {
+  const [selectedDepartment, setSelectedDepartment] = useState<string>(
+    `${data?.department_id ?? ""}`
+  );
+
+  const [selectedEmployee, setSelectedEmployee] = useState<
+    string | undefined
+  >();
+
+  const [filteredEmployees, setFilteredEmployees] = useState<
+    IEmployeeWithUserMetadata[]
+  >(employees.filter((emp) => emp.department_id == (data?.department_id ?? 0)));
+
+  const filterEmployees = useCallback(
+    (department: string) => {
+      setSelectedDepartment(department);
+
+      if (department.length < 1) {
+        setFilteredEmployees([]);
+        return;
+      }
+
+      const department_id = Number.parseInt(department);
+      setFilteredEmployees(
+        employees.filter((emp) => emp.department_id == department_id)
+      );
+    },
+    [employees]
+  );
+
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 col-span-full">
         <Label className={readOnly ? "" : RequiredAsterisk}>Department</Label>
-        <Select
+        {/* <LabelledComboBox
+          contentClassName="w-fit max-w-screen-xl"
+          key={`department-${data?.departments.department_id ?? ""}`}
           required
-          defaultValue={`${data?.department.department_id ?? ""}`}
+          defaultValue={`${data?.departments.department_id ?? ""}`}
           name="department_id"
           disabled={disabled || readOnly}
+          onValueChange={(e) => filterEmployees(e)}
+          items={departments.map((item) => ({
+            value: `${item.department_id}`,
+            label: `${item.dpt_name}`,
+          }))}
+          label="Select a Department"
+        /> */}
+
+        <Select
+          key={`department-${data?.departments.department_id ?? ""}`}
+          required
+          defaultValue={`${data?.departments.department_id ?? ""}`}
+          name="department_id"
+          disabled={disabled || readOnly}
+          onValueChange={(e) => filterEmployees(e)}
         >
           <SelectTrigger>
             <SelectValue placeholder={"Select a Department"} />
@@ -44,15 +106,20 @@ export default function DutyRosterFormFragment({
             <SelectGroup>
               <SelectLabel>Select a department</SelectLabel>
 
-              <SelectItem value="1">Department 1</SelectItem>
-              <SelectItem value="2">Department 2</SelectItem>
-              <SelectItem value="3">Department 3</SelectItem>
+              {departments.map((item) => (
+                <SelectItem
+                  value={`${item.department_id}`}
+                  key={`department-${item.department_id}`}
+                >
+                  {item.dpt_name}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <Label className={readOnly ? "" : RequiredAsterisk}>Designation</Label>
         <Select
           required
@@ -74,16 +141,82 @@ export default function DutyRosterFormFragment({
             </SelectGroup>
           </SelectContent>
         </Select>
+      </div> */}
+
+      <div className="flex flex-col gap-2 col-span-full">
+        <Label className={readOnly ? "" : RequiredAsterisk}>Shift</Label>
+        {/* <LabelledComboBox
+          contentClassName="w-fit max-w-screen-xl"
+          key={`shift-${data?.shift_db.shift_id ?? ""}`}
+          required
+          defaultValue={`${data?.shift_db.shift_id ?? ""}`}
+          name="shift_id"
+          disabled={disabled || readOnly}
+          items={shifts.map((item) => ({
+            value: `${item.shift_id}`,
+            label: `${item.shift_name} (${convertTo12Hour(
+              item.start_time
+            )}-${convertTo12Hour(item.end_time)})`,
+          }))}
+          label="Select a Shift"
+        /> */}
+
+        <Select
+          key={`shift-${data?.shift_db.shift_id ?? ""}`}
+          required
+          defaultValue={`${data?.shift_db.shift_id ?? ""}`}
+          name="shift_id"
+          disabled={disabled || readOnly}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder={"Select a Shift"} />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select a Shift</SelectLabel>
+
+              {shifts.map((item) => (
+                <SelectItem
+                  key={`shift-option-${item.shift_id}`}
+                  value={`${item.shift_id}`}
+                >
+                  {item.shift_name} ({convertTo12Hour(item.start_time)}-
+                  {convertTo12Hour(item.end_time)})
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       {showEmployee && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 col-span-full">
           <Label className={readOnly ? "" : RequiredAsterisk}>Employee</Label>
-          <Select
-            required
-            defaultValue={`${data?.employee.employee_id ?? ""}`}
+          {/* <LabelledComboBox
+            contentClassName="w-fit max-w-screen-xl"
+            items={filteredEmployees.map((emp) => ({
+              value: `${emp.employee_id}`,
+              label: `${emp.user.first_name}${
+                emp.user.middle_name.length > 1
+                  ? ` ${emp.user.middle_name}`
+                  : ""
+              } ${emp.user.last_name}`,
+            }))}
             name="employee_id"
-            disabled={disabled || readOnly}
+            required
+            readOnly={readOnly}
+            disabled={disabled || selectedDepartment.length < 1}
+            key={`employee-${data?.employees.employee_id ?? ""}`}
+            defaultValue={`${data?.employees.employee_id ?? ""}`}
+            label="Select an Employee"
+          /> */}
+          <Select
+            key={`employee-${data?.employees.employee_id ?? ""}`}
+            required
+            defaultValue={`${data?.employees.employee_id ?? ""}`}
+            name="employee_id"
+            disabled={disabled || readOnly || selectedDepartment.length < 1}
           >
             <SelectTrigger>
               <SelectValue placeholder={"Select an Employee"} />
@@ -93,9 +226,16 @@ export default function DutyRosterFormFragment({
               <SelectGroup>
                 <SelectLabel>Select an Employee</SelectLabel>
 
-                <SelectItem value="1">Employee 1</SelectItem>
-                <SelectItem value="2">Employee 2</SelectItem>
-                <SelectItem value="3">Employee 3</SelectItem>
+                {filteredEmployees.map((item) => (
+                  <SelectItem
+                    key={`employee-${item.employee_id}`}
+                    value={`${item.employee_id}`}
+                  >{`${item.user.first_name}${
+                    item.user.middle_name.length > 0
+                      ? ` ${item.user.middle_name}`
+                      : ""
+                  } ${item.user.last_name}`}</SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -117,7 +257,9 @@ export default function DutyRosterFormFragment({
           type="date"
           key={`from-date-${data?.from_date}`}
           name="from_date"
-          defaultValue={data?.from_date ? toYYYYMMDD(data?.from_date) : ""}
+          defaultValue={
+            data?.from_date ? toYYYYMMDD(new Date(data.from_date)) : ""
+          }
         />
       </div>
 
@@ -134,9 +276,11 @@ export default function DutyRosterFormFragment({
           readOnly={readOnly}
           disabled={disabled}
           type="date"
-          key={`to-date-${data?.to_date}`}
+          key={`to-date-${data?.end_date}`}
           name="to_date"
-          defaultValue={data?.to_date ? toYYYYMMDD(data?.to_date) : ""}
+          defaultValue={
+            data?.end_date ? toYYYYMMDD(new Date(data.end_date)) : ""
+          }
         />
       </div>
     </>

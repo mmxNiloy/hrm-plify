@@ -15,31 +15,31 @@ import { IUser } from "@/schema/UserSchema";
 import { ICompany } from "@/schema/CompanySchema";
 import { redirect } from "next/navigation";
 import OffDaysEditDialog from "@/app/Components/Rota/EditDialog/OffDaysEditDialog";
+import { getCompanyData } from "@/app/actions/getCompanyData";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
+import { getOffDays } from "@/app/actions/getOffDays";
+import OffDaysEditDialogWrapper from "@/app/Components/Rota/EditDialog/OffDaysEditDialog/wrapper";
+import { getShifts } from "@/app/actions/getShifts";
 
-export default async function RotaDayOffPage({ params }: CompanyByIDPageProps) {
-  // Get company information0
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var company: ICompany;
+interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
+export default async function RotaDayOffPage({ params, searchParams }: Props) {
+  const company = await getCompanyData(params.companyId);
 
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
+  const { page, limit } = getPaginationParams(searchParams);
+
+  const paginatedOffDays = await getOffDays({
+    company_id: params.companyId,
+    page,
+    limit,
+  });
+
+  const allShifts = await getShifts({
+    company_id: params.companyId,
+    page: 1,
+    limit: -1,
+  });
 
   return (
     <main className="container flex flex-col gap-2">
@@ -74,10 +74,18 @@ export default async function RotaDayOffPage({ params }: CompanyByIDPageProps) {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <OffDaysEditDialog />
+        <OffDaysEditDialog
+          shifts={allShifts.data}
+          company_id={company.company_id}
+        />
       </div>
 
-      <OffDaysDataTable />
+      <OffDaysDataTable
+        data={paginatedOffDays.data.map((item) => ({
+          ...item,
+          shifts: allShifts.data,
+        }))}
+      />
     </main>
   );
 }

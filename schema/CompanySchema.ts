@@ -1,5 +1,11 @@
 import { IDesignation } from "./DesignationSchema";
+import {
+  IEmployee,
+  IEmployeeWithPersonalInfo,
+  IEmployeeWithUserMetadata,
+} from "./EmployeeSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
+import { IShift } from "./RotaSchema";
 
 export interface ICompany {
   company_id: number;
@@ -158,4 +164,12 @@ export interface IDepartment {
   created_at?: Date;
   updated_at?: Date;
   dpt_name: string;
+}
+
+export interface ICompanyExtraData {
+  message?: string;
+  shifts: IShift[];
+  departments: IDepartment[];
+  designations: IDesignation[];
+  employees: IEmployeeWithUserMetadata[];
 }

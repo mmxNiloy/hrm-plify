@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import React from "react";
 import { ShiftsDataTableColumns } from "./columns";
 import { IShift } from "@/schema/RotaSchema";
@@ -11,7 +11,7 @@ export default function ShiftManagementDataTable({
   data?: IShift[];
 }) {
   return (
-    <DataTable
+    <StaticDataTable
       columns={ShiftsDataTableColumns}
       data={data}
       showOptions={!showOptions}

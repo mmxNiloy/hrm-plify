@@ -1,11 +1,20 @@
 import { DataTable } from "@/components/ui/data-table";
 import React from "react";
-import { columns } from "./columns";
+import { DutyRosterDataTableColumns } from "./columns";
+import { IDutyRosterWithEditData } from "@/schema/RotaSchema";
 
 export default function DutyRosterDataTable({
   showOptions,
+  data = [],
 }: {
   showOptions?: boolean;
+  data?: IDutyRosterWithEditData[];
 }) {
-  return <DataTable columns={columns} data={[]} showOptions={showOptions} />;
+  return (
+    <DataTable
+      columns={DutyRosterDataTableColumns}
+      data={data}
+      showOptions={showOptions}
+    />
+  );
 }

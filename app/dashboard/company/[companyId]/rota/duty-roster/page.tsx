@@ -33,33 +33,27 @@ import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DutyRosterFormFragment from "@/app/Components/Rota/EditDialog/DutyRosterEditDialog/form-fragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
+import { getCompanyData } from "@/app/actions/getCompanyData";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
+import { getDutyRosters } from "@/app/actions/getDutyRosters";
+import { getCompanyExtraData } from "@/app/actions/getCompanyExtraData";
+
+interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function RotaDutyRosterPage({
   params,
-}: CompanyByIDPageProps) {
-  // Get company information0
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var company: ICompany;
+  searchParams,
+}: Props) {
+  const company = await getCompanyData(params.companyId);
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
+  const { page, limit } = getPaginationParams(searchParams);
+  const paginatedDutyRoster = await getDutyRosters({
+    company_id: company.company_id,
+    page,
+    limit,
+  });
+  const companyExtraData = await getCompanyExtraData(params.companyId);
 
   return (
     <main className="container flex flex-col gap-2">
@@ -151,11 +145,25 @@ export default async function RotaDutyRosterPage({
           </DialogContent>
         </Dialog>
         <span className="flex-grow"></span>
-        <DutyRosterEditDialog type="employee" />
-        <DutyRosterEditDialog type="designation" />
+        <DutyRosterEditDialog
+          company_id={params.companyId}
+          departments={companyExtraData.departments}
+          designations={companyExtraData.designations}
+          shifts={companyExtraData.shifts}
+          employees={companyExtraData.employees}
+          type="employee"
+        />
+        {/* <DutyRosterEditDialog type="designation" /> */}
       </div>
 
-      <DutyRosterDataTable />
+      <DutyRosterDataTable
+        data={paginatedDutyRoster.data.map((item) => ({
+          ...item,
+          company_shifts: companyExtraData.shifts,
+          company_departments: companyExtraData.departments,
+          company_employees: companyExtraData.employees,
+        }))}
+      />
     </main>
   );
 }

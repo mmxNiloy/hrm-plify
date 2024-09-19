@@ -212,3 +212,11 @@ export interface IEmployeeNid {
   updated_at?: Date; // Auto-generated
   isCurrent?: number;
 }
+
+export interface IEmployeeWithUserMetadata extends IEmployee {
+  user: {
+    first_name: string;
+    last_name: string;
+    middle_name: string;
+  };
+}
