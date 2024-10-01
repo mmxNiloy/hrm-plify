@@ -8,11 +8,18 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
 } from "@/components/ui/menubar";
+import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import Link from "next/link";
 import React from "react";
 
-export default function EmployeeNavMenu({ user }: { user: IUser }) {
+export default function EmployeeNavMenu({
+  user,
+  company,
+}: {
+  user: IUser;
+  company?: ICompany;
+}) {
   return (
     <Menubar>
       <MenubarMenu>

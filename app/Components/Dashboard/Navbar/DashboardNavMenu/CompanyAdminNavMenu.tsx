@@ -9,11 +9,18 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import Link from "next/link";
 import React from "react";
 
-export default function CompanyAdminNavMenu({ user }: { user: IUser }) {
+export default function CompanyAdminNavMenu({
+  user,
+  company,
+}: {
+  user: IUser;
+  company?: ICompany;
+}) {
   return (
     <Menubar>
       <MenubarMenu>
@@ -24,32 +31,32 @@ export default function CompanyAdminNavMenu({ user }: { user: IUser }) {
             <MenubarSubContent>
               <Link
                 className="w-full"
-                href={`/dashboard/company/${user.company_id}/employee`}
+                href={`/dashboard/company/${company?.company_id}/employee`}
               >
                 <MenubarItem className="cursor-pointer">Dashboard</MenubarItem>
               </Link>
               <MenubarSeparator />
               <Link
                 className="w-full"
-                href={`/dashboard/company/${user.company_id}/employee/all`}
+                href={`/dashboard/company/${company?.company_id}/employee/all`}
               >
                 <MenubarItem>All Employees</MenubarItem>
               </Link>
               <Link
                 className="w-full"
-                href={`/dashboard/company/${user.company_id}/employee/migrant`}
+                href={`/dashboard/company/${company?.company_id}/employee/migrant`}
               >
                 <MenubarItem>Migrant Employees</MenubarItem>
               </Link>
               <Link
                 className="w-full"
-                href={`/dashboard/company/${user.company_id}/employee/change-of-circumstances"`}
+                href={`/dashboard/company/${company?.company_id}/employee/change-of-circumstances"`}
               >
                 <MenubarItem>Change of Circumstances</MenubarItem>
               </Link>
               <Link
                 className="w-full"
-                href={`/dashboard/company/${user.company_id}/employee/contract-agreement`}
+                href={`/dashboard/company/${company?.company_id}/employee/contract-agreement`}
               >
                 <MenubarItem>Contract Agreement</MenubarItem>
               </Link>
