@@ -9,6 +9,12 @@ export async function getCompanyData(company_id: number) {
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   var company: ICompany;
 
+  if (cookies().has(process.env.COOKIE_COMPANY_KEY!)) {
+    return JSON.parse(
+      cookies().get(process.env.COOKIE_COMPANY_KEY!)!.value
+    ) as ICompany;
+  }
+
   try {
     const apiRes = await fetch(
       `${process.env.API_BASE_URL}/companies/${company_id}`,

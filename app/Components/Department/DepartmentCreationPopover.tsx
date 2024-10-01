@@ -31,10 +31,8 @@ import React, { useCallback, useState } from "react";
 
 export default function DepartmentCreationPopover({
   company_id,
-  onSuccess,
 }: {
   company_id: number;
-  onSuccess?: (arg0: number) => void;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -65,12 +63,6 @@ export default function DepartmentCreationPopover({
             className: ToastSuccess,
           });
 
-          const data = res as {
-            message: string;
-            data: IDepartment;
-          };
-          if (onSuccess) onSuccess(data.data.department_id);
-
           router.refresh();
           setOpen(false);
         } else {
@@ -91,7 +83,7 @@ export default function DepartmentCreationPopover({
 
       setLoading(false);
     },
-    [onSuccess, router, toast]
+    [router, toast]
   );
 
   return (

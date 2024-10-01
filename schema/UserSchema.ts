@@ -1,4 +1,4 @@
-import { IEmployee } from "./EmployeeSchema";
+import { IEmployee, IEmployeeWithUserMetadata } from "./EmployeeSchema";
 
 export interface ILoginResponse {
   token: string;
@@ -22,16 +22,23 @@ export interface IUserWithEmployeeData extends IUserBase {
 }
 
 export interface IUser extends IUserBase {
-  company_id?: number;
   user_roles?: IUserRoles;
+  usercompany?: ICompanyUser;
 }
 
 export interface IUserRoles {
   roles: IRoles;
 }
 
+export type TRole =
+  | "Super Admin"
+  | "Admin"
+  | "Company Admin"
+  | "Employee"
+  | "Guest";
+
 export interface IRoles {
-  role_name: "Super Admin" | "Admin" | "Company Admin" | "Employee" | "Guest";
+  role_name: TRole;
 }
 
 export interface ICompanyUser {
@@ -50,6 +57,28 @@ export interface ICompanyUserRoles {
   role_id: number;
   role_name: string;
   description?: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface IUserConfig {
+  employee_id: number;
+  company_id: number;
+  email: string;
+  password?: string;
+  created_at?: Date;
+  updated_at?: Date;
+
+  // employee data
+  employees?: IEmployeeWithUserMetadata;
+}
+
+export interface IEmployeeUserRole {
+  company_id: number;
+  employee_id: number;
+  module_name: string;
+  access: string;
+  permissions: string;
+
+  employees?: IEmployeeWithUserMetadata;
 }

@@ -64,8 +64,8 @@ export default function DutyRosterEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const dutyRoster: IDutyRosterBase = {
-        roaster_id: 1, // Ignored on the server side
-        designation_id: 1, // Ignored on the server side
+        roaster_id: data?.roaster_id ?? 1, // Ignored on the server side
+        designation_id: data?.designation_id ?? 1, // Ignored on the server side
         company_id: Number.parseInt(`${company_id}`),
         shift_id: Number.parseInt(
           (fd.get("shift_id") as string | undefined) ?? "0"

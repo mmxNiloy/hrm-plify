@@ -1,3 +1,6 @@
+import { IDepartment } from "./CompanySchema";
+import { IDesignation } from "./DesignationSchema";
+import { ILeaveApprover } from "./LeaveSchema";
 import { IUser, IUserBase } from "./UserSchema";
 
 export interface IEmployee {
@@ -6,8 +9,8 @@ export interface IEmployee {
   employee_code: string;
   job_title?: string;
   hire_date?: Date;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
   company_id: number;
   image?: string;
   gender?: string;
@@ -214,9 +217,9 @@ export interface IEmployeeNid {
 }
 
 export interface IEmployeeWithUserMetadata extends IEmployee {
-  user: {
-    first_name: string;
-    last_name: string;
-    middle_name: string;
-  };
+  user: IUser;
+
+  designations?: IDesignation;
+  departments?: IDepartment;
+  leave_approvers?: ILeaveApprover;
 }

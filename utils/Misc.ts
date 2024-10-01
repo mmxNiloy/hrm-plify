@@ -1,3 +1,4 @@
+import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { ISearchParams } from "./Types";
 
 export const nationalities: string[] = [
@@ -407,13 +408,13 @@ export const months: string[] = [
 ];
 
 export const weekDays: string[] = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 
 export const maritalStatus: string[] = [
@@ -482,4 +483,19 @@ export function getPaginationParams(searchParams: ISearchParams): {
   }
 
   return { page, limit };
+}
+
+export function dateDiffInDays(a: Date, b: Date) {
+  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+  // Discard the time and time-zone information.
+  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+  return Math.floor(Math.abs(utc2 - utc1) / _MS_PER_DAY);
+}
+
+export function getFullNameOfEmployee(employee: IEmployeeWithUserMetadata) {
+  return `${employee.user.first_name}${
+    employee.user.middle_name.length > 0 ? ` ${employee.user.middle_name}` : ""
+  } ${employee.user.last_name}`;
 }

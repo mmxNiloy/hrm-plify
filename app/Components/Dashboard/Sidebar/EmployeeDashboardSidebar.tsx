@@ -13,7 +13,6 @@ export default function EmployeeDashboardSidebar({
 }) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
-  const path = usePathname();
 
   return (
     <Sidebar

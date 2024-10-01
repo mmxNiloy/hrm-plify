@@ -127,6 +127,8 @@ import {
   Clock,
   CalendarDaysIcon,
   LucideCalendarClock,
+  Landmark,
+  UserCheck,
 } from "lucide-react";
 import React from "react";
 
@@ -142,7 +144,7 @@ const YouTubeIcon = React.forwardRef<SVGElement, SVGAttributes>(
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn(className, "lucide lucide-youtube")}
+      className={cn(className, "lucide lucide-youtube fill-current")}
     >
       <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
       <path d="m10 15 5-3-5-3z" />
@@ -159,7 +161,7 @@ const GenderIcon = React.forwardRef<SVGElement, SVGAttributes>(
       width={24}
       viewBox="0 0 640 512"
       fill="currentColor"
-      className={cn(className, "lucide lucide-gender")}
+      className={cn(className, "lucide lucide-gender fill-current")}
     >
       <path d="M176 288a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM352 176c0 86.3-62.1 158.1-144 173.1l0 34.9 32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0 0 32c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-32-32 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l32 0 0-34.9C62.1 334.1 0 262.3 0 176C0 78.8 78.8 0 176 0s176 78.8 176 176zM271.9 360.6c19.3-10.1 36.9-23.1 52.1-38.4c20 18.5 46.7 29.8 76.1 29.8c61.9 0 112-50.1 112-112s-50.1-112-112-112c-7.2 0-14.3 .7-21.1 2c-4.9-21.5-13-41.7-24-60.2C369.3 66 384.4 64 400 64c37 0 71.4 11.4 99.8 31l20.6-20.6L487 41c-6.9-6.9-8.9-17.2-5.2-26.2S494.3 0 504 0L616 0c13.3 0 24 10.7 24 24l0 112c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-33.4-33.4L545 140.2c19.5 28.4 31 62.7 31 99.8c0 97.2-78.8 176-176 176c-50.5 0-96-21.3-128.1-55.4z" />
     </svg>
@@ -179,7 +181,7 @@ const GitHubIcon = React.forwardRef<SVGElement, SVGAttributes>(
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn(className, "lucide lucide-github")}
+      className={cn(className, "lucide lucide-github fill-current")}
     >
       <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
       <path d="M9 18c-4.51 2-5-2-7-2" />
@@ -200,7 +202,10 @@ const AnalyticsIcon = React.forwardRef<SVGElement, SVGAttributes>(
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn("lucide lucide-chart-no-axes-combined", className)}
+      className={cn(
+        "lucide lucide-chart-no-axes-combined fill-current",
+        className
+      )}
     >
       <path d="M12 16v5" />
       <path d="M16 14v7" />
@@ -218,7 +223,7 @@ const PDFIcon = React.forwardRef<SVGElement, SVGAttributes>(
     <svg
       height={24}
       width={24}
-      className={cn(className, "lucide")}
+      className={cn(className, "lucide fill-current")}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
     >
@@ -233,7 +238,7 @@ const ExcelIcon = React.forwardRef<SVGElement, SVGAttributes>(
     <svg
       height={24}
       width={24}
-      className={cn(className, "lucide")}
+      className={cn(className, "lucide fill-current")}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 384 512"
     >
@@ -248,7 +253,7 @@ const WordIcon = React.forwardRef<SVGElement, SVGAttributes>(
     <svg
       height={24}
       width={24}
-      className={cn(className, "lucide")}
+      className={cn(className, "lucide fill-current")}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 384 512"
     >
@@ -260,7 +265,11 @@ WordIcon.displayName = "WordIcon";
 
 const SiteIcon = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
-    <svg width="24" height="24" className={cn("lucide", className)}>
+    <svg
+      width="24"
+      height="24"
+      className={cn("lucide fill-current", className)}
+    >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 121.99 100">
         <path d="m41.71 30.89 14.31 23.56L28.27 100H0z" />
         <path fill="#e42b37" d="M61.78 60.73 39.79 100h44.15z" />
@@ -274,7 +283,7 @@ SiteIcon.displayName = "SiteIcon";
 const RunningLateIcon = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
     <svg
-      className={cn("lucide", className)}
+      className={cn("lucide fill-current", className)}
       fill="#000000"
       height="24"
       width="24"
@@ -326,7 +335,7 @@ RunningLateIcon.displayName = "RunningLateIcon";
 const CategoryIcon = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
     <svg
-      className={cn(className, "lucide")}
+      className={cn(className, "lucide fill-current")}
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -393,7 +402,7 @@ DistributionIcon.displayName = "DistributionIcon";
 const LawBuilding = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
     <svg
-      className={cn(className, "lucide")}
+      className={cn(className, "lucide fill-current")}
       width="24"
       height="24"
       viewBox="0 0 48 48"
@@ -411,7 +420,145 @@ const LawBuilding = React.forwardRef<SVGElement, SVGAttributes>(
 );
 LawBuilding.displayName = "LawBuilding";
 
+const UserRole = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 32 32"
+      className={cn(className, "lucide fill-current")}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M28.07 21 22 15l6.07-6 1.43 1.41L24.86 15l4.64 4.59zM22 30h-2v-5a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v5H2v-5a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7ZM12 4a5 5 0 1 1-5 5 5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7 7 7 0 0 0-7-7" />
+      <path
+        data-name="&lt;Transparent Rectangle&gt;"
+        fill="none"
+        d="M0 0h32v32H0z"
+      />
+    </svg>
+  )
+);
+UserRole.displayName = "UserRole";
+
+const CalendarAlert = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={cn("lucide stroke-current", className)}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3 9h18m-9 3v3m0 3h.01M7 3v2m10-2v2M6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8V8.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 5 18.92 5 17.8 5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.52 3 7.08 3 8.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )
+);
+CalendarAlert.displayName = "CalendarAlert";
+
+const DepartmentIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      className={cn("lucide", className)}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fill="none" fill-rule="evenodd">
+        <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035q-.016-.005-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427q-.004-.016-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093q.019.005.029-.008l.004-.014-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014-.034.614q.001.018.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
+        <path
+          d="M15 6a3 3 0 0 1-2 2.83V11h3a3 3 0 0 1 3 3v1.17a3.001 3.001 0 1 1-2 0V14a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1.17a3.001 3.001 0 1 1-2 0V14a3 3 0 0 1 3-3h3V8.83A3.001 3.001 0 1 1 15 6m-3-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2M6 17a1 1 0 1 0 0 2 1 1 0 0 0 0-2m12 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"
+          className="fill-current"
+        />
+      </g>
+    </svg>
+  )
+);
+DepartmentIcon.displayName = "DepartmentIcon";
+
+const IdCardIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24"
+      width="24"
+      viewBox="0 0 433.362 433.362"
+      xmlSpace="preserve"
+      className={cn("lucide fill-current", className)}
+    >
+      <path d="M254.139 125.413V72.49l-19.025-19.025h-36.872L179.216 72.49v52.923H0v254.485h433.362V125.413zm-60.923-47.124 10.824-10.824h25.274l10.824 10.824v68.896h-46.923zm226.146 287.609H14V139.413h165.216v21.771h74.923v-21.771h165.224z" />
+      <path d="M27.458 352.068h147.678V178.343H27.458zm40.729-106.955c0-18.26 14.851-33.116 33.104-33.116 18.261 0 33.116 14.856 33.116 33.116a33.09 33.09 0 0 1-22.472 31.359l.802 13.479c23.408 4.938 40.873 24.692 43.398 48.118H46.459c2.525-23.425 19.99-43.179 43.398-48.118l.802-13.479a33.09 33.09 0 0 1-22.472-31.359m92.949-52.77V309.39c-6.925-11.948-17.33-21.752-29.961-27.839a47.09 47.09 0 0 0 17.232-36.438c0-25.98-21.137-47.116-47.116-47.116-25.974 0-47.104 21.136-47.104 47.116a47.09 47.09 0 0 0 17.232 36.438c-12.63 6.087-23.036 15.891-29.961 27.839V192.343zm70.71 6.842h158.839v14H231.846zm0 46.744h158.839v14H231.846z" />
+    </svg>
+  )
+);
+IdCardIcon.displayName = "IdCardIcon";
+
+const EmployeeSalary = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 256 240"
+      xmlSpace="preserve"
+      className={cn("lucide fill-current", className)}
+    >
+      <path d="M84.635 20.256c18.383 0 33.286 14.903 33.286 33.286s-14.903 33.286-33.286 33.286-33.286-14.903-33.286-33.286 14.902-33.286 33.286-33.286M31.002 145.011c0-2.499 1.606-4.194 4.194-4.194s4.194 1.606 4.194 4.194v92.986h91.469v-92.986c0-2.499 1.606-4.194 4.194-4.194 2.499 0 4.194 1.606 4.194 4.194v92.986h29.092V136.623c0-22.934-18.74-41.585-41.585-41.585h-8.388l-24.451 38.015-2.945-28.467 4.016-9.638H76.96l4.016 9.638-3.123 28.645-24.452-38.193h-9.816C20.651 95.038 2 113.778 2 136.623v101.375h29.092v-92.986h-.09zM197.036 24.057 189.972 2h40.376l-8.659 22.057zm-30.943 46.437c0-17.044 9.433-31.763 23.606-39.1h40.422C244.293 38.73 254 53.45 254 70.494c0 24.153-19.687 43.84-43.84 43.84-24.426-.001-44.067-19.687-44.067-43.84m48.032 10.527c0 2.598-2.37 3.919-5.788 3.919-3.965 0-7.61-1.322-10.254-2.643l-1.823 7.064c2.324 1.322 6.289 2.37 10.481 2.643v5.788h6.015v-6.289c7.109-1.048 11.028-5.788 11.028-11.302s-2.917-8.886-10.254-11.53c-5.241-1.823-7.337-3.144-7.337-5.241 0-1.595 1.322-3.418 5.241-3.418 4.466 0 7.337 1.322 8.932 2.096l1.823-6.836c-2.096-1.048-4.739-1.823-8.932-2.096v-5.514h-6.015v5.742c-6.562 1.322-10.481 5.514-10.481 11.028 0 6.061 4.466 9.205 11.028 11.302 4.468 1.595 6.564 2.917 6.336 5.287" />
+    </svg>
+  )
+);
+EmployeeSalary.displayName = "EmployeeSalary";
+
+const CalendarMoney = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      className="lucide lucide-calendar"
+    >
+      <path d="M8 2v4m8-4v4" />
+      <rect width="18" height="18" x="3" y="4" rx="2" />
+      <path d="M3 10h18" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="9"
+        height="9"
+        x="7.5"
+        y="11.5"
+        viewBox="0 0 24 24"
+        className="lucide lucide-badge-dollar-sign"
+      >
+        <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76" />
+        <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8m4 2V6" />
+      </svg>
+    </svg>
+  )
+);
+CalendarMoney.displayName = "CalendarMoney";
+
 const Icons = {
+  userCheck: UserCheck,
+  pay: HandCoins,
+  landmark: Landmark,
+  calendarMoney: CalendarMoney,
+  employeeSalary: EmployeeSalary,
+  idCard: IdCardIcon,
+  department: DepartmentIcon,
+  calendarAlert: CalendarAlert,
+  userRole: UserRole,
   lawBuilding: LawBuilding,
   distribution: DistributionIcon,
   category: CategoryIcon,

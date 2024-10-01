@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
-import Icons from "@/components/ui/icons";
 import { ILeaveType } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import LeaveTypeEditDialog from "./Edit/LeaveTypeEditDialog";
@@ -13,7 +11,7 @@ export const LeaveTypeDataTableColumns: ColumnDef<ILeaveType>[] = [
     header: ({ column }) => <SortableHeader column={column} name="ID" />,
   },
   {
-    accessorKey: "leave_type",
+    accessorKey: "leave_type_name",
     header: ({ column }) => (
       <SortableHeader column={column} name="Leave Type" />
     ),
@@ -23,11 +21,19 @@ export const LeaveTypeDataTableColumns: ColumnDef<ILeaveType>[] = [
     header: ({ column }) => <SortableHeader column={column} name="Shortcode" />,
   },
   {
-    accessorKey: "remarks",
-    header: ({ column }) => <SortableHeader column={column} name="Remarks" />,
+    accessorKey: "description",
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Description" />
+    ),
   },
   {
     id: "edit-action",
-    cell: ({ row }) => <LeaveTypeEditDialog data={row.original} asIcon />,
+    cell: ({ row }) => (
+      <LeaveTypeEditDialog
+        data={row.original}
+        company_id={row.original.company_id}
+        asIcon
+      />
+    ),
   },
 ];

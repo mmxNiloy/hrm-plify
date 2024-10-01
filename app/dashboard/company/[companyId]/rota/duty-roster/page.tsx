@@ -34,12 +34,30 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import DutyRosterFormFragment from "@/app/Components/Rota/EditDialog/DutyRosterEditDialog/form-fragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { getCompanyData } from "@/app/actions/getCompanyData";
-import { ISearchParamsProps } from "@/utils/Types";
+import { ISearchParams, ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getDutyRosters } from "@/app/actions/getDutyRosters";
 import { getCompanyExtraData } from "@/app/actions/getCompanyExtraData";
+import Link from "next/link";
+import DutyRosterFilterDialog from "@/app/Components/Rota/DutyRosterFilterDialog";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+function getFilters(searchParams: ISearchParams) {
+  const { department_id, shift_id, employee_id, from_date, end_date } =
+    searchParams;
+  return {
+    department_id: department_id
+      ? Number.parseInt(department_id as string)
+      : undefined,
+    shift_id: shift_id ? Number.parseInt(shift_id as string) : undefined,
+    employee_id: employee_id
+      ? Number.parseInt(employee_id as string)
+      : undefined,
+    from_date: from_date as string | undefined,
+    end_date: end_date as string | undefined,
+  };
+}
 
 export default async function RotaDutyRosterPage({
   params,
@@ -48,11 +66,15 @@ export default async function RotaDutyRosterPage({
   const company = await getCompanyData(params.companyId);
 
   const { page, limit } = getPaginationParams(searchParams);
+  const filters = getFilters(searchParams);
+
   const paginatedDutyRoster = await getDutyRosters({
     company_id: company.company_id,
     page,
     limit,
+    filters,
   });
+
   const companyExtraData = await getCompanyExtraData(params.companyId);
 
   return (
@@ -89,12 +111,56 @@ export default async function RotaDutyRosterPage({
         </Breadcrumb>
 
         <span className="flex-grow" />
-        <Button
-          className="bg-rose-500 hover:bg-rose-400 text-white rounded-full gap-2"
-          size="sm"
+        <form
+          method="POST"
+          action={`/api/rota/duty-roster/report/pdf`}
+          target="_blank"
         >
-          <Icons.pdf className="stroke-white fill-white" /> Download as PDF File
-        </Button>
+          <input
+            className="hidden"
+            readOnly
+            value={params.companyId}
+            name="company_id"
+          />
+          <input
+            className="hidden"
+            readOnly
+            value={filters.employee_id}
+            name="employee_id"
+          />
+          <input
+            className="hidden"
+            readOnly
+            value={filters.from_date}
+            name="from_date"
+          />
+          <input
+            className="hidden"
+            readOnly
+            value={filters.end_date}
+            name="end_date"
+          />
+          <input
+            className="hidden"
+            readOnly
+            value={filters.department_id}
+            name="department_id"
+          />
+          <input
+            className="hidden"
+            readOnly
+            value={filters.shift_id}
+            name="shift_id"
+          />
+
+          <Button
+            className="bg-rose-500 hover:bg-rose-400 text-white rounded-full gap-2"
+            size="sm"
+          >
+            <Icons.pdf className="stroke-white fill-white" /> Download as PDF
+            File
+          </Button>
+        </form>
         <Button className={ButtonSuccess} size="sm">
           <Icons.excel className="stroke-white fill-white" /> Download as Excel
           File
@@ -102,55 +168,12 @@ export default async function RotaDutyRosterPage({
       </div>
       <div className="flex items-center justify-end gap-2 mt-2 mb-2">
         {/* Duty Roster Filter */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className={ButtonWarn}>
-              <Icons.filter /> Filter Duty Roster
-            </Button>
-          </DialogTrigger>
+        <DutyRosterFilterDialog {...companyExtraData} />
 
-          <DialogContent className={DialogContentWidth}>
-            <DialogHeader>
-              <DialogTitle>Filter Duty Roster</DialogTitle>
-              <DialogDescription>
-                Filter Duty Roster By the following fields
-              </DialogDescription>
-            </DialogHeader>
-
-            <form>
-              <ScrollArea className="h-[70vh]">
-                <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-                  <DutyRosterFormFragment showEmployee />
-                </div>
-              </ScrollArea>
-
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button
-                    type="button"
-                    className="rounded-full"
-                    variant={"destructive"}
-                    size="sm"
-                  >
-                    <Icons.cross /> Close
-                  </Button>
-                </DialogClose>
-                {/* <DialogClose asChild> */}
-                <Button type="submit" className={ButtonSuccess} size="sm">
-                  <Icons.check /> Apply
-                </Button>
-                {/* </DialogClose> */}
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
         <span className="flex-grow"></span>
         <DutyRosterEditDialog
           company_id={params.companyId}
-          departments={companyExtraData.departments}
-          designations={companyExtraData.designations}
-          shifts={companyExtraData.shifts}
-          employees={companyExtraData.employees}
+          {...companyExtraData}
           type="employee"
         />
         {/* <DutyRosterEditDialog type="designation" /> */}

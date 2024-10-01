@@ -13,11 +13,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import LeaveTypeEditDialog from "@/app/Components/Leave/Edit/LeaveTypeEditDialog";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { ILeaveType } from "@/schema/LeaveSchema";
 import { LeaveTypeDataTableColumns } from "@/app/Components/Leave/LeaveTypeDataTableColumns";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
+import { getCompanyLeaveTypes } from "@/app/actions/getCompanyLeaveTypes";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -25,24 +26,15 @@ export default async function CompanyLeaveTypePage({
   params,
   searchParams,
 }: Props) {
-  const { page, limit } = getPaginationParams(searchParams);
-
   const company = await getCompanyData(params.companyId);
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var leaveTypes: ILeaveType[] = [];
-  var total_page: number = 1;
-
-  try {
-    // TODO: Get leave types from the API
-    // Hit the api and get data
-  } catch (_) {
-    // If data not found, show an empty table
-    total_page = 0;
-    leaveTypes = [];
-  }
+  var leaveTypes: ILeaveType[] = await getCompanyLeaveTypes({
+    company_id: company.company_id,
+    searchParams,
+  });
 
   return (
     <main className="container flex flex-col gap-2">
@@ -83,14 +75,10 @@ export default async function CompanyLeaveTypePage({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <LeaveTypeEditDialog />
+        <LeaveTypeEditDialog company_id={company.company_id} />
       </div>
 
-      <StaticDataTable
-        columns={LeaveTypeDataTableColumns}
-        data={leaveTypes}
-        pageCount={total_page}
-      />
+      <DataTable columns={LeaveTypeDataTableColumns} data={leaveTypes} />
     </main>
   );
 }

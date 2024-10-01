@@ -15,7 +15,7 @@ import { IEmployee } from "@/schema/EmployeeSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-export const columns: ColumnDef<ICompany>[] = [
+export const CompanyDataTableColumns: ColumnDef<ICompany>[] = [
   {
     accessorKey: "company_id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,

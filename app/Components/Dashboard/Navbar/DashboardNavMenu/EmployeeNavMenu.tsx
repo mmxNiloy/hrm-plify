@@ -19,7 +19,7 @@ export default function EmployeeNavMenu({ user }: { user: IUser }) {
         <MenubarTrigger>
           <Link
             className="cursor-pointer"
-            href={`/dashboard/company/${user.company_id}/employee/home/holidays`}
+            href={`/dashboard/company/${user.usercompany?.company_id}/employee/home/holidays`}
           >
             Holiday Calendar
           </Link>
@@ -30,7 +30,7 @@ export default function EmployeeNavMenu({ user }: { user: IUser }) {
         <MenubarTrigger>
           <Link
             className="cursor-pointer"
-            href={`/dashboard/company/${user.company_id}/employee/home/leave-status`}
+            href={`/dashboard/company/${user.usercompany?.company_id}/employee/home/leave-status`}
           >
             Leave Status
           </Link>
@@ -41,7 +41,7 @@ export default function EmployeeNavMenu({ user }: { user: IUser }) {
         <MenubarTrigger>
           <Link
             className="cursor-pointer"
-            href={`/dashboard/company/${user.company_id}/employee/home/attendance-status`}
+            href={`/dashboard/company/${user.usercompany?.company_id}/employee/home/attendance-status`}
           >
             Attendance Status
           </Link>
@@ -51,7 +51,7 @@ export default function EmployeeNavMenu({ user }: { user: IUser }) {
         <MenubarTrigger>
           <Link
             className="cursor-pointer"
-            href={`/dashboard/company/${user.company_id}/employee/home/change-of-circumstances`}
+            href={`/dashboard/company/${user.usercompany?.company_id}/employee/home/change-of-circumstances`}
           >
             Change of Circumstances
           </Link>

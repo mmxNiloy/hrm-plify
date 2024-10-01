@@ -32,7 +32,7 @@ export function middleware(req: NextRequest) {
     } else if (userRole.role.role_name === "Guest") {
       return NextResponse.rewrite(new URL("/dashboard/guest", req.url));
     } else if (userRole.role.role_name === "Employee") {
-      return NextResponse.rewrite(
+      return NextResponse.redirect(
         new URL(
           `/dashboard/company/${userRole.company_id}/employee/home`,
           req.url
@@ -41,27 +41,7 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // For company route, check role and redirect accordingly
-  if (req.nextUrl.pathname.startsWith("/dashboard/company")) {
-    if (!userRole) {
-      cookies().delete(
-        process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ?? "hrmplify_session_token"
-      );
-      cookies().delete(
-        process.env.NEXT_PUBLIC_COOKIE_USER_KEY ?? "hrmplify_user_data"
-      );
-      return NextResponse.redirect(
-        new URL("/?_ref=permission-denied", req.url)
-      );
-    } else if (
-      userRole.role.role_name !== "Super Admin" &&
-      userRole.role.role_name !== "Admin"
-    ) {
-      return NextResponse.rewrite(
-        new URL(`/dashboard/company/${userRole.company_id}`, req.url)
-      );
-    }
-  }
+  // Route guards
 }
 
 export const config = {

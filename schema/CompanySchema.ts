@@ -166,6 +166,10 @@ export interface IDepartment {
   dpt_name: string;
 }
 
+export interface IPaginatedDepartment extends IPaginatedResponse {
+  data: IDepartment[];
+}
+
 export interface ICompanyExtraData {
   message?: string;
   shifts: IShift[];

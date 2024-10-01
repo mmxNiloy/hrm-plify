@@ -30,6 +30,12 @@ export default function SuperAdminNavMenu() {
             </MenubarItem>
           </Link>
 
+          <Link href={"/dashboard/user-access"}>
+            <MenubarItem className="cursor-pointer">
+              User Access Management
+            </MenubarItem>
+          </Link>
+
           <Link href={"/dashboard/leave"}>
             <MenubarItem className="cursor-pointer">
               Leave Management
@@ -67,15 +73,11 @@ export default function SuperAdminNavMenu() {
                 <MenubarItem className="cursor-pointer">Rota</MenubarItem>
               </Link>
 
-              <MenubarSub>
-                <MenubarSubTrigger>Holiday Management</MenubarSubTrigger>
-                <MenubarSubContent>
-                  <MenubarItem>Dashboard</MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem>Holiday type</MenubarItem>
-                  <MenubarItem>Holiday list</MenubarItem>
-                </MenubarSubContent>
-              </MenubarSub>
+              <Link href={`/dashboard/holiday`}>
+                <MenubarItem className="cursor-pointer">
+                  Holiday Management
+                </MenubarItem>
+              </Link>
             </MenubarSubContent>
           </MenubarSub>
           <Link href={"/dashboard/task"}>

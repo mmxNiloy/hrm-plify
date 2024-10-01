@@ -61,11 +61,29 @@ export default function LeaveDashboardSidebar({
         </SidebarLink>
 
         <SidebarLink
+          href={`/dashboard/company/${company.company_id}/leave/request`}
+        >
+          <Icons.todo />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Leave Requests
+          </span>
+        </SidebarLink>
+
+        <SidebarLink
           href={`/dashboard/company/${company.company_id}/leave/type`}
         >
           <Icons.category />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Leave Type
+          </span>
+        </SidebarLink>
+
+        <SidebarLink
+          href={`/dashboard/company/${company.company_id}/leave/approver`}
+        >
+          <Icons.userCheck />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Leave Approvers
           </span>
         </SidebarLink>
 

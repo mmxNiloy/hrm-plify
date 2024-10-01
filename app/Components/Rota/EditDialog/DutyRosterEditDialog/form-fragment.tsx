@@ -277,7 +277,7 @@ export default function DutyRosterFormFragment({
           disabled={disabled}
           type="date"
           key={`to-date-${data?.end_date}`}
-          name="to_date"
+          name="end_date"
           defaultValue={
             data?.end_date ? toYYYYMMDD(new Date(data.end_date)) : ""
           }
