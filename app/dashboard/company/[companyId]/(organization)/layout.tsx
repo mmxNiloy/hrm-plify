@@ -41,7 +41,7 @@ export default async function CompanyByIdDashboardPageLayout({
   }
   return (
     <div>
-      <CompanyDashboardSidebar company={company} />
+      <CompanyDashboardSidebar user={user} company={company} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

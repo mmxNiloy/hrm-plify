@@ -103,7 +103,11 @@ export default async function LeaveRequestPage({
 
       <StaticDataTable
         columns={LeaveRequestDataTableColumns}
-        data={leaveRequests.data}
+        data={leaveRequests.data.map((item) => ({
+          ...item,
+          company_leave_types: leaveTypes,
+          can_edit: true,
+        }))}
         pageCount={leaveRequests.total_page}
       />
     </main>

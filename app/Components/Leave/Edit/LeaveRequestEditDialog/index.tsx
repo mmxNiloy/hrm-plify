@@ -32,11 +32,13 @@ export default function LeaveRequestEditDialog({
   asIcon = false,
   company_id,
   leaveTypes = [],
+  employee_id,
 }: {
   data?: ILeaveRequest;
   asIcon?: boolean;
   company_id: number;
   leaveTypes?: ILeaveType[];
+  employee_id?: number;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -48,7 +50,8 @@ export default function LeaveRequestEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      if (!data?.employee_id) {
+      if (!data?.employee_id && !employee_id) {
+        console.error("Leave Request Edit Dialog >", data);
         alert(
           "Data integrity failed. Employee ID does not exist for this entry. Cannot edit this item. Please check data integrity."
         );
@@ -58,7 +61,7 @@ export default function LeaveRequestEditDialog({
       const fd = new FormData(e.currentTarget);
       const leaveReq: ILeaveRequest = {
         company_id: company_id,
-        employee_id: data.employee_id,
+        employee_id: data?.employee_id ?? employee_id ?? 0,
         end_date: new Date(
           (fd.get("end_date") as string | undefined) ?? new Date()
         ),
@@ -113,7 +116,7 @@ export default function LeaveRequestEditDialog({
 
       setLoading(false);
     },
-    [company_id, data, router, toast]
+    [company_id, data, employee_id, router, toast]
   );
 
   return (
@@ -172,7 +175,7 @@ export default function LeaveRequestEditDialog({
               <Button
                 type="button"
                 disabled={loading}
-                className="rounded-full"
+                className="rounded-full gap-1"
                 variant={"destructive"}
                 size="sm"
               >

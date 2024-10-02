@@ -43,19 +43,13 @@ export async function getLeaveRequests({
       }
     );
 
-    const res = (await apiRes.json()) as {
-      data: ILeaveRequest[];
-      total_page?: number;
-      data_count?: number;
-    };
+    const res = (await apiRes.json()) as IPaginatedLeaveRequest;
     console.log("Actions > Get Leave Approvers > ", res);
 
     if (apiRes.ok) {
-      return {
-        data: res.data.map((item) => ({ ...item, employees: user.data })),
-        total_page: res.total_page ?? 1,
-        data_count: res.data_count ?? 0,
-      };
+      if (user.data) {
+      }
+      return res;
     } else {
       console.error(
         "Actions > Get Leave Approvers > Failed to get leave approvers >",

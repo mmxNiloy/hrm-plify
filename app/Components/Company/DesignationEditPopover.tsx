@@ -41,7 +41,7 @@ export default function DesignationEditPopover({
       setLoading(true);
 
       try {
-        const apiRes = await fetch(`/api/designation`, {
+        const apiRes = await fetch(`/api/company/designation`, {
           method: data ? "PUT" : "POST",
           body: fd,
         });

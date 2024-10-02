@@ -110,6 +110,7 @@ export default function LeaveRequestFormFragment({
 
       {data && (
         <div className="flex flex-col gap-2">
+          <Label>Status</Label>
           <Select
             key={`leave-request-status-${data?.status}`}
             defaultValue={data?.status}

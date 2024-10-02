@@ -88,6 +88,7 @@ export default async function EmployeeLeaveRequestPage({
 
         {employeeData && (
           <LeaveRequestEditDialog
+            employee_id={employeeData.data?.employee_id}
             company_id={company.company_id}
             leaveTypes={leaveTypes}
           />
@@ -96,7 +97,12 @@ export default async function EmployeeLeaveRequestPage({
 
       <StaticDataTable
         columns={LeaveRequestDataTableColumns}
-        data={leaveRequests.data}
+        data={leaveRequests.data.map((item) => ({
+          ...item,
+          company_leave_types: leaveTypes,
+          can_edit: Boolean(employeeData.data?.leave_approvers ?? false),
+          currentEmployee: employeeData.data,
+        }))}
         pageCount={leaveRequests.total_page}
       />
     </main>

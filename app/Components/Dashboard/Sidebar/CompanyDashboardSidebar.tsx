@@ -9,8 +9,10 @@ import { IUser } from "@/schema/UserSchema";
 
 export default function CompanyDashboardSidebar({
   company,
+  user,
 }: {
   company: ICompany;
+  user: IUser;
 }) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
@@ -60,6 +62,18 @@ export default function CompanyDashboardSidebar({
             Organization Profile
           </span>
         </SidebarLink>
+
+        {(user.user_roles?.roles.role_name === "Super Admin" ||
+          user.user_roles?.roles.role_name === "Admin") && (
+          <SidebarLink
+            href={`/dashboard/company/${company.company_id}/company-admin`}
+          >
+            <Icons.user />
+            <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+              Company Admin
+            </span>
+          </SidebarLink>
+        )}
 
         <SidebarLink
           href={`/dashboard/company/${company.company_id}/department`}
