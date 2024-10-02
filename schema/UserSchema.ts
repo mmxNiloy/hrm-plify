@@ -19,7 +19,7 @@ export interface IUserBase {
 }
 
 export interface IUserWithEmployeeData extends IUserBase {
-  employee_data: IEmployee;
+  employee_data?: IEmployee;
 }
 
 export interface IUser extends IUserBase {
