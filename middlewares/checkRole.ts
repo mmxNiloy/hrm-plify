@@ -9,10 +9,10 @@ export function checkRole(
     const userCookie = req.cookies.get(
       process.env.NEXT_PUBLIC_COOKIE_USER_KEY!
     );
-    const userData = JSON.parse(userCookie?.value ?? "") as IUser;
+    const userData = JSON.parse(userCookie?.value ?? "{}") as IUser;
     return {
       role: userData.user_roles?.roles ?? { role_name: "Guest" },
-      company_id: userData.company_id ?? 0,
+      company_id: userData.usercompany?.company_id ?? 0,
     };
   } catch (_) {
     return undefined;

@@ -15,33 +15,28 @@ import { redirect } from "next/navigation";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import ShiftManagementEditDialog from "@/app/Components/Rota/EditDialog/ShiftManagementEditDialog";
+import { getCompanyData } from "@/app/actions/getCompanyData";
+import { StaticDataTable } from "@/components/ui/data-table";
+import { ShiftsDataTableColumns } from "@/app/Components/Rota/ShiftManagementDataTable/columns";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
+import { getShifts } from "@/app/actions/getShifts";
+
+interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function RotaShiftManagementPage({
   params,
-}: CompanyByIDPageProps) {
-  // Get company information0
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var company: ICompany;
+  searchParams,
+}: Props) {
+  const { limit, page } = getPaginationParams(searchParams);
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
+  const company = await getCompanyData(params.companyId);
 
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
+  const paginatedShifts = await getShifts({
+    company_id: params.companyId,
+    page,
+    limit,
+  });
 
   return (
     <main className="container flex flex-col gap-2">
@@ -76,10 +71,10 @@ export default async function RotaShiftManagementPage({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <ShiftManagementEditDialog />
+        <ShiftManagementEditDialog company_id={company.company_id} />
       </div>
 
-      <ShiftManagementDataTable />
+      <ShiftManagementDataTable data={paginatedShifts.data} />
     </main>
   );
 }

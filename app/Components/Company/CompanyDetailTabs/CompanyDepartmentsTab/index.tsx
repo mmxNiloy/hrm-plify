@@ -15,10 +15,7 @@ export default function CompanyDepartmentsTab({
     <div className="flex flex-col gap-4 p-8 border rounded-md">
       <div className="w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Company Departments</p>
-        <DepartmentCreationPopover
-          company_id={company_id}
-          onSuccess={(id) => setNewDeptId(id)}
-        />
+        <DepartmentCreationPopover company_id={company_id} />
       </div>
       <NetworkedDataTable
         src={`/api/company/department?company_id=${company_id}&_last=${newDeptId}`}

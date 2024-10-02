@@ -7,3 +7,11 @@ export interface IFormFragmentProps<T> {
   readOnly?: boolean;
   disabled?: boolean;
 }
+
+export interface ISearchParamsProps {
+  searchParams: ISearchParams;
+}
+
+export interface ISearchParams {
+  [key: string]: string | string[] | undefined;
+}

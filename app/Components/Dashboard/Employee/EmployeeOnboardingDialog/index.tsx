@@ -34,6 +34,7 @@ import {
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+import EmployeeOnboardingFormFragment from "./form-fragment";
 
 export default function EmployeeOnboardingDialog({
   company_id,
@@ -56,6 +57,7 @@ export default function EmployeeOnboardingDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      fd.append("company_id", `${company_id}`);
 
       setLoading(true);
 
@@ -95,7 +97,7 @@ export default function EmployeeOnboardingDialog({
 
       setLoading(false);
     },
-    [router, toast]
+    [company_id, router, toast]
   );
 
   return (
@@ -124,95 +126,10 @@ export default function EmployeeOnboardingDialog({
         <form onSubmit={handleSubmit}>
           {/* Form body */}
           <div className="flex flex-col gap-4 h-[70vh]">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email-input">Email</Label>
-              <Input
-                required
-                id="email-input"
-                name="email"
-                type="email"
-                placeholder="Email"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="first-name-input">First Name</Label>
-              <Input
-                required
-                id="first-name-input"
-                name="fname"
-                placeholder="First Name"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="middle-name-input">Middle Name</Label>
-              <Input
-                required
-                id="middle-name-input"
-                name="middleName"
-                placeholder="Middle Name"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="last-name-input">Last Name</Label>
-              <Input
-                required
-                id="last-name-input"
-                name="lname"
-                placeholder="Last Name"
-              />
-            </div>
-
-            <Input className="hidden" name="company_id" value={company_id} />
-
-            <div className="flex flex-col gap-2">
-              <Label>Department</Label>
-              <Select required name="department_id">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a Department" />
-                </SelectTrigger>
-
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select a department</SelectLabel>
-
-                    {departments.map((dpt) => (
-                      <SelectItem
-                        value={`${dpt.department_id}`}
-                        key={`${dpt.department_id}`}
-                      >
-                        {dpt.dpt_name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Designation</Label>
-              <Select required name="designation_id">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a Designation" />
-                </SelectTrigger>
-
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select a designation</SelectLabel>
-
-                    {designations.map((dsg) => (
-                      <SelectItem
-                        value={`${dsg.designation_id}`}
-                        key={`${dsg.designation_id}`}
-                      >
-                        {dsg.designation_name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            <EmployeeOnboardingFormFragment
+              departments={departments}
+              designations={designations}
+            />
           </div>
 
           <DialogFooter>

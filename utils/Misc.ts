@@ -1,3 +1,7 @@
+import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
+import { ISearchParams } from "./Types";
+import { IUser } from "@/schema/UserSchema";
+
 export const nationalities: string[] = [
   "Afghan",
   "Albanian",
@@ -405,13 +409,13 @@ export const months: string[] = [
 ];
 
 export const weekDays: string[] = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 
 export const maritalStatus: string[] = [
@@ -422,7 +426,7 @@ export const maritalStatus: string[] = [
   "Widowed",
 ];
 
-export function convertTo12Hour(time: string): string {
+export function convertTo12Hour(time: string, showSeconds?: boolean): string {
   // Split the time string by colon
   const [hours, minutes, seconds] = time.split(":");
 
@@ -436,7 +440,17 @@ export function convertTo12Hour(time: string): string {
   hour = hour % 12 || 12; // If hour is 0 or 12, show 12
 
   // Return formatted time with optional seconds
-  return `${hour}:${minutes}${seconds ? ":" + seconds : ""} ${period}`;
+  return `${hour}:${minutes}${
+    seconds && showSeconds ? ":" + seconds : ""
+  } ${period}`;
+}
+
+export function stripSeconds(time: string): string {
+  // Split the time string by colon
+  const [hours, minutes, seconds] = time.split(":");
+
+  // Return formatted time with optional seconds
+  return `${hours}:${minutes}`;
 }
 
 export function toYYYYMMDD(date?: Date) {
@@ -447,4 +461,45 @@ export function toYYYYMMDD(date?: Date) {
   )
     .toString()
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+}
+
+export function getPaginationParams(searchParams: ISearchParams): {
+  page: number;
+  limit: number;
+} {
+  var page = 1;
+  var limit = 5;
+  try {
+    page = Math.max(
+      1,
+      Number.parseInt((searchParams.page as string | undefined) ?? "1") || 0
+    );
+    limit = Math.max(
+      5,
+      Number.parseInt((searchParams.limit as string | undefined) ?? "5") || 0
+    );
+  } catch (_) {
+    page = 1;
+    limit = 5;
+  }
+
+  return { page, limit };
+}
+
+export function dateDiffInDays(a: Date, b: Date) {
+  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+  // Discard the time and time-zone information.
+  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+  return Math.floor(Math.abs(utc2 - utc1) / _MS_PER_DAY);
+}
+
+export function getFullNameOfEmployee(employee: IEmployeeWithUserMetadata) {
+  return getFullNameOfUser(employee.user);
+}
+export function getFullNameOfUser(user: IUser) {
+  return `${user.first_name}${
+    user.middle_name.length > 0 ? ` ${user.middle_name}` : ""
+  } ${user.last_name}`;
 }

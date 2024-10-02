@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     company_id,
     department_id,
     designation_id,
+    employment_type: 1,
   };
 
   // Check if the user is logged in

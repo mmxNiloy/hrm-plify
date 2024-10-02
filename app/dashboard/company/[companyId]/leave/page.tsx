@@ -1,3 +1,5 @@
+"use server";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,8 +14,22 @@ import LeaveBalanceCard from "@/app/Components/Dashboard/Leave/LeaveBalanceCard"
 import { IEmployeeLeave, ILeaveBalance } from "@/schema/LeaveSchema";
 import LeaveCountBarChart from "@/app/Components/Dashboard/Leave/Stats/LeaveCountBarChart";
 import LeaveTypesDataTable from "@/app/Components/Dashboard/Leave/LeaveTypesDataTable";
+import { wait } from "@/utils/wait";
+import { redirect } from "next/navigation";
+import { ICompany } from "@/schema/CompanySchema";
+import { IUser } from "@/schema/UserSchema";
+import { cookies } from "next/headers";
+import { CompanyByIDPageProps } from "../PageProps";
+import { getCompanyData } from "@/app/actions/getCompanyData";
 
-export default function LeavePage() {
+export default async function CompanyLeaveDashboardPage({
+  params,
+}: CompanyByIDPageProps) {
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+  const company = await getCompanyData(params.companyId);
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Leave Management Dashboard</p>
@@ -23,9 +39,32 @@ export default function LeavePage() {
             <BreadcrumbItem>
               <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
             </BreadcrumbItem>
+            {(user.user_roles?.roles.role_name === "Super Admin" ||
+              user.user_roles?.roles.role_name === "Admin") && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    className="line-clamp-1 text-ellipsis max-w-32"
+                    href="/dashboard/leave"
+                  >
+                    Leave
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            )}
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Leave</BreadcrumbPage>
+              <BreadcrumbLink
+                className="line-clamp-1 text-ellipsis max-w-32"
+                href={`/dashboard/company/${company.company_id}`}
+              >
+                {company.company_name}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Leave Management</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -36,7 +75,7 @@ export default function LeavePage() {
         <HolidaysCard />
 
         {/* Leave balance */}
-        <LeaveBalanceCard
+        {/* <LeaveBalanceCard
           data={Array.from({ length: 3 }, (_: ILeaveBalance, index) => ({
             employee_id: index + 1,
             employee_name: `Example Employee #${index + 1}`,
@@ -48,7 +87,7 @@ export default function LeavePage() {
               leave_taken: 2 + idx * 3,
             })),
           }))}
-        />
+        /> */}
 
         {/* Current leave types */}
         <div className="px-8 py-4">

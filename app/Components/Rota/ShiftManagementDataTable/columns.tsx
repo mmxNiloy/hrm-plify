@@ -4,55 +4,55 @@ import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
 import { IShift } from "@/schema/RotaSchema";
+import { convertTo12Hour } from "@/utils/Misc";
 import { ColumnDef } from "@tanstack/react-table";
+import ShiftManagementEditDialog from "../EditDialog/ShiftManagementEditDialog";
 
-export const columns: ColumnDef<IShift>[] = [
+export const ShiftsDataTableColumns: ColumnDef<IShift>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "shift_id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,
   },
   {
-    accessorKey: "shift_code",
+    accessorKey: "shift_name",
     header: ({ column }) => (
-      <SortableHeader name="Shift Code" column={column} />
+      <SortableHeader name="Shift Name" column={column} />
     ),
   },
   {
-    accessorKey: "shift_description",
+    accessorKey: "shift_time",
     header: ({ column }) => (
-      <SortableHeader name="Shift Description" column={column} />
+      <SortableHeader name="Shift Start" column={column} />
     ),
+    cell: ({ row }) => convertTo12Hour(row.original.start_time ?? "00:00"),
   },
   {
-    accessorKey: "work_in_time",
-    header: ({ column }) => (
-      <SortableHeader name="Work In Time" column={column} />
-    ),
+    accessorKey: "end_time",
+    header: ({ column }) => <SortableHeader name="Shift End" column={column} />,
+    cell: ({ row }) => convertTo12Hour(row.original.end_time ?? "00:00"),
   },
   {
-    accessorKey: "work_out_time",
+    accessorKey: "break_start",
     header: ({ column }) => (
-      <SortableHeader name="Work Out Time" column={column} />
+      <SortableHeader name="Break Time Start" column={column} />
     ),
+    cell: ({ row }) => convertTo12Hour(row.original.break_start ?? "00:00"),
   },
   {
-    accessorKey: "break_time_start",
+    accessorKey: "break_end",
     header: ({ column }) => (
-      <SortableHeader name="Break Time From" column={column} />
+      <SortableHeader name="Break Time End" column={column} />
     ),
-  },
-  {
-    accessorKey: "break_time_end",
-    header: ({ column }) => (
-      <SortableHeader name="Break Time To" column={column} />
-    ),
+    cell: ({ row }) => convertTo12Hour(row.original.break_end ?? "00:00"),
   },
   {
     id: "edit-action",
     cell: ({ row }) => (
-      <Button variant={"ghost"} size="icon">
-        <Icons.edit />
-      </Button>
+      <ShiftManagementEditDialog
+        company_id={row.original.company_id}
+        asIcon
+        data={row.original}
+      />
     ),
   },
 ];

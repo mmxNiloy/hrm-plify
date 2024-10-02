@@ -16,7 +16,6 @@ type TabValue =
   | "auth"
   | "key-contact"
   | "l1-user"
-  | "departments"
   | "address"
   | "trade"
   | "documents";
@@ -73,11 +72,6 @@ export default function CompanyDetailTabs({
             data={company.company_l1_user}
           />
         ),
-      },
-      {
-        value: "departments",
-        title: "Departments",
-        content: <CompanyDepartmentsTab company_id={company.company_id} />,
       },
       {
         value: "address",

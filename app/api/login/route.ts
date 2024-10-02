@@ -25,11 +25,13 @@ export async function POST(req: NextRequest) {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
+        expires: Date.now() + 43200000, // 12hrs
       });
       cookies().set(process.env.COOKIE_USER_KEY!, JSON.stringify(data.user), {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
+        expires: Date.now() + 43200000, // 12hrs
       });
 
       return NextResponse.json(

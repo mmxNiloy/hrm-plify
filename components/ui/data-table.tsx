@@ -45,12 +45,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IPaginatedResponse } from "@/schema/PaginatedResponse";
 import { Skeleton } from "./skeleton";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   showOptions?: boolean;
   pageSize?: number;
+  pageCount?: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -58,6 +60,7 @@ export function DataTable<TData, TValue>({
   data,
   showOptions = true,
   pageSize = 5,
+  pageCount = 1,
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -682,6 +685,261 @@ export function DataTableSkeleton<TValue>({
               variant="outline"
               size="sm"
               disabled
+            >
+              Next <Icons.chevronRight />
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/// Server Side Data table, uses query params to paginate
+export function StaticDataTable<TData, TValue>({
+  columns,
+  data,
+  showOptions = true,
+  pageCount = 1,
+}: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const searchParams = useSearchParams();
+
+  // update search params
+  const createQueryString = useCallback(
+    ({
+      name,
+      value,
+      names,
+      values,
+    }: {
+      name?: string;
+      value?: string;
+      names?: [string, ...string[]];
+      values?: [string, ...string[]];
+    }) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (name && value) {
+        params.set(name, value);
+      }
+
+      if (names && values) {
+        names.forEach((n, i) => params.set(n, values.at(i) ?? ""));
+      }
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    pageCount,
+    manualPagination: true,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      pagination: {
+        pageIndex:
+          Math.max(1, Number.parseInt(searchParams.get("page") ?? "1")) - 1,
+        pageSize: Math.max(
+          5,
+          Number.parseInt(searchParams.get("limit") ?? "5")
+        ),
+      },
+      sorting,
+      columnFilters,
+      globalFilter,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
+  const handleFilterChange = useDebouncedCallback(
+    useCallback(
+      (e: ChangeEvent<HTMLInputElement>) => setGlobalFilter(e.target.value),
+      []
+    ),
+    300
+  );
+
+  return (
+    <div className="flex flex-col gap-4">
+      {showOptions && (
+        <div className="flex items-center justify-between">
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-2">
+              <Label>Page size</Label>
+              <Select
+                onValueChange={(val) => {
+                  router.replace(
+                    `${pathname}?${createQueryString({
+                      names: ["limit", "page"],
+                      values: [val, "1"],
+                    })}`
+                  );
+                }}
+              >
+                <SelectTrigger className="w-16">
+                  <SelectValue placeholder={5} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Visible Columns</Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="items-center gap-4 justify-between"
+                  >
+                    Visible Columns
+                    <Icons.chevronsUpDown className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="search-input">Search</Label>
+            <Input
+              type="search"
+              placeholder="Search..."
+              onChange={handleFilterChange}
+            />
+          </div>
+        </div>
+      )}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader className="bg-blue-500">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                className="*:text-white text-sm hover:bg-blue-500"
+                key={headerGroup.id}
+              >
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  className="even:bg-accent text-xs"
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      {showOptions && (
+        <div className="flex items-center justify-between space-x-2 py-4">
+          <p className="text-sm">
+            Showing page: {table.getState().pagination.pageIndex + 1} of{" "}
+            {pageCount}
+          </p>
+          <div className="flex flex-row gap-2">
+            <Button
+              className="rounded-full gap-2"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                router.push(
+                  `${pathname}?${createQueryString({
+                    name: "page",
+                    value: `${table.getState().pagination.pageIndex}`,
+                  })}`
+                );
+              }}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <Icons.chevronLeft /> Previous
+            </Button>
+            <Button
+              className="rounded-full gap-2"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                router.push(
+                  `${pathname}?${createQueryString({
+                    name: "page",
+                    value: `${table.getState().pagination.pageIndex + 2}`,
+                  })}`
+                );
+              }}
+              disabled={!table.getCanNextPage()}
             >
               Next <Icons.chevronRight />
             </Button>
