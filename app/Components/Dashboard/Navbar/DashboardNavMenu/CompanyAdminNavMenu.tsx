@@ -38,13 +38,13 @@ export default function CompanyAdminNavMenu({
             </MenubarItem>
           </Link>
 
-          <Link href={"/dashboard/user-access"}>
+          <Link href={`/dashboard/company/${company.company_id}/user-access`}>
             <MenubarItem className="cursor-pointer">
               User Access Management
             </MenubarItem>
           </Link>
 
-          <Link href={"/dashboard/leave"}>
+          <Link href={`/dashboard/company/${company.company_id}/leave`}>
             <MenubarItem className="cursor-pointer">
               Leave Management
             </MenubarItem>
@@ -54,7 +54,9 @@ export default function CompanyAdminNavMenu({
 
       <MenubarMenu>
         <MenubarTrigger>
-          <Link href="/dashboard/company">Company Management</Link>
+          <Link href={`/dashboard/company/${company.company_id}/`}>
+            Company Management
+          </Link>
         </MenubarTrigger>
       </MenubarMenu>
       <MenubarMenu>
@@ -77,18 +79,18 @@ export default function CompanyAdminNavMenu({
                 </MenubarSubContent>
               </MenubarSub>
 
-              <Link href={`/dashboard/rota`}>
+              <Link href={`/dashboard/company/${company.company_id}/rota`}>
                 <MenubarItem className="cursor-pointer">Rota</MenubarItem>
               </Link>
 
-              <Link href={`/dashboard/holiday`}>
+              <Link href={`/dashboard/company/${company.company_id}/holiday`}>
                 <MenubarItem className="cursor-pointer">
                   Holiday Management
                 </MenubarItem>
               </Link>
             </MenubarSubContent>
           </MenubarSub>
-          <Link href={"/dashboard/task"}>
+          <Link href={`/dashboard/company/${company.company_id}/task`}>
             <MenubarItem className="cursor-pointer">Tasks</MenubarItem>
           </Link>
         </MenubarContent>
