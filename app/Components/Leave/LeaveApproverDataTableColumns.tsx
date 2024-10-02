@@ -8,7 +8,7 @@ import {
 } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import LeaveTypeEditDialog from "./Edit/LeaveTypeEditDialog";
-import { getFullNameOfEmployee } from "@/utils/Misc";
+import { getFullNameOfUser } from "@/utils/Misc";
 import LeaveApproverEditDialog from "./Edit/LeaveApproverEditDialog";
 
 export const LeaveApproverDataTableColumns: ColumnDef<ILeaveApprover>[] = [
@@ -21,7 +21,7 @@ export const LeaveApproverDataTableColumns: ColumnDef<ILeaveApprover>[] = [
     header: ({ column }) => (
       <SortableHeader column={column} name="Employee Name" />
     ),
-    cell: ({ row }) => getFullNameOfEmployee(row.original.employees!),
+    cell: ({ row }) => getFullNameOfUser(row.original.employees!),
   },
   {
     id: "approver-status",

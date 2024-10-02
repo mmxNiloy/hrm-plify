@@ -10,7 +10,7 @@ import {
 } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import LeaveTypeEditDialog from "./Edit/LeaveTypeEditDialog";
-import { getFullNameOfEmployee } from "@/utils/Misc";
+import { getFullNameOfUser } from "@/utils/Misc";
 import LeaveApproverEditDialog from "./Edit/LeaveApproverEditDialog";
 import { cn } from "@/lib/utils";
 import LeaveRequestEditDialog from "./Edit/LeaveRequestEditDialog";
@@ -33,9 +33,9 @@ export const LeaveRequestDataTableColumns: ColumnDef<Props>[] = [
     ),
     cell: ({ row }) =>
       row.original.employees
-        ? getFullNameOfEmployee(row.original.employees)
+        ? getFullNameOfUser(row.original.employees)
         : row.original.currentEmployee
-        ? getFullNameOfEmployee(row.original.currentEmployee)
+        ? getFullNameOfUser(row.original.currentEmployee)
         : "Employee data not found",
   },
   {

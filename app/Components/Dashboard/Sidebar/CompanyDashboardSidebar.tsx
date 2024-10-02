@@ -68,7 +68,7 @@ export default function CompanyDashboardSidebar({
           <SidebarLink
             href={`/dashboard/company/${company.company_id}/company-admin`}
           >
-            <Icons.user />
+            <Icons.adminUser />
             <span className="transition-all group-data-[state=closed]/sidebar:hidden">
               Company Admin
             </span>

@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { ILeaveApprover, ILeaveType } from "@/schema/LeaveSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { getFullNameOfEmployee } from "@/utils/Misc";
+import { getFullNameOfUser } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React, { useEffect } from "react";
 
@@ -53,7 +53,7 @@ export default function LeaveApproverFormFragment({
                   value={`${emp.employee_id}`}
                   key={`employee-id-select-item-${emp.employee_id}`}
                 >
-                  {getFullNameOfEmployee(emp)}
+                  {getFullNameOfUser(emp)}
                 </SelectItem>
               ))}
             </SelectGroup>

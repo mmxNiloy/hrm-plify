@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
-import { getFullNameOfEmployee } from "@/utils/Misc";
+import { getFullNameOfUser } from "@/utils/Misc";
 import { useTheme } from "next-themes";
 import React from "react";
 

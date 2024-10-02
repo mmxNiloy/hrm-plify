@@ -1,3 +1,4 @@
+import { ICompany } from "./CompanySchema";
 import { IEmployee, IEmployeeWithUserMetadata } from "./EmployeeSchema";
 
 export interface ILoginResponse {
@@ -51,6 +52,7 @@ export interface ICompanyUser {
   isActive: boolean;
   users: IUserWithEmployeeData;
   roles: ICompanyUserRoles;
+  companies?: ICompany;
 }
 
 export interface ICompanyUserRoles {
