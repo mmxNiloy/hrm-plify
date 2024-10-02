@@ -38,6 +38,10 @@ export function middleware(req: NextRequest) {
           req.url
         )
       );
+    } else if (userRole.role.role_name === "Company Admin") {
+      return NextResponse.redirect(
+        new URL(`/dashboard/company/${userRole.company_id}/`, req.url)
+      );
     }
   }
 
