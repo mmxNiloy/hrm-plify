@@ -23,6 +23,10 @@ import {
 import { ICompany } from "@/schema/CompanySchema";
 
 export default async function DashboardNavbar() {
+  if (!cookies().has(process.env.COOKIE_USER_KEY!)) {
+    return null;
+  }
+
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
