@@ -11,11 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
 import { IEmployeeUserRole, IUserConfig } from "@/schema/UserSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { dateDiffInDays, weekDays } from "@/utils/Misc";
+import { dateDiffInDays, toYYYYMMDD, weekDays } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React, { useState } from "react";
 
@@ -30,19 +31,31 @@ export default function HolidayFormFragment({
   holidayTypes,
 }: Props) {
   const [startDate, setStartDate] = useState<Date | undefined>(
-    data ? new Date(data.start_date) : undefined
+    data ? new Date(data.start_time) : undefined
   );
   const [endDate, setEndDate] = useState<Date | undefined>(
-    data ? new Date(data.end_date) : undefined
+    data ? new Date(data.end_time) : undefined
   );
 
   return (
     <>
       <div className="flex flex-col gap-2 col-span-full">
+        <Label className={RequiredAsterisk}>Holiday Name</Label>
+        <Input
+          key={`holiday-name-${data?.holiday_name ?? ""}`}
+          defaultValue={data?.holiday_name}
+          name="holiday_name"
+          placeholder="Holiday Name"
+          required
+          readOnly={readOnly}
+          disabled={disabled}
+        />
+      </div>
+      <div className="flex flex-col gap-2 col-span-full">
         <Label className={RequiredAsterisk}>Holiday Type</Label>
         <Select
-          key={`holiday-type-${data?.holiday_type_id ?? ""}`}
-          defaultValue={`${data?.holiday_type_id ?? ""}`}
+          key={`holiday-type-${data?.holiday_type ?? ""}`}
+          defaultValue={`${data?.holiday_type ?? ""}`}
           name="holiday_type_id"
           required
           disabled={disabled || readOnly}
@@ -57,8 +70,8 @@ export default function HolidayFormFragment({
 
               {holidayTypes.map((item) => (
                 <SelectItem
-                  key={`select-holiday-type-${item.holiday_type_id}`}
-                  value={`${item.holiday_type_id}`}
+                  key={`select-holiday-type-${item.id}`}
+                  value={`${item.id}`}
                 >
                   {item.holiday_type_name}
                 </SelectItem>
@@ -71,11 +84,9 @@ export default function HolidayFormFragment({
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Start Date</Label>
         <Input
-          key={`start-date-${data?.start_date ?? ""}`}
+          key={`start-date-${data?.start_time ?? ""}`}
           defaultValue={
-            data?.start_date
-              ? new Date(data.start_date).toLocaleDateString("en-GB")
-              : undefined
+            data?.start_time ? toYYYYMMDD(new Date(data.start_time)) : undefined
           }
           name="start_date"
           type="date"
@@ -90,11 +101,9 @@ export default function HolidayFormFragment({
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>End Date</Label>
         <Input
-          key={`end-date-${data?.end_date ?? ""}`}
+          key={`end-date-${data?.end_time ?? ""}`}
           defaultValue={
-            data?.end_date
-              ? new Date(data.end_date).toLocaleDateString("en-GB")
-              : undefined
+            data?.end_time ? toYYYYMMDD(new Date(data.end_time)) : undefined
           }
           name="end_date"
           type="date"
@@ -112,8 +121,8 @@ export default function HolidayFormFragment({
           defaultValue={
             data
               ? dateDiffInDays(
-                  new Date(data.start_date),
-                  new Date(data.end_date)
+                  new Date(data.start_time),
+                  new Date(data.end_time)
                 ).toString()
               : undefined
           }
@@ -131,11 +140,25 @@ export default function HolidayFormFragment({
         <Label className={RequiredAsterisk}>Starting Day</Label>
         <Input
           defaultValue={
-            data ? weekDays[new Date(data.start_date).getUTCDay()] : undefined
+            data ? weekDays[new Date(data.start_time).getUTCDay()] : undefined
           }
           value={startDate ? weekDays[startDate.getUTCDay()] : undefined}
           placeholder="Starting Day"
           readOnly
+        />
+      </div>
+
+      <div className="flex flex-col gap-2 col-span-full">
+        <Label>Holiday Description</Label>
+        <Textarea
+          className="resize-none"
+          rows={5}
+          key={`holiday-desc-${data?.holiday_desc ?? ""}`}
+          defaultValue={data?.holiday_name}
+          name="holiday_desc"
+          placeholder="Holiday Description"
+          readOnly={readOnly}
+          disabled={disabled}
         />
       </div>
     </>

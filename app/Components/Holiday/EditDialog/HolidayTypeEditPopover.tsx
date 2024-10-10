@@ -39,7 +39,7 @@ export default function HolidayTypeEditPopover({
       const fd = new FormData(e.currentTarget);
       const leaveType: IHolidayType = {
         company_id: company_id,
-        holiday_type_id: data?.holiday_type_id ?? 0,
+        id: data?.id ?? 1,
         holiday_type_name: fd.get("holiday_type_name") as string,
       };
 

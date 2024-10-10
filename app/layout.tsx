@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Providers } from "@/providers/Providers";
 import SiteConfig from "@/utils/SiteConfig";
+import Navbar from "./Components/Navbar/Navbar";
+import DashboardNavbar from "./Components/Dashboard/Navbar/DashboardNavbar";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -29,6 +31,7 @@ export default function RootLayout({
       >
         <Providers>
           {/* <Navbar /> */}
+          <DashboardNavbar />
           <div
             className={cn(
               "relative flex flex-col bg-no-repeat bg-center bg-cover",

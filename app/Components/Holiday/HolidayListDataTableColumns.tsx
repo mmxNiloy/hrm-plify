@@ -22,11 +22,23 @@ export const HolidayListDataTableColumns: ColumnDef<IHolidayWithHolidayTypes>[] 
       header: ({ column }) => <SortableHeader name="ID" column={column} />,
     },
     {
+      accessorKey: "holiday_name",
+      header: ({ column }) => (
+        <SortableHeader name="Holiday Name" column={column} />
+      ),
+    },
+    {
+      accessorKey: "holiday_desc",
+      header: ({ column }) => (
+        <SortableHeader name="Description" column={column} />
+      ),
+    },
+    {
       id: "holiday-type",
       header: ({ column }) => (
         <SortableHeader name={"Holiday Type"} column={column} />
       ),
-      cell: ({ row }) => row.original.holiday_types?.holiday_type_name,
+      cell: ({ row }) => row.original.type_data?.holiday_type_name,
     },
     {
       id: "start-date",
@@ -34,7 +46,7 @@ export const HolidayListDataTableColumns: ColumnDef<IHolidayWithHolidayTypes>[] 
         <SortableHeader name={"Start Date"} column={column} />
       ),
       cell: ({ row }) =>
-        new Date(row.original.start_date).toLocaleDateString("en-GB"),
+        new Date(row.original.start_time).toLocaleDateString("en-GB"),
     },
     {
       id: "end-date",
@@ -42,14 +54,14 @@ export const HolidayListDataTableColumns: ColumnDef<IHolidayWithHolidayTypes>[] 
         <SortableHeader name={"End Date"} column={column} />
       ),
       cell: ({ row }) =>
-        new Date(row.original.end_date).toLocaleDateString("en-GB"),
+        new Date(row.original.end_time).toLocaleDateString("en-GB"),
     },
     {
       id: "year",
       header: ({ column }) => <SortableHeader name={"Year"} column={column} />,
       cell: ({ row }) => {
-        const endYear = new Date(row.original.end_date).getFullYear();
-        const startYear = new Date(row.original.start_date).getFullYear();
+        const endYear = new Date(row.original.end_time).getFullYear();
+        const startYear = new Date(row.original.start_time).getFullYear();
         if (startYear == endYear) return `${startYear}`;
         return `${startYear}-${endYear}`;
       },
@@ -60,7 +72,7 @@ export const HolidayListDataTableColumns: ColumnDef<IHolidayWithHolidayTypes>[] 
         <SortableHeader name={"Starting Day"} column={column} />
       ),
       cell: ({ row }) =>
-        weekDays[new Date(row.original.start_date).getUTCDay()],
+        weekDays[new Date(row.original.start_time).getUTCDay()],
     },
     {
       id: "date-diff",
@@ -69,8 +81,8 @@ export const HolidayListDataTableColumns: ColumnDef<IHolidayWithHolidayTypes>[] 
       ),
       cell: ({ row }) =>
         dateDiffInDays(
-          new Date(row.original.start_date),
-          new Date(row.original.end_date)
+          new Date(row.original.start_time),
+          new Date(row.original.end_time)
         ),
     },
     {
@@ -79,6 +91,7 @@ export const HolidayListDataTableColumns: ColumnDef<IHolidayWithHolidayTypes>[] 
         // const employee = row.original;
         return (
           <HolidayEditDialog
+            asIcon
             data={row.original}
             company_id={row.original.company_id}
             holidayTypes={row.original.company_holiday_types}

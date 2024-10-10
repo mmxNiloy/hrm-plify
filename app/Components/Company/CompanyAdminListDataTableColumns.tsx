@@ -15,9 +15,7 @@ export const CompanyAdminListDataTableColumns: ColumnDef<ICompanyUser>[] = [
   },
   {
     id: "user-name",
-    header: ({ column }) => (
-      <SortableHeader column={column} name="Full Namez" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} name="Full Name" />,
     cell: ({ row }) => getFullNameOfUser(row.original.users),
   },
   {

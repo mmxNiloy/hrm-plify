@@ -39,7 +39,7 @@ export default async function DashboardNavbar() {
       <div className="flex h-16 w-full items-center gap-2 md:gap-4 lg:gap-8 px-6 md:px-8 lg:px-16 sm:space-x-0">
         <NavLogo href="/dashboard" />
 
-        <DashboardNavMenu user={user} company={company} />
+        {/* <DashboardNavMenu user={user} company={company} /> */}
 
         {/* Empty gap */}
         <span className="flex-grow" />

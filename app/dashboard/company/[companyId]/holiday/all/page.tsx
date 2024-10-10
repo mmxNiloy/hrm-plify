@@ -29,6 +29,8 @@ import HolidayTypeEditPopover from "@/app/Components/Holiday/EditDialog/HolidayT
 import { HolidayTypeDataTableColumns } from "@/app/Components/Holiday/HolidayTypeDataTableColumns";
 import HolidayEditDialog from "@/app/Components/Holiday/EditDialog/HolidayEditDialog";
 import { HolidayListDataTableColumns } from "@/app/Components/Holiday/HolidayListDataTableColumns";
+import { getHolidayTypes } from "@/app/actions/getHolidayTypes";
+import { getHolidays } from "@/app/actions/getHolidays";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -38,9 +40,12 @@ export default async function HolidayListPage({ params, searchParams }: Props) {
   const company = await getCompanyData(params.companyId);
   const companyExtraData = await getCompanyExtraData(params.companyId);
 
-  // TODO: hit the api to get data
-  const holidayTypes: IHolidayType[] = [];
-  const holidays: IHoliday[] = []; // Placeholder
+  const holidayTypes: IHolidayType[] = await getHolidayTypes({
+    company_id: params.companyId,
+  });
+  const holidays: IHoliday[] = await getHolidays({
+    company_id: params.companyId,
+  });
 
   return (
     <main className="container flex flex-col gap-2">

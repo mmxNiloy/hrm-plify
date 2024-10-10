@@ -48,20 +48,22 @@ export default function HolidayEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const holiday: IHoliday = {
+        holiday_name: (fd.get("holiday_name") as string | undefined) ?? "",
+        holiday_desc: (fd.get("holiday_desc") as string | undefined) ?? "",
         company_id: Number.parseInt(`${company_id}`),
-        end_date: new Date(fd.get("end_date") as string),
+        end_time: new Date(fd.get("end_date") as string),
         holiday_id: data?.holiday_id ?? 0,
-        holiday_type_id: Number.parseInt(
+        holiday_type: Number.parseInt(
           (fd.get("holiday_type_id") as string | undefined) ?? "0"
         ),
-        start_date: new Date(fd.get("start_date") as string),
+        start_time: new Date(fd.get("start_date") as string),
       };
 
       setLoading(true);
 
       try {
         const apiRes = await fetch(`/api/holiday`, {
-          method: data ? "PUT" : "POST",
+          method: data ? "PATCH" : "POST",
           body: JSON.stringify(holiday),
         });
 

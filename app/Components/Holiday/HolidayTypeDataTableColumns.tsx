@@ -11,7 +11,7 @@ import HolidayTypeEditPopover from "./EditDialog/HolidayTypeEditPopover";
 
 export const HolidayTypeDataTableColumns: ColumnDef<IHolidayType>[] = [
   {
-    accessorKey: "holiday_type_id",
+    accessorKey: "id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,
   },
   {
@@ -26,6 +26,7 @@ export const HolidayTypeDataTableColumns: ColumnDef<IHolidayType>[] = [
       // const employee = row.original;
       return (
         <HolidayTypeEditPopover
+          asIcon
           data={row.original}
           company_id={row.original.company_id}
         />

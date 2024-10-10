@@ -43,7 +43,7 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "chart.js/auto";
 import { Calendar } from "@/components/ui/calendar";
-import LeaveBalanceCard from "../Components/Dashboard/Leave/LeaveBalanceCard";
+import LeaveBalanceCard from "../../Components/Dashboard/Leave/LeaveBalanceCard";
 import { IEmployeeLeave, ILeaveBalance } from "@/schema/LeaveSchema";
 const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
   ssr: false,
