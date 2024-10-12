@@ -1,10 +1,8 @@
 "use client";
 
-import DepartmentEditPopover from "@/app/Components/Department/DepartmentEditPopover";
 import { SortableHeader } from "@/components/ui/data-table";
-import Icons from "@/components/ui/icons";
 import { ICompanyUser } from "@/schema/UserSchema";
-import { getFullNameOfUser, toYYYYMMDD } from "@/utils/Misc";
+import { getFullNameOfUser } from "@/utils/Misc";
 import { ColumnDef } from "@tanstack/react-table";
 import CompanyAdminEditDialog from "../../../Dialog/Company/CompanyAdminEditDialog";
 
