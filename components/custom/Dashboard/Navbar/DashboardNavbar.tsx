@@ -1,26 +1,17 @@
 "use server";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import NavLogo from "../../Navbar/NavLogo";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import DashboardNavMenu from "./DashboardNavMenu";
 import NavProfile from "./NavProfile";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { getCompanyData } from "@/app/actions/getCompanyData";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ICompany } from "@/schema/CompanySchema";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 
 export default async function DashboardNavbar() {
   if (!cookies().has(process.env.COOKIE_USER_KEY!)) {

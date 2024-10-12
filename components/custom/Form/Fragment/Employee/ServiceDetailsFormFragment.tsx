@@ -1,6 +1,3 @@
-import DepartmentSelect from "@/app/Components/Department/DepartmentSelect";
-import DesignationSelect from "@/app/Components/Department/DesignationSelect";
-import { SelectSkeleton } from "@/app/Components/Department/SelectSkeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,6 +7,9 @@ import { IFormFragmentProps } from "@/utils/Types";
 import React, { Suspense } from "react";
 import CompanyNameInput from "../../../Input/CompanyNameInput";
 import CompanyNameSkeleton from "../../../Input/CompanyNameSkeleton";
+import { SelectSkeleton } from "@/components/custom/Select/SelectSkeleton";
+import DepartmentSelect from "@/components/custom/Select/DepartmentSelect";
+import DesignationSelect from "@/components/custom/Select/DesignationSelect";
 
 export default function ServiceDetailsFormFragment({
   data,

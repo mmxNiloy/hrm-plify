@@ -1,8 +1,6 @@
 "use client";
 
-import EditJobPopover from "@/app/Components/Dashboard/Job/EditJobPopover";
-import DepartmentCreationPopover from "@/app/Components/Department/DepartmentCreationPopover";
-import DepartmentEditPopover from "@/app/Components/Department/DepartmentEditPopover";
+import DepartmentEditPopover from "@/components/custom/Popover/Department/DepartmentEditPopover";
 import { SortableHeader } from "@/components/ui/data-table";
 import { IDepartment } from "@/schema/CompanySchema";
 import { ColumnDef } from "@tanstack/react-table";
