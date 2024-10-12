@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -13,11 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { ILeaveRequest, ILeaveRule, ILeaveType } from "@/schema/LeaveSchema";
 import { ICompanyUser } from "@/schema/UserSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 

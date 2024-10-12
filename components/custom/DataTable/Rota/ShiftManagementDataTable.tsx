@@ -1,4 +1,4 @@
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { StaticDataTable } from "@/components/ui/data-table";
 import React from "react";
 import { ShiftsDataTableColumns } from "../Columns/Rota/ShiftsDataTableColumns";
 import { IShift } from "@/schema/RotaSchema";

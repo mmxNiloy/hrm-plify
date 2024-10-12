@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { IEmployee, IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
+import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
 import { maritalStatus, nationalities, toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";

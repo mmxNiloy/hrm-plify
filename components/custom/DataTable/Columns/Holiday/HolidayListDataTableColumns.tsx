@@ -1,17 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
-import Icons from "@/components/ui/icons";
-import { ICompany } from "@/schema/CompanySchema";
-import {
-  IHoliday,
-  IHolidayType,
-  IHolidayWithHolidayTypes,
-} from "@/schema/HolidaySchema";
+import { IHolidayWithHolidayTypes } from "@/schema/HolidaySchema";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
-import HolidayTypeEditPopover from "../../../Popover/HolidayTypeEditPopover";
 import { dateDiffInDays, weekDays } from "@/utils/Misc";
 import HolidayEditDialog from "../../../Dialog/HolidayEditDialog";
 

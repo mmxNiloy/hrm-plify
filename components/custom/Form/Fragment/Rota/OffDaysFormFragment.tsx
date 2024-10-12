@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IOffDays, IShift } from "@/schema/RotaSchema";
-import { weekDays } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -12,13 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
-import { ILeaveApprover, ILeaveType } from "@/schema/LeaveSchema";
+import { ILeaveApprover } from "@/schema/LeaveSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { getFullNameOfEmployee, getFullNameOfUser } from "@/utils/Misc";
+import { getFullNameOfEmployee } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
-import React, { useEffect } from "react";
+import React from "react";
 
 interface Props extends IFormFragmentProps<ILeaveApprover> {
   employees: IEmployeeWithUserMetadata[];

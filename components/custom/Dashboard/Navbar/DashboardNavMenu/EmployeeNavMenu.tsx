@@ -1,13 +1,4 @@
-import {
-  Menubar,
-  MenubarContent,
-  MenubarTrigger,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-} from "@/components/ui/menubar";
+import { Menubar, MenubarTrigger, MenubarMenu } from "@/components/ui/menubar";
 import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import Link from "next/link";

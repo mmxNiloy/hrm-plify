@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,9 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import React from "react";
 import dynamic from "next/dynamic";
 import "chart.js/auto";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
 const Bar = dynamic(() => import("react-chartjs-2").then((mod) => mod.Bar), {
   ssr: false,
 });

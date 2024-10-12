@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IDepartment } from "@/schema/CompanySchema";
-import { IDesignation } from "@/schema/DesignationSchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import React from "react";

@@ -15,11 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useCallback, useState } from "react";
 import EducationDetailsFormFragment from "../../Form/Fragment/Employee/EducationDetailsFormFragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import {
-  ButtonBlue,
-  ButtonSuccess,
-  ButtonWarn,
-} from "@/styles/button.tailwind";
+import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
 import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";

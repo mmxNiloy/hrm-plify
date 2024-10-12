@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
-import { ICompanyUser, IUser } from "@/schema/UserSchema";
+import { ICompanyUser } from "@/schema/UserSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 

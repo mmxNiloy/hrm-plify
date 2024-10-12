@@ -1,17 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import Icons from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
-import { IEmployee } from "@/schema/EmployeeSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 

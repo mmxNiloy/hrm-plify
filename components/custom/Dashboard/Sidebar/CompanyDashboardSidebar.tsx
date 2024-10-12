@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
 import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import {
@@ -22,7 +21,6 @@ export default function CompanyDashboardSidebar({
 }) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
-  const path = usePathname();
   const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(true);
 
   return (

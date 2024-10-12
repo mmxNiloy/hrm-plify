@@ -4,7 +4,6 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
-import { IUser } from "@/schema/UserSchema";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 
 export default function EmployeeHomeSidebar({

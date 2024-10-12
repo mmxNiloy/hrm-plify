@@ -1,14 +1,9 @@
 "use client";
 
 import { SortableHeader } from "@/components/ui/data-table";
-import {
-  ILeaveApprover,
-  ILeaveApproverWithAllEmployees,
-  ILeaveType,
-} from "@/schema/LeaveSchema";
+import { ILeaveApprover } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import LeaveTypeEditDialog from "../../../Dialog/Leave/LeaveTypeEditDialog";
-import { getFullNameOfEmployee, getFullNameOfUser } from "@/utils/Misc";
+import { getFullNameOfEmployee } from "@/utils/Misc";
 import LeaveApproverEditDialog from "../../../Dialog/Leave/LeaveApproverEditDialog";
 
 export const LeaveApproverDataTableColumns: ColumnDef<ILeaveApprover>[] = [

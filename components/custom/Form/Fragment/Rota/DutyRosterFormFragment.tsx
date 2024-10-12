@@ -1,5 +1,4 @@
 "use client";
-import { ComboBox, LabelledComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -14,15 +13,11 @@ import {
 import { IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
-import {
-  IDutyRoster,
-  IDutyRosterWithEditData,
-  IShift,
-} from "@/schema/RotaSchema";
+import { IDutyRoster, IShift } from "@/schema/RotaSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { convertTo12Hour, toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 interface Props extends IFormFragmentProps<IDutyRoster> {
   showEmployee?: boolean;

@@ -1,5 +1,4 @@
 "use client";
-import { ComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,9 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
-import { IEmployeeUserRole, IUserConfig } from "@/schema/UserSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { dateDiffInDays, toYYYYMMDD, weekDays } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";

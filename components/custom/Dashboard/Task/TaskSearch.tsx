@@ -17,7 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
-import { IEmployee, IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
+import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
 import React, { useCallback, useState } from "react";
 
 export default function TaskSearch() {

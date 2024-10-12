@@ -4,7 +4,6 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
-import { usePathname } from "next/navigation";
 
 export default function LeaveDashboardSidebar({
   company,
@@ -13,7 +12,7 @@ export default function LeaveDashboardSidebar({
 }) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
-  const path = usePathname();
+
   return (
     <Sidebar
       className="overflow-auto"

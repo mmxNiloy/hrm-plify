@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { IDesignation } from "@/schema/DesignationSchema";
 import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";

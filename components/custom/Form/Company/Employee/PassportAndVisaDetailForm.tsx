@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { IChangeOfCircumstances } from "@/schema/EmployeeSchema";
 import { countryNames, nationalities } from "@/utils/Misc";
 import React from "react";

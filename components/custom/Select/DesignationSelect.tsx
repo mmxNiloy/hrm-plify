@@ -1,6 +1,4 @@
 "use server";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -11,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";

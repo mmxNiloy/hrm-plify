@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
-import { ICompany, ICompanyWithDesignationMeta } from "@/schema/CompanySchema";
+import { ICompanyWithDesignationMeta } from "@/schema/CompanySchema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 

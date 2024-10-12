@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ILeaveApprover, ILeaveType } from "@/schema/LeaveSchema";
+import { ILeaveApprover } from "@/schema/LeaveSchema";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
 import React, { useCallback, useState } from "react";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";

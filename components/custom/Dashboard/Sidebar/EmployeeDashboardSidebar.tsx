@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
 import { ICompany } from "@/schema/CompanySchema";
 
 export default function EmployeeDashboardSidebar({

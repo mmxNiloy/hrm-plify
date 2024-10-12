@@ -1,6 +1,5 @@
 "use client";
 import { ComboBox } from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -12,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
-import { IEmployeeUserRole, IUserConfig } from "@/schema/UserSchema";
+import { IEmployeeUserRole } from "@/schema/UserSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";

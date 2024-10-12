@@ -2,12 +2,8 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import "chart.js/auto";
-import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
 import { months } from "@/utils/Misc";
-const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
-  ssr: false,
-});
 const Bar = dynamic(() => import("react-chartjs-2").then((mod) => mod.Bar), {
   ssr: false,
 });

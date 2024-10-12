@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
@@ -19,9 +18,7 @@ import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
-import EmployeeDetailsFormFragment from "../../Form/Fragment/Employee/EmployeeDetailsFormFragment";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import ServiceDetailsFormFragment from "../../Form/Fragment/Employee/ServiceDetailsFormFragment";
 import { ICompany, IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import ServiceDetailsFormFragmentClient from "../../Form/Fragment/Employee/ServiceDetailsFormFragmentClient";

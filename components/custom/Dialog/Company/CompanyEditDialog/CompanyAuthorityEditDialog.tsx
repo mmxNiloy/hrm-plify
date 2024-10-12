@@ -14,12 +14,7 @@ import Icons from "@/components/ui/icons";
 import { ButtonWarn } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
-import {
-  ICompanyAuthorisedDetails,
-  ICompanyAuthorizedDetailsBase,
-  ICompanyKeyContact,
-  ICompanyL1User,
-} from "@/schema/CompanySchema";
+import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
 import CompanyAuthorityFormFragment from "../../../Form/Fragment/Company/CompanyAuthorityFormFragment";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";

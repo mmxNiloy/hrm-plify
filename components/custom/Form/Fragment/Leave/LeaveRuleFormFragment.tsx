@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { ILeaveRule, ILeaveType } from "@/schema/LeaveSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { toYYYYMMDD } from "@/utils/Misc";

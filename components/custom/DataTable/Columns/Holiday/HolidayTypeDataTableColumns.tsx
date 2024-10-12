@@ -1,12 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
-import Icons from "@/components/ui/icons";
-import { ICompany } from "@/schema/CompanySchema";
 import { IHolidayType } from "@/schema/HolidaySchema";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import HolidayTypeEditPopover from "../../../Popover/HolidayTypeEditPopover";
 
 export const HolidayTypeDataTableColumns: ColumnDef<IHolidayType>[] = [

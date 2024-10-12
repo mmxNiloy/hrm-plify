@@ -3,7 +3,6 @@
 import { SortableHeader } from "@/components/ui/data-table";
 import { ILeaveRule, ILeaveType } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import LeaveTypeEditDialog from "../../../Dialog/Leave/LeaveTypeEditDialog";
 import LeaveRuleEditDialog from "../../../Dialog/Leave/LeaveRuleEditDialog";
 
 export const LeaveRulesDataTableColumns: ColumnDef<ILeaveRule>[] = [

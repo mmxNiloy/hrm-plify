@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
-import Icons from "@/components/ui/icons";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import EditJobPopover from "../../Popover/Job/EditJobPopover";

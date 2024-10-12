@@ -1,9 +1,9 @@
 "use server";
 
-import { getShifts } from "@/app/actions/getShifts";
 import React from "react";
 import OffDaysEditDialog from "./OffDaysEditDialog";
 import { IOffDays } from "@/schema/RotaSchema";
+import { getShifts } from "@/app/(server)/actions/getShifts";
 
 export default async function OffDaysEditDialogWrapper({
   company_id,

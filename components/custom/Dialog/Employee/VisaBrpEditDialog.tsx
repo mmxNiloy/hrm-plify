@@ -16,11 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useCallback, useState } from "react";
 import VisaBrpFormFragment from "../../Form/Fragment/Employee/VisaBrpFormFragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import {
-  ButtonBlue,
-  ButtonSuccess,
-  ButtonWarn,
-} from "@/styles/button.tailwind";
+import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
 import { IEmployeeVisaBrp } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";

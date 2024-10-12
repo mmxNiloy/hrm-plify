@@ -1,12 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
-import Icons from "@/components/ui/icons";
-import { ICompany } from "@/schema/CompanySchema";
 import { IUserConfig } from "@/schema/UserSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import UserConfigEditDialog from "../../../Dialog/UserAccess/UserConfigEditDialog";
 
 export const UserConfigDataTableColumns: ColumnDef<IUserConfig>[] = [

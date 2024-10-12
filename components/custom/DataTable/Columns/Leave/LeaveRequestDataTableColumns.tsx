@@ -2,16 +2,11 @@
 
 import { SortableHeader } from "@/components/ui/data-table";
 import {
-  ILeaveApprover,
-  ILeaveApproverWithAllEmployees,
-  ILeaveRequest,
   ILeaveRequestWithCurrentEmployee,
   ILeaveType,
 } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import LeaveTypeEditDialog from "../../../Dialog/Leave/LeaveTypeEditDialog";
-import { getFullNameOfEmployee, getFullNameOfUser } from "@/utils/Misc";
-import LeaveApproverEditDialog from "../../../Dialog/Leave/LeaveApproverEditDialog";
+import { getFullNameOfEmployee } from "@/utils/Misc";
 import { cn } from "@/lib/utils";
 import LeaveRequestEditDialog from "../../../Dialog/Leave/LeaveRequestEditDialog";
 import Icons from "@/components/ui/icons";

@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import React from "react";
 
