@@ -129,6 +129,8 @@ import {
   LucideCalendarClock,
   Landmark,
   UserCheck,
+  UserX,
+  FileCog,
 } from "lucide-react";
 import React from "react";
 
@@ -702,6 +704,8 @@ const StatGraph = React.forwardRef<SVGElement, SVGAttributes>(
 StatGraph.displayName = "StatGraph";
 
 const Icons = {
+  fileCog: FileCog,
+  userX: UserX,
   statGraph: StatGraph,
   clockStar: ClockStar,
   cycle: CycleIcon,
