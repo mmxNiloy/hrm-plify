@@ -14,13 +14,16 @@ import { ICompany } from "@/schema/CompanySchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 
 export default async function DashboardNavbar() {
-  if (!cookies().has(process.env.COOKIE_USER_KEY!)) {
+  var user: IUser | undefined;
+  try {
+    user = JSON.parse(
+      cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    ) as IUser;
+  } catch (err) {
+    console.error("DashboardNavbar > User Cookie not found", err);
     return null;
   }
 
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
   var company: ICompany | undefined;
   if (
     user.user_roles?.roles.role_name === "Company Admin" ||

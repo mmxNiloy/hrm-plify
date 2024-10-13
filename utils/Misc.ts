@@ -503,3 +503,32 @@ export function getFullNameOfUser(user: IUser) {
     user.middle_name.length > 0 ? ` ${user.middle_name}` : ""
   } ${user.last_name}`;
 }
+
+export function timeDifference(startTime: string, endTime: string): string {
+  // Parse the time strings into hours and minutes
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+
+  // Convert both times to minutes since midnight
+  const startTotalMinutes = startHour * 60 + startMinute;
+  const endTotalMinutes = endHour * 60 + endMinute;
+
+  // Calculate the difference in minutes
+  let diffMinutes = endTotalMinutes - startTotalMinutes;
+
+  // Handle case where the difference is negative (next day)
+  if (diffMinutes < 0) {
+    diffMinutes += 24 * 60; // Add 24 hours worth of minutes
+  }
+
+  // Convert the difference back into hours and minutes
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffMins = diffMinutes % 60;
+
+  // Format the result as HH:mm
+  const formattedDiff = `${String(diffHours).padStart(2, "0")}:${String(
+    diffMins
+  ).padStart(2, "0")}`;
+
+  return formattedDiff;
+}

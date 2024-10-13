@@ -3,7 +3,6 @@ import Image from "next/image";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { Progress } from "@/components/ui/progress";
 import DashboardNavbar from "@/components/custom/Dashboard/Navbar/DashboardNavbar";
 import Footer from "@/components/custom/Footer";
 
