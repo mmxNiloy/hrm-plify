@@ -129,6 +129,8 @@ import {
   LucideCalendarClock,
   Landmark,
   UserCheck,
+  UserX,
+  FileCog,
 } from "lucide-react";
 import React from "react";
 
@@ -565,7 +567,186 @@ const AdminUserIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 AdminUserIcon.displayName = "AdminUserIcon";
 
+const HRIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 124 124"
+      xmlSpace="preserve"
+      className={cn("fill-current", className)}
+    >
+      <path d="M121.4 89.5H2.6c-1.4 0-2.6 1.2-2.6 2.6v9.801c0 1.399 1.2 2.6 2.6 2.6h118.8c1.399 0 2.6-1.2 2.6-2.6V92.1c0-1.4-1.2-2.6-2.6-2.6M2.7 77.5h11.9c1.7 0 3.4-1.7 3.4-3.4V56.7c0-1.7 1-3.2 2.7-3.2h13.6c1.7 0 2.8 1.5 2.8 3.2v17.5c0 1.7 1.6 3.399 3.3 3.399h12c1.7 0 2.7-1.699 2.7-3.399V22c0-1.7-1-2.5-2.7-2.5h-12c-1.7 0-3.3.9-3.3 2.5v14.3c0 1.7-1.1 3.2-2.8 3.2H20.7C19 39.5 18 38 18 36.3V22c0-1.7-1.7-2.5-3.4-2.5H2.7C1 19.5 0 20.4 0 22v52.1c0 1.7 1 3.4 2.7 3.4m107.2-27.2c.899-.3 1.6-.7 2.3-1.1q3.6-2.25 5.7-5.7c1.399-2.3 2.1-5.1 2.1-8.3 0-3.7-.9-6.8-2.7-9.4s-4.2-4.1-7.1-5.1-7.2-1.2-12.7-1.2H69.1c-.899 0-2.1.2-2.1 1.1v55c0 .9 1.2 1.9 2.1 1.9H84c.9 0 2.1-1 2.1-1.9V55.1c0-.9.5-1.6 1.301-1.6 1.6 0 3 .4 4.3 1.3 1 .7 2 2.2 3.2 4.5l9.1 17.2c.3.5.8 1 1.4 1h16.8c1.2 0 2-1.4 1.399-2.5-2.6-5.1-4.899-10.5-8.199-15.3-1.301-1.9-2.7-4.1-4.4-5.6-1.101-.9-3.301-2.9-1.101-3.8M101 39.6c-.9 1.2-2.3 2-3.8 2.4-3.2.9-6.601.6-9.9.6-.9 0-1.3-.7-1.3-1.6v-8.7c0-.9.2-1.8 1.1-1.8h6.3c2.8 0 5.8.2 7.6 2.8 1.3 1.8 1.3 4.5 0 6.3" />
+    </svg>
+  )
+);
+HRIcon.displayName = "HRIcon";
+
+const UserKey = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <path d="M12 1.2A4.8 4.8 0 1 0 16.8 6 4.805 4.805 0 0 0 12 1.2m0 8.6A3.8 3.8 0 1 1 15.8 6 3.804 3.804 0 0 1 12 9.8M9 22H4l.01-4.5A5.5 5.5 0 0 1 9.5 12h4.312a6 6 0 0 0-.462 1H9.5A4.505 4.505 0 0 0 5 17.5V21h4zm10-10.9a3.9 3.9 0 0 0-3.9 3.9 3.9 3.9 0 0 0 .225 1.255L11 20.727V23h2.993l.023-.01L15 22v-1h1.005L17 20v-1h1.004l.186-.187A3.9 3.9 0 1 0 19 11.1m0 6.9a3 3 0 0 1-1.223-.267l-.272.267H16v2h-2v1.674l-.408.326H12v-.906l4.419-4.591A2.97 2.97 0 0 1 16 15a3 3 0 1 1 3 3m.5-5a1.5 1.5 0 1 0 1.5 1.5 1.5 1.5 0 0 0-1.5-1.5m0 2a.5.5 0 1 1 .5-.5.5.5 0 0 1-.5.5" />
+      <path fill="none" d="M0 0h24v24H0z" />
+    </svg>
+  )
+);
+UserKey.displayName = "UserKey";
+
+const PersonLeave = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      height="24"
+      width="24"
+      xmlSpace="preserve"
+      className={cn("fill-current", className)}
+    >
+      <path d="M501.084 295.982h-17.462v-22.126c0-5.57-4.515-10.086-10.086-10.086h-5.964c.709-8.717-4.914-16.938-13.672-19.189l-57.62-14.81 18.561-48.611c5.374-14.076-1.673-29.852-15.761-35.231l-42.49-16.44c-8.143-3.151-16.891-3.956-25.479-2.38-33.716 6.185-89.129 16.352-95.531 17.522a18.3 18.3 0 0 0-10.802 6.327l-37.719 45.523V59.369a12.055 12.055 0 0 0-8.678-11.573l-81.14-23.68h210.377v89.025l24.112-3.15V12.06c0-6.658-5.398-12.056-12.056-12.056-1.709 0-306.832-.027-307.764.05C5.526.58.841 5.946.841 12.06c0 2.958-.057 440.79.104 442.075.613 4.872 4.095 8.755 8.575 10.064l162.107 47.309c7.723 2.257 15.433-3.561 15.433-11.573V250.25a18.2 18.2 0 0 0 7.416-5.339l54.243-65.467 60.479-11.061-40.764 106.762s1.453-3.672-25.712 89.318l-31.614 60.093v56.934h.001c9.305 2.27 19.27-1.977 23.908-10.795l46.438-88.273a21.4 21.4 0 0 0 1.597-3.948l25.689-87.938 5.789 2.21 44.751 70.286-32.169 90.604c-3.94 11.096 1.861 23.286 12.958 27.226 11.036 3.919 23.279-1.841 27.226-12.958l35.651-100.411a21.33 21.33 0 0 0-2.107-18.585l-31.286-49.137 13.584-35.578 28.807 7.405-.263 24.386H394.22c-2.269 0-4.355.759-6.039 2.022l26.713 41.955c6.327 9.937 7.695 22.004 3.754 33.106l-4.437 12.498h86.875c5.569 0 10.083-4.515 10.083-10.083v-69.414c0-5.571-4.515-10.086-10.085-10.086M152.698 316.97c0 6.658-5.398 12.056-12.056 12.056s-12.056-5.398-12.056-12.056v-69.596c0-6.658 5.398-12.056 12.056-12.056s12.056 5.398 12.056 12.056zm310.755-20.988h-31.599v-12.041h31.6z" />
+      <path d="m315.805 325.767-8.188 28.028v86.777h-37.929l-12.685 24.113h52.405c-.579-5.552.081-11.207 2.005-16.624l20.318-57.222v-40.06zM416.914 50.634c-20.845-7.959-44.195 2.487-52.154 23.332-8.029 21.025 2.701 44.277 23.332 52.154 20.656 7.888 44.136-2.332 52.154-23.332 7.958-20.845-2.487-44.195-23.332-52.154" />
+    </svg>
+  )
+);
+PersonLeave.displayName = "PersonLeave";
+
+const OperationsIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 1024 1024"
+      className={cn("fill-current", className)}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M389.44 768a96.064 96.064 0 0 1 181.12 0H896v64H570.56a96.064 96.064 0 0 1-181.12 0H128v-64zm192-288a96.064 96.064 0 0 1 181.12 0H896v64H762.56a96.064 96.064 0 0 1-181.12 0H128v-64zm-320-288a96.064 96.064 0 0 1 181.12 0H896v64H442.56a96.064 96.064 0 0 1-181.12 0H128v-64z" />
+    </svg>
+  )
+);
+OperationsIcon.displayName = "OperationsIcon";
+
+const UsersCheck = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m16 18 2 2 4-4m-10-1H8c-1.864 0-2.796 0-3.53.305a4 4 0 0 0-2.166 2.164C2 18.204 2 19.136 2 21M15.5 3.29a4.001 4.001 0 0 1 0 7.42M13.5 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
+        className={cn("stroke-current", className)}
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )
+);
+UsersCheck.displayName = "UsersCheck";
+
+const CycleIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="m12.953 28.484-1.584-10.589-3.182 4.301c-2.75-3.393-2.978-8.339-.26-12.013 2.577-3.483 7.02-4.769 10.926-3.499l-.548-3.665 4.493-.672C16.231-1.021 8.003.759 3.47 6.886c-4.545 6.144-3.823 14.56 1.356 19.852l-2.463 3.329zM26.941 5.445l2.58-3.487-10.589 1.583 1.584 10.589 3.056-4.131c2.633 3.388 2.814 8.239.137 11.858-2.534 3.426-6.875 4.726-10.732 3.559l.525 3.511-4.762.712c6.581 3.425 14.858 1.657 19.41-4.496 4.502-6.085 3.836-14.399-1.208-19.699z" />
+    </svg>
+  )
+);
+CycleIcon.displayName = "CycleIcon";
+
+const ClockStar = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 52 52"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <path d="M38.71 25.59a11.3 11.3 0 0 1 11.29 11v.29a11.29 11.29 0 0 1-11 11.29h-.29a11.3 11.3 0 0 1-.3-22.59zm-.45 3.08v.1l-1.66 5.32a.4.4 0 0 1-.4.32h-5.43a.58.58 0 0 0-.39 1l.07.06 4.31 3.18a.55.55 0 0 1 .2.51v.09l-2 5.43a.53.53 0 0 0 .74.65h.07l4.67-3.45a.53.53 0 0 1 .55-.06l.08.06 4.63 3.45a.52.52 0 0 0 .83-.51v-.09l-2-5.43a.56.56 0 0 1 .11-.53l.07-.07L47 35.43a.57.57 0 0 0-.23-1h-5.44a.52.52 0 0 1-.45-.23v-.09l-1.67-5.31a.52.52 0 0 0-.95-.13M21.84 3a19.89 19.89 0 0 1 19.84 19.84v.24a14.3 14.3 0 0 0-2.47-.31h-.9v-.25a16.47 16.47 0 1 0-16.47 16.79 16.3 16.3 0 0 0 2.91-.26 14.2 14.2 0 0 0 .92 3.26 19.4 19.4 0 0 1-3.83.37 19.84 19.84 0 0 1 0-39.68M22 14.3a1.06 1.06 0 0 1 1 1V22a1.06 1.06 0 0 0 .27.76l3.81 3.93a1 1 0 0 1 0 1.45l-1.43 1.44a1 1 0 0 1-1.43 0l-5-5.1a1.4 1.4 0 0 1-.28-.76v-8.38a1.06 1.06 0 0 1 1-1H22z" />
+    </svg>
+  )
+);
+ClockStar.displayName = "ClockStar";
+
+const StatGraph = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 32 32"
+      className={cn("fill-current", className)}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect height="10" rx="1" ry="1" width="6" x="17" y="17" />
+      <rect height="16" rx="1" ry="1" width="6" x="25" y="11" />
+      <rect height="12" rx="1" ry="1" width="6" x="9" y="15" />
+      <rect height="7" rx="1" ry="1" width="6" x="1" y="20" />
+      <path d="M31 25H1v3a3 3 0 0 0 3 3h24a3 3 0 0 0 3-3Z" />
+      <path d="M4 17H2a1 1 0 0 1 0-2h1.52L10 6.94a1 1 0 1 1 1.56 1.24l-6.78 8.44A1 1 0 0 1 4 17m17.25-5.56a1 1 0 0 1-.62-.22 1 1 0 0 1-.16-1.4l6.75-8.44A1 1 0 0 1 28 1h2a1 1 0 0 1 0 2h-1.52L22 11.06a1 1 0 0 1-.75.38m-8.252-3.443 1.2-1.6 4.8 3.6-1.2 1.6z" />
+      <circle cx="12" cy="6" r="3" />
+      <circle cx="20" cy="11.99" r="3" />
+    </svg>
+  )
+);
+StatGraph.displayName = "StatGraph";
+
+const StepsIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn("fill-current", className)}
+    >
+      <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
+    </svg>
+  )
+);
+StepsIcon.displayName = "StepsIcon";
+
+const HeirarchyIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <path d="M13.5 11h-1.729L8.438 6H9.5l.5-.5v-4L9.5 1h-4l-.5.5v4l.5.5h1.062l-3.333 5H1.5l-.5.5v3l.5.5h3l.5-.5v-3l-.5-.5h-.068L7.5 6.4l3.068 4.6H10.5l-.5.5v3l.5.5h3l.5-.5v-3zM6 5V2h3v3zm-2 7v2H2v-2zm9 2h-2v-2h2z" />
+    </svg>
+  )
+);
+HeirarchyIcon.displayName = "HeirarchyIcon";
+
 const Icons = {
+  heirarchy: HeirarchyIcon,
+  steps: StepsIcon,
+  fileCog: FileCog,
+  userX: UserX,
+  statGraph: StatGraph,
+  clockStar: ClockStar,
+  cycle: CycleIcon,
+  usersCheck: UsersCheck,
+  operations: OperationsIcon,
+  leave: PersonLeave,
+  userKey: UserKey,
+  hr: HRIcon,
   userPlus: UserPlus,
   adminUser: AdminUserIcon,
   userCheck: UserCheck,

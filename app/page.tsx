@@ -1,18 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import LoginForm from "./Components/Auth/LoginForm";
 import Icons from "@/components/ui/icons";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import Image from "next/image";
-import Footer from "./Components/Footer";
-import Navbar from "./Components/Navbar/Navbar";
-import Link from "next/link";
-import RegistrationForm from "./Components/Auth/RegistrationForm";
-import AuthCard from "./Components/Auth/AuthCard";
 import SiteConfig from "@/utils/SiteConfig";
+import Navbar from "@/components/custom/Navbar/Navbar";
+import AuthCard from "@/components/custom/Auth/AuthCard";
+import Footer from "@/components/custom/Footer";
 
 export default function Home() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [AutoScroll()]);

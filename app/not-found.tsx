@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ButtonBlue } from "@/styles/button.tailwind";
-import { headers } from "next/headers";
 import Link from "next/link";
 import React from "react";
 

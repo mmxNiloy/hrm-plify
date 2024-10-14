@@ -28,7 +28,6 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          {/* <Navbar /> */}
           <div
             className={cn(
               "relative flex flex-col bg-no-repeat bg-center bg-cover",
