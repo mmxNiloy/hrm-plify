@@ -703,7 +703,40 @@ const StatGraph = React.forwardRef<SVGElement, SVGAttributes>(
 );
 StatGraph.displayName = "StatGraph";
 
+const StepsIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn("fill-current", className)}
+    >
+      <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
+    </svg>
+  )
+);
+StepsIcon.displayName = "StepsIcon";
+
+const HeirarchyIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <path d="M13.5 11h-1.729L8.438 6H9.5l.5-.5v-4L9.5 1h-4l-.5.5v4l.5.5h1.062l-3.333 5H1.5l-.5.5v3l.5.5h3l.5-.5v-3l-.5-.5h-.068L7.5 6.4l3.068 4.6H10.5l-.5.5v3l.5.5h3l.5-.5v-3zM6 5V2h3v3zm-2 7v2H2v-2zm9 2h-2v-2h2z" />
+    </svg>
+  )
+);
+HeirarchyIcon.displayName = "HeirarchyIcon";
+
 const Icons = {
+  heirarchy: HeirarchyIcon,
+  steps: StepsIcon,
   fileCog: FileCog,
   userX: UserX,
   statGraph: StatGraph,

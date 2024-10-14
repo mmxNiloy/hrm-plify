@@ -16,6 +16,9 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { getDesignations } from "@/app/(server)/actions/getDesignations";
 import DesignationEditPopover from "@/components/custom/Popover/Company/DesignationEditPopover";
 import { CompanyDesignationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyDesignationDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -30,35 +33,15 @@ export default async function DesignationsPage({
     page,
     limit,
   });
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Designations</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`..`}>Company Management</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`.`}
-                className="line-clamp-1 text-ellipsis max-w-32"
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Designations</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs company={company} user={user} title="Designations" />
 
         <DesignationEditPopover company_id={params.companyId} />
       </div>

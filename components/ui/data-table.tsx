@@ -53,6 +53,7 @@ interface DataTableProps<TData, TValue> {
   showOptions?: boolean;
   pageSize?: number;
   pageCount?: number;
+  loading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -701,6 +702,7 @@ export function StaticDataTable<TData, TValue>({
   data,
   showOptions = true,
   pageCount = 1,
+  loading = false,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -873,35 +875,49 @@ export function StaticDataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  className="even:bg-accent text-xs"
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+          {!loading && (
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    className="even:bg-accent text-xs"
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
+              )}
+            </TableBody>
+          )}
+          {loading && (
+            <TableBody>
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
+                <TableCell colSpan={columns.length} className="h-24">
+                  <p className="w-full h-full flex flex-row gap-2 items-center justify-center">
+                    <Icons.spinner className="animate-spin ease-in-out" />
+                    Loading...
+                  </p>
                 </TableCell>
               </TableRow>
-            )}
-          </TableBody>
+            </TableBody>
+          )}
         </Table>
       </div>
       {showOptions && (

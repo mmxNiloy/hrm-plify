@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { cn } from "@/lib/utils";
+import AnimatedTrigger from "./AnimatedTrigger";
 
 export default function HolidayTypeEditPopover({
   data,
@@ -92,13 +93,18 @@ export default function HolidayTypeEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
-            <Icons.plus /> Create a Holiday Type
-          </Button>
+          <AnimatedTrigger label="Create a holiday Type" />
         )}
       </PopoverTrigger>
 
-      <PopoverContent>
+      <PopoverContent
+        align="end"
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+          }
+        }}
+      >
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <Label className={RequiredAsterisk}>Holiday Type</Label>

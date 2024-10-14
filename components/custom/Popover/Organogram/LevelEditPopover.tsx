@@ -8,32 +8,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { IPayGroup } from "@/schema/PayGroupSchema";
+import { IBank } from "@/schema/BankSchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
+import { IOrganogramLevel } from "@/schema/OrganogramSchema";
 
-export default function PayGroupEditPopover({
+export default function LevelEditPopover({
   company_id,
   data,
   asIcon,
 }: {
   company_id: number;
-  data?: IPayGroup;
+  data?: IOrganogramLevel;
   asIcon?: boolean;
 }) {
   const { toast } = useToast();
@@ -51,19 +43,15 @@ export default function PayGroupEditPopover({
       setLoading(true);
 
       try {
-        const pgData: IPayGroup = {
+        const apData: IOrganogramLevel = {
           company_id,
-          pay_group_id: data?.pay_group_id ?? 1,
-          pay_group_name:
-            (fd.get("pay_group_name") as string | undefined) ?? "",
-          is_active: Number.parseInt(
-            (fd.get("is_active") as string | undefined) ?? "0"
-          ),
+          level_id: data?.level_id ?? 1,
+          level_name: (fd.get("level_name") as string | undefined) ?? "",
         };
 
-        const apiRes = await fetch(`/api/company/pay-group`, {
+        const apiRes = await fetch(`/api/company/bank`, {
           method: data ? "PATCH" : "POST",
-          body: JSON.stringify(pgData),
+          body: JSON.stringify(apData),
         });
 
         const res = await apiRes.json();
@@ -107,7 +95,7 @@ export default function PayGroupEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <AnimatedTrigger label="Add a new Pay Group" />
+          <AnimatedTrigger label="Add a new Level" />
         )}
       </PopoverTrigger>
 
@@ -120,51 +108,16 @@ export default function PayGroupEditPopover({
         }}
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
-            <Input
-              readOnly
-              name="company_id"
-              id="company-id-input"
-              placeholder="Company ID"
-              defaultValue={company_id}
-            />
-          </div>
-
           <div className="flex flex-col gap-4 items-center justify-center">
             <div className="w-full flex-grow flex flex-col gap-2">
-              <Label
-                className={RequiredAsterisk}
-                htmlFor="pay-group-name-input"
-              >
-                Pay Group
-              </Label>
+              <Label className={RequiredAsterisk}>Level</Label>
               <Input
-                className="rounded-full"
-                name="pay_group_name"
-                id="pay-group-name-input"
-                placeholder="Pay Group"
                 required
+                name="level_name"
+                defaultValue={data?.level_name}
+                placeholder="Level Name"
+                key={`level-name-${data?.level_name}`}
               />
-            </div>
-
-            <div className="flex flex-col gap-2 w-full">
-              <Label>Status</Label>
-              <Select
-                defaultValue={data ? `${data.is_active}` : ""}
-                name="is_active"
-              >
-                <SelectTrigger className="w-full rounded-full">
-                  <SelectValue placeholder="Select Pay Group Status" />
-                </SelectTrigger>
-
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select pay group</SelectLabel>
-                    <SelectItem value={"0"}>Inactive</SelectItem>
-                    <SelectItem value={"1"}>Active</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
             </div>
 
             <Button

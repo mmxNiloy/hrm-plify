@@ -5,7 +5,7 @@ import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 
-export default function AttendanceDashboardSidebar({
+export default function OrganogramDashboardSidebar({
   company,
 }: {
   company: ICompany;
@@ -52,56 +52,29 @@ export default function AttendanceDashboardSidebar({
         </SidebarHeader>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance`}
+          href={`/dashboard/company/${company.company_id}/organogram`}
         >
           <Icons.home />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Attendance Management
+            Organogram Chart
           </span>
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/stats`}
+          href={`/dashboard/company/${company.company_id}/organogram/level`}
         >
-          <Icons.chart />
+          <Icons.steps />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Attendance Statistics
+            Levels
           </span>
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/absent-report`}
+          href={`/dashboard/company/${company.company_id}/organogram/heirarchy`}
         >
-          <Icons.userX />
+          <Icons.heirarchy />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Absent Report
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/upload`}
-        >
-          <Icons.uploadCloud />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Upload Attendance
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/generate`}
-        >
-          <Icons.fileCog />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Generate Attendance
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/report`}
-        >
-          <Icons.note />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Generate Report
+            Heirarchy
           </span>
         </SidebarLink>
       </SidebarContent>

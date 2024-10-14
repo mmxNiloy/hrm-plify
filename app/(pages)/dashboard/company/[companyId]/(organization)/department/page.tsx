@@ -8,6 +8,10 @@ import { IPaginatedDepartment } from "@/schema/CompanySchema";
 import { getDepartments } from "@/app/(server)/actions/getDepartments";
 import DepartmentCreationPopover from "@/components/custom/Popover/Department/DepartmentCreationPopover";
 import { CompanyDepartmentDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyDepartmentDataTableColumns";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
@@ -18,11 +22,17 @@ export default async function DepartmentPage({ params, searchParams }: Props) {
     page,
     limit,
   });
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+
+  const company = await getCompanyData(params.companyId);
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">Company Departments</p>
+      <p className="text-lg font-semibold">Company Departments</p>
+      <div className="flex items-center justify-between">
+        <MyBreadcrumbs company={company} user={user} title="Designations" />
         <DepartmentCreationPopover company_id={params.companyId} />
       </div>
       <StaticDataTable

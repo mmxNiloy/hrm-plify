@@ -5,6 +5,8 @@ import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import AttendanceGenerationTable from "@/components/custom/Dashboard/Attendance/AttendanceGenerationTable";
 
 export default async function GenerateAttendancePage({
   params,
@@ -13,6 +15,8 @@ export default async function GenerateAttendancePage({
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
   const company = await getCompanyDetails(params.companyId);
+
+  const companyExtraData = await getCompanyExtraData(params.companyId);
 
   return (
     <main className="container flex flex-col gap-2">
@@ -27,6 +31,12 @@ export default async function GenerateAttendancePage({
           }}
         />
         {/* <AttendanceFilterPopover {...companyExtraData} /> */}
+      </div>
+      <div className="flex flex-col gap-4">
+        <AttendanceGenerationTable
+          employees={companyExtraData.employees}
+          companyId={company.company_id}
+        />
       </div>
 
       {/* <StaticDataTable

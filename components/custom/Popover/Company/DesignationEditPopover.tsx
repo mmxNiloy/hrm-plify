@@ -16,6 +16,7 @@ import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+import AnimatedTrigger from "../AnimatedTrigger";
 
 export default function DesignationEditPopover({
   company_id,
@@ -87,13 +88,12 @@ export default function DesignationEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
-            <Icons.plus /> Add a new Designation
-          </Button>
+          <AnimatedTrigger label={"Add a new Designation"} />
         )}
       </PopoverTrigger>
 
       <PopoverContent
+        align="end"
         onInteractOutside={(e) => {
           if (loading) {
             e.preventDefault();

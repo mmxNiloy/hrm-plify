@@ -1,18 +1,16 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
-import { redirect } from "next/navigation";
-import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { LayoutProps } from "@/utils/Types";
-import RotaDashboardSidebar from "@/components/custom/Dashboard/Sidebar/RotaDashboardSidebar";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import OrganogramDashboardSidebar from "@/components/custom/Dashboard/Sidebar/OrganogramDashboardSidebar";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
-export default async function RotaDashboardPageLayout({
+export default async function OrganogramDashboardPageLayout({
   children,
   params,
 }: Props) {
@@ -25,7 +23,7 @@ export default async function RotaDashboardPageLayout({
 
   return (
     <div>
-      <RotaDashboardSidebar company={company} />
+      <OrganogramDashboardSidebar company={company} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

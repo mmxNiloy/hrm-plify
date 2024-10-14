@@ -8,32 +8,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { IPayGroup } from "@/schema/PayGroupSchema";
+import { IBank } from "@/schema/BankSchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
+import { ITax } from "@/schema/TaxSchema";
+import { IPaymentType } from "@/schema/PaymentTypeSchema";
 
-export default function PayGroupEditPopover({
+export default function PaymentTypeEditPopover({
   company_id,
   data,
   asIcon,
 }: {
   company_id: number;
-  data?: IPayGroup;
+  data?: IPaymentType;
   asIcon?: boolean;
 }) {
   const { toast } = useToast();
@@ -51,19 +44,20 @@ export default function PayGroupEditPopover({
       setLoading(true);
 
       try {
-        const pgData: IPayGroup = {
+        const apData: IPaymentType = {
           company_id,
-          pay_group_id: data?.pay_group_id ?? 1,
-          pay_group_name:
-            (fd.get("pay_group_name") as string | undefined) ?? "",
-          is_active: Number.parseInt(
-            (fd.get("is_active") as string | undefined) ?? "0"
+          payment_type_id: data?.payment_type_id ?? 1,
+          payment_type_name:
+            (fd.get("payment_type_name") as string | undefined) ?? "",
+          rate: (fd.get("rate") as string | undefined) ?? "",
+          min_hours: Number.parseInt(
+            (fd.get("min_hours") as string | undefined) ?? "0"
           ),
         };
 
-        const apiRes = await fetch(`/api/company/pay-group`, {
+        const apiRes = await fetch(`/api/company/payment-type`, {
           method: data ? "PATCH" : "POST",
-          body: JSON.stringify(pgData),
+          body: JSON.stringify(apData),
         });
 
         const res = await apiRes.json();
@@ -107,7 +101,7 @@ export default function PayGroupEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <AnimatedTrigger label="Add a new Pay Group" />
+          <AnimatedTrigger label="Add a Payment Type" />
         )}
       </PopoverTrigger>
 
@@ -120,51 +114,39 @@ export default function PayGroupEditPopover({
         }}
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
-            <Input
-              readOnly
-              name="company_id"
-              id="company-id-input"
-              placeholder="Company ID"
-              defaultValue={company_id}
-            />
-          </div>
-
           <div className="flex flex-col gap-4 items-center justify-center">
             <div className="w-full flex-grow flex flex-col gap-2">
-              <Label
-                className={RequiredAsterisk}
-                htmlFor="pay-group-name-input"
-              >
-                Pay Group
-              </Label>
+              <Label className={RequiredAsterisk}>Payment Type</Label>
               <Input
-                className="rounded-full"
-                name="pay_group_name"
-                id="pay-group-name-input"
-                placeholder="Pay Group"
                 required
+                name="payment_type_name"
+                defaultValue={data?.payment_type_name}
+                placeholder="Payment Type"
+                key={`payment-type-name-${data?.payment_type_name}`}
               />
             </div>
 
             <div className="flex flex-col gap-2 w-full">
-              <Label>Status</Label>
-              <Select
-                defaultValue={data ? `${data.is_active}` : ""}
-                name="is_active"
-              >
-                <SelectTrigger className="w-full rounded-full">
-                  <SelectValue placeholder="Select Pay Group Status" />
-                </SelectTrigger>
+              <Label className={RequiredAsterisk}>Minimum Work Hours</Label>
+              <Input
+                type="number"
+                defaultValue={data?.min_hours}
+                name="bank_shortcode"
+                placeholder="Minimum Work Hours"
+                required
+                key={`minimum-work-hours-${data?.min_hours}`}
+              />
+            </div>
 
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select pay group</SelectLabel>
-                    <SelectItem value={"0"}>Inactive</SelectItem>
-                    <SelectItem value={"1"}>Active</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="w-full flex-grow flex flex-col gap-2">
+              <Label className={RequiredAsterisk}>Rate</Label>
+              <Input
+                required
+                name="rate"
+                defaultValue={data?.rate}
+                placeholder="Rate"
+                key={`rate-${data?.rate}`}
+              />
             </div>
 
             <Button

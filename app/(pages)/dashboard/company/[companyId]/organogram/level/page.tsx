@@ -11,10 +11,13 @@ import { getCompanyLeaveTypes } from "@/app/(server)/actions/getCompanyLeaveType
 import LeaveTypeEditDialog from "@/components/custom/Dialog/Leave/LeaveTypeEditDialog";
 import { LeaveTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveTypeDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import LevelEditPopover from "@/components/custom/Popover/Organogram/LevelEditPopover";
+import { LevelDataTableColumns } from "@/components/custom/DataTable/Columns/Organogram/LevelDataTableColumns";
+import { IOrganogramLevel } from "@/schema/OrganogramSchema";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
-export default async function CompanyLeaveTypePage({
+export default async function OrganizationLevelPage({
   params,
   searchParams,
 }: Props) {
@@ -23,26 +26,24 @@ export default async function CompanyLeaveTypePage({
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var leaveTypes: ILeaveType[] = await getCompanyLeaveTypes({
-    company_id: company.company_id,
-    searchParams,
-  });
+  // TODO: Hit the api and get a list of organization levels here
+  const levels: IOrganogramLevel[] = [];
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Leave Type</p>
+      <p className="text-xl font-semibold">Organization Levels</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           company={company}
           user={user}
-          parent="Leave Management"
-          title="Leave Type"
+          parent="Organogram Chart"
+          title="Levels"
         />
 
-        <LeaveTypeEditDialog company_id={company.company_id} />
+        <LevelEditPopover company_id={company.company_id} />
       </div>
 
-      <DataTable columns={LeaveTypeDataTableColumns} data={leaveTypes} />
+      <DataTable columns={LevelDataTableColumns} data={levels} />
     </main>
   );
 }

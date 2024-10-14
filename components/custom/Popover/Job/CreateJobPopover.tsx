@@ -13,6 +13,7 @@ import { ButtonBlue } from "@/styles/button.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+import AnimatedTrigger from "../AnimatedTrigger";
 
 export default function CreateJobPopover({
   company_id,
@@ -75,12 +76,11 @@ export default function CreateJobPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button className={ButtonBlue}>
-          <Icons.plus /> Add a new Designation
-        </Button>
+        <AnimatedTrigger label="Add a new Designation" />
       </PopoverTrigger>
 
       <PopoverContent
+        align="end"
         className="min-w-96 w-fit"
         onInteractOutside={(e) => {
           if (loading) {

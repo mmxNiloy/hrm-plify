@@ -13,6 +13,8 @@ import { ButtonBlue } from "@/styles/button.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+import AnimatedTrigger from "../AnimatedTrigger";
+import { Label } from "@/components/ui/label";
 
 export default function DepartmentCreationPopover({
   company_id,
@@ -74,21 +76,19 @@ export default function DepartmentCreationPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button className={ButtonBlue}>
-          <Icons.plus /> Add a New Department
-        </Button>
+        <AnimatedTrigger label="Add a new Department" />
       </PopoverTrigger>
 
       <PopoverContent
-        className="min-w-96 w-fit"
         onInteractOutside={(e) => {
           if (loading) {
             e.preventDefault();
           }
         }}
+        align="end"
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
+          <div className="sr-only">
             <Input
               readOnly
               name="company_id"
@@ -97,40 +97,15 @@ export default function DepartmentCreationPopover({
               defaultValue={company_id}
             />
           </div>
-
-          <div className="flex flex-row gap-2 items-center justify-center">
-            <div className="flex-grow flex felx-col gap-2">
-              {/* <Label htmlFor="department-name-input">Department Name</Label> */}
-              <Input
-                className="rounded-full"
-                name="dpt_name"
-                id="department-name-input"
-                placeholder="Department Name"
-                required
-              />
+          <div className="flex flex-col *:w-full gap-4 items-center justify-center">
+            <div className="flex flex-col gap-2">
+              <Label>Department Name</Label>
+              <Input name="dpt_name" placeholder="Department Name" required />
             </div>
 
-            {/* <PopoverClose asChild>
-              <Button
-                className="size-8 rounded-full"
-                variant={"destructive"}
-                size={"icon"}
-                type="button"
-                disabled={loading}
-                title="Close"
-              >
-                <Icons.cross />
-              </Button>
-            </PopoverClose> */}
-
-            <Button
-              className={cn(ButtonBlue, "size-8")}
-              size={"icon"}
-              type="submit"
-              disabled={loading}
-              title="Submit"
-            >
+            <Button className={ButtonBlue} type="submit" disabled={loading}>
               <Icons.check />
+              Submit
             </Button>
           </div>
         </form>

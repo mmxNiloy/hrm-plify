@@ -16,6 +16,7 @@ import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+import AnimatedTrigger from "../AnimatedTrigger";
 
 export default function EmploymentTypeEditPopover({
   company_id,
@@ -93,13 +94,12 @@ export default function EmploymentTypeEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
-            <Icons.plus /> Add a new Employment Type
-          </Button>
+          <AnimatedTrigger label="Add a new Employee Type" />
         )}
       </PopoverTrigger>
 
       <PopoverContent
+        align="end"
         onInteractOutside={(e) => {
           if (loading) {
             e.preventDefault();

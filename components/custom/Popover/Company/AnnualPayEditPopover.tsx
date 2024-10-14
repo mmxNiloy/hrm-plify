@@ -25,6 +25,7 @@ import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+import AnimatedTrigger from "../AnimatedTrigger";
 
 export default function AnnualPayEditPopover({
   company_id,
@@ -109,9 +110,7 @@ export default function AnnualPayEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
-            <Icons.plus /> Add a new Annual Pay
-          </Button>
+          <AnimatedTrigger label={"Add a new Annual Pay"} />
         )}
       </PopoverTrigger>
 
@@ -121,18 +120,9 @@ export default function AnnualPayEditPopover({
             e.preventDefault();
           }
         }}
+        align="end"
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
-            <Input
-              readOnly
-              name="company_id"
-              id="company-id-input"
-              placeholder="Company ID"
-              defaultValue={company_id}
-            />
-          </div>
-
           <div className="flex flex-col gap-4 items-center justify-center">
             <div className="w-full flex-grow flex flex-col gap-2">
               <Label

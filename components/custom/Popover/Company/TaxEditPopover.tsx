@@ -8,32 +8,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { IPayGroup } from "@/schema/PayGroupSchema";
+import { IBank } from "@/schema/BankSchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
+import { ITax } from "@/schema/TaxSchema";
 
-export default function PayGroupEditPopover({
+export default function TaxEditPopover({
   company_id,
   data,
   asIcon,
 }: {
   company_id: number;
-  data?: IPayGroup;
+  data?: ITax;
   asIcon?: boolean;
 }) {
   const { toast } = useToast();
@@ -51,19 +43,19 @@ export default function PayGroupEditPopover({
       setLoading(true);
 
       try {
-        const pgData: IPayGroup = {
+        const apData: ITax = {
           company_id,
-          pay_group_id: data?.pay_group_id ?? 1,
-          pay_group_name:
-            (fd.get("pay_group_name") as string | undefined) ?? "",
-          is_active: Number.parseInt(
-            (fd.get("is_active") as string | undefined) ?? "0"
+          tax_id: data?.tax_id ?? 1,
+          tax_code: (fd.get("tax_code") as string | undefined) ?? "",
+          tax_reference: (fd.get("tax_reference") as string | undefined) ?? "",
+          percentage: Number.parseInt(
+            (fd.get("percentage") as string | undefined) ?? "0"
           ),
         };
 
-        const apiRes = await fetch(`/api/company/pay-group`, {
+        const apiRes = await fetch(`/api/company/tax`, {
           method: data ? "PATCH" : "POST",
-          body: JSON.stringify(pgData),
+          body: JSON.stringify(apData),
         });
 
         const res = await apiRes.json();
@@ -107,7 +99,7 @@ export default function PayGroupEditPopover({
             <Icons.edit />
           </Button>
         ) : (
-          <AnimatedTrigger label="Add a new Pay Group" />
+          <AnimatedTrigger label="Add a Tax Memo" />
         )}
       </PopoverTrigger>
 
@@ -120,51 +112,42 @@ export default function PayGroupEditPopover({
         }}
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
-            <Input
-              readOnly
-              name="company_id"
-              id="company-id-input"
-              placeholder="Company ID"
-              defaultValue={company_id}
-            />
-          </div>
-
           <div className="flex flex-col gap-4 items-center justify-center">
             <div className="w-full flex-grow flex flex-col gap-2">
-              <Label
-                className={RequiredAsterisk}
-                htmlFor="pay-group-name-input"
-              >
-                Pay Group
-              </Label>
+              <Label className={RequiredAsterisk}>Tax Code</Label>
               <Input
-                className="rounded-full"
-                name="pay_group_name"
-                id="pay-group-name-input"
-                placeholder="Pay Group"
                 required
+                name="tax_code"
+                defaultValue={data?.tax_code}
+                placeholder="Tax Code"
+                key={`tax-code-${data?.tax_code}`}
               />
             </div>
 
             <div className="flex flex-col gap-2 w-full">
-              <Label>Status</Label>
-              <Select
-                defaultValue={data ? `${data.is_active}` : ""}
-                name="is_active"
-              >
-                <SelectTrigger className="w-full rounded-full">
-                  <SelectValue placeholder="Select Pay Group Status" />
-                </SelectTrigger>
+              <Label className={RequiredAsterisk}>Tax Percentage</Label>
+              <Input
+                type="number"
+                step={0.01}
+                min={0}
+                max={100}
+                defaultValue={data?.percentage}
+                name="bank_shortcode"
+                placeholder="Tax Percentage"
+                required
+                key={`tax-percentage-${data?.percentage}`}
+              />
+            </div>
 
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select pay group</SelectLabel>
-                    <SelectItem value={"0"}>Inactive</SelectItem>
-                    <SelectItem value={"1"}>Active</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="w-full flex-grow flex flex-col gap-2">
+              <Label className={RequiredAsterisk}>Tax Reference</Label>
+              <Input
+                required
+                name="tax_reference"
+                defaultValue={data?.tax_reference}
+                placeholder="Tax Reference"
+                key={`tax-reference-${data?.tax_reference}`}
+              />
             </div>
 
             <Button

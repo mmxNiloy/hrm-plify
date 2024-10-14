@@ -1,4 +1,4 @@
-import SiteLoading from "@/app/(pages)/loading";
+import SiteLoading from "@/app/loading";
 import React from "react";
 
 export default function CompanyDetailsLoading() {

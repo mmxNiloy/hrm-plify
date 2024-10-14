@@ -1,14 +1,12 @@
 "use client";
 
 import { SortableHeader } from "@/components/ui/data-table";
-import { ILeaveApprover } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   convertTo12Hour,
   getFullNameOfEmployee,
   timeDifference,
 } from "@/utils/Misc";
-import LeaveApproverEditDialog from "../../../Dialog/Leave/LeaveApproverEditDialog";
 import { IAttendance } from "@/schema/AttendanceSchema";
 
 export const AttendanceDataTableColumns: ColumnDef<IAttendance>[] = [
