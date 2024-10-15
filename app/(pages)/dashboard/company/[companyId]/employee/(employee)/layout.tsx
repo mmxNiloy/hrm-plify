@@ -31,7 +31,7 @@ export default async function EmployeeHomeLayout({ children, params }: Props) {
   return (
     <div>
       {/* Navbar has h-16 */}
-      <EmployeeHomeSidebar company={company} employee={employee.data} />
+      <EmployeeHomeSidebar company={company} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

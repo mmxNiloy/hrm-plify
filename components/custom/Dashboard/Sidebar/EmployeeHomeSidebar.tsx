@@ -65,7 +65,7 @@ export default function EmployeeHomeSidebar({
         >
           <Icons.todo />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Attendance Management
+            Attendance Report
           </span>
         </SidebarLink>
 
@@ -74,7 +74,7 @@ export default function EmployeeHomeSidebar({
         >
           <Icons.logout />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Management
+            Leave Requests
           </span>
         </SidebarLink>
 

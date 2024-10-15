@@ -30,12 +30,14 @@ interface Props {
   departments?: IDepartment[];
   designations?: IDesignation[];
   employees?: IEmployeeWithUserMetadata[];
+  asEmployee?: boolean;
 }
 
 export default function AttendanceReportFilterPopover({
   departments = [],
   designations = [],
   employees = [],
+  asEmployee = false,
 }: Props) {
   const [department, setDepartment] = useState<string>("");
   const [designation, setDesignation] = useState<string>("");
@@ -52,9 +54,13 @@ export default function AttendanceReportFilterPopover({
       </PopoverTrigger>
       <PopoverContent className="w-96" align="end">
         <form className="flex flex-col gap-4 w-full">
-          <div className="col-span-full flex flex-col gap-2">
+          <div className={"col-span-full flex flex-col gap-2"}>
             <Label>Employee</Label>
-            <Select name="employee" onValueChange={(e) => setEmployee(e)}>
+            <Select
+              disabled={asEmployee}
+              name="employee"
+              onValueChange={(e) => setEmployee(e)}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select an Employee" />
               </SelectTrigger>
