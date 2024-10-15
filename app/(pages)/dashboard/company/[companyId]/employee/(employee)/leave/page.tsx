@@ -21,6 +21,7 @@ import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
 import { getLeaveRequests } from "@/app/(server)/actions/getLeaveRequests";
 import LeaveRequestEditDialog from "@/components/custom/Dialog/Leave/LeaveRequestEditDialog";
 import { LeaveRequestDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveRequestDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -58,31 +59,7 @@ export default async function EmployeeLeaveRequestPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Leave Requests</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            {(user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin") && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    className="line-clamp-1 text-ellipsis max-w-32"
-                    href="/dashboard/leave"
-                  >
-                    Leave
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Leave Requests</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs company={company} user={user} title="Leave Requests" />
 
         {employeeData && (
           <LeaveRequestEditDialog

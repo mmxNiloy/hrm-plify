@@ -4,7 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
+  SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -50,7 +53,7 @@ export default function LeaveRuleFormFragment({
         </Label>
         <Select
           key={`leave-type-short-code-${data?.leave_type_id}`}
-          defaultValue={`${data?.leave_type_id}`}
+          defaultValue={data ? `${data?.leave_type_id}` : undefined}
           name="leave_type_id"
           required
           disabled={disabled || readOnly}
@@ -59,14 +62,19 @@ export default function LeaveRuleFormFragment({
             <SelectValue placeholder="Select Leave Type" />
           </SelectTrigger>
 
-          {leaveTypes.map((item) => (
-            <SelectItem
-              value={`${item.leave_type_id}`}
-              key={`${item.leave_type_id}`}
-            >
-              {item.leave_type_name}
-            </SelectItem>
-          ))}
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select Leave Type</SelectLabel>
+              {leaveTypes.map((item) => (
+                <SelectItem
+                  value={`${item.leave_type_id}`}
+                  key={`${item.leave_type_id}`}
+                >
+                  {item.leave_type_name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
         </Select>
       </div>
 

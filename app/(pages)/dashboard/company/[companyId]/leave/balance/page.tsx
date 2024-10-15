@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { LeaveBalanceDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveBalanceDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -47,56 +48,31 @@ export default async function CompanyLeaveBalancePage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Leave Type</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            {(user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin") && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    className="line-clamp-1 text-ellipsis max-w-32"
-                    href="/dashboard/leave"
-                  >
-                    Leave
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                className="line-clamp-1 text-ellipsis max-w-32"
-                href={`/dashboard/company/${company.company_id}`}
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Leave Balance</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs
+          company={company}
+          user={user}
+          parent="Leave"
+          title="Leave Balance"
+        />
 
         <div className="flex flex-row gap-2 items-center justify-center">
           <Button
+            disabled
             className={
               "bg-green-500 hover:bg-green-400 text-white rounded-full gap-2"
             }
           >
             <Icons.excel className="fill-white stroke-white" /> Download as
-            Excel
+            Excel (WIP)
           </Button>
           <Button
+            disabled
             className={
               "bg-rose-500 hover:bg-rose-400 text-white rounded-full gap-2"
             }
           >
             <Icons.pdf className="fill-white stroke-white" /> Download as PDF
+            (WIP)
           </Button>
         </div>
       </div>

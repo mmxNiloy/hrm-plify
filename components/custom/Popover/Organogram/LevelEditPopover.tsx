@@ -49,7 +49,7 @@ export default function LevelEditPopover({
           level_name: (fd.get("level_name") as string | undefined) ?? "",
         };
 
-        const apiRes = await fetch(`/api/company/bank`, {
+        const apiRes = await fetch(`/api/company/organogram/level`, {
           method: data ? "PATCH" : "POST",
           body: JSON.stringify(apData),
         });

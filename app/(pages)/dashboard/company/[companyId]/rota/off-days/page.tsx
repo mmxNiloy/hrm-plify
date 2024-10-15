@@ -16,11 +16,17 @@ import { getOffDays } from "@/app/(server)/actions/getOffDays";
 import { getShifts } from "@/app/(server)/actions/getShifts";
 import OffDaysDataTable from "@/components/custom/DataTable/Rota/OffDaysDataTable";
 import OffDaysEditDialog from "@/components/custom/Dialog/Rota/OffDaysEditDialog";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function RotaDayOffPage({ params, searchParams }: Props) {
   const company = await getCompanyData(params.companyId);
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
 
   const { page, limit } = getPaginationParams(searchParams);
 
@@ -40,34 +46,12 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Off Days</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                className="line-clamp-1 text-ellipsis max-w-32"
-                href={`/dashboard/company/${params.companyId}`}
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/dashboard/company/${params.companyId}/rota`}
-              >
-                Rota
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Off Days</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs
+          company={company}
+          user={user}
+          parent="Rota"
+          title="Off Days"
+        />
 
         <OffDaysEditDialog
           shifts={allShifts.data}

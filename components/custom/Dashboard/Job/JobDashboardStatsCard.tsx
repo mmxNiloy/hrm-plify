@@ -67,7 +67,7 @@ export default function JobDashboardStatisticsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Job Statistics</CardTitle>
+        <CardTitle className="text-base">Job Statistics (WIP)</CardTitle>
         <Separator />
         <CardDescription className="sr-only">
           Job Dashboard Statistics Card

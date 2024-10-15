@@ -46,6 +46,32 @@ export function middleware(req: NextRequest) {
   }
 
   // Route guards
+  if (
+    userRole?.role.role_name === "Company Admin" &&
+    !req.nextUrl.pathname.startsWith(
+      `/dashboard/company/${userRole.company_id}`
+    )
+  ) {
+    return NextResponse.redirect(
+      new URL(`/dashboard/company/${userRole.company_id}`, req.url)
+    );
+  }
+
+  if (
+    userRole?.role.role_name === "Employee" &&
+    (!req.nextUrl.pathname.startsWith(
+      `/dashboard/company/${userRole.company_id}/employee`
+    ) ||
+      req.nextUrl.pathname ===
+        `/dashboard/company/${userRole.company_id}/employee`)
+  ) {
+    return NextResponse.redirect(
+      new URL(
+        `/dashboard/company/${userRole.company_id}/employee/home`,
+        req.url
+      )
+    );
+  }
 }
 
 export const config = {

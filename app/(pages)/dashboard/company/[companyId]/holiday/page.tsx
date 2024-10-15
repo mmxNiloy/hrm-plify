@@ -20,11 +20,17 @@ import { getHolidayTypes } from "@/app/(server)/actions/getHolidayTypes";
 import { getHolidays } from "@/app/(server)/actions/getHolidays";
 import { HolidayListDataTableColumns } from "@/components/custom/DataTable/Columns/Holiday/HolidayListDataTableColumns";
 import { HolidayTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Holiday/HolidayTypeDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
 
 export default async function HolidayDashboardPage({
   params,
 }: CompanyByIDPageProps) {
   const company = await getCompanyData(params.companyId);
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
   const companyExtraData = await getCompanyExtraData(params.companyId);
 
   const holidayTypes: IHolidayType[] = await getHolidayTypes({
@@ -37,6 +43,7 @@ export default async function HolidayDashboardPage({
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Holiday Management</p>
+      <MyBreadcrumbs company={company} user={user} title="Holiday" />
       <Card>
         <CardHeader>
           <CardTitle>All Holidays</CardTitle>

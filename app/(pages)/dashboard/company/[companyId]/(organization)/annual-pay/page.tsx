@@ -14,8 +14,9 @@ import { IAnnualPay, IPayGroup } from "@/schema/PayGroupSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import AnnualPayEditPopover from "@/components/custom/Popover/Company/AnnualPayEditPopover";
 import { CompanyAnnualPayDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyAnnualPayDataTableColumns";
+import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
 
-export default async function PayGroupPage({ params }: CompanyByIDPageProps) {
+export default async function AnnualPayPage({ params }: CompanyByIDPageProps) {
   const company = await getCompanyData(params.companyId);
 
   // TODO: Hit the api and get actual employment types
@@ -51,10 +52,11 @@ export default async function PayGroupPage({ params }: CompanyByIDPageProps) {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <AnnualPayEditPopover
+        <AnimatedTrigger disabled label={"Add a new Annual Pay (WIP)"} />
+        {/* <AnnualPayEditPopover
           company_id={params.companyId}
           payGroups={payGroups}
-        />
+        /> */}
       </div>
 
       <DataTable

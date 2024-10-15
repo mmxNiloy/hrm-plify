@@ -7,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
 export default function EmployeeChangeOfCircumstancesPageLoading() {
@@ -14,25 +15,7 @@ export default function EmployeeChangeOfCircumstancesPageLoading() {
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Change of Circumstances</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="#">Company Name</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="#">Employee Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Change of Circumstances</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <Skeleton className="w-3/5 h-5" />
 
         {/* <EmployeeCreationDialog /> */}
       </div>

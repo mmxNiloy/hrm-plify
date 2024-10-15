@@ -4,14 +4,11 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
-import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 
 export default function EmployeeHomeSidebar({
   company,
-  employee,
 }: {
   company: ICompany;
-  employee: IEmployeeWithUserMetadata;
 }) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
@@ -68,7 +65,7 @@ export default function EmployeeHomeSidebar({
         >
           <Icons.todo />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Attendance Management
+            Attendance Report
           </span>
         </SidebarLink>
 
@@ -77,7 +74,7 @@ export default function EmployeeHomeSidebar({
         >
           <Icons.logout />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Management
+            Leave Requests
           </span>
         </SidebarLink>
 
@@ -91,7 +88,7 @@ export default function EmployeeHomeSidebar({
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/employee/change-of-circumstances`}
+          href={`/dashboard/company/${company.company_id}/employee/my-change-of-circumstances`}
         >
           <Icons.userCog />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">

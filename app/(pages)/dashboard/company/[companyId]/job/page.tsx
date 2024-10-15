@@ -4,38 +4,29 @@ import { CompanyByIDPageProps } from "../PageProps";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import JobDashboardStatisticsCard from "@/components/custom/Dashboard/Job/JobDashboardStatsCard";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
 
 export default async function JobDashboardPage({
   params,
 }: CompanyByIDPageProps) {
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+  const company = await getCompanyData(params.companyId);
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Designations Dashboard</p>
-      {/* <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              href={`/dashboard/company/${company.company_id}`}
-              className="line-clamp-1 text-ellipsis max-w-32"
-            >
-              {company.company_name}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Designations</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb> */}
+      <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
+
+      <MyBreadcrumbs company={company} user={user} title="Job & Recruitment" />
 
       <div className="grid lg:grid-cols-2 gap-2">
         <JobDashboardStatisticsCard />
 
         <div className="grid grid-cols-3 gap-2">
+          <p className="text-bold col-span-full">Work In Progress (WIP)</p>
           <Card className="bg-gradient-to-br from-indigo-300 to-green-200 drop-shadow-md">
             <CardHeader className="flex flex-row gap-4">
               {/* <Icons.todo className="size-8" /> */}
@@ -116,7 +107,7 @@ export default async function JobDashboardPage({
         </div>
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Offer Letters</CardTitle>
+            <CardTitle className="text-base">Offer Letters (WIP)</CardTitle>
           </CardHeader>
 
           <CardContent className="flex flex-col gap-2">

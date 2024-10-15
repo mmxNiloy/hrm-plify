@@ -1,4 +1,4 @@
-"use client";
+"use server";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,75 +11,34 @@ import {
 import { ButtonBlue } from "@/styles/button.tailwind";
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import ShiftManagementDataTable from "@/components/custom/DataTable/Rota/ShiftManagementDataTable";
 import OffDaysDataTable from "@/components/custom/DataTable/Rota/OffDaysDataTable";
 import DutyRosterDataTable from "@/components/custom/DataTable/Rota/DutyRosterDataTable";
+import { CompanyByIDPageProps } from "../PageProps";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { IUser } from "@/schema/UserSchema";
+import { cookies } from "next/headers";
+import { getShifts } from "@/app/(server)/actions/getShifts";
+import { getOffDays } from "@/app/(server)/actions/getOffDays";
+import { getDutyRosters } from "@/app/(server)/actions/getDutyRosters";
+import WIPPage from "@/components/custom/Placeholder/WIPPage";
 
-export default function RotaDashboardPage() {
-  const pathName = usePathname();
+export default async function RotaDashboardPage({
+  params,
+}: CompanyByIDPageProps) {
+  const company = await getCompanyData(params.companyId);
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Rota</p>
 
-      <div className="flex flex-col gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Shift Management</CardTitle>
-            <CardDescription className="sr-only">
-              Shift Management Table Preview Card
-            </CardDescription>
-          </CardHeader>
+      <MyBreadcrumbs company={company} user={user} title="Rota" />
 
-          <CardContent>
-            <ShiftManagementDataTable showOptions={true} />
-          </CardContent>
-
-          <CardFooter>
-            <Link href={`${pathName}/shift`}>
-              <Button className={ButtonBlue}>View All</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Off Days</CardTitle>
-            <CardDescription className="sr-only">
-              Off Days Table Preview Card
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <OffDaysDataTable showOptions={false} />
-          </CardContent>
-
-          <CardFooter>
-            <Link href={`${pathName}/off-days`}>
-              <Button className={ButtonBlue}>View All</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader className="text-lg">
-            <CardTitle>Duty Roster</CardTitle>
-            <CardDescription className="sr-only">
-              Duty Roster Table Preview Card
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <DutyRosterDataTable showOptions={false} />
-          </CardContent>
-
-          <CardFooter>
-            <Link href={`${pathName}/duty-roster`} passHref>
-              <Button className={ButtonBlue}>View All</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
+      <WIPPage />
     </main>
   );
 }

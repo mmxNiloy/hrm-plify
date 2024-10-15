@@ -74,7 +74,7 @@ export default function CompanyDashboardSidebar({
           }}
         >
           <AccordionItem value="org">
-            <AccordionTrigger className="rounded-md px-2 data-[state=open]:from-amber-500 data-[state=open]:to-emerald-400 bg-gradient-to-br data-[state=open]:text-white">
+            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
               <div className="flex gap-2 items-center">
                 <Icons.building />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -186,7 +186,7 @@ export default function CompanyDashboardSidebar({
           </AccordionItem>
 
           <AccordionItem value="hr">
-            <AccordionTrigger className="rounded-md px-2 data-[state=open]:from-amber-500 data-[state=open]:to-emerald-400 bg-gradient-to-br data-[state=open]:text-white">
+            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
               <div className="flex gap-2 items-center">
                 <Icons.hr />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -214,7 +214,7 @@ export default function CompanyDashboardSidebar({
               </SidebarLink>
 
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job`}
+                href={`/dashboard/company/${company.company_id}/user-access`}
               >
                 <Icons.userKey />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -234,7 +234,7 @@ export default function CompanyDashboardSidebar({
           </AccordionItem>
 
           <AccordionItem value="ops">
-            <AccordionTrigger className="rounded-md px-2 data-[state=open]:from-amber-500 data-[state=open]:to-emerald-400 bg-gradient-to-br data-[state=open]:text-white">
+            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
               <div className="flex gap-2 items-center">
                 <Icons.operations />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -282,7 +282,7 @@ export default function CompanyDashboardSidebar({
           </AccordionItem>
 
           <AccordionItem value="fin">
-            <AccordionTrigger className="rounded-md px-2 data-[state=open]:from-amber-500 data-[state=open]:to-emerald-400 bg-gradient-to-br data-[state=open]:text-white">
+            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
               <div className="flex gap-2 items-center">
                 <Icons.statGraph />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">

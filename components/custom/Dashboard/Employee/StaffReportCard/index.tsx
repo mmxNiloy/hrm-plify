@@ -16,7 +16,7 @@ export default function StaffReportCard({ companyId }: { companyId: number }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Staff Report</CardTitle>
+        <CardTitle className="text-base">Staff Report (WIP)</CardTitle>
         <Separator />
         <CardDescription className="sr-only">Staff Report Card</CardDescription>
       </CardHeader>

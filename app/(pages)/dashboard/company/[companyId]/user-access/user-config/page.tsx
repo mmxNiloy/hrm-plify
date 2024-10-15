@@ -7,7 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { IUserConfig } from "@/schema/UserSchema";
+import { IUser, IUserConfig } from "@/schema/UserSchema";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { StaticDataTable } from "@/components/ui/data-table";
@@ -17,6 +17,8 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import UserConfigEditDialog from "@/components/custom/Dialog/UserAccess/UserConfigEditDialog";
 import { UserConfigDataTableColumns } from "@/components/custom/DataTable/Columns/UserAccess/UserConfigDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -25,6 +27,9 @@ export default async function UserConfigPage({ params, searchParams }: Props) {
 
   const company = await getCompanyData(params.companyId);
   const companyExtraData = await getCompanyExtraData(params.companyId);
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
 
   // TODO: hit the api to get data
   const userConfigData: IUserConfig[] = []; // Placeholder
@@ -33,30 +38,12 @@ export default async function UserConfigPage({ params, searchParams }: Props) {
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">User Configuration</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                className="line-clamp-1 text-ellipsis max-w-32"
-                href={`../`}
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`.`}>User Access</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>User Configuration</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs
+          company={company}
+          user={user}
+          parent="User Access"
+          title="User Configuration"
+        />
 
         <UserConfigEditDialog
           company_id={company.company_id}

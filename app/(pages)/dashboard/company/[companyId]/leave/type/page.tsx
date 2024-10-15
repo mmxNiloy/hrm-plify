@@ -35,7 +35,7 @@ export default async function CompanyLeaveTypePage({
         <MyBreadcrumbs
           company={company}
           user={user}
-          parent="Leave Management"
+          parent="Leave"
           title="Leave Type"
         />
 

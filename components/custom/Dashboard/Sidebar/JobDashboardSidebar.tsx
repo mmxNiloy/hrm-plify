@@ -21,6 +21,7 @@ export default function JobDashboardSidebar({
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
   const path = usePathname();
+  const [isAccordionOpen, setIsAccordionOpen] = useState<number>(0);
 
   return (
     <Sidebar
@@ -69,20 +70,6 @@ export default function JobDashboardSidebar({
         </SidebarLink>
 
         {/* Jobs Navigation */}
-        {/* Placeholder icon for the accordion */}
-        {!(open || hovered) && (
-          <Button
-            variant={"ghost"}
-            className={cn(
-              "w-full gap-4 hover:underline justify-center transition-all group-data-[state=open]/sidebar:justify-start",
-              path.search(`/dashboard/company/${company.company_id}/job/`) >= 0
-                ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
-                : ""
-            )}
-          >
-            <Icons.briefcase />
-          </Button>
-        )}
         <Accordion
           type="single"
           collapsible
@@ -91,16 +78,24 @@ export default function JobDashboardSidebar({
               ? "job"
               : ""
           }
-          className="group-data-[state=closed]/sidebar:hidden"
+          onValueChange={(e) => {
+            if (e.length > 0) {
+              setIsAccordionOpen((oldValue) => oldValue | 1);
+            } else {
+              setIsAccordionOpen((oldValue) => oldValue & 2);
+            }
+          }}
         >
           <AccordionItem value="job">
-            <AccordionTrigger>
+            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
               <div className="flex gap-2 items-center">
                 <Icons.briefcase />
-                <span>Job</span>
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Job
+                </span>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-2">
+            <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/all`}
               >
@@ -162,7 +157,7 @@ export default function JobDashboardSidebar({
           </span>
         </SidebarLink>
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/job/search/status`}
+          href={`/dashboard/company/${company.company_id}/job/status-search`}
         >
           <Icons.handshake />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -177,7 +172,7 @@ export default function JobDashboardSidebar({
             className={cn(
               "w-full gap-4 hover:underline justify-center transition-all group-data-[state=open]/sidebar:justify-start",
               path.search(
-                `/dashboard/company/${company.company_id}/mock-interview/`
+                `/dashboard/company/${company.company_id}/job/mock-interview/`
               ) >= 0
                 ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
                 : ""
@@ -189,38 +184,51 @@ export default function JobDashboardSidebar({
         <Accordion
           type="single"
           collapsible
-          className="group-data-[state=closed]/sidebar:hidden"
           defaultValue={
             path.search(
-              `/dashboard/company/${company.company_id}/mock-interview/`
+              `/dashboard/company/${company.company_id}/job/mock-interview/`
             ) >= 0
               ? "mock-interview"
               : ""
           }
+          onValueChange={(e) => {
+            if (e.length > 0) {
+              setIsAccordionOpen((oldValue) => oldValue | 2);
+            } else {
+              setIsAccordionOpen((oldValue) => oldValue & 1);
+            }
+          }}
         >
           <AccordionItem value="mock-interview">
-            <AccordionTrigger>Mock Interview</AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-2">
+            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
+              <div className="flex gap-2 items-center">
+                <Icons.todo />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Mock Interview
+                </span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/mock-interview`}
+                href={`/dashboard/company/${company.company_id}/job/mock-interview`}
               >
                 Mock Interview
               </SidebarLink>
 
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/mock-interview/interview-forms`}
+                href={`/dashboard/company/${company.company_id}/job/interview-forms`}
               >
                 Interview Forms
               </SidebarLink>
 
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/mock-interview/capstone-assessment-report`}
+                href={`/dashboard/company/${company.company_id}/job/capstone-assessment-report`}
               >
                 Capstone Assessment Report
               </SidebarLink>
 
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/mock-interview/cognitive-ability-assessment-report`}
+                href={`/dashboard/company/${company.company_id}/job/cognitive-ability-assessment-report`}
               >
                 Cognitive Ability Assessment Report
               </SidebarLink>
@@ -236,6 +244,7 @@ export default function JobDashboardSidebar({
             Message Center
           </span>
         </SidebarLink>
+        {isAccordionOpen > 0 && <span className="h-8"></span>}
       </SidebarContent>
     </Sidebar>
   );

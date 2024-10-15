@@ -55,7 +55,7 @@ export default function SuperAdminSidebar({ user }: { user: IUser }) {
           </span>
         </SidebarLink>
 
-        <SidebarLink href={"/profile"}>
+        <SidebarLink href={"/dashboard/profile"}>
           <Icons.user />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             My Profile

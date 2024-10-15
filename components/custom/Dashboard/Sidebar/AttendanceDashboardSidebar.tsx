@@ -54,9 +54,9 @@ export default function AttendanceDashboardSidebar({
         <SidebarLink
           href={`/dashboard/company/${company.company_id}/attendance`}
         >
-          <Icons.home />
+          <Icons.note />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Attendance Management
+            Attendance Report
           </span>
         </SidebarLink>
 
@@ -79,29 +79,11 @@ export default function AttendanceDashboardSidebar({
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/upload`}
-        >
-          <Icons.uploadCloud />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Upload Attendance
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
           href={`/dashboard/company/${company.company_id}/attendance/generate`}
         >
           <Icons.fileCog />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Generate Attendance
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/attendance/report`}
-        >
-          <Icons.note />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Generate Report
           </span>
         </SidebarLink>
       </SidebarContent>
