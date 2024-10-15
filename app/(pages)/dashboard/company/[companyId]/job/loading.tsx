@@ -6,28 +6,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import React from "react";
 
 export default function CompanyJobsPageSkeleton() {
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Designations Dashboard</p>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="#">Company Name</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Designations</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
+      <Skeleton className="w-3/5 h-5" />
 
       <div className="grid lg:grid-cols-2 gap-2">
         {/* <EmployeeStatsSkeleton /> */}

@@ -131,6 +131,7 @@ import {
   UserCheck,
   UserX,
   FileCog,
+  Factory,
 } from "lucide-react";
 import React from "react";
 
@@ -386,7 +387,7 @@ CategoryIcon.displayName = "CategoryIcon";
 const DistributionIcon = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
     <svg
-      className={cn(className, "lucide")}
+      className={cn("fill-current", className)}
       width="24"
       height="24"
       viewBox="18 24 64 52"
@@ -734,7 +735,29 @@ const HeirarchyIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 HeirarchyIcon.displayName = "HeirarchyIcon";
 
+const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 21 21"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("stroke-current", className)}
+    >
+      <path
+        d="m2.5 10.5 8 4 8.017-4M2.5 14.5l8 4 8.017-4M2.5 6.657l8.008 3.843 8.009-3.843L10.508 2.5z"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )
+);
+VersionIcon.displayName = "VersionIcon";
+
 const Icons = {
+  version: VersionIcon,
+  factory: Factory,
   heirarchy: HeirarchyIcon,
   steps: StepsIcon,
   fileCog: FileCog,

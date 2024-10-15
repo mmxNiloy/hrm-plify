@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { CompanyByIDPageProps } from "../PageProps";
+import { CompanyByIDPageProps } from "../../PageProps";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,6 +18,8 @@ import { ButtonBlue } from "@/styles/button.tailwind";
 import Icons from "@/components/ui/icons";
 import TaskSearch from "@/components/custom/Dashboard/Task/TaskSearch";
 import TasksDataTable from "@/components/custom/DataTable/TasksDataTable";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 
 export default async function CompanyTasksDashboardPage({
   params,
@@ -27,49 +29,18 @@ export default async function CompanyTasksDashboardPage({
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  var company: ICompany;
-
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
+  const company = await getCompanyData(params.companyId);
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Tasks Dashboard</p>
+      <p className="text-xl font-semibold">Tasks</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="..">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href=".">{company.company_name}</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Tasks Dashboard</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs company={company} user={user} title="Tasks" />
 
         <div className="flex gap-4 items-center">
-          <TaskSearch />
-          <Button className={ButtonBlue}>
-            <Icons.plus /> Add a Task
+          {/* <TaskSearch /> */}
+          <Button disabled className={ButtonBlue}>
+            <Icons.plus /> Add a Task (WIP)
           </Button>
         </div>
       </div>

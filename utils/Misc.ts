@@ -532,3 +532,43 @@ export function timeDifference(startTime: string, endTime: string): string {
 
   return formattedDiff;
 }
+
+export function stringToColor(name: string): string {
+  // Hash the name string into an integer
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Generate a color code from the hash
+  let color = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += ("00" + value.toString(16)).slice(-2);
+  }
+
+  return color;
+}
+
+export function stringToColorRGBA(name: string, alpha: number = 1): string {
+  // Hash the name string into an integer
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Generate the RGB values from the hash
+  const r = (hash >> 0) & 0xff;
+  const g = (hash >> 8) & 0xff;
+  const b = (hash >> 16) & 0xff;
+
+  // Return the color in rgba format
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+export const WIPToastOptions = {
+  title: "Work In Progress",
+  description:
+    "This feature is currently unavailable. It will be available soon. Please try again later.",
+  className: "bg-amber-500 text-white",
+};

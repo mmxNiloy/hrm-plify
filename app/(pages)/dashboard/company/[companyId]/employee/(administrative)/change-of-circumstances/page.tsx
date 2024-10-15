@@ -16,6 +16,8 @@ import { redirect } from "next/navigation";
 import FindChangeOfCircumstancesByIDDialog from "@/components/custom/Dialog/Company/FindChangeOfCircumstancesByIDDialog";
 import ChangeOfCircumstancesCreationDialog from "@/components/custom/Dialog/Company/ChangeOfCircumstancesCreationDialog";
 import ChangeOfCircumstancesDataTable from "@/components/custom/DataTable/Company/Employee/ChangeOfCircumstancesDataTable";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 
 export default async function ChangeOfCircumstancesPage({
   params,
@@ -25,59 +27,18 @@ export default async function ChangeOfCircumstancesPage({
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  var company: ICompany;
-
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
-  }
-
-  // await wait(5000);
+  const company = await getCompanyData(params.companyId);
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Change of Circumstances</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                className="line-clamp-1 text-ellipsis max-w-32"
-                href={`/dashboard/company/${params.companyId}`}
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/dashboard/company/${params.companyId}/employee`}
-              >
-                Employee Dashboard
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Change of Circumstances</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs
+          title="Change of Circumstances"
+          parent="Employee Management"
+          company={company}
+          user={user}
+        />
 
         <div className="flex flex-row gap-4">
           <FindChangeOfCircumstancesByIDDialog />

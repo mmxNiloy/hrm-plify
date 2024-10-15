@@ -4,15 +4,9 @@ import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { DataTable } from "@/components/ui/data-table";
-import { ILeaveType } from "@/schema/LeaveSchema";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { getCompanyLeaveTypes } from "@/app/(server)/actions/getCompanyLeaveTypes";
-import LeaveTypeEditDialog from "@/components/custom/Dialog/Leave/LeaveTypeEditDialog";
-import { LeaveTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveTypeDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import LevelEditPopover from "@/components/custom/Popover/Organogram/LevelEditPopover";
-import { LevelDataTableColumns } from "@/components/custom/DataTable/Columns/Organogram/LevelDataTableColumns";
 import {
   IOrganogramHeirarchyRecord,
   IOrganogramLevel,
@@ -20,6 +14,7 @@ import {
 import { HeirarchyDataTableColumns } from "@/components/custom/DataTable/Columns/Organogram/HeirarchyDataTableColumns";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import HeirarchyEditDialog from "@/components/custom/Dialog/Organogram/HeirarchyEditDialog";
+import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -50,11 +45,12 @@ export default async function OrganizationHeirarchyPage({
           title="Heirarchy"
         />
 
-        <HeirarchyEditDialog
+        <AnimatedTrigger disabled label="Create a Heirarchy Record" />
+        {/* <HeirarchyEditDialog
           {...companyExtraData}
           levels={company_levels}
           company_id={company.company_id}
-        />
+        /> */}
       </div>
 
       <DataTable

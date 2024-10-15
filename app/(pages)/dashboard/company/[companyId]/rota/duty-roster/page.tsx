@@ -20,6 +20,9 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import DutyRosterFilterDialog from "@/components/custom/Dialog/Rota/DutyRosterFilterDialog";
 import DutyRosterEditDialog from "@/components/custom/Dialog/Rota/DutyRosterEditDialog";
 import DutyRosterDataTable from "@/components/custom/DataTable/Rota/DutyRosterDataTable";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { IUser } from "@/schema/UserSchema";
+import { cookies } from "next/headers";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -44,6 +47,9 @@ export default async function RotaDutyRosterPage({
   searchParams,
 }: Props) {
   const company = await getCompanyData(params.companyId);
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
 
   const { page, limit } = getPaginationParams(searchParams);
   const filters = getFilters(searchParams);
@@ -61,34 +67,12 @@ export default async function RotaDutyRosterPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Duty Roster</p>
       <div className="flex items-center justify-between gap-2">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                className="line-clamp-1 text-ellipsis max-w-32"
-                href={`/dashboard/company/${params.companyId}`}
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/dashboard/company/${params.companyId}/rota`}
-              >
-                Rota
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Duty Roster</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs
+          company={company}
+          user={user}
+          parent="Rota"
+          title="Duty Roster"
+        />
 
         <span className="flex-grow" />
         <form
@@ -134,16 +118,17 @@ export default async function RotaDutyRosterPage({
           />
 
           <Button
+            disabled
             className="bg-rose-500 hover:bg-rose-400 text-white rounded-full gap-2"
             size="sm"
           >
             <Icons.pdf className="stroke-white fill-white" /> Download as PDF
-            File
+            File (WIP)
           </Button>
         </form>
-        <Button className={ButtonSuccess} size="sm">
+        <Button className={ButtonSuccess} size="sm" disabled>
           <Icons.excel className="stroke-white fill-white" /> Download as Excel
-          File
+          File (WIP)
         </Button>
       </div>
       <div className="flex items-center justify-end gap-2 mt-2 mb-2">

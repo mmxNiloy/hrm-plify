@@ -4,14 +4,11 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
-import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 
 export default function EmployeeHomeSidebar({
   company,
-  employee,
 }: {
   company: ICompany;
-  employee: IEmployeeWithUserMetadata;
 }) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);

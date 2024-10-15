@@ -1,5 +1,6 @@
+import WIPPage from "@/components/custom/Placeholder/WIPPage";
 import React from "react";
 
 export default function UserListPage() {
-  return <div>UserListPage</div>;
+  return <WIPPage />;
 }

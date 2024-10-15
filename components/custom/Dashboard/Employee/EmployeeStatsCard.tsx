@@ -57,7 +57,7 @@ export default function EmployeeStatsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Employee Statistics</CardTitle>
+        <CardTitle className="text-base">Employee Statistics (WIP)</CardTitle>
         <Separator />
         <CardDescription className="sr-only">
           Employee Statistics Card

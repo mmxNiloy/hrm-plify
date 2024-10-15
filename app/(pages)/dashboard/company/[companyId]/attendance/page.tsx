@@ -1,46 +1,37 @@
 "use server";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
-import AttendanceFilterPopover from "@/components/custom/Popover/Attendance/AttendanceFilterPopover";
-import { IAttendance, IPaginatedAttendance } from "@/schema/AttendanceSchema";
-import { StaticDataTable } from "@/components/ui/data-table";
-import { AttendanceDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceDataTableColumns";
+import AttendanceReportFilterPopover from "@/components/custom/Popover/Attendance/AttendanceReportFilterPopover";
 import { ISearchParams, ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { getAttendance } from "@/app/(server)/actions/getAttendance";
+import { getAttendanceReports } from "@/app/(server)/actions/getAttendanceReports";
+import { StaticDataTable } from "@/components/ui/data-table";
+import { AttendanceReportDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceReportDataTableColumns";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
+import { Input } from "@/components/ui/input";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 function getFilters(searchParams: ISearchParams) {
-  const department = searchParams.department as string | undefined;
-  const designation = searchParams.department as string | undefined;
-  const employee = searchParams.department as string | undefined;
-  const from_date = searchParams.department as string | undefined;
-  const to_date = searchParams.department as string | undefined;
-
   return {
-    department: department ? Number.parseInt(department) : undefined,
-    designation: designation ? Number.parseInt(designation) : undefined,
-    employee: employee ? Number.parseInt(employee) : undefined,
-    from_date,
-    to_date,
+    employee_id: Math.max(
+      0,
+      Number.parseInt((searchParams.employee_id as string | undefined) ?? "0")
+    ),
+    from_date: searchParams.datepicker_from_date as string | undefined,
+    end_date: searchParams.datepicker_to_date as string | undefined,
+    sort: (searchParams.sort as string | undefined) ?? "DESC",
   };
 }
 
-export default async function AttendanceManagementPage({
+export default async function AttendanceReportPage({
   params,
   searchParams,
 }: Props) {
@@ -48,12 +39,14 @@ export default async function AttendanceManagementPage({
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
   const company = await getCompanyDetails(params.companyId);
-  const companyExtraData = await getCompanyExtraData(params.companyId);
 
-  const { limit, page } = getPaginationParams(searchParams);
+  const companyExtraData = await getCompanyExtraData(params.companyId);
   const filters = getFilters(searchParams);
-  const paginatedAttendance: IPaginatedAttendance = await getAttendance({
-    company_id: params.companyId,
+  const { limit, page } = getPaginationParams(searchParams);
+
+  // Get report data from the server
+  const reports = await getAttendanceReports({
+    company_id: company.company_id,
     limit,
     page,
     filters,
@@ -61,16 +54,54 @@ export default async function AttendanceManagementPage({
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Attendance Management</p>
+      <p className="text-xl font-semibold">Attendance Report</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs {...{ user, company, title: "Attendance Management" }} />
-        <AttendanceFilterPopover {...companyExtraData} />
+        <MyBreadcrumbs
+          {...{
+            user,
+            company,
+            title: "Attendance Report",
+          }}
+        />
+
+        <div className="flex gap-4">
+          <form action={"/api/attendance/pdf"} method="POST" target="_blank">
+            <div className="sr-only">
+              <Input
+                readOnly
+                defaultValue={company.company_id}
+                name="company_id"
+              />
+              <Input
+                readOnly
+                defaultValue={filters.employee_id}
+                name="employee_id"
+              />
+              <Input
+                readOnly
+                defaultValue={filters.from_date}
+                name="from_date"
+              />
+              <Input readOnly defaultValue={filters.end_date} name="end_date" />
+              <Input readOnly defaultValue={filters.sort} name="sort" />
+            </div>
+            <Button
+              disabled
+              variant={"destructive"}
+              className="gap-2 rounded-full"
+            >
+              <Icons.pdf />
+              Download PDF (WIP)
+            </Button>
+          </form>
+          <AttendanceReportFilterPopover {...companyExtraData} />
+        </div>
       </div>
 
       <StaticDataTable
-        data={paginatedAttendance.data}
-        columns={AttendanceDataTableColumns}
-        pageCount={paginatedAttendance.total_page}
+        data={reports}
+        columns={AttendanceReportDataTableColumns}
+        // pageCount={paginatedAttendance.total_page}
       />
     </main>
   );

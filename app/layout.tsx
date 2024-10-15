@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Providers } from "@/providers/Providers";
 import SiteConfig from "@/utils/SiteConfig";
+import VersionIndicator from "@/components/custom/VersionIndicator";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -37,6 +38,8 @@ export default function RootLayout({
             {children}
           </div>
         </Providers>
+
+        <VersionIndicator />
       </body>
     </html>
   );

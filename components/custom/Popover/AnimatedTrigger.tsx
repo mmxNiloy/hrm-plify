@@ -8,11 +8,13 @@ import React from "react";
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   label?: string;
   Icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const AnimatedTrigger = React.forwardRef<HTMLButtonElement, Props>(
-  ({ className, label, Icon, ...props }, ref) => (
+  ({ className, label, Icon, disabled = false, ...props }, ref) => (
     <Button
+      disabled={disabled}
       ref={ref}
       className={cn(
         ButtonBlue,

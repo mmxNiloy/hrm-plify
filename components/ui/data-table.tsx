@@ -788,6 +788,7 @@ export function StaticDataTable<TData, TValue>({
             <div className="flex flex-col gap-2">
               <Label>Page size</Label>
               <Select
+                disabled={loading}
                 onValueChange={(val) => {
                   router.replace(
                     `${pathname}?${createQueryString({
@@ -813,6 +814,7 @@ export function StaticDataTable<TData, TValue>({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
+                    disabled={loading}
                     variant="outline"
                     className="items-center gap-4 justify-between"
                   >
@@ -845,6 +847,7 @@ export function StaticDataTable<TData, TValue>({
           <div className="flex flex-col gap-2">
             <Label htmlFor="search-input">Search</Label>
             <Input
+              disabled={loading}
               type="search"
               placeholder="Search..."
               onChange={handleFilterChange}

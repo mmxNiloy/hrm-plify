@@ -3,33 +3,28 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import EmployeeStatsCard from "@/components/custom/Dashboard/Employee/EmployeeStatsCard";
 import StaffReportCard from "@/components/custom/Dashboard/Employee/StaffReportCard";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
 
 export default async function EmployeeDashboard({
   params,
 }: CompanyByIDPageProps) {
+  const user = JSON.parse(
+    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+
+  const company = await getCompanyData(params.companyId);
+
   return (
     <main className="transition-all container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Employee Dashboard</p>
-      {/* <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              href={`/dashboard/company/${company.company_id}`}
-              className="line-clamp-1 text-ellipsis max-w-32"
-            >
-              {company.company_name}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Employee</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb> */}
+      <p className="text-xl font-semibold">Employee Management Dashboard</p>
+      <MyBreadcrumbs
+        company={company}
+        user={user}
+        title="Employee Management"
+      />
 
       <div className="grid lg:grid-cols-2 gap-2">
         <EmployeeStatsCard />

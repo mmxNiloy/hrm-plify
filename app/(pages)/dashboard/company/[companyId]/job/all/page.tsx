@@ -18,6 +18,8 @@ import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { DataTable } from "@/components/ui/data-table";
 import { JobsDataTableColumns } from "@/components/custom/DataTable/Columns/JobsDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -36,34 +38,16 @@ export default async function AllJobsPage({ params, searchParams }: Props) {
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Designations Dashboard</p>
+      <p className="text-xl font-semibold">All Jobs</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="../../">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`..`}
-                className="line-clamp-1 text-ellipsis max-w-32"
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href=".">Designations</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>All Designations</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        <CreateJobPopover company_id={params.companyId} />
+        <MyBreadcrumbs
+          company={company}
+          user={user}
+          parent="Job & Recruitment"
+          title="All Jobs"
+        />
+        <AnimatedTrigger disabled label="Create a Job (WIP)" />
+        {/* <CreateJobPopover company_id={params.companyId} /> */}
       </div>
 
       <DataTable data={designations} columns={JobsDataTableColumns} />
