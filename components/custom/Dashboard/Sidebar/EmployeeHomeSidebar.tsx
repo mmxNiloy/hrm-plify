@@ -88,7 +88,7 @@ export default function EmployeeHomeSidebar({
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/employee/change-of-circumstances`}
+          href={`/dashboard/company/${company.company_id}/employee/my-change-of-circumstances`}
         >
           <Icons.userCog />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
