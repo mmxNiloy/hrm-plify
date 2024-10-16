@@ -48,6 +48,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
+interface IPostBody extends ICompanyCreationBody {
+  is_current_user_owner?: boolean;
+}
+
 export async function POST(req: NextRequest) {
   if (!process.env.COOKIE_SESSION_KEY || !process.env.API_BASE_URL) {
     return NextResponse.json(
@@ -67,7 +71,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const fd = await req.formData();
-    const data: ICompanyCreationBody = {
+    const data: IPostBody = {
       company_name: (fd.get("company_name") ?? "") as string,
       industry: (fd.get("industry") ?? "") as string,
       headquarters: (fd.get("headquarters") ?? "") as string,
@@ -75,6 +79,9 @@ export async function POST(req: NextRequest) {
       website: (fd.get("website") ?? "") as string,
       logo: (fd.get("logo") ?? "") as string,
       contact_number: (fd.get("contact_number") ?? "") as string,
+      is_current_user_owner: Boolean(
+        (fd.get("is_current_user_owner") as string | undefined) ?? "false"
+      ),
     };
 
     const apiRes = await fetch(`${process.env.API_BASE_URL}/companies/create`, {

@@ -25,16 +25,11 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfileFormFragment";
+import { IUser } from "@/schema/UserSchema";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import refreshUserCookie from "@/app/(server)/actions/refreshUserCookie";
 
-export default function CompanyCreationDialog({
-  asClient = false,
-  Icon,
-}: {
-  asClient?: boolean;
-  Icon?: React.ReactNode;
-}) {
+export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const { toast } = useToast();
@@ -47,12 +42,9 @@ export default function CompanyCreationDialog({
 
       setLoading(true);
       const fd = new FormData(e.currentTarget);
-      if (asClient) {
-        fd.append("is_current_user_owner", "true");
-      }
 
       try {
-        const apiRes = await fetch("/api/company", {
+        const apiRes = await fetch("/api/company/client", {
           method: "POST",
           body: fd,
         });
@@ -63,19 +55,16 @@ export default function CompanyCreationDialog({
             className: "bg-green-500 text-white",
           });
 
-          if (asClient) {
-            await refreshUserCookie();
-          }
-
           // Refresh the parent server component
           router.refresh();
 
           // Close the dialog
           setOpen(false);
         } else {
+          const res = await apiRes.json();
           toast({
             title: "Failed to Create a Company!",
-            description: JSON.stringify(await apiRes.json()),
+            description: `${res.message}`,
             variant: "destructive",
           });
         }
@@ -88,16 +77,19 @@ export default function CompanyCreationDialog({
 
       setLoading(false);
     },
-    [asClient, router, toast]
+    [router, toast]
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size={asClient ? "default" : "sm"}
-          className={cn(ButtonBlue, asClient ? "w-full" : "")}
+          size={"sm"}
+          className={cn(
+            ButtonSuccess,
+            "w-full from-green-400 to-green-500 bg-gradient-to-br shadow-lg"
+          )}
         >
-          {Icon ? <>{Icon}</> : <Icons.plus />} Create a Company
+          <Icons.check /> Create a Company
         </Button>
       </DialogTrigger>
 
@@ -117,13 +109,13 @@ export default function CompanyCreationDialog({
         </DialogHeader>
 
         <form onSubmit={handleCreateCompany}>
+          <div className="sr-only">
+            <Input readOnly defaultValue={user.user_id} name="user_id" />
+          </div>
           {/* Company Creation form */}
           <ScrollArea className="h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
-              <CompanyProfileFormFragment
-                asClient={asClient}
-                disabled={loading}
-              />
+              <CompanyProfileFormFragment asClient disabled={loading} />
             </div>
           </ScrollArea>
 

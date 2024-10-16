@@ -8,5 +8,5 @@ export async function logout() {
   cookies().delete(process.env.COOKIE_USER_KEY!);
   cookies().delete(process.env.COOKIE_EMPLOYEE_KEY!);
 
-  redirect("/_ref=logout");
+  redirect("/?_ref=logout");
 }

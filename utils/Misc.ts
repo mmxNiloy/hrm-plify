@@ -572,3 +572,8 @@ export const WIPToastOptions = {
     "This feature is currently unavailable. It will be available soon. Please try again later.",
   className: "bg-amber-500 text-white",
 };
+export function bitCount32(n: number) {
+  n = n - ((n >> 1) & 0x55555555);
+  n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+  return (((n + (n >> 4)) & 0xf0f0f0f) * 0x1010101) >> 24;
+}

@@ -15,11 +15,16 @@ import { ICompany } from "@/schema/CompanySchema";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 
+interface Props extends IFormFragmentProps<ICompany> {
+  asClient?: boolean;
+}
+
 export default function CompanyProfileFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<ICompany>) {
+  asClient = false,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -46,7 +51,9 @@ export default function CompanyProfileFormFragment({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-2">
+        <div
+          className={cn("flex flex-col gap-2", asClient ? "col-span-full" : "")}
+        >
           <Label
             htmlFor="industry-input"
             className={cn(
@@ -70,7 +77,7 @@ export default function CompanyProfileFormFragment({
             className="rounded-full"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className={cn("flex flex-col gap-2", asClient ? "hidden" : "")}>
           <Label>Status</Label>
           <Select
             key={`company-status-${data?.is_active ?? 0}`}

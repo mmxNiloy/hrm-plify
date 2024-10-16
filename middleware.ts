@@ -30,7 +30,9 @@ export function middleware(req: NextRequest) {
         new URL("/?_ref=permission-denied", req.url)
       );
     } else if (userRole.role.role_name === "Guest") {
-      return NextResponse.rewrite(new URL("/dashboard/guest", req.url));
+      return NextResponse.rewrite(
+        new URL("/dashboard/profile?_ref=guest", req.url)
+      );
     } else if (userRole.role.role_name === "Employee") {
       return NextResponse.redirect(
         new URL(

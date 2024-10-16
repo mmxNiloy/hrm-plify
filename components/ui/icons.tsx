@@ -132,6 +132,8 @@ import {
   UserX,
   FileCog,
   Factory,
+  SquareCheck,
+  SquareX,
 } from "lucide-react";
 import React from "react";
 
@@ -349,35 +351,35 @@ const CategoryIcon = React.forwardRef<SVGElement, SVGAttributes>(
         opacity=".34"
         d="M5 10h2q3 0 3-3V5q0-3-3-3H5Q2 2 2 5v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M17 10h2q3 0 3-3V5q0-3-3-3h-2q-3 0-3 3v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         opacity=".34"
         d="M17 22h2q3 0 3-3v-2q0-3-3-3h-2q-3 0-3 3v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M5 22h2q3 0 3-3v-2q0-3-3-3H5q-3 0-3 3v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -455,9 +457,9 @@ const CalendarAlert = React.forwardRef<SVGElement, SVGAttributes>(
     >
       <path
         d="M3 9h18m-9 3v3m0 3h.01M7 3v2m10-2v2M6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8V8.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 5 18.92 5 17.8 5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.52 3 7.08 3 8.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -527,9 +529,9 @@ const CalendarMoney = React.forwardRef<SVGElement, SVGAttributes>(
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className="lucide lucide-calendar"
     >
       <path d="M8 2v4m8-4v4" />
@@ -644,9 +646,9 @@ const UsersCheck = React.forwardRef<SVGElement, SVGAttributes>(
       <path
         d="m16 18 2 2 4-4m-10-1H8c-1.864 0-2.796 0-3.53.305a4 4 0 0 0-2.166 2.164C2 18.204 2 19.136 2 21M15.5 3.29a4.001 4.001 0 0 1 0 7.42M13.5 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
         className={cn("stroke-current", className)}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -747,8 +749,8 @@ const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
       <path
         d="m2.5 10.5 8 4 8.017-4M2.5 14.5l8 4 8.017-4M2.5 6.657l8.008 3.843 8.009-3.843L10.508 2.5z"
         fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -756,6 +758,8 @@ const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
 VersionIcon.displayName = "VersionIcon";
 
 const Icons = {
+  boxChecked: SquareCheck,
+  boxCrossed: SquareX,
   version: VersionIcon,
   factory: Factory,
   heirarchy: HeirarchyIcon,

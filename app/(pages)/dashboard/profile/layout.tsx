@@ -41,7 +41,7 @@ export default async function ProfileLayout({ children }: LayoutProps) {
         <SidebarViewport>{children}</SidebarViewport>
       </div>
     );
-  } else if (user.user_roles?.roles.role_name === "Guest") {
+  } else {
     return <>{children}</>;
-  } else notFound();
+  }
 }

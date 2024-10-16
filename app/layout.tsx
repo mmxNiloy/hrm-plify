@@ -31,14 +31,14 @@ export default function RootLayout({
         <Providers>
           <div
             className={cn(
-              "relative flex flex-col bg-no-repeat bg-center bg-cover",
+              "min-h-screen relative flex flex-col bg-no-repeat bg-center bg-cover",
               nunito.className
             )}
           >
             {children}
           </div>
         </Providers>
-
+        {/* <div className="h-screen w-screen top-0 left-0 bottom-0 right-0 sticky bg-green-500/20 -z-10"></div> */}
         <VersionIndicator />
       </body>
     </html>

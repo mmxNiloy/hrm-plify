@@ -7,6 +7,7 @@ import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { useTheme } from "next-themes";
 import React from "react";
+import TextCapsule from "../../TextCapsule";
 
 export default function NavProfile({
   user,
@@ -34,9 +35,10 @@ export default function NavProfile({
               {company && (
                 <p className="text-start text-xs">{company.company_name}</p>
               )}
-              <p className="text-start text-xs rounded-full w-fit px-2 py-1 bg-green-500 text-white">
-                {user.user_roles?.roles.role_name}
-              </p>
+
+              <TextCapsule className="bg-green-500 text-xs">
+                {user.user_roles?.roles.role_name ?? "Guest"}
+              </TextCapsule>
             </div>
           </div>
         </div>
