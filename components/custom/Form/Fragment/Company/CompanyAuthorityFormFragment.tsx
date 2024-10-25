@@ -10,6 +10,7 @@ import {
   ICompanyAuthorizedDetailsBase,
 } from "@/schema/CompanySchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
+import { FileSizeWarning, RequiredAsterisk } from "@/styles/label.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
 import React from "react";
@@ -134,13 +135,19 @@ export default function CompanyAuthorityFormFragment({
       </div>
 
       <div className="col-span-full flex flex-col gap-2">
-        <Label htmlFor="document-input">Document</Label>
+        <Label
+          htmlFor="document-input"
+          className={!readOnly ? FileSizeWarning : ""}
+        >
+          Document
+        </Label>
 
         {readOnly ? (
           <Link
             key={`authority-doc-link-${data?.doc_link}`}
             id="document-input"
             href={data?.doc_link ?? "#"}
+            target={data?.doc_link ? "_blank" : "_self"}
             passHref
           >
             <Button className={cn(ButtonBlue, "w-full")}>

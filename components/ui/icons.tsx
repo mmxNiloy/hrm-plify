@@ -134,6 +134,9 @@ import {
   Factory,
   SquareCheck,
   SquareX,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
 } from "lucide-react";
 import React from "react";
 
@@ -758,6 +761,9 @@ const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
 VersionIcon.displayName = "VersionIcon";
 
 const Icons = {
+  reset: RotateCcw,
+  zoomIn: ZoomIn,
+  zoomOut: ZoomOut,
   boxChecked: SquareCheck,
   boxCrossed: SquareX,
   version: VersionIcon,

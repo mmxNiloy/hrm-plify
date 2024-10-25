@@ -15,6 +15,7 @@ import { CompanyByIDPageProps } from "../PageProps";
 import { redirect } from "next/navigation";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 
 export default async function CompanyByIDPage({
   params,
@@ -40,36 +41,10 @@ export default async function CompanyByIDPage({
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Details</p>
-      <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard/company/">
-                Company Management
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="truncate w-64">
-                {company.company_name}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
 
-        {/* {user.user_roles.roles.role_name !== "Employee" && (
-          <CompanyEditDialog data={company} />
-        )} */}
-      </div>
+      <MyBreadcrumbs company={company} user={user} />
 
       <CompanyDetailTabs company={company} />
-
-      {/* Empty space at the bottom */}
-      <span className="h-1" />
     </main>
   );
 }

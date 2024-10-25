@@ -56,13 +56,12 @@ export default function MyBreadcrumbs({
         )}
         <BreadcrumbItem>
           <BreadcrumbLink
-            className="line-clamp-1 text-ellipsis max-w-32"
+            className="line-clamp-1 text-ellipsis max-w-48"
             href={`/dashboard/company/${company.company_id}`}
           >
             {company.company_name}
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
         {grandParent && (
           <>
             <BreadcrumbItem>
@@ -79,9 +78,14 @@ export default function MyBreadcrumbs({
             <BreadcrumbSeparator />
           </>
         )}
-        <BreadcrumbItem>
-          <BreadcrumbPage>{title ?? "Example Breadcrumbs"}</BreadcrumbPage>
-        </BreadcrumbItem>
+        {title && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

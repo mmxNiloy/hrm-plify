@@ -4,11 +4,16 @@ import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
-import WIPPage from "@/components/custom/Placeholder/WIPPage";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import OrgChart from "@/components/custom/Popover/Organogram/OrgChart";
+import { ITreeNode } from "@/schema/OrganogramSchema";
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
-  const company = await getCompanyData(params.companyId);
+  const [company, companyExtra] = await Promise.all([
+    getCompanyData(params.companyId),
+    getCompanyExtraData(params.companyId),
+  ]);
   const user = JSON.parse(
     cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -18,7 +23,11 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
       <p className="text-xl font-semibold">Organogram Chart</p>
       <MyBreadcrumbs company={company} user={user} title="Holiday" />
 
-      <WIPPage />
+      <OrgChart
+        tree={[]}
+        employees={companyExtra.employees}
+        companyId={params.companyId}
+      />
     </main>
   );
 }

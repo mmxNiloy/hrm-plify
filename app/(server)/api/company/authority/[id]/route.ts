@@ -1,9 +1,11 @@
+import { upload } from "@/app/(server)/actions/upload";
 import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 interface IReqBody extends ICompanyAuthorizedDetailsBase {
   endpoint: string;
+  document?: File;
   type: "Authorised Personnel" | "Key Contact" | "Level 1 User";
 }
 
@@ -24,6 +26,12 @@ export async function POST(
     );
   }
 
+  // try to upload the document here
+  var uploadRes = undefined;
+  if (reqBod.document) {
+    uploadRes = await upload(reqBod.document);
+  }
+
   try {
     const apiRes = await fetch(
       `${process.env.API_BASE_URL}/${reqBod.endpoint}`,
@@ -33,7 +41,9 @@ export async function POST(
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.value}`,
         },
-        body: JSON.stringify(reqBod),
+        body: JSON.stringify(
+          Object.assign(reqBod, { doc_link: uploadRes?.data?.fileUrl ?? "" })
+        ),
       }
     );
 
@@ -58,6 +68,12 @@ export async function PUT(
 
   const reqBod = makeRequestBody(fd, Number.parseInt(params.id), "PUT");
 
+  // try to upload the document here
+  var uploadRes = undefined;
+  if (reqBod.document) {
+    uploadRes = await upload(reqBod.document);
+  }
+
   // Check if the user is logged in
   const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
@@ -76,7 +92,9 @@ export async function PUT(
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.value}`,
         },
-        body: JSON.stringify(reqBod),
+        body: JSON.stringify(
+          Object.assign(reqBod, { doc_link: uploadRes?.data?.fileUrl ?? "" })
+        ),
       }
     );
 
@@ -103,7 +121,7 @@ function makeRequestBody(
   const designation = fd.get("designation") as string; // string
   const phone_no = fd.get("phone_no") as string; // string
   const email = fd.get("email") as string; // string
-  const document = fd.get("document") as File; // file
+  const document = fd.get("document") as File | undefined; // file
   const offence_history = fd.get("offence_history") as string; // string
   const type = fd.get("type") as
     | "Authorised Personnel"
@@ -132,7 +150,8 @@ function makeRequestBody(
     designation,
     phone_no,
     email,
-    doc_link: `https://hrmplify.com/files/unimplemented/${document.name}`,
+    document,
+    doc_link: "",
     offence_history,
     endpoint,
     type,

@@ -18,16 +18,19 @@ export async function getCompanyDetails(company_id: number) {
       }
     );
 
-    if (!companyRes.ok) {
-      notFound();
+    if (companyRes.ok) {
+      return (await companyRes.json()) as ICompanyDetails;
     }
 
-    return (await companyRes.json()) as ICompanyDetails;
+    console.error(
+      "Actions > Get company details > Failed to fetch company information",
+      { error: await companyRes.json(), status: companyRes.status }
+    );
   } catch (err) {
     console.error(
       "Actions > Get company details > Failed to fetch company information",
       err
     );
-    notFound();
   }
+  notFound();
 }

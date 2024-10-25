@@ -1,6 +1,7 @@
 import { IDepartment } from "./CompanySchema";
 import { IDesignation } from "./DesignationSchema";
 import { ILeaveApprover } from "./LeaveSchema";
+import { ITreeNode } from "./OrganogramSchema";
 import { IUser, IUserBase } from "./UserSchema";
 
 export interface IEmployee {
@@ -222,4 +223,7 @@ export interface IEmployeeWithUserMetadata extends IEmployee {
   designations?: IDesignation;
   departments?: IDepartment;
   leave_approvers?: ILeaveApprover;
+
+  is_node?: boolean;
+  parent?: ITreeNode;
 }

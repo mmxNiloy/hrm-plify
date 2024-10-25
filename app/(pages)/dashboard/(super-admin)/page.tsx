@@ -1,14 +1,6 @@
 "use server";
 import { getCompanies } from "@/app/(server)/actions/getCompanies";
-import { CompanyDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyDataTableColumns";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Command,
   CommandEmpty,
@@ -17,11 +9,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { getPaginationParams, stringToColor } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";

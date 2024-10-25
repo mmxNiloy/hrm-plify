@@ -1,3 +1,4 @@
+import { upload } from "@/app/(server)/actions/upload";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -44,8 +45,13 @@ export async function PUT(
     const contact_number = fd.get("contact_number"); // string
     const founded_year = fd.get("founded_year"); // string
     const website = fd.get("website"); // string
-    const logo = fd.get("logo"); // string
+    const logo = fd.get("logo") as File | undefined; // file
     const is_active = fd.get("is_active") as "yes" | "no"; // enum('yes', 'no')
+
+    var uploadRes = undefined;
+    if (logo) {
+      uploadRes = await upload(logo);
+    }
 
     // request body as raw json
     const reqBod = {
@@ -55,7 +61,7 @@ export async function PUT(
       contact_number: contact_number as string,
       founded_year: Number.parseInt(founded_year as string),
       website: website as string,
-      logo: logo as string,
+      logo: uploadRes?.data?.fileUrl ?? "",
       is_active: is_active === "yes" ? 1 : 0,
     };
 

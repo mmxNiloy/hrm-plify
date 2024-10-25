@@ -1,5 +1,7 @@
+import { TreeNode } from "primereact/treenode";
 import { IDesignation } from "./DesignationSchema";
 import { IEmployeeWithUserMetadata } from "./EmployeeSchema";
+import React from "react";
 
 export interface IOrganogramLevel {
   level_id: number;
@@ -24,4 +26,10 @@ export interface IOrganogramHeirarchyRecord {
   levels?: IOrganogramLevel;
   designations?: IDesignation;
   employees?: IEmployeeWithUserMetadata;
+}
+
+export interface ITreeNode extends TreeNode {
+  type?: string;
+  children?: ITreeNode[];
+  data: IEmployeeWithUserMetadata;
 }

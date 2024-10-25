@@ -1,4 +1,7 @@
 "use client";
+import { upload } from "@/app/(server)/actions/upload";
+import { AvatarPicker } from "@/components/ui/avatar-picker";
+import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,10 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 import { IFormFragmentProps } from "@/utils/Types";
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 interface Props extends IFormFragmentProps<ICompany> {
   asClient?: boolean;
@@ -193,16 +197,25 @@ export default function CompanyProfileFormFragment({
       {/* TODO: Replace logo with a file/image picker here */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="logo-input">Logo</Label>
-        <Input
-          key={`company-logo-${data?.logo ?? ""}`}
-          disabled={disabled}
-          readOnly={readOnly}
-          defaultValue={data?.logo ?? ""}
-          id="logo-input"
-          name="logo"
-          placeholder="Logo"
-          className="rounded-full"
-        />
+        <div className="relative">
+          <AvatarPicker
+            readOnly={readOnly}
+            disabled={disabled}
+            name="logo"
+            placeholderIcon={
+              <Icons.factory
+                className={cn(
+                  "size-1/2",
+                  disabled || readOnly ? "" : "group-hover:invisible"
+                )}
+              />
+            }
+            className="w-1/2"
+            variant="video"
+            src={data?.logo?.replace("http:", "https:")}
+            alt={`${data?.company_name} Logo`}
+          />
+        </div>
       </div>
     </>
   );

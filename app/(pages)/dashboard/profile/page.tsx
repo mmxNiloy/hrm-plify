@@ -43,7 +43,10 @@ function getProfileCompletion(user: IUser) {
   if (user.user_roles) status |= ProfileStep.ROLE;
   if (user.usercompany) {
     status |= ProfileStep.COMPANY;
-    if (user.usercompany.roles.role_name.length > 0)
+    if (
+      user.usercompany.company_role_id ||
+      user.usercompany.roles.role_name.length > 0
+    )
       status |= ProfileStep.COMPANY_ROLE;
     if (user.usercompany.isActive) status |= ProfileStep.COMPANY_STATUS;
     if (user.usercompany.companies?.contact_number)
@@ -79,7 +82,10 @@ export default async function ProfilePage() {
 
   return (
     <main className="container flex flex-col gap-2">
-      <JoinOrCreateCompanyDialog defaultOpen={!hasCompany} user={user} />
+      <JoinOrCreateCompanyDialog
+        defaultOpen={!hasCompany && !isAdmin}
+        user={user}
+      />
 
       <div className="flex flex-col gap-2 bg-background rounded-lg">
         {/* Profile overview card */}
@@ -103,7 +109,10 @@ export default async function ProfilePage() {
             <span className="w-full" style={{ aspectRatio: 4 / 1 }} />
 
             <div className="px-8 w-full flex flex-row items-end justify-between">
-              <AvatarPicker className="size-48 -mt-24 border border-muted-foreground/50 shadow-lg" />
+              <AvatarPicker
+                name="file"
+                className="size-48 -mt-24 border border-muted-foreground/50 shadow-lg"
+              />
               <ProfileEditButton />
             </div>
           </div>

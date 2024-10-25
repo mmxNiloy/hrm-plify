@@ -20,6 +20,7 @@ import CompanyProfileFormFragment from "../../../Form/Fragment/Company/CompanyPr
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function CompanyProfileEditDialog({ data }: { data: ICompany }) {
   const { toast } = useToast();
