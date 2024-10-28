@@ -40,13 +40,21 @@ export default function NodeEditDialog({
   employees,
   tree,
   onSubmit,
+  parentNode,
+  asMenuItem,
+  menuItemLabel,
+  menuItemIcon,
   node,
 }: {
   asIcon?: boolean;
   companyId: number;
   employees: IEmployeeWithUserMetadata[];
   tree: ITreeNode[];
+  parentNode?: ITreeNode;
   node?: ITreeNode;
+  asMenuItem?: boolean;
+  menuItemLabel?: string;
+  menuItemIcon?: React.ReactNode;
   onSubmit?: ({
     parent,
     child,
@@ -82,7 +90,8 @@ export default function NodeEditDialog({
           Number.parseInt((fd.get("child") as string | undefined) ?? "0") || 0,
       };
 
-      const parNode = treeNodes.find((e) => e.employee_id == parent)?.parent;
+      const parNode =
+        treeNodes.find((e) => e.employee_id == parent)?.selfRef ?? tree[0];
       const chNode = availableNodes.find((e) => e.employee_id == child);
 
       // No child selected
@@ -96,12 +105,6 @@ export default function NodeEditDialog({
         return;
       }
 
-      toast({
-        title: "Pushing Node",
-        description: `Parent: ${parent}, Child: ${child}`,
-        className: "bg-amber-500 text-white",
-      });
-
       setLoading(true);
 
       if (onSubmit) {
@@ -111,13 +114,22 @@ export default function NodeEditDialog({
       setLoading(false);
       setOpen(false);
     },
-    [availableNodes, onSubmit, toast, treeNodes]
+    [availableNodes, onSubmit, toast, tree, treeNodes]
   );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {asIcon ? (
+        {asMenuItem ? (
+          <Button
+            variant={"ghost"}
+            size="sm"
+            className="w-full gap-2 justify-start"
+          >
+            {menuItemIcon ?? <Icons.userPlus />}
+            {menuItemLabel ?? "Add a node"}
+          </Button>
+        ) : asIcon ? (
           <Button variant={"outline"} size="icon">
             <Icons.userPlus />
           </Button>
@@ -130,7 +142,7 @@ export default function NodeEditDialog({
 
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle>{node ? "Update" : "Add"} a Node</DialogTitle>
+          <DialogTitle>Node Editor</DialogTitle>
           <DialogDescription>
             Fill out the form appropriately.
           </DialogDescription>
@@ -148,6 +160,9 @@ export default function NodeEditDialog({
                 <LabelledComboBox
                   name="parent"
                   required
+                  defaultValue={
+                    parentNode ? `${parentNode.data.employee_id}` : undefined
+                  }
                   disabled={treeNodes.length < 1}
                   items={treeNodes.map((n) => ({
                     label: getFullNameOfEmployee(n),
@@ -161,6 +176,7 @@ export default function NodeEditDialog({
                 <LabelledComboBox
                   name="child"
                   required
+                  defaultValue={node ? `${node.data.employee_id}` : undefined}
                   disabled={availableNodes.length < 1}
                   items={availableNodes.map((emp) => ({
                     label: getFullNameOfEmployee(emp),

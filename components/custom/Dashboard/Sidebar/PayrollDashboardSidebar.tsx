@@ -5,7 +5,7 @@ import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 
-export default function RotaDashboardSidebar({
+export default function PayrollDashboardSidebar({
   company,
 }: {
   company: ICompany;
@@ -15,6 +15,7 @@ export default function RotaDashboardSidebar({
 
   return (
     <Sidebar
+      className="overflow-auto"
       open={open || hovered}
       onMouseEnter={(e) => setHovered(true)}
       onMouseLeave={(e) => setHovered(false)}
@@ -51,44 +52,19 @@ export default function RotaDashboardSidebar({
           </span>
         </SidebarHeader>
 
-        {/* <SidebarLink href={`/dashboard/company/${company.company_id}/rota`}>
+        <SidebarLink href={`/dashboard/company/${company.company_id}/payroll`}>
           <Icons.home />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Rota
-          </span>
-        </SidebarLink> */}
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/rota/shift`}
-        >
-          <Icons.clock />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Shift Management
+            Payroll Management Dashboard
           </span>
         </SidebarLink>
 
-        {/* <SidebarLink
-          href={`/dashboard/company/${company.company_id}/rota/late-policy`}
-        >
-          <Icons.late />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Late Policy
-          </span>
-        </SidebarLink> */}
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/rota/off-days`}
+          href={`/dashboard/company/${company.company_id}/payroll/salary-struct`}
         >
-          <Icons.calendarDays />
+          <Icons.list />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Off Days
-          </span>
-        </SidebarLink>
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/rota/duty-roster`}
-        >
-          <Icons.calendarClock />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Duty Roster
+            Salary Structure
           </span>
         </SidebarLink>
       </SidebarContent>

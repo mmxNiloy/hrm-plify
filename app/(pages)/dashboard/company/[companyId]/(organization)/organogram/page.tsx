@@ -3,10 +3,10 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import React from "react";
-import { CompanyByIDPageProps } from "../PageProps";
+import { CompanyByIDPageProps } from "../../PageProps";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
-import OrgChart from "@/components/custom/Popover/Organogram/OrgChart";
+import OrgChart from "@/components/custom/Organogram/OrgChart";
 import { ITreeNode } from "@/schema/OrganogramSchema";
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
@@ -21,10 +21,9 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Organogram Chart</p>
-      <MyBreadcrumbs company={company} user={user} title="Holiday" />
+      <MyBreadcrumbs company={company} user={user} title="Organogram" />
 
       <OrgChart
-        tree={[]}
         employees={companyExtra.employees}
         companyId={params.companyId}
       />
