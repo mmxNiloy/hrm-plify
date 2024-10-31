@@ -3,7 +3,7 @@ import { validateSession } from "@/middlewares/validateSession";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const session = validateSession(req);
   const userRole = checkRole(req);
 
@@ -20,10 +20,10 @@ export function middleware(req: NextRequest) {
   // Default dashboard of each user
   if (req.nextUrl.pathname.endsWith("/dashboard")) {
     if (!userRole) {
-      cookies().delete(
+      (await cookies()).delete(
         process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ?? "hrmplify_session_token"
       );
-      cookies().delete(
+      (await cookies()).delete(
         process.env.NEXT_PUBLIC_COOKIE_USER_KEY ?? "hrmplify_user_data"
       );
       return NextResponse.redirect(
