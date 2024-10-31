@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
-  params: {
+  params: Promise<{
     employee_id: string;
-  };
+  }>;
 }
 
 interface IUpdateBod extends IEmployeeWithPersonalInfo {
@@ -28,7 +28,11 @@ export async function PATCH(req: NextRequest, { params }: Props) {
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/update-personal-data/${params.employee_id}`,
+      `${process.env.API_BASE_URL}/employee/update-personal-data/${
+        (
+          await params
+        ).employee_id
+      }`,
       {
         method: "PATCH",
         headers: {

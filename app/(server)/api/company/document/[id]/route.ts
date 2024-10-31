@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const doc_name = fd.get("doc_name"); // stirng
   const doc_type = fd.get("doc_type"); // string
@@ -13,7 +11,7 @@ export async function POST(
     {
       message: "TODO: Integrate with the server when it's ready",
       data: {
-        company_id: params.id,
+        company_id: (await params).id,
         doc_name: doc_name as string,
         doc_type: doc_type as string,
         doc_file: (doc_file as File).name,
@@ -23,10 +21,7 @@ export async function POST(
   );
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export async function PUT(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const doc_name = fd.get("doc_name"); // stirng
   const doc_type = fd.get("doc_type"); // string
@@ -36,7 +31,7 @@ export async function PUT(
     {
       message: "TODO: Integrate with the server when it's ready",
       data: {
-        company_id: params.id,
+        company_id: (await params).id,
         doc_name: doc_name as string,
         doc_type: doc_type as string,
         doc_file: (doc_file as File).name,

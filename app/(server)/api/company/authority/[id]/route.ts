@@ -2,6 +2,7 @@ import { upload } from "@/app/(server)/actions/upload";
 import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
 interface IReqBody extends ICompanyAuthorizedDetailsBase {
   endpoint: string;
@@ -9,13 +10,14 @@ interface IReqBody extends ICompanyAuthorizedDetailsBase {
   type: "Authorised Personnel" | "Key Contact" | "Level 1 User";
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
 
-  const reqBod = makeRequestBody(fd, Number.parseInt(params.id), "POST");
+  const reqBod = makeRequestBody(
+    fd,
+    Number.parseInt((await params).id),
+    "POST"
+  );
 
   // Check if the user is logged in
   const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
@@ -60,13 +62,10 @@ export async function POST(
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
 
-  const reqBod = makeRequestBody(fd, Number.parseInt(params.id), "PUT");
+  const reqBod = makeRequestBody(fd, Number.parseInt((await params).id), "PUT");
 
   // try to upload the document here
   var uploadRes = undefined;
@@ -85,7 +84,7 @@ export async function PUT(
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/${reqBod.endpoint}/${params.id}`,
+      `${process.env.API_BASE_URL}/${reqBod.endpoint}/${(await params).id}`,
       {
         method: "PUT",
         headers: {

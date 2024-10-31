@@ -1,11 +1,9 @@
 import { upload } from "@/app/(server)/actions/upload";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const company_name = fd.get("company_name"); // stirng
   const industry = fd.get("industry"); // string
@@ -18,7 +16,7 @@ export async function POST(
     {
       message: "TODO: Integrate with the server when it's ready",
       data: {
-        company_id: params.id,
+        company_id: (await params).id,
         company_name: company_name as string,
         industry: industry as string,
         headquarters: headquarters as string,
@@ -32,10 +30,7 @@ export async function POST(
   );
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export async function PUT(req: NextRequest, { params }: IDProps) {
   try {
     // Extract form data
     const fd = await req.formData();
@@ -75,7 +70,7 @@ export async function PUT(
     }
 
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL!}/companies/update/${params.id}`,
+      `${process.env.API_BASE_URL!}/companies/update/${(await params).id}`,
       {
         method: "PUT",
         headers: {
