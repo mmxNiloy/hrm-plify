@@ -39,43 +39,43 @@ export default function AuthCard() {
   }, [loginAnimController]);
 
   return currentForm === "login-form" ? (
-    <animated.div style={{ ...loginAnimSprings }}>
-      <Card className="bg-muted/60 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-        </CardHeader>
-        <CardContent className="w-[32rem]">
-          <LoginForm />
+    // <animated.div style={{ ...loginAnimSprings }} >
+    // </animated.div>
+    <Card className="bg-muted/60 backdrop-blur-sm">
+      <CardHeader>
+        <CardTitle>Login</CardTitle>
+      </CardHeader>
+      <CardContent className="w-[32rem]">
+        <LoginForm />
 
-          <p className="text-center mt-4 mb-2">Don&apos;t have an account?</p>
-          <Button
-            onClick={handleRegFormSlide}
-            type="button"
-            className="gap-2 w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white"
-          >
-            <Icons.badgeCheck /> Sign-up
-          </Button>
-        </CardContent>
-      </Card>
-    </animated.div>
+        <p className="text-center mt-4 mb-2">Don&apos;t have an account?</p>
+        <Button
+          onClick={handleRegFormSlide}
+          type="button"
+          className="gap-2 w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white"
+        >
+          <Icons.badgeCheck /> Sign-up
+        </Button>
+      </CardContent>
+    </Card>
   ) : (
-    <animated.div style={{ ...regAnimSprings }}>
-      <Card className="bg-muted/60 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle>Sign-up</CardTitle>
-        </CardHeader>
-        <CardContent className="w-[32rem]">
-          <RegistrationForm />
+    // <animated.div style={{ ...regAnimSprings }}>
+    // </animated.div>
+    <Card className="bg-muted/60 backdrop-blur-sm">
+      <CardHeader>
+        <CardTitle>Sign-up</CardTitle>
+      </CardHeader>
+      <CardContent className="w-[32rem]">
+        <RegistrationForm />
 
-          <p className="text-center mt-4 mb-2">Already have an account?</p>
-          <Button
-            onClick={handleLoginformSlide}
-            className="gap-2 w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white"
-          >
-            <Icons.login /> Login
-          </Button>
-        </CardContent>
-      </Card>
-    </animated.div>
+        <p className="text-center mt-4 mb-2">Already have an account?</p>
+        <Button
+          onClick={handleLoginformSlide}
+          className="gap-2 w-full rounded-full bg-blue-500 hover:bg-blue-400 text-white"
+        >
+          <Icons.login /> Login
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
