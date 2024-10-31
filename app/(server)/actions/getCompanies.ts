@@ -1,6 +1,7 @@
 "use server";
 
 import { IPaginatedCompany } from "@/schema/CompanySchema";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
 export async function getCompanies({
@@ -10,29 +11,22 @@ export async function getCompanies({
   page: number;
   limit: number;
 }) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const fallback: IPaginatedCompany = {
-    total_page: 1,
-    data: [],
-    data_count: 0,
-  };
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies?page=${page}&limit=${limit}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-    if (apiRes.ok) {
-      return (await apiRes.json()) as IPaginatedCompany;
-    } else {
-      return fallback;
+  const req = fetch(
+    `${process.env.API_BASE_URL}/companies?page=${page}&limit=${limit}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
     }
-  } catch (_) {
-    return fallback;
+  );
+  const { data, error } = await withError<IPaginatedCompany>(req);
+  if (error) {
+    console.error("Actions > Get Companies > Failed to get companies", error);
+    return { error };
   }
+  return { data };
 }

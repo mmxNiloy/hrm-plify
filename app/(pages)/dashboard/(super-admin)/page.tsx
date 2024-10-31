@@ -1,5 +1,6 @@
 "use server";
 import { getCompanies } from "@/app/(server)/actions/getCompanies";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -20,8 +21,18 @@ import React from "react";
 export default async function DashboardPage({
   searchParams,
 }: ISearchParamsProps) {
-  const { page, limit } = getPaginationParams(searchParams);
-  const companies = await getCompanies({ page, limit });
+  const { page, limit } = getPaginationParams(await searchParams);
+  const { data: companies, error } = await getCompanies({ page, limit });
+
+  if (error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Dashboard</p>
+        <ErrorFallbackCard error={error} />
+      </main>
+    );
+  }
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Dashboard</p>

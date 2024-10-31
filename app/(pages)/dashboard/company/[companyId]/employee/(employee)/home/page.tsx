@@ -11,21 +11,33 @@ import { Button } from "@/components/ui/button";
 import { ButtonBlue, ButtonWarn } from "@/styles/button.tailwind";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function EmployeeUserHome({
   params,
 }: CompanyByIDPageProps) {
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const employee = await getEmployeeData();
-  const company = await getCompanyData(params.companyId);
+  const [employee, company] = await Promise.all([
+    getEmployeeData(),
+    getCompanyData((await params).companyId),
+  ]);
+
+  if (employee.error || company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Home</p>
+        <ErrorFallbackCard error={employee.error ?? company.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Home</p>
       <p className="text-xl font-semibold">
-        Welcome, {getFullNameOfEmployee(employee.data!)}!
+        Welcome, {getFullNameOfEmployee(employee.data.data!)}!
       </p>
 
       <div className="grid grid-cols-2 gap-4">

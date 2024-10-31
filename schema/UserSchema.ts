@@ -1,5 +1,6 @@
 import { ICompany } from "./CompanySchema";
 import { IEmployee, IEmployeeWithUserMetadata } from "./EmployeeSchema";
+import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface ILoginResponse {
   token: string;
@@ -40,6 +41,10 @@ export type TRole =
 
 export interface IRoles {
   role_name: TRole;
+}
+
+export interface IPaginatedCompanyUser extends IPaginatedResponse {
+  data: ICompanyUser[];
 }
 
 export interface ICompanyUser {

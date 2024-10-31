@@ -9,7 +9,7 @@ interface Props {
 export async function GET(req: NextRequest, { params }: Props) {
   try {
     // Check token
-    const sessionId = cookies().get(process.env.COOKIE_SESSION_KEY!);
+    const sessionId = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
     // Invalid token/error encountered
     if (!sessionId || sessionId.value.length < 1)
       return NextResponse.json(

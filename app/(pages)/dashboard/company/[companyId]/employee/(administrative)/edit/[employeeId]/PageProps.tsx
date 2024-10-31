@@ -1,6 +1,6 @@
 export interface EditEmployeeByIdProps {
-  params: {
+  params: Promise<{
     companyId: number;
     employeeId: number;
-  };
+  }>;
 }

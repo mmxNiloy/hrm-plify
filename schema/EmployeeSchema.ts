@@ -44,8 +44,8 @@ export interface IEmployeeContactInfo {
   additional_address_2?: string;
   country?: string;
   proof_address_doc_link?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface IChangeOfCircumstances {

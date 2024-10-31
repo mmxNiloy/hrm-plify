@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
 import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
@@ -23,37 +23,51 @@ import { HolidayTypeDataTableColumns } from "@/components/custom/DataTable/Colum
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function HolidayDashboardPage({
   params,
 }: CompanyByIDPageProps) {
-  const company = await getCompanyData(params.companyId);
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const companyExtraData = await getCompanyExtraData(params.companyId);
 
-  const holidayTypes: IHolidayType[] = await getHolidayTypes({
-    company_id: params.companyId,
-  });
-  const holidays: IHoliday[] = await getHolidays({
-    company_id: params.companyId,
-  });
+  const [company, holidayTypes, holidays] = await Promise.all([
+    getCompanyData(companyId),
+    getHolidayTypes({
+      company_id: companyId,
+    }),
+    getHolidays({
+      company_id: companyId,
+    }),
+  ]);
+
+  if (company.error || holidayTypes.error || holidays.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Holiday List</p>
+        <ErrorFallbackCard
+          error={company.error ?? holidayTypes.error ?? holidays.error}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Holiday Management</p>
-      <MyBreadcrumbs company={company} user={user} title="Holiday" />
+      <MyBreadcrumbs company={company.data} user={user} title="Holiday" />
       <Card>
         <CardHeader>
           <CardTitle>All Holidays</CardTitle>
         </CardHeader>
 
         <CardContent>
-          <StaticDataTable
-            data={holidays.map((item) => ({
+          <DataTable
+            data={holidays.data.map((item) => ({
               ...item,
-              company_holiday_types: holidayTypes,
+              company_holiday_types: holidayTypes.data,
             }))}
             columns={HolidayListDataTableColumns}
           />
@@ -75,8 +89,8 @@ export default async function HolidayDashboardPage({
         </CardHeader>
 
         <CardContent>
-          <StaticDataTable
-            data={holidayTypes}
+          <DataTable
+            data={holidayTypes.data}
             columns={HolidayTypeDataTableColumns}
           />
         </CardContent>

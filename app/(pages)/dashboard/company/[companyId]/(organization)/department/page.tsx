@@ -12,32 +12,52 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
 export default async function DepartmentPage({ params, searchParams }: Props) {
-  const { page, limit } = getPaginationParams(searchParams);
-  var paginatedDepartments: IPaginatedDepartment = await getDepartments({
-    company_id: params.companyId,
-    page,
-    limit,
-  });
+  const companyId = (await params).companyId;
+  const { page, limit } = getPaginationParams(await searchParams);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const company = await getCompanyData(params.companyId);
+  const [paginatedDepartments, company] = await Promise.all([
+    getDepartments({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+    getCompanyData(companyId),
+  ]);
+
+  if (paginatedDepartments.error || company.error) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-lg font-semibold">Company Departments</p>
+
+        <ErrorFallbackCard
+          error={paginatedDepartments.error ?? company.error}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-2">
       <p className="text-lg font-semibold">Company Departments</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs company={company} user={user} title="Designations" />
-        <DepartmentCreationPopover company_id={params.companyId} />
+        <MyBreadcrumbs
+          company={company.data}
+          user={user}
+          title="Designations"
+        />
+        <DepartmentCreationPopover company_id={companyId} />
       </div>
       <StaticDataTable
-        data={paginatedDepartments.data}
-        pageCount={paginatedDepartments.total_page}
+        data={paginatedDepartments.data.data}
+        pageCount={paginatedDepartments.data.total_page}
         columns={CompanyDepartmentDataTableColumns}
       />
     </div>

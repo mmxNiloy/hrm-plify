@@ -1,5 +1,4 @@
 "use server";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -7,16 +6,29 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import AttendanceGenerationTable from "@/components/custom/Dashboard/Attendance/AttendanceGenerationTable";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function GenerateAttendancePage({
   params,
 }: CompanyByIDPageProps) {
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const company = await getCompanyDetails(params.companyId);
+  const [company, companyExtraData] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+  ]);
 
-  const companyExtraData = await getCompanyExtraData(params.companyId);
+  if (company.error || companyExtraData.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Generate Attendance</p>
+        <ErrorFallbackCard error={company.error ?? companyExtraData.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
@@ -25,7 +37,7 @@ export default async function GenerateAttendancePage({
         <MyBreadcrumbs
           {...{
             user,
-            company,
+            company: company.data,
             title: "Generate Attendance",
             parent: "Attendance Management",
           }}
@@ -34,16 +46,10 @@ export default async function GenerateAttendancePage({
       </div>
       <div className="flex flex-col gap-4">
         <AttendanceGenerationTable
-          employees={companyExtraData.employees}
-          companyId={company.company_id}
+          employees={companyExtraData.data.employees}
+          companyId={companyId}
         />
       </div>
-
-      {/* <StaticDataTable
-    data={paginatedAttendance.data}
-    columns={AttendanceDataTableColumns}
-    pageCount={paginatedAttendance.total_page}
-  /> */}
     </main>
   );
 }

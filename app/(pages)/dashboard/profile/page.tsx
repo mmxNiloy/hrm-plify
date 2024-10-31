@@ -67,7 +67,7 @@ function getProfileCompletion(user: IUser) {
 
 export default async function ProfilePage() {
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
   const hasCompany =

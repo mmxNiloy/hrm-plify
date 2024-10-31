@@ -1,5 +1,4 @@
 "use server";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -9,14 +8,14 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import AttendanceReportFilterPopover from "@/components/custom/Popover/Attendance/AttendanceReportFilterPopover";
 import { ISearchParams, ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { getAttendanceReports } from "@/app/(server)/actions/getAttendanceReports";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { AttendanceReportDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceReportDataTableColumns";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { getAbsentReports } from "@/app/(server)/actions/getAbsentReport";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -36,22 +35,35 @@ export default async function AbsentReportPage({
   params,
   searchParams,
 }: Props) {
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const company = await getCompanyDetails(params.companyId);
+  const sParams = await searchParams;
+  const filters = getFilters(sParams);
+  const { limit, page } = getPaginationParams(sParams);
 
-  const companyExtraData = await getCompanyExtraData(params.companyId);
-  const filters = getFilters(searchParams);
-  const { limit, page } = getPaginationParams(searchParams);
+  const [company, companyExtraData, reports] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getAbsentReports({
+      company_id: companyId,
+      limit,
+      page,
+      filters,
+    }),
+  ]);
 
-  // Get report data from the server
-  const reports = await getAbsentReports({
-    company_id: company.company_id,
-    limit,
-    page,
-    filters,
-  });
+  if (company.error || companyExtraData.error || reports.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Absent Report</p>
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? reports.error}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
@@ -60,7 +72,7 @@ export default async function AbsentReportPage({
         <MyBreadcrumbs
           {...{
             user,
-            company,
+            company: company.data,
             title: "Absent Report",
           }}
         />
@@ -72,11 +84,7 @@ export default async function AbsentReportPage({
             target="_blank"
           >
             <div className="sr-only">
-              <Input
-                readOnly
-                defaultValue={company.company_id}
-                name="company_id"
-              />
+              <Input readOnly defaultValue={companyId} name="company_id" />
               <Input
                 readOnly
                 defaultValue={filters.employee_id}
@@ -99,12 +107,12 @@ export default async function AbsentReportPage({
               Download PDF (WIP)
             </Button>
           </form>
-          <AttendanceReportFilterPopover {...companyExtraData} />
+          <AttendanceReportFilterPopover {...companyExtraData.data} />
         </div>
       </div>
 
       <StaticDataTable
-        data={reports}
+        data={reports.data}
         columns={AttendanceReportDataTableColumns}
         // pageCount={paginatedAttendance.total_page}
       />

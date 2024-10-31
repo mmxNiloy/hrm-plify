@@ -7,10 +7,10 @@ export async function getUserData() {
   var user: IUser | undefined;
   try {
     user = JSON.parse(
-      cookies().get(process.env.COOKIE_USER_KEY!)?.value!
+      (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value!
     ) as IUser;
   } catch (err) {
-    console.error("DashboardNavbar > User Cookie not found", err);
+    console.error("Actions > User Cookie not found", err);
     user = undefined;
   }
 

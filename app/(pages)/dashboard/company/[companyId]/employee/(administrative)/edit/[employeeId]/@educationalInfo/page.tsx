@@ -7,54 +7,42 @@ import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
 import { redirect } from "next/navigation";
 import EducationalInfoDataTable from "@/components/custom/DataTable/Company/Employee/EducationalInfoDataTable";
 import EducationalInfoEditDialog from "@/components/custom/Dialog/Employee/EducationalInfoEditDialog";
+import { getEducationalInfo } from "@/app/(server)/actions/employee/getEducationalInfo";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { EducationalInfoDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EducationalInfoDataTableColumns";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function EducationalInfoSlot({
   params,
 }: EditEmployeeByIdProps) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const { employeeId, companyId } = await params;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var educationalInfo: IEmployeeEducationalDetail[] = [];
+  const { data: educationalInfo, error } = await getEducationalInfo(employeeId);
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/get-education-data/${params.employeeId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
+  if (error) {
+    return (
+      <div className="flex flex-col gap-4 p-8 border rounded-md">
+        <div className="w-full flex flex-row items-center justify-between">
+          <p className="text-lg font-semibold">Educational Information</p>
+        </div>
+        <ErrorFallbackCard error={error} />
+      </div>
     );
-
-    if (!apiRes.ok) {
-      console.error("Edit Employee > Contact Info > Data not found");
-      redirect("/not-found");
-    } else {
-      const result = (await apiRes.json()) as {
-        message: string;
-        data: IEmployeeEducationalDetail[];
-      };
-      educationalInfo = result.data;
-      // console.log("Data found", educationalInfo);
-    }
-  } catch (err) {
-    console.error("Edit Employee > Contact Info > Data not found");
-    redirect("/not-found");
   }
+
   return (
-    <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-      <div className="col-span-full w-full flex flex-row items-center justify-between">
+    <div className="flex flex-col gap-4 p-8 border rounded-md">
+      <div className="w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Educational Information</p>
-        <EducationalInfoEditDialog employee_id={params.employeeId} />
+        <EducationalInfoEditDialog employee_id={employeeId} />
       </div>
-      <div className="col-span-full">
-        <EducationalInfoDataTable
-          key={`${params.employeeId}-educational-info-table-length-${educationalInfo.length}`}
-          data={educationalInfo}
-        />
-      </div>
+      <DataTable
+        data={educationalInfo}
+        columns={EducationalInfoDataTableColumns}
+      />
     </div>
   );
 }

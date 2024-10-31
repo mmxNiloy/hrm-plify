@@ -8,6 +8,8 @@ import { cookies } from "next/headers";
 import { LayoutProps } from "@/utils/Types";
 import UserAccessDashboardSidebar from "@/components/custom/Dashboard/Sidebar/UserAccessDashboardSidebar";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -16,31 +18,24 @@ export default async function UserAccessDashboardPageLayout({
   params,
 }: Props) {
   // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  var company: ICompany;
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
+  const company = await getCompanyData(companyId);
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">User Access Management</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
     );
-
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
   }
+
   return (
     <div>
-      <UserAccessDashboardSidebar company={company} />
+      <UserAccessDashboardSidebar company={company.data} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

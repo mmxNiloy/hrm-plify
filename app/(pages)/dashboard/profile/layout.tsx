@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 
 export default async function ProfileLayout({ children }: LayoutProps) {
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
   if (

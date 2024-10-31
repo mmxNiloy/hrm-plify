@@ -4,49 +4,38 @@ import { ILoginResponse } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { logout } from "./logout";
+import { withError } from "@/utils/Debug";
 
 export default async function refreshUserCookie() {
-  var endpoint = "";
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/profile/role-data`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-        method: "GET",
-      }
-    );
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const req = fetch(`${process.env.API_BASE_URL}/profile/role-data`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+    method: "GET",
+  });
 
-    if (apiRes.ok) {
-      const data = (await apiRes.json()) as ILoginResponse; /// Caution: Does not actually send a new token
-      console.log("Action > Refresh User Cookie > Got new data", data);
-
-      // Send a cookie w\ user data
-      cookies().set(process.env.COOKIE_USER_KEY!, JSON.stringify(data.user), {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        expires: Date.now() + 43200000, // 12hrs
-      });
-
-      // Redirect to dashboard, the middleware handles the rest
-      endpoint = "/dashboard";
-    } else {
-      // On error log the user out and start again
-      console.error(
-        "Actions > Refresh User Cookie > Failed to refresh user cookie",
-        { error: await apiRes.json(), status: apiRes.status }
-      );
-    }
-  } catch (err) {
+  const { data, error } = await withError<ILoginResponse>(req);
+  if (error) {
     console.error(
       "Actions > Refresh User Cookie > Failed to refresh user cookie",
-      err
+      error
     );
+    await logout();
+    throw error;
   }
 
-  if (endpoint !== "/dashboard") await logout();
-  redirect(endpoint);
+  // Send a cookie w\ user data
+  (await cookies()).set(
+    process.env.COOKIE_USER_KEY!,
+    JSON.stringify(data.user),
+    {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      expires: Date.now() + 43200000, // 12hrs
+    }
+  );
+  redirect("/dashboard");
 }

@@ -1,12 +1,6 @@
+import { ChangeOfCircumstancesDataTableColumns } from "@/components/custom/DataTable/Columns/Company/ChangeOfCircumstancesDataTableColumns";
 import ChangeOfCircumstancesDataTableSkeleton from "@/components/custom/DataTable/Company/Employee/ChangeOfCircumstancesDataTableSkeleton";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { DataTableSkeleton } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
@@ -21,7 +15,10 @@ export default function EmployeeChangeOfCircumstancesPageLoading() {
       </div>
 
       {/* Main content, a table of employees */}
-      <ChangeOfCircumstancesDataTableSkeleton />
+      <DataTableSkeleton
+        columns={ChangeOfCircumstancesDataTableColumns}
+        showOptions
+      />
     </main>
   );
 }

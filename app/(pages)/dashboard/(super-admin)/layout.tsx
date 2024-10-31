@@ -7,8 +7,9 @@ import SuperAdminSidebar from "@/components/custom/Dashboard/Sidebar/SuperAdminS
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 
 export default async function DashboardLayout({ children }: LayoutProps) {
+  const mCookies = await cookies();
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
   return (

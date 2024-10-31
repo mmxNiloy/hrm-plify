@@ -2,6 +2,7 @@
 import { getCompanies } from "@/app/(server)/actions/getCompanies";
 import { CompanyDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyDataTableColumns";
 import CompanyCreationDialog from "@/components/custom/Dialog/Company/CompanyCreationDialog";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,8 +19,33 @@ import React from "react";
 export default async function CompanyDashboardPage({
   searchParams,
 }: ISearchParamsProps) {
-  const { limit, page } = getPaginationParams(searchParams);
-  const paginatedCompanies = await getCompanies({ page, limit });
+  const { limit, page } = getPaginationParams(await searchParams);
+  const { data: paginatedCompanies, error } = await getCompanies({
+    page,
+    limit,
+  });
+  if (error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Company Management</p>
+        <div className="flex items-center justify-between">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Company Management</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+
+        <ErrorFallbackCard error={error} />
+      </main>
+    );
+  }
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Management</p>

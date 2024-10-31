@@ -8,25 +8,33 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import OrgChart from "@/components/custom/Organogram/OrgChart";
 import { ITreeNode } from "@/schema/OrganogramSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
+  const companyId = (await params).companyId;
   const [company, companyExtra] = await Promise.all([
-    getCompanyData(params.companyId),
-    getCompanyExtraData(params.companyId),
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
   ]);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+
+  if (company.error || companyExtra.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Organogram Chart</p>
+        <ErrorFallbackCard error={company.error ?? companyExtra.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Organogram Chart</p>
-      <MyBreadcrumbs company={company} user={user} title="Organogram" />
+      <MyBreadcrumbs company={company.data} user={user} title="Organogram" />
 
-      <OrgChart
-        employees={companyExtra.employees}
-        companyId={params.companyId}
-      />
+      <OrgChart employees={companyExtra.data.employees} companyId={companyId} />
     </main>
   );
 }

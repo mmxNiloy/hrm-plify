@@ -8,7 +8,7 @@ import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 
 export default async function DashboardLayout({ children }: LayoutProps) {
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
   return (

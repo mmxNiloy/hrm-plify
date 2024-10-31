@@ -1,12 +1,4 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { Button } from "@/components/ui/button";
@@ -23,6 +15,7 @@ import DutyRosterDataTable from "@/components/custom/DataTable/Rota/DutyRosterDa
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -46,29 +39,44 @@ export default async function RotaDutyRosterPage({
   params,
   searchParams,
 }: Props) {
-  const company = await getCompanyData(params.companyId);
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+  const sParams = await searchParams;
+  const filters = getFilters(sParams);
+  const { page, limit } = getPaginationParams(sParams);
 
-  const { page, limit } = getPaginationParams(searchParams);
-  const filters = getFilters(searchParams);
+  const [company, companyExtraData, paginatedDutyRoster] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getDutyRosters({
+      company_id: companyId,
+      page,
+      limit,
+      filters,
+    }),
+  ]);
 
-  const paginatedDutyRoster = await getDutyRosters({
-    company_id: company.company_id,
-    page,
-    limit,
-    filters,
-  });
-
-  const companyExtraData = await getCompanyExtraData(params.companyId);
+  if (company.error || companyExtraData.error || paginatedDutyRoster.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Duty Roster</p>
+        <ErrorFallbackCard
+          error={
+            company.error ?? companyExtraData.error ?? paginatedDutyRoster.error
+          }
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Duty Roster</p>
       <div className="flex items-center justify-between gap-2">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Rota"
           title="Duty Roster"
@@ -83,7 +91,7 @@ export default async function RotaDutyRosterPage({
           <input
             className="hidden"
             readOnly
-            value={params.companyId}
+            value={companyId}
             name="company_id"
           />
           <input
@@ -133,23 +141,23 @@ export default async function RotaDutyRosterPage({
       </div>
       <div className="flex items-center justify-end gap-2 mt-2 mb-2">
         {/* Duty Roster Filter */}
-        <DutyRosterFilterDialog {...companyExtraData} />
+        <DutyRosterFilterDialog {...companyExtraData.data} />
 
         <span className="flex-grow"></span>
         <DutyRosterEditDialog
-          company_id={params.companyId}
-          {...companyExtraData}
+          company_id={companyId}
+          {...companyExtraData.data}
           type="employee"
         />
         {/* <DutyRosterEditDialog type="designation" /> */}
       </div>
 
       <DutyRosterDataTable
-        data={paginatedDutyRoster.data.map((item) => ({
+        data={paginatedDutyRoster.data.data.map((item) => ({
           ...item,
-          company_shifts: companyExtraData.shifts,
-          company_departments: companyExtraData.departments,
-          company_employees: companyExtraData.employees,
+          company_shifts: companyExtraData.data.shifts,
+          company_departments: companyExtraData.data.departments,
+          company_employees: companyExtraData.data.employees,
         }))}
       />
     </main>

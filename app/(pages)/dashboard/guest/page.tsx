@@ -12,7 +12,7 @@ import React from "react";
 
 export default async function GuestDashboard() {
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
   redirect("/dashboard/profile");

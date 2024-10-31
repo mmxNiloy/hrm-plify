@@ -1,13 +1,5 @@
 import EmployeeStatsSkeleton from "@/components/custom/Dashboard/Employee/EmployeeStatsSkeleton";
 import StaffReportCardSkeleton from "@/components/custom/Dashboard/Employee/StaffReportCard/skeleton";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 

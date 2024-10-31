@@ -16,7 +16,7 @@ interface IUpdateBod extends IEmployeeWithPersonalInfo {
 
 export async function PATCH(req: NextRequest, { params }: Props) {
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },

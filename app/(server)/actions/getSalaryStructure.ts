@@ -7,10 +7,7 @@ interface Props extends ISearchParamsProps {
   company_id: string | number;
 }
 
-export async function getSalaryStructure({
-  company_id,
-  searchParams,
-}: Props): Promise<ISalaryStructure[]> {
+export async function getSalaryStructure({ company_id, searchParams }: Props) {
   // Code
   return [];
 }

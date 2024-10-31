@@ -1,6 +1,7 @@
 "use server";
 
 import { IAttendanceReport } from "@/schema/AttendanceSchema";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
 interface Filter {
@@ -35,46 +36,34 @@ export async function getAbsentReports({
   page,
   filters,
 }: Props) {
-  console.log(
-    "Actions > Get Absent Report > Endpoint",
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const req = fetch(
     `${
       process.env.API_BASE_URL
     }/attendance/admin/generate-absent-report/${company_id}?page=${page}&limit=${limit}${generateFilterParams(
       filters
-    )}`
-  );
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-    const apiRes = await fetch(
-      `${
-        process.env.API_BASE_URL
-      }/attendance/admin/generate-absent-report/${company_id}?page=${page}&limit=${limit}${generateFilterParams(
-        filters
-      )}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    if (apiRes.ok) {
-      const res = (await apiRes.json()) as {
-        message: string;
-        data: IAttendanceReport[];
-      };
-      return res.data;
+    )}`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
     }
-    console.error("Actions > Get Absent Report > Failed to get Absent report", {
-      error: await apiRes.json(),
-      status: apiRes.status,
-    });
-  } catch (err) {
+  );
+
+  const { data, error } = await withError<{
+    message: string;
+    data: IAttendanceReport[];
+  }>(req);
+
+  if (error) {
     console.error(
       "Actions > Get Absent Report > Failed to get Absent report",
-      err
+      error
     );
+
+    return { error };
   }
 
-  return [];
+  return { data: data.data };
 }

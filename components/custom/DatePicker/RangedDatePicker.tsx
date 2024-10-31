@@ -70,6 +70,7 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
             <Calendar
               initialFocus
               mode="range"
+              captionLayout="dropdown-buttons"
               defaultMonth={date?.from}
               selected={date}
               onSelect={setDate}

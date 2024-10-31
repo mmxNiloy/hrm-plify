@@ -15,9 +15,29 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import AnnualPayEditPopover from "@/components/custom/Popover/Company/AnnualPayEditPopover";
 import { CompanyAnnualPayDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyAnnualPayDataTableColumns";
 import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function AnnualPayPage({ params }: CompanyByIDPageProps) {
-  const company = await getCompanyData(params.companyId);
+  const user = JSON.parse(
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+  const { data: company, error } = await getCompanyData(
+    (
+      await params
+    ).companyId
+  );
+
+  if (error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Company Annual Payments</p>
+        <ErrorFallbackCard error={error} />
+      </main>
+    );
+  }
 
   // TODO: Hit the api and get actual employment types
   const annualPays: IAnnualPay[] = [];
@@ -27,30 +47,7 @@ export default async function AnnualPayPage({ params }: CompanyByIDPageProps) {
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Annual Payments</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`..`}>Company Management</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`.`}
-                className="line-clamp-1 text-ellipsis max-w-32"
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Annual Pay</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs company={company} user={user} title="Annual Pay" />
 
         <AnimatedTrigger disabled label={"Add a new Annual Pay (WIP)"} />
         {/* <AnnualPayEditPopover

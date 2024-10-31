@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -37,28 +38,54 @@ export default async function EmployeeAttendancePage({
   params,
   searchParams,
 }: Props) {
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const employee = await getEmployeeData();
 
-  if (!employee.data) {
-    notFound();
+  const [employee, company, companyExtraData, sParams] = await Promise.all([
+    getEmployeeData(),
+    getCompanyDetails(companyId),
+    getCompanyExtraData(companyId),
+    searchParams,
+  ]);
+  const { limit, page } = getPaginationParams(sParams);
+
+  if (
+    employee.error ||
+    !employee.data.data ||
+    company.error ||
+    companyExtraData.error
+  ) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Attendance Report</p>
+        <ErrorFallbackCard
+          error={employee.error ?? company.error ?? companyExtraData.error}
+        />
+      </main>
+    );
   }
 
-  const company = await getCompanyDetails(params.companyId);
-
-  const companyExtraData = await getCompanyExtraData(params.companyId);
-  const filters = getFilters(searchParams, employee.data);
-  const { limit, page } = getPaginationParams(searchParams);
+  const filters = getFilters(sParams, employee.data.data);
 
   // Get report data from the server
   const reports = await getAttendanceReports({
-    company_id: company.company_id,
+    company_id: companyId,
     limit,
     page,
     filters,
   });
+
+  if (reports.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Attendance Report</p>
+        <ErrorFallbackCard error={reports.error} />
+      </main>
+    );
+  }
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Attendance Report</p>
@@ -66,7 +93,7 @@ export default async function EmployeeAttendancePage({
         <MyBreadcrumbs
           {...{
             user,
-            company,
+            company: company.data,
             title: "Attendance Report",
           }}
         />
@@ -74,14 +101,10 @@ export default async function EmployeeAttendancePage({
         <div className="flex gap-4">
           <form action={"/api/attendance/pdf"} method="POST" target="_blank">
             <div className="sr-only">
+              <Input readOnly defaultValue={companyId} name="company_id" />
               <Input
                 readOnly
-                defaultValue={company.company_id}
-                name="company_id"
-              />
-              <Input
-                readOnly
-                defaultValue={employee.data.employee_id}
+                defaultValue={employee.data.data.employee_id}
                 name="employee_id"
               />
               <Input
@@ -101,12 +124,15 @@ export default async function EmployeeAttendancePage({
               Download PDF (WIP)
             </Button>
           </form>
-          <AttendanceReportFilterPopover asEmployee {...companyExtraData} />
+          <AttendanceReportFilterPopover
+            asEmployee
+            {...companyExtraData.data}
+          />
         </div>
       </div>
 
       <StaticDataTable
-        data={reports}
+        data={reports.data}
         columns={AttendanceReportDataTableColumns}
         // pageCount={paginatedAttendance.total_page}
       />

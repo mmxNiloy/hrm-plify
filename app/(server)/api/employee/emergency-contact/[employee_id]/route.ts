@@ -7,7 +7,8 @@ export async function GET(
   { params }: { params: { employee_id: string } }
 ) {
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
   if (!session) {
     return NextResponse.json(

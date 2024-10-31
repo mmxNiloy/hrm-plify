@@ -76,7 +76,7 @@ export default function AttendanceGenerationTable({
       setLoading(true);
 
       const mAttendance = await generateAttendance(data);
-      if (!mAttendance) {
+      if (mAttendance.error) {
         toast({
           title: "Attendance Generation Failed",
           description:
@@ -84,7 +84,7 @@ export default function AttendanceGenerationTable({
           variant: "destructive",
         });
       } else {
-        setAttendance(mAttendance.new_records);
+        setAttendance(mAttendance.data.new_records);
       }
 
       setLoading(false);

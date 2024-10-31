@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   const limit = Number.parseInt(req.nextUrl.searchParams.get("limit") ?? "10");
 
   // Check session
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY);
   if (!session) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Check session
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY);
   if (!session) {
     return NextResponse.json(
       { message: "Session expired. Login again." },

@@ -1,12 +1,4 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { IEmployeeUserRole, IUser } from "@/schema/UserSchema";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
@@ -19,35 +11,48 @@ import EmployeeUserRoleEditDialog from "@/components/custom/Dialog/UserAccess/Em
 import { EmployeeUserRoleDataTableColumns } from "@/components/custom/DataTable/Columns/UserAccess/EmployeeUserRoleDataTableColumns";
 import { cookies } from "next/headers";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function UserRolePage({ params, searchParams }: Props) {
-  const { limit, page } = getPaginationParams(searchParams);
-
-  const company = await getCompanyData(params.companyId);
-  const companyExtraData = await getCompanyExtraData(params.companyId);
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+  const { limit, page } = getPaginationParams(await searchParams);
 
   // TODO: hit the api to get data
   const userConfigData: IEmployeeUserRole[] = []; // Placeholder
+
+  const [company, companyExtraData] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+  ]);
+
+  if (company.error || companyExtraData.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Shift Management</p>
+        <ErrorFallbackCard error={company.error ?? companyExtraData.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Role Management</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="User Access"
           title="Role Management"
         />
 
         <EmployeeUserRoleEditDialog
-          company_id={company.company_id}
-          employees={companyExtraData.employees}
+          company_id={companyId}
+          employees={companyExtraData.data.employees}
         />
       </div>
 

@@ -1,12 +1,4 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { ISearchParamsProps } from "@/utils/Types";
@@ -18,6 +10,7 @@ import ShiftManagementDataTable from "@/components/custom/DataTable/Rota/ShiftMa
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -25,34 +18,47 @@ export default async function RotaShiftManagementPage({
   params,
   searchParams,
 }: Props) {
-  const { limit, page } = getPaginationParams(searchParams);
+  const companyId = (await params).companyId;
+  const sParams = await searchParams;
+  const { limit, page } = getPaginationParams(sParams);
 
-  const company = await getCompanyData(params.companyId);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const paginatedShifts = await getShifts({
-    company_id: params.companyId,
-    page,
-    limit,
-  });
+  const [company, paginatedShifts] = await Promise.all([
+    getCompanyData(companyId),
+    getShifts({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+  ]);
+
+  if (company.error || paginatedShifts.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Shift Management</p>
+        <ErrorFallbackCard error={company.error ?? paginatedShifts.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Shift Management</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Rota"
           title="Shift Management"
         />
 
-        <ShiftManagementEditDialog company_id={company.company_id} />
+        <ShiftManagementEditDialog company_id={companyId} />
       </div>
 
-      <ShiftManagementDataTable data={paginatedShifts.data} />
+      <ShiftManagementDataTable data={paginatedShifts.data.data} />
     </main>
   );
 }

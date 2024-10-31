@@ -1,58 +1,71 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import React, { Suspense } from "react";
+import React from "react";
 import { CompanyByIDPageProps } from "../../../PageProps";
-import { redirect } from "next/navigation";
-import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
-import EmployeeOnboardingDialogSkeleton from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/skeleton";
-import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/wrapper";
-import UserDataTable from "@/components/custom/DataTable/Company/UserDataTable";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import EmployeeOnboardingDialog from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
+import { StaticDataTable } from "@/components/ui/data-table";
+import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyUserDataTableColumns";
+import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
-export default async function AllEmployeePage({
-  params,
-}: CompanyByIDPageProps) {
+interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
+
+export default async function AllEmployeePage({ params, searchParams }: Props) {
   // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(params.companyId);
+  const companyId = (await params).companyId;
+  const sParams = await searchParams;
+  const { limit, page } = getPaginationParams(sParams);
 
-  // await wait(5000);
+  const user = JSON.parse(
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+
+  const [company, companyExtraData, employees] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getCompanyEmployees({ companyId, page, limit }),
+  ]);
+
+  if (company.error || companyExtraData.error || employees.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">All Employees</p>
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? employees.error}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">All Employees</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Company Management"
           title="All Employees"
         />
 
         {/* <EmployeeCreationDialog /> */}
-        <Suspense fallback={<EmployeeOnboardingDialogSkeleton />}>
-          <EmployeeOnboardingDialogWrapper
-            session={session}
-            company_id={params.companyId}
-          />
-        </Suspense>
+        <EmployeeOnboardingDialog
+          company_id={companyId}
+          {...companyExtraData.data}
+        />
       </div>
 
-      {/* Main content, a table of employees */}
-      <UserDataTable company_id={params.companyId} />
+      <StaticDataTable
+        data={employees.data.data}
+        columns={CompanyUserDataTableColumns}
+        pageCount={employees.data.total_page}
+      />
     </main>
   );
 }

@@ -1,12 +1,4 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { ICompanyDetails } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -16,25 +8,36 @@ import { redirect } from "next/navigation";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function CompanyByIDPage({
   params,
 }: CompanyByIDPageProps) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var company: ICompanyDetails = await getCompanyDetails(params.companyId);
+  var company = await getCompanyDetails(companyId);
 
   // Guard unauthorized access
   if (
     user.user_roles?.roles.role_name !== "Super Admin" &&
     user.user_roles?.roles.role_name !== "Admin" &&
-    user.usercompany?.company_id != Number.parseInt(`${params.companyId}`)
+    user.usercompany?.company_id != Number.parseInt(`${companyId}`)
   ) {
     redirect(
       `/dashboard/company/${user.usercompany?.company_id}/?_ref=unauthorized-access`
+    );
+  }
+
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Company Details</p>
+
+        <ErrorFallbackCard error={company.error} />
+      </main>
     );
   }
 
@@ -42,9 +45,9 @@ export default async function CompanyByIDPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Details</p>
 
-      <MyBreadcrumbs company={company} user={user} />
+      <MyBreadcrumbs company={company.data} user={user} />
 
-      <CompanyDetailTabs company={company} />
+      <CompanyDetailTabs company={company.data} />
     </main>
   );
 }

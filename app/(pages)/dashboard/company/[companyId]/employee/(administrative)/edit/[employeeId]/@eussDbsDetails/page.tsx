@@ -8,42 +8,28 @@ import { EditEmployeeByIdProps } from "../PageProps";
 import EussDbsEditDialog from "@/components/custom/Dialog/Employee/EussDbsEditDialog";
 import EussFormFragment from "@/components/custom/Form/Fragment/Employee/EussFormFragment";
 import DbsFormFragment from "@/components/custom/Form/Fragment/Employee/DbsFormFragment";
+import { getEussDBInfo } from "@/app/(server)/actions/employee/getEussDBInfo";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function EussDetailsSlot({
   params,
 }: EditEmployeeByIdProps) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const { employeeId, companyId } = await params;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var euss: IEmployeeEussDbsData | undefined = undefined;
+  const { data: euss, error } = await getEussDBInfo(employeeId);
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/get-euss-dbs-data/${params.employeeId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
+  if (error) {
+    return (
+      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-row items-center justify-between">
+          <p className="text-lg font-semibold">EUSS/Time Limit Information</p>
+        </div>
+        <ErrorFallbackCard error={error} />
+      </div>
     );
-
-    if (!apiRes.ok) {
-      console.error("Edit Employee > EUSS DBS Info > Data not found");
-      redirect("/not-found");
-    } else {
-      const result = (await apiRes.json()) as {
-        message: string;
-        data?: IEmployeeEussDbsData;
-      };
-      euss = result.data;
-
-      //   console.log("Data found", visaBrp);
-    }
-  } catch (err) {
-    console.error("Edit Employee > EUSS DBS Info > Data not found");
-    redirect("/not-found");
   }
 
   return (
@@ -51,7 +37,7 @@ export default async function EussDetailsSlot({
       <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
         <div className="col-span-full w-full flex flex-row items-center justify-between">
           <p className="text-lg font-semibold">EUSS/Time Limit Information</p>
-          <EussDbsEditDialog data={euss} employee_id={params.employeeId} />
+          <EussDbsEditDialog data={euss} employee_id={employeeId} />
         </div>
         <EussFormFragment readOnly data={euss} />
       </div>

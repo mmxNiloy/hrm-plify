@@ -7,6 +7,7 @@ import { LayoutProps } from "@/utils/Types";
 import AttendanceDashboardSidebar from "@/components/custom/Dashboard/Sidebar/AttendanceDashboardSidebar";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -15,15 +16,24 @@ export default async function AttendanceDashboardPageLayout({
   params,
 }: Props) {
   // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const company = await getCompanyData(params.companyId);
+  const company = await getCompanyData(companyId);
+
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Attendance Management</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
+  }
 
   return (
     <div>
-      <AttendanceDashboardSidebar company={company} />
+      <AttendanceDashboardSidebar company={company.data} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

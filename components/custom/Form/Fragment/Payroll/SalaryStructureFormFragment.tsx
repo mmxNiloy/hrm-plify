@@ -47,9 +47,9 @@ export default function SalaryStructureFormFragment({
         <MultiSelect
           disabled={disabled || readOnly || asEditable}
           defaultValue={data ? [`${data.employee_id}`] : []}
-          onValueChange={(employees) => {
+          onValueChange={(emps) => {
             if (onEmployeesSelect) {
-              onEmployeesSelect(employees);
+              onEmployeesSelect(emps);
             }
           }}
           contentClassName="min-w-96"

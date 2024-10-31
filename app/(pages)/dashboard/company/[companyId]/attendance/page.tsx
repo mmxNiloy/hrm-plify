@@ -1,5 +1,4 @@
 "use server";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -12,10 +11,11 @@ import { getPaginationParams } from "@/utils/Misc";
 import { getAttendanceReports } from "@/app/(server)/actions/getAttendanceReports";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { AttendanceReportDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceReportDataTableColumns";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -35,22 +35,35 @@ export default async function AttendanceReportPage({
   params,
   searchParams,
 }: Props) {
+  const sParams = await searchParams;
+  const companyId = (await params).companyId;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const company = await getCompanyDetails(params.companyId);
+  const filters = getFilters(sParams);
+  const { limit, page } = getPaginationParams(sParams);
 
-  const companyExtraData = await getCompanyExtraData(params.companyId);
-  const filters = getFilters(searchParams);
-  const { limit, page } = getPaginationParams(searchParams);
+  const [company, companyExtraData, reports] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getAttendanceReports({
+      company_id: companyId,
+      limit,
+      page,
+      filters,
+    }),
+  ]);
 
-  // Get report data from the server
-  const reports = await getAttendanceReports({
-    company_id: company.company_id,
-    limit,
-    page,
-    filters,
-  });
+  if (company.error || companyExtraData.error || reports.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Attendance Report</p>
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? reports.error}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
@@ -59,7 +72,7 @@ export default async function AttendanceReportPage({
         <MyBreadcrumbs
           {...{
             user,
-            company,
+            company: company.data,
             title: "Attendance Report",
           }}
         />
@@ -67,11 +80,7 @@ export default async function AttendanceReportPage({
         <div className="flex gap-4">
           <form action={"/api/attendance/pdf"} method="POST" target="_blank">
             <div className="sr-only">
-              <Input
-                readOnly
-                defaultValue={company.company_id}
-                name="company_id"
-              />
+              <Input readOnly defaultValue={companyId} name="company_id" />
               <Input
                 readOnly
                 defaultValue={filters.employee_id}
@@ -94,12 +103,12 @@ export default async function AttendanceReportPage({
               Download PDF (WIP)
             </Button>
           </form>
-          <AttendanceReportFilterPopover {...companyExtraData} />
+          <AttendanceReportFilterPopover {...companyExtraData.data} />
         </div>
       </div>
 
       <StaticDataTable
-        data={reports}
+        data={reports.data}
         columns={AttendanceReportDataTableColumns}
         // pageCount={paginatedAttendance.total_page}
       />

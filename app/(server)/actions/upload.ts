@@ -1,45 +1,40 @@
 "use server";
 
+import { withError } from "@/utils/Debug";
 import SiteConfig from "@/utils/SiteConfig";
 import { cookies } from "next/headers";
 
 export async function upload(file: File) {
   if (file.size > SiteConfig.maxFileSize) {
-    return { error: { message: "File too large" } };
+    return {
+      error: new Error("File too large", {
+        cause: `Trying to upload a file greater than ${SiteConfig.maxFileSize} bytes`,
+      }),
+    };
   }
 
   const fd = new FormData();
   fd.append("file", file);
 
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-    const apiRes = await fetch(`${process.env.API_BASE_URL}/upload`, {
-      headers: {
-        Authorization: `Bearer ${session}`,
-      },
-      method: "POST",
-      body: fd,
-    });
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const req = fetch(`${process.env.API_BASE_URL}/upload`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+    method: "POST",
+    body: fd,
+  });
 
-    if (apiRes.ok) {
-      const data = (await apiRes.json()) as {
-        message: string;
-        fileUrl: string;
-      };
-      return {
-        data: {
-          message: data.message,
-          fileUrl: data.fileUrl.replace("http:", "https:"),
-        },
-      };
-    }
+  const { data, error } = await withError<{
+    message: string;
+    fileUrl: string;
+  }>(req);
 
-    return {
-      error: { message: "Failed to upload file", reason: await apiRes.json() },
-    };
-  } catch (err) {
-    console.error("Actions > Upload file > Failed to upload file", err);
-
-    return { error: { message: "Failed to upload file", reason: err } };
+  if (error) {
+    console.error("Actions > Upload file > Failed to upload file", error);
+    return { error };
   }
+
+  return { data };
 }

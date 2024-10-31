@@ -6,14 +6,6 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
@@ -30,6 +22,7 @@ import { ComboBox } from "@/components/ui/combobox";
 import { ButtonWarn } from "@/styles/button.tailwind";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -37,34 +30,34 @@ export default async function CompanyLeaveReportPage({
   params,
   searchParams,
 }: Props) {
-  const { page, limit } = getPaginationParams(searchParams);
+  const companyId = (await params).companyId;
+  const sParams = await searchParams;
+  const { page, limit } = getPaginationParams(sParams);
 
   // Search filters
-  const yearFilter = (searchParams.year as string | undefined) ?? "";
-  const employeeIdFilter =
-    (searchParams.employee_id as string | undefined) ?? "";
+  const yearFilter = (sParams.year as string | undefined) ?? "";
+  const employeeIdFilter = (sParams.employee_id as string | undefined) ?? "";
 
-  const company = await getCompanyData(params.companyId);
+  const company = await getCompanyData(companyId);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var balance: ILeaveBalance[] = [];
-  var total_page: number = 1;
-
-  try {
-    // TODO: Hit the api to get data
-  } catch (_) {
-    balance = [];
-    total_page = 1;
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Leave Report</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
   }
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Leave Type</p>
+      <p className="text-xl font-semibold">Leave Report</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Leave"
           title="Leave Balance"
@@ -139,12 +132,6 @@ export default async function CompanyLeaveReportPage({
           </Button>
         </div>
       </form>
-
-      {/* <StaticDataTable
-    columns={LeaveBalanceDataTableColumns}
-    data={balance}
-    pageCount={total_page}
-  /> */}
     </main>
   );
 }

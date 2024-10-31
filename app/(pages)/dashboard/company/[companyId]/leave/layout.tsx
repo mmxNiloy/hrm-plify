@@ -5,6 +5,7 @@ import { LayoutProps } from "@/utils/Types";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import LeaveDashboardSidebar from "@/components/custom/Dashboard/Sidebar/LeaveDashboardSidebar";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -12,11 +13,21 @@ export default async function CompanyLeaveDashboardLayout({
   children,
   params,
 }: Props) {
-  const company = await getCompanyData(params.companyId);
+  const companyId = (await params).companyId;
+  const company = await getCompanyData(companyId);
+
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Leave Management Dashboard</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
+  }
 
   return (
     <div>
-      <LeaveDashboardSidebar company={company} />
+      <LeaveDashboardSidebar company={company.data} />
       <SidebarViewport>{children}</SidebarViewport>
     </div>
   );
