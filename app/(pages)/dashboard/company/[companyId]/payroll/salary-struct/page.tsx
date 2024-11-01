@@ -3,7 +3,7 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
@@ -12,6 +12,7 @@ import { SalaryStructureDataTableColumns } from "@/components/custom/DataTable/C
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import SalaryStructureEditDialog from "@/components/custom/Dialog/Payroll/SalaryStructureEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getPaginationParams } from "@/utils/Misc";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -19,6 +20,7 @@ export default async function SalaryStructPage({
   params,
   searchParams,
 }: Props) {
+  const { page, limit } = getPaginationParams(await searchParams);
   const companyId = (await params).companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -28,16 +30,19 @@ export default async function SalaryStructPage({
     getCompanyData(companyId),
     getSalaryStructure({
       company_id: companyId,
-      searchParams,
+      page,
+      limit,
     }),
     getCompanyExtraData(companyId),
   ]);
 
-  if (company.error || companyExtra.error) {
+  if (company.error || companyExtra.error || salaryStructs.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Salary Structure</p>
-        <ErrorFallbackCard error={company.error ?? companyExtra.error} />
+        <ErrorFallbackCard
+          error={company.error ?? companyExtra.error ?? salaryStructs.error}
+        />
       </main>
     );
   }
@@ -59,13 +64,14 @@ export default async function SalaryStructPage({
         />
       </div>
 
-      {/* <DataTable
+      <StaticDataTable
         columns={SalaryStructureDataTableColumns}
-        data={salaryStructs.map((item) => ({
+        data={salaryStructs.data.data.map((item) => ({
           ...item,
-          companyEmployees: companyExtra.employees,
+          companyEmployees: companyExtra.data.employees,
         }))}
-      /> */}
+        pageCount={salaryStructs.data.total_page}
+      />
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import { IEmployeeWithUserMetadata } from "./EmployeeSchema";
+import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface ISalaryStructure {
   id: number;
@@ -10,8 +11,15 @@ export interface ISalaryStructure {
   tax_percentage: number;
   created_at?: Date;
   updated_at?: Date;
+}
 
-  employees?: IEmployeeWithUserMetadata;
+export interface IEmployeeWithSalaryStructure
+  extends IEmployeeWithUserMetadata {
+  salaryStructure?: ISalaryStructure;
+}
+
+export interface IPaginatedEmployeeSalaryStructure extends IPaginatedResponse {
+  data: IEmployeeWithSalaryStructure[];
 }
 
 export interface IBonus {
@@ -43,8 +51,9 @@ export interface IPayroll {
   status: "Processed" | "Pending" | "Failed";
 
   // Bonus and deduction refs
-  bonus?: IBonus;
+  bonuse?: IBonus;
   deduction?: IDeduction;
+  employee?: IEmployeeWithSalaryStructure;
 
   created_at?: Date;
   updated_at?: Date;

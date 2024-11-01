@@ -4,7 +4,7 @@ import Icons from "@/components/ui/icons";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { months } from "@/utils/Misc";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 
@@ -20,8 +20,15 @@ const MonthPicker = React.forwardRef<HTMLInputElement, MonthPickerProps>(
     { className, contentClassName, name, required, disabled, ...props },
     ref
   ) => {
-    const [month, setMonth] = useState<string>(months[new Date().getMonth()]);
-    const [year, setYear] = useState<number>(new Date().getFullYear());
+    const defaultDate = useMemo(() => {
+      if (props.defaultValue) {
+        return new Date(props.defaultValue as string);
+      }
+
+      return new Date();
+    }, [props.defaultValue]);
+    const [month, setMonth] = useState<string>(months[defaultDate.getMonth()]);
+    const [year, setYear] = useState<number>(defaultDate.getFullYear());
     return (
       <>
         <Input
@@ -31,13 +38,16 @@ const MonthPicker = React.forwardRef<HTMLInputElement, MonthPickerProps>(
           className="sr-only"
           ref={ref}
           readOnly
-          value={`${year}-${months.indexOf(month) + 1}-01`}
+          value={`${year}-${(months.indexOf(month) + 1)
+            .toString()
+            .padStart(2, "0")}-01`}
           type="date"
           {...props}
         />
         <Popover>
           <PopoverTrigger asChild>
             <Button
+              disabled={disabled}
               variant={"outline"}
               className={cn("gap-2 justify-between", className)}
             >

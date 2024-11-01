@@ -1,21 +1,18 @@
 "use server";
 
-import { IPaginatedEmployeeSalaryStructure } from "@/schema/Payroll";
+import {
+  IPaginatedEmployeeSalaryStructure,
+  ISalaryStructure,
+} from "@/schema/Payroll";
 import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
-interface Props {
-  company_id: string | number;
-  page: number;
-  limit: number;
-}
-
-export async function getSalaryStructure({ company_id, page, limit }: Props) {
+export async function getEmployeeSalaryStructure(employee_id: number) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
   const req = fetch(
-    `${process.env.API_BASE_URL}/payroll/salary-structure/${company_id}?page=${page}&limit=${limit}`,
+    `${process.env.API_BASE_URL}/payroll/salary-structure/employee/${employee_id}`,
     {
       headers: {
         Authorization: `Bearer ${session}`,
@@ -24,9 +21,10 @@ export async function getSalaryStructure({ company_id, page, limit }: Props) {
     }
   );
 
-  const { data, error } = await withError<IPaginatedEmployeeSalaryStructure>(
-    req
-  );
+  const { data, error } = await withError<{
+    message: string;
+    data: ISalaryStructure;
+  }>(req);
 
   if (error) {
     console.error(

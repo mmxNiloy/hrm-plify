@@ -14,14 +14,19 @@ import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import { IPayroll, ISalaryStructure } from "@/schema/Payroll";
+import {
+  IEmployeeWithSalaryStructure,
+  IPayroll,
+  ISalaryStructure,
+} from "@/schema/Payroll";
 import SalaryStructureFormFragment from "../../Form/Fragment/Payroll/SalaryStructureFormFragment";
 import PayrollFormFragment from "../../Form/Fragment/Payroll/PayrollFormFragment";
+import { getEmployeeSalaryStructure } from "@/app/(server)/actions/getEmployeeSalaryStructure";
 
 interface Props {
   company_id: number;
@@ -42,7 +47,32 @@ export default function PayrollEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
-  const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<string | undefined>(
+    undefined
+  );
+  const [salaryStruct, setSalaryStruct] = useState<
+    ISalaryStructure | undefined
+  >(undefined);
+
+  const getSalaryStructureData = useCallback(async () => {
+    console.log("Get Employee Salary Structure > BEGIN");
+    if (!selectedEmployee) return;
+    setLoading(true);
+
+    const sal = await getEmployeeSalaryStructure(
+      Number.parseInt(selectedEmployee)
+    );
+    if (sal.data) {
+      setSalaryStruct(sal.data.data);
+    }
+
+    setLoading(false);
+  }, [selectedEmployee]);
+
+  useEffect(() => {
+    // Get salary structure for a selected employee
+    getSalaryStructureData();
+  }, [getSalaryStructureData]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,25 +81,25 @@ export default function PayrollEditDialog({
 
       const fd = new FormData(e.currentTarget);
 
-      const salStruct: IPayroll = {
+      const payroll = {
         id: data?.id ?? 0,
         // company_id: Number.parseInt(`${company_id}`),
         employee_id: Number.parseInt(
-          (fd.get("employee_id") as string | undefined) ?? "0"
+          selectedEmployee ??
+            (fd.get("employee_id") as string | undefined) ??
+            "0"
         ),
-        pay_period: new Date(
-          (fd.get("pay_period") as string | undefined) ?? new Date()
-        ),
-        gross_salary: Number.parseInt(
+        pay_period: fd.get("pay_period") as string | undefined,
+        gross_salary: Number.parseFloat(
           (fd.get("gross_salary") as string | undefined) ?? "0"
         ),
-        net_salary: Number.parseInt(
+        net_salary: Number.parseFloat(
           (fd.get("net_salary") as string | undefined) ?? "0"
         ),
-        overtime_pay: Number.parseInt(
+        overtime_pay: Number.parseFloat(
           (fd.get("overtime_pay") as string | undefined) ?? "0"
         ),
-        tax_deduction: Number.parseInt(
+        tax_deduction: Number.parseFloat(
           (fd.get("tax_deduction") as string | undefined) ?? "0"
         ),
         status:
@@ -78,18 +108,27 @@ export default function PayrollEditDialog({
             | "Processed"
             | "Failed"
             | undefined) ?? "Pending",
+        bonus_amount: Number.parseFloat(
+          (fd.get("bonus_amount") as string | undefined) ?? "0"
+        ),
+        bonus_reason: (fd.get("bonus_reason") as string | undefined) ?? "",
+        deduction_amount: Number.parseFloat(
+          (fd.get("deduction_amount") as string | undefined) ?? "0"
+        ),
+        deduction_reason:
+          (fd.get("deduction_reason") as string | undefined) ?? "",
       };
+
+      console.log("Payroll Edit dialog > Form Data", payroll);
 
       setLoading(true);
 
       try {
-        const apiRes = await fetch(`/api/payroll/salary-struct`, {
-          method: data ? "PATCH" : "POST",
+        const apiRes = await fetch(`/api/payroll`, {
+          method: data ? "PUT" : "POST",
           body: JSON.stringify({
-            ...salStruct,
-            selected_employees: selectedEmployees.map((emp) =>
-              Number.parseInt(emp)
-            ),
+            payroll,
+            employee_ids: [selectedEmployee],
           }),
         });
 
@@ -123,26 +162,35 @@ export default function PayrollEditDialog({
 
       setLoading(false);
     },
-    [data, router, selectedEmployees, toast]
+    [data, router, selectedEmployee, toast]
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(e) => {
+        if (!e) {
+          setSelectedEmployee(undefined);
+          setSalaryStruct(undefined);
+          setOpen(false);
+        } else setOpen(true);
+      }}
+    >
       <DialogTrigger asChild>
         {asIcon ? (
-          <Button variant={"ghost"} size="icon">
-            <Icons.edit />
+          <Button variant={"ghost"} size="icon" title="Generate Payroll">
+            <Icons.printer />
           </Button>
         ) : (
           <Button className={ButtonBlue}>
-            <Icons.plus /> Create Payroll
+            <Icons.printer /> Generate Payroll
           </Button>
         )}
       </DialogTrigger>
 
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>
-          <DialogTitle>{data ? "Update" : "Create"} Payroll</DialogTitle>
+          <DialogTitle>Generate Payroll</DialogTitle>
           <DialogDescription>
             Fill out the form appropriately.
           </DialogDescription>
@@ -150,22 +198,24 @@ export default function PayrollEditDialog({
             Fields marked by an asterisk (
             <span className="text-red-500">*</span>) are required.
           </DialogDescription>
-          <DialogDescription>
+          {/* <DialogDescription>
             Bonus and deduction options are available for one employee only.
-          </DialogDescription>
+          </DialogDescription> */}
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
               <PayrollFormFragment
-                onEmployeesSelectChange={(employees) => {
-                  setSelectedEmployees(employees);
+                onEmployeeSelect={(employee) => {
+                  setSelectedEmployee(employee);
                 }}
                 disabled={loading}
                 data={data}
                 employees={employees}
                 asEditable={asEditable}
+                salaryStruct={salaryStruct}
+                loading={loading}
               />
             </div>
           </ScrollArea>
@@ -184,7 +234,7 @@ export default function PayrollEditDialog({
             </DialogClose>
             <Button
               type="submit"
-              disabled={loading}
+              disabled={loading || !salaryStruct}
               className={ButtonSuccess}
               size="sm"
             >

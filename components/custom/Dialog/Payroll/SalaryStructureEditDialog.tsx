@@ -30,6 +30,7 @@ interface Props {
   asIcon?: boolean;
   asEditable?: boolean;
   employees?: IEmployeeWithUserMetadata[];
+  currentEmployee?: number;
 }
 
 export default function SalaryStructureEditDialog({
@@ -38,12 +39,19 @@ export default function SalaryStructureEditDialog({
   employees = [],
   company_id,
   asEditable = false,
+  currentEmployee,
 }: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
-  const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const [selectedEmployees, setSelectedEmployees] = useState<string[]>(
+    data
+      ? [`${data.employee_id}`]
+      : currentEmployee
+      ? [`${currentEmployee}`]
+      : []
+  );
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -79,13 +87,15 @@ export default function SalaryStructureEditDialog({
 
       try {
         const apiRes = await fetch(`/api/payroll/salary-struct`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify({
-            ...salStruct,
-            selected_employees: selectedEmployees.map((emp) =>
-              Number.parseInt(emp)
-            ),
-          }),
+          method: data ? "PUT" : "POST",
+          body: data
+            ? JSON.stringify(salStruct)
+            : JSON.stringify({
+                salary_structure: salStruct,
+                employee_ids: selectedEmployees.map((emp) =>
+                  Number.parseInt(emp)
+                ),
+              }),
         });
 
         if (apiRes.ok) {
@@ -151,6 +161,7 @@ export default function SalaryStructureEditDialog({
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
               <SalaryStructureFormFragment
+                currentEmployee={currentEmployee}
                 onEmployeesSelectChange={(employees) => {
                   setSelectedEmployees(employees);
                 }}

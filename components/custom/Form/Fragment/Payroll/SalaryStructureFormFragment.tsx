@@ -30,6 +30,7 @@ interface Props extends IFormFragmentProps<ISalaryStructure> {
   asEditable?: boolean;
   employees?: IEmployeeWithUserMetadata[];
   onEmployeesSelectChange?: (employees: string[]) => void;
+  currentEmployee?: number;
 }
 
 export default function SalaryStructureFormFragment({
@@ -39,6 +40,7 @@ export default function SalaryStructureFormFragment({
   asEditable = false,
   employees = [],
   onEmployeesSelectChange: onEmployeesSelect,
+  currentEmployee,
 }: Props) {
   return (
     <>
@@ -46,7 +48,13 @@ export default function SalaryStructureFormFragment({
         <Label className={RequiredAsterisk}>Employee</Label>
         <MultiSelect
           disabled={disabled || readOnly || asEditable}
-          defaultValue={data ? [`${data.employee_id}`] : []}
+          defaultValue={
+            data
+              ? [`${data.employee_id}`]
+              : currentEmployee
+              ? [`${currentEmployee}`]
+              : []
+          }
           onValueChange={(emps) => {
             if (onEmployeesSelect) {
               onEmployeesSelect(emps);
@@ -56,7 +64,7 @@ export default function SalaryStructureFormFragment({
           key={"employees-multiselect"}
           placeholder="Select Employees"
           options={employees.map((item: IEmployeeWithUserMetadata) => ({
-            label: getFullNameOfEmployee(item),
+            label: `(${item.employee_code}) - ${getFullNameOfEmployee(item)}`,
             value: `${item.employee_id}`,
           }))}
         />
@@ -80,7 +88,7 @@ export default function SalaryStructureFormFragment({
       <div className="flex flex-col gap-2 col-span-full">
         <Label className={RequiredAsterisk}>House Allowance</Label>
         <Input
-          key={`basic-salary-${data?.house_allowance}`}
+          key={`house-allowance-${data?.house_allowance}`}
           defaultValue={data?.house_allowance ?? 0}
           min={0}
           name="house_allowance"
@@ -95,7 +103,7 @@ export default function SalaryStructureFormFragment({
       <div className="flex flex-col gap-2 col-span-full">
         <Label className={RequiredAsterisk}>Medical Allowance</Label>
         <Input
-          key={`basic-salary-${data?.medical_allowance}`}
+          key={`medical-allowance-${data?.medical_allowance}`}
           defaultValue={data?.medical_allowance ?? 0}
           min={0}
           name="medical_allowance"
@@ -110,7 +118,7 @@ export default function SalaryStructureFormFragment({
       <div className="flex flex-col gap-2 col-span-full">
         <Label className={RequiredAsterisk}>Transport Allowance</Label>
         <Input
-          key={`basic-salary-${data?.transport_allowance}`}
+          key={`transport-allowance-${data?.transport_allowance}`}
           defaultValue={data?.transport_allowance ?? 0}
           min={0}
           name="transport_allowance"

@@ -22,8 +22,8 @@ export default function ErrorFallbackCard({ error }: { error?: Error }) {
   );
   return (
     <Card className="col-span-full w-full">
-      <CardContent className="w-full flex flex-col items-center justify-center gap-4">
-        <Icons.rabbit />
+      <CardContent className="w-full flex flex-col items-center justify-center gap-4 p-4">
+        <Icons.rabbit className="size-16" />
         <p className="text-2xl font-bold">Oops! Something went wrong!</p>
         <p className="text-xl font-bold">
           Please try again. If the problem persists, report a bug.

@@ -1,12 +1,6 @@
 import { ILeaveType } from "@/schema/LeaveSchema";
-import { ISalaryStructure } from "@/schema/Payroll";
-import { IOffDaysBase, IShift } from "@/schema/RotaSchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
-interface ReqBody extends ISalaryStructure {
-  employee_ids: number[];
-}
 
 export async function POST(req: NextRequest) {
   // Check if the user is logged in
@@ -18,13 +12,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as ReqBody;
+  const data = await req.json();
 
-  console.log("POST > Create salary structure > Body data", data);
+  console.log("POST > Create payroll > Body data", data);
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/payroll/salary-structure`,
+      `${process.env.API_BASE_URL}/payroll/salary/create`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -38,12 +32,9 @@ export async function POST(req: NextRequest) {
     const res = await apiRes.json();
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
-    console.error(
-      "POST > Create Salary Structure > Failed to create salary structure",
-      err
-    );
+    console.error("POST > Create payroll > Failed to create payroll", err);
     return NextResponse.json(
-      { message: "Failed to create salary structure" },
+      { message: "Failed to create payroll" },
       { status: 500 }
     );
   }
@@ -59,13 +50,13 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as ISalaryStructure;
+  const data = await req.json();
 
-  console.log("PUT > Update salary structure > Request Body", data);
+  console.log("PUT > Update payroll > Request Body", data);
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/payroll/salary-structure/${data.id}`,
+      `${process.env.API_BASE_URL}/payroll/salary/${data.id}`,
       {
         method: "PUT",
         body: JSON.stringify(data),
@@ -79,12 +70,9 @@ export async function PUT(req: NextRequest) {
     const res = await apiRes.json();
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
-    console.error(
-      "PUT > Update salary structure > Failed to update salary structure",
-      err
-    );
+    console.error("PUT > Update payroll > Failed to update payroll", err);
     return NextResponse.json(
-      { message: "Failed to update salary structure" },
+      { message: "Failed to update payroll" },
       { status: 500 }
     );
   }
