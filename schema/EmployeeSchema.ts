@@ -2,6 +2,7 @@ import { IDepartment } from "./CompanySchema";
 import { IDesignation } from "./DesignationSchema";
 import { ILeaveApprover } from "./LeaveSchema";
 import { ITreeNode } from "./OrganogramSchema";
+import { IPaginatedResponse } from "./PaginatedResponse";
 import { IUser, IUserBase } from "./UserSchema";
 
 export interface IEmployee {
@@ -153,6 +154,20 @@ export interface IEmployeePassportDetail {
   remark?: string;
   created_at?: Date; // Auto-generated
   updated_at?: Date; // Auto-generated
+}
+
+export interface IEmployeeWithVisaDetails extends IEmployeeVisaBrp {
+  employee: IEmployeeWithUserMetadata;
+}
+
+export interface IEmployeeDocument extends IEmployeeWithUserMetadata {
+  visa_brp?: IEmployeeVisaBrp;
+  emp_passport?: IEmployeePassportDetail;
+  emp_euss_dbss_data?: IEmployeeEussDbsData;
+}
+
+export interface IPaginatedEmployeeDocument extends IPaginatedResponse {
+  data: IEmployeeDocument[];
 }
 
 export interface IEmployeeEmergencyContact {

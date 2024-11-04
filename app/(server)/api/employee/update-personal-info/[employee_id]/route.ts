@@ -26,6 +26,8 @@ export async function PATCH(req: NextRequest, { params }: Props) {
 
   const bod = (await req.json()) as IUpdateBod;
 
+  console.log("PATCH > Update Employee Personal Data >", bod);
+
   try {
     const apiRes = await fetch(
       `${process.env.API_BASE_URL}/employee/update-personal-data/${

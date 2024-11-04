@@ -64,18 +64,18 @@ export default function MyBreadcrumbs({
         </BreadcrumbItem>
         {grandParent && (
           <>
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href={`..`}>{grandParent}</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
           </>
         )}
         {parent && (
           <>
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href={`.`}>{parent}</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
           </>
         )}
         {title && (

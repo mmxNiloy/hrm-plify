@@ -10,9 +10,18 @@ import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
+interface Props extends CompanyByIDPageProps {
+  readOnly?: boolean;
+  parent?: string;
+  title?: string;
+}
+
 export default async function CompanyByIDPage({
   params,
-}: CompanyByIDPageProps) {
+  readOnly,
+  parent,
+  title,
+}: Props) {
   const companyId = (await params).companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -45,9 +54,14 @@ export default async function CompanyByIDPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Details</p>
 
-      <MyBreadcrumbs company={company.data} user={user} />
+      <MyBreadcrumbs
+        company={company.data}
+        user={user}
+        parent={parent}
+        title={title}
+      />
 
-      <CompanyDetailTabs company={company.data} />
+      <CompanyDetailTabs readOnly={readOnly} company={company.data} />
     </main>
   );
 }

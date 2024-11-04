@@ -42,32 +42,48 @@ export const EducationalInfoDataTableColumns: ColumnDef<IEmployeeEducationalDeta
     {
       accessorKey: "transcript_link",
       header: "Transcript",
-      cell: ({ row }) => (
-        <Link
-          target="_blank"
-          href={row.original.transcript_link ?? "#"}
-          passHref
-        >
-          <Button size={"icon"} variant={"ghost"} className="rounuded-full">
+      cell: ({ row }) =>
+        row.original.transcript_link ? (
+          <Link
+            target="_blank"
+            href={row.original.transcript_link ?? "#"}
+            passHref
+          >
+            <Button size={"icon"} variant={"ghost"} className="rounuded-full">
+              <Icons.pdf />
+            </Button>
+          </Link>
+        ) : (
+          <Button
+            disabled
+            size={"icon"}
+            variant={"ghost"}
+            className="rounuded-full"
+          >
             <Icons.pdf />
           </Button>
-        </Link>
-      ),
+        ),
     },
     {
       accessorKey: "certificate_link",
       header: "Certificate",
-      cell: ({ row }) => (
-        <Link
-          target="_blank"
-          href={row.original.certificate_link ?? "#"}
-          passHref
-        >
-          <Button size={"icon"} variant={"ghost"} className="rounuded-full">
+      cell: ({ row }) =>
+        row.original.certificate_link ? (
+          <Link target="_blank" href={row.original.certificate_link} passHref>
+            <Button size={"icon"} variant={"ghost"} className="rounuded-full">
+              <Icons.document />
+            </Button>
+          </Link>
+        ) : (
+          <Button
+            disabled
+            size={"icon"}
+            variant={"ghost"}
+            className="rounuded-full"
+          >
             <Icons.document />
           </Button>
-        </Link>
-      ),
+        ),
     },
     {
       id: "action-edit",

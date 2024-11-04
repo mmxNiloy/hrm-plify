@@ -14,9 +14,23 @@ import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Colum
 import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
-interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
+interface Props extends ISearchParamsProps, CompanyByIDPageProps {
+  parent?: string;
+  readOnly?: boolean;
+  showMigrantEmployeesOnly?: boolean;
+  title?: string;
+  grandParent?: string;
+}
 
-export default async function AllEmployeePage({ params, searchParams }: Props) {
+export default async function AllEmployeePage({
+  params,
+  searchParams,
+  parent,
+  grandParent,
+  title,
+  readOnly,
+  showMigrantEmployeesOnly,
+}: Props) {
   // Get company information
   const companyId = (await params).companyId;
   const sParams = await searchParams;
@@ -29,7 +43,7 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
   const [company, companyExtraData, employees] = await Promise.all([
     getCompanyData(companyId),
     getCompanyExtraData(companyId),
-    getCompanyEmployees({ companyId, page, limit }),
+    getCompanyEmployees({ companyId, page, limit, showMigrantEmployeesOnly }),
   ]);
 
   if (company.error || companyExtraData.error || employees.error) {
@@ -50,19 +64,22 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent="Company Management"
-          title="All Employees"
+          parent={parent ?? "Company Management"}
+          title={title ?? "All Employees"}
+          grandParent={grandParent}
         />
 
         {/* <EmployeeCreationDialog /> */}
-        <EmployeeOnboardingDialog
-          company_id={companyId}
-          {...companyExtraData.data}
-        />
+        {!readOnly && (
+          <EmployeeOnboardingDialog
+            company_id={companyId}
+            {...companyExtraData.data}
+          />
+        )}
       </div>
 
       <StaticDataTable
-        data={employees.data.data}
+        data={employees.data.data.map((item) => ({ ...item, readOnly }))}
         columns={CompanyUserDataTableColumns}
         pageCount={employees.data.total_page}
       />

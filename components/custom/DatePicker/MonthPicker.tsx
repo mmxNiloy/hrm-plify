@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import { months } from "@/utils/Misc";
+import { months, toYYYYMMDD } from "@/utils/Misc";
 import React, { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -27,8 +27,10 @@ const MonthPicker = React.forwardRef<HTMLInputElement, MonthPickerProps>(
 
       return new Date();
     }, [props.defaultValue]);
-    const [month, setMonth] = useState<string>(months[defaultDate.getMonth()]);
+
+    const [month, setMonth] = useState<number>(defaultDate.getMonth());
     const [year, setYear] = useState<number>(defaultDate.getFullYear());
+
     return (
       <>
         <Input
@@ -38,9 +40,7 @@ const MonthPicker = React.forwardRef<HTMLInputElement, MonthPickerProps>(
           className="sr-only"
           ref={ref}
           readOnly
-          value={`${year}-${(months.indexOf(month) + 1)
-            .toString()
-            .padStart(2, "0")}-01`}
+          value={toYYYYMMDD(new Date(Date.UTC(year, month, 1, 0, 0, 0, 0)))}
           type="date"
           {...props}
         />
@@ -52,7 +52,7 @@ const MonthPicker = React.forwardRef<HTMLInputElement, MonthPickerProps>(
               className={cn("gap-2 justify-between", className)}
             >
               <p>
-                {month}, {year}
+                {months[month]}, {year}
               </p>
               <Icons.calendar />
             </Button>
@@ -99,16 +99,16 @@ const MonthPicker = React.forwardRef<HTMLInputElement, MonthPickerProps>(
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-              {months.map((mn) => (
+              {months.map((mn, index) => (
                 <Button
                   type="button"
-                  variant={month !== mn ? "outline" : "default"}
+                  variant={months[month] !== mn ? "outline" : "default"}
                   className={cn(
-                    month === mn
+                    months[month] === mn
                       ? "bg-blue-500 text-white hover:bg-blue-400"
                       : ""
                   )}
-                  onClick={() => setMonth(mn)}
+                  onClick={() => setMonth(index)}
                   key={`monthpicker-month-${mn}`}
                 >
                   {mn}

@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import EmployeeDetailsFormFragment from "../../Form/Fragment/Employee/EmployeeDetailsFormFragment";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function EmployeeDetailsEditDialog({
   data,
@@ -37,6 +38,8 @@ export default function EmployeeDetailsEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const profile_pic = fd.get("profile_pic") as File | undefined;
+
       const employeeData = {
         first_name: fd.get("first_name") as string,
         middle_name: fd.get("middle_name") as string,
@@ -51,10 +54,32 @@ export default function EmployeeDetailsEditDialog({
         alternative_number: fd.get("alternative_number") as string,
       };
 
-      const reqBod = Object.assign(data, employeeData);
-
       setLoading(true);
       // Request api here
+
+      // If an image is selected, upload the image and set the new image source
+      var image = data?.image ?? "";
+
+      if (profile_pic) {
+        const uploadRes = await upload(profile_pic);
+        if (uploadRes.error) {
+          toast({
+            title: "Upload Failed",
+            description:
+              "Failed to upload the profile picture. Please try again. Max image size is 1.5MB",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        image = uploadRes.data.fileUrl;
+      }
+
+      const reqBod = Object.assign(
+        data,
+        Object.assign(employeeData, { image })
+      );
       try {
         const apiRes = await fetch(
           `/api/employee/update-personal-info/${data.employee_id}`,

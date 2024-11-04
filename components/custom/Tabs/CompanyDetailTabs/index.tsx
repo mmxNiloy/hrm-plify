@@ -27,15 +27,17 @@ interface TabItem {
 
 export default function CompanyDetailTabs({
   company,
+  readOnly,
 }: {
   company: ICompanyDetails;
+  readOnly?: boolean;
 }) {
   const tabList: TabItem[] = useMemo(
     () => [
       {
         value: "profile",
         title: "Profile",
-        content: <CompanyProfileTab data={company} />,
+        content: <CompanyProfileTab readOnly={readOnly} data={company} />,
       },
       {
         value: "auth",
@@ -45,6 +47,7 @@ export default function CompanyDetailTabs({
             id={company.company_authorised_details?.authorised_id}
             company_id={company.company_id}
             data={company.company_authorised_details}
+            readOnly={readOnly}
           />
         ),
       },
@@ -57,6 +60,7 @@ export default function CompanyDetailTabs({
             company_id={company.company_id}
             title="Key Contact"
             data={company.company_key_contact}
+            readOnly={readOnly}
           />
         ),
       },
@@ -69,6 +73,7 @@ export default function CompanyDetailTabs({
             company_id={company.company_id}
             title="Level 1 User"
             data={company.company_l1_user}
+            readOnly={readOnly}
           />
         ),
       },
@@ -79,6 +84,7 @@ export default function CompanyDetailTabs({
           <CompanyAddressTab
             company_id={company.company_id}
             data={company.company_address}
+            readOnly={readOnly}
           />
         ),
       },
@@ -92,6 +98,7 @@ export default function CompanyDetailTabs({
               company_trade_details: company.company_trade_details,
               company_trading_hour: company.company_trading_hour,
             }}
+            readOnly={readOnly}
           />
         ),
       },
@@ -102,11 +109,12 @@ export default function CompanyDetailTabs({
           <CompanyDocumentsTab
             company_id={company.company_id}
             data={company.company_doc_db}
+            readOnly={readOnly}
           />
         ),
       },
     ],
-    [company]
+    [company, readOnly]
   );
 
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);

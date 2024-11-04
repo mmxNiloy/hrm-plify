@@ -128,7 +128,7 @@ export default function PayrollEditDialog({
           method: data ? "PUT" : "POST",
           body: JSON.stringify({
             payroll,
-            employee_ids: [selectedEmployee],
+            employee_ids: [Number.parseInt(selectedEmployee ?? "0")],
           }),
         });
 
@@ -178,12 +178,12 @@ export default function PayrollEditDialog({
     >
       <DialogTrigger asChild>
         {asIcon ? (
-          <Button variant={"ghost"} size="icon" title="Generate Payroll">
+          <Button variant={"ghost"} size="icon" title="Create Payroll">
             <Icons.printer />
           </Button>
         ) : (
           <Button className={ButtonBlue}>
-            <Icons.printer /> Generate Payroll
+            <Icons.printer /> Create Payroll
           </Button>
         )}
       </DialogTrigger>

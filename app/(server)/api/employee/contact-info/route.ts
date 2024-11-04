@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IContactInfoReqBody;
+  const data = await req.json();
 
   try {
     const apiRes = await fetch(
@@ -59,7 +59,12 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IContactInfoReqBody;
+  const data = await req.json();
+
+  console.log(
+    "PATCH > Update Contact Information of Employee > Request Body",
+    data
+  );
 
   try {
     const apiRes = await fetch(

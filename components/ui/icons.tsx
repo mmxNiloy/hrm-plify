@@ -137,6 +137,7 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
+  ExternalLink,
 } from "lucide-react";
 import React from "react";
 
@@ -761,6 +762,7 @@ const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
 VersionIcon.displayName = "VersionIcon";
 
 const Icons = {
+  externalLink: ExternalLink,
   reset: RotateCcw,
   zoomIn: ZoomIn,
   zoomOut: ZoomOut,

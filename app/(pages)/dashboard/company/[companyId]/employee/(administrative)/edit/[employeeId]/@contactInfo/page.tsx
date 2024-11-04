@@ -3,12 +3,9 @@ import React from "react";
 import { EditEmployeeByIdProps } from "../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { IEmployeeContactInfo } from "@/schema/EmployeeSchema";
-import { redirect } from "next/navigation";
 import ContactInfoEditDialog from "@/components/custom/Dialog/Employee/ContactInfoEditDialog";
 import ContactInfoFormFragment from "@/components/custom/Form/Fragment/Employee/ContactInfoFormFragment";
 import { getContactInfo } from "@/app/(server)/actions/employee/getContactInfo";
-import Icons from "@/components/ui/icons";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function ContactInfoSlot({

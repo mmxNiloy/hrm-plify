@@ -14,7 +14,12 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
-import { maritalStatus, nationalities, toYYYYMMDD } from "@/utils/Misc";
+import {
+  getFullNameOfUser,
+  maritalStatus,
+  nationalities,
+  toYYYYMMDD,
+} from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 
@@ -54,7 +59,18 @@ export default function EmployeeDetailsFormFragment({
 
       {dialogForm && (
         <div className="row-span-3 flex flex-col gap-2 items-center justify-center">
-          <AvatarPicker src={data?.image} className="w-52" />
+          <AvatarPicker
+            src={data?.image}
+            readOnly={readOnly}
+            disabled={disabled}
+            className="w-52"
+            name="profile_pic"
+            alt={
+              data
+                ? getFullNameOfUser(data.users) + "'s Profile Picture"
+                : "User Profile Pic"
+            }
+          />
         </div>
       )}
 
@@ -73,7 +89,18 @@ export default function EmployeeDetailsFormFragment({
 
       {!dialogForm && (
         <div className="row-span-3 flex flex-col gap-2 items-center justify-center">
-          <AvatarPicker src={data?.image} className="w-52" />
+          <AvatarPicker
+            src={data?.image}
+            className="w-52"
+            readOnly={readOnly}
+            disabled={disabled}
+            name="profile_pic"
+            alt={
+              data
+                ? getFullNameOfUser(data.users) + "'s Profile Picture"
+                : "User Profile Pic"
+            }
+          />
         </div>
       )}
 

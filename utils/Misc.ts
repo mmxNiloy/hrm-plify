@@ -463,7 +463,10 @@ export function toYYYYMMDD(date?: Date) {
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
 
-export function getPaginationParams(searchParams: ISearchParams): {
+export function getPaginationParams(
+  searchParams: ISearchParams,
+  prefix?: string
+): {
   page: number;
   limit: number;
 } {
@@ -472,11 +475,19 @@ export function getPaginationParams(searchParams: ISearchParams): {
   try {
     page = Math.max(
       1,
-      Number.parseInt((searchParams.page as string | undefined) ?? "1") || 0
+      Number.parseInt(
+        (searchParams[`${prefix ? `${prefix}_` : ""}page`] as
+          | string
+          | undefined) ?? "1"
+      ) || 0
     );
     limit = Math.max(
       5,
-      Number.parseInt((searchParams.limit as string | undefined) ?? "5") || 0
+      Number.parseInt(
+        (searchParams[`${prefix ? `${prefix}_` : ""}limit`] as
+          | string
+          | undefined) ?? "5"
+      ) || 0
     );
   } catch (_) {
     page = 1;

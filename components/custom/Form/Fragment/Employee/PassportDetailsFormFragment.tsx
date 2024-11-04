@@ -10,6 +10,7 @@ import React from "react";
 import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { toYYYYMMDD } from "@/utils/Misc";
 import { ButtonBlue } from "@/styles/button.tailwind";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function PassportDetailsFormFragment({
   data,
@@ -117,27 +118,32 @@ export default function PassportDetailsFormFragment({
             type="file"
             name="document"
           />
-        ) : (
+        ) : data?.document ? (
           <Link
             className="w-full"
-            href={data?.document ?? "#document-download"}
+            href={data.document}
+            target="_blank"
             passHref
           >
-            <Button
-              id="document-download"
-              disabled={!data || !data.document}
-              className={cn(ButtonBlue, "w-full")}
-            >
-              <Icons.download /> View Document
+            <Button className={cn(ButtonBlue, "w-full")}>
+              <Icons.externalLink />
+              View Document
             </Button>
           </Link>
+        ) : (
+          <Button disabled className={cn(ButtonBlue, "w-full")}>
+            <Icons.externalLink />
+            View Document
+          </Button>
         )}
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="col-span-full flex flex-col gap-2">
         <Label htmlFor="remark-input">Remark</Label>
-        <Input
+        <Textarea
           id="remark-input"
+          className="resize-none"
+          rows={5}
           key={`remark-${data?.remark}`}
           name="remark"
           defaultValue={data?.remark ?? ""}

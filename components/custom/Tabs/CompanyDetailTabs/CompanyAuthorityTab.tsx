@@ -8,23 +8,27 @@ export default function CompanyAuthorityTab({
   title = "Authorised Personnel",
   company_id,
   id,
+  readOnly,
 }: {
   data?: ICompanyAuthorizedDetailsBase;
   title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
   company_id: number;
   id?: number;
+  readOnly?: boolean;
 }) {
   return (
     <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
       <div className="col-span-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">{title}</p>
 
-        <CompanyAuthorityEditDialog
-          id={id}
-          company_id={company_id}
-          title={title}
-          data={data}
-        />
+        {!readOnly && (
+          <CompanyAuthorityEditDialog
+            id={id}
+            company_id={company_id}
+            title={title}
+            data={data}
+          />
+        )}
       </div>
 
       <CompanyAuthorityFormFragment data={data} readOnly />

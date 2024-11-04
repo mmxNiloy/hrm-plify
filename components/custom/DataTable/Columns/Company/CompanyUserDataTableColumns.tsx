@@ -44,7 +44,10 @@ export const CompanyUserDataTableColumns: ColumnDef<ICompanyUser>[] = [
   {
     id: "edit-employee",
     cell: ({ row }) =>
-      row.original.users.employee_data && (
+      row.original.users.employee_data &&
+      (row.original.readOnly ? (
+        <Icons.download />
+      ) : (
         <Link
           href={`/dashboard/company/${row.original.company_id}/employee/edit/${row.original.users.employee_data.employee_id}/`}
           passHref
@@ -58,6 +61,6 @@ export const CompanyUserDataTableColumns: ColumnDef<ICompanyUser>[] = [
             <Icons.edit />
           </Button>
         </Link>
-      ),
+      )),
   },
 ];

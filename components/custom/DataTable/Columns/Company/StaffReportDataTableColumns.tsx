@@ -41,7 +41,7 @@ export const StaffReportDataTableColumns: ColumnDef<IEmployee>[] = [
     },
   },
   {
-    id: "view-action",
+    id: "print-action",
     cell: ({ row }) => {
       return (
         <Button
@@ -91,7 +91,7 @@ export const column_skeletons: ColumnDef<IEmployee>[] = [
     },
   },
   {
-    id: "view-action",
+    id: "print-action",
     cell: ({ row }) => {
       return (
         <Button

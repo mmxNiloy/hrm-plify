@@ -54,6 +54,7 @@ interface DataTableProps<TData, TValue> {
   pageSize?: number;
   pageCount?: number;
   loading?: boolean;
+  prefix?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -703,6 +704,7 @@ export function StaticDataTable<TData, TValue>({
   showOptions = true,
   pageCount = 1,
   loading = false,
+  prefix,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -724,16 +726,18 @@ export function StaticDataTable<TData, TValue>({
     }) => {
       const params = new URLSearchParams(searchParams.toString());
       if (name && value) {
-        params.set(name, value);
+        params.set(prefix ? prefix.concat(`_${name}`) : name, value);
       }
 
       if (names && values) {
-        names.forEach((n, i) => params.set(n, values.at(i) ?? ""));
+        names.forEach((n, i) =>
+          params.set(prefix ? prefix.concat(`_${n}`) : n, values.at(i) ?? "")
+        );
       }
 
       return params.toString();
     },
-    [searchParams]
+    [prefix, searchParams]
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -758,10 +762,17 @@ export function StaticDataTable<TData, TValue>({
     state: {
       pagination: {
         pageIndex:
-          Math.max(1, Number.parseInt(searchParams.get("page") ?? "1")) - 1,
+          Math.max(
+            1,
+            Number.parseInt(
+              searchParams.get(prefix ? `${prefix}_page` : "page") ?? "1"
+            )
+          ) - 1,
         pageSize: Math.max(
           5,
-          Number.parseInt(searchParams.get("limit") ?? "5")
+          Number.parseInt(
+            searchParams.get(prefix ? `${prefix}_limit` : "limit") ?? "5"
+          )
         ),
       },
       sorting,
@@ -939,7 +950,8 @@ export function StaticDataTable<TData, TValue>({
                   `${pathname}?${createQueryString({
                     name: "page",
                     value: `${table.getState().pagination.pageIndex}`,
-                  })}`
+                  })}`,
+                  { scroll: false }
                 );
               }}
               disabled={!table.getCanPreviousPage()}
@@ -955,7 +967,8 @@ export function StaticDataTable<TData, TValue>({
                   `${pathname}?${createQueryString({
                     name: "page",
                     value: `${table.getState().pagination.pageIndex + 2}`,
-                  })}`
+                  })}`,
+                  { scroll: false }
                 );
               }}
               disabled={!table.getCanNextPage()}

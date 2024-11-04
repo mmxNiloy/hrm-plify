@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
 
 export default function DbsFormFragment({
   data,
@@ -89,9 +90,17 @@ export default function DbsFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="dbs-doc">DBS Document</Label>
         {readOnly ? (
-          <Button disabled className={ButtonBlue}>
-            <Icons.download /> View Document
-          </Button>
+          data?.dbs_doc ? (
+            <Link passHref href={data.dbs_doc} target="_blank">
+              <Button className={cn(ButtonBlue, "w-full")}>
+                <Icons.externalLink /> View Document
+              </Button>
+            </Link>
+          ) : (
+            <Button className={ButtonBlue} disabled>
+              <Icons.externalLink /> View Document
+            </Button>
+          )
         ) : (
           <Input
             type="file"

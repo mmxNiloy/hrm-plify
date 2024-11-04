@@ -8,9 +8,11 @@ import CompanyTradingHoursEditDialog from "../../Dialog/Company/CompanyEditDialo
 export default function CompanyTradeTab({
   data,
   company_id,
+  readOnly,
 }: {
   data?: ICompanyTradeData;
   company_id: number;
+  readOnly?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -19,10 +21,12 @@ export default function CompanyTradeTab({
           <p className="text-lg font-semibold col-span-full">
             Company Trade Details
           </p>
-          <CompanyTradeEditDialog
-            company_id={company_id}
-            data={data?.company_trade_details}
-          />
+          {!readOnly && (
+            <CompanyTradeEditDialog
+              company_id={company_id}
+              data={data?.company_trade_details}
+            />
+          )}
         </div>
 
         <CompanyTradeFormFragment data={data?.company_trade_details} readOnly />
@@ -30,10 +34,12 @@ export default function CompanyTradeTab({
       <div className="flex flex-col gap-4 p-8 border rounded-md">
         <div className="flex flex-row items-center justify-between">
           <p className="text-lg font-semibold">Trading Hours</p>
-          <CompanyTradingHoursEditDialog
-            company_id={company_id}
-            data={data?.company_trading_hour ?? []}
-          />
+          {!readOnly && (
+            <CompanyTradingHoursEditDialog
+              company_id={company_id}
+              data={data?.company_trading_hour ?? []}
+            />
+          )}
         </div>
 
         {/* Trading hours list */}

@@ -58,6 +58,8 @@ export interface ICompanyUser {
   users: IUserWithEmployeeData;
   roles: ICompanyUserRoles;
   companies?: ICompany;
+
+  readOnly?: boolean;
 }
 
 export interface ICompanyUserRoles {

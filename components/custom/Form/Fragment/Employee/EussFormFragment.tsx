@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
 
 export default function EussFormFragment({
   data,
@@ -114,9 +115,17 @@ export default function EussFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="euss-doc">EUSS Document</Label>
         {readOnly ? (
-          <Button className={ButtonBlue} disabled>
-            <Icons.download /> View Document
-          </Button>
+          data?.euss_doc ? (
+            <Link passHref href={data.euss_doc} target="_blank">
+              <Button className={cn(ButtonBlue, "w-full")}>
+                <Icons.externalLink /> View Document
+              </Button>
+            </Link>
+          ) : (
+            <Button className={ButtonBlue} disabled>
+              <Icons.externalLink /> View Document
+            </Button>
+          )
         ) : (
           <Input
             key={`euss-doc-${data?.euss_doc}`}

@@ -20,6 +20,7 @@ import { IEmployeeNid } from "@/schema/EmployeeSchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { countryNames, nationalities, toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
 import React from "react";
 
 export default function NidFormFragment({
@@ -143,9 +144,17 @@ export default function NidFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="document-input">Document</Label>
         {readOnly ? (
-          <Button className={ButtonBlue} disabled>
-            <Icons.download /> View Document
-          </Button>
+          data?.document ? (
+            <Link passHref href={data.document} target="_blank">
+              <Button className={cn(ButtonBlue, "w-full")}>
+                <Icons.externalLink /> View Document
+              </Button>
+            </Link>
+          ) : (
+            <Button className={ButtonBlue} disabled>
+              <Icons.externalLink /> View Document
+            </Button>
+          )
         ) : (
           <Input
             type="file"
@@ -153,7 +162,6 @@ export default function NidFormFragment({
             id="document-input"
             name="document"
             placeholder="Document"
-            defaultValue={data?.document ?? ""}
             readOnly={readOnly}
             disabled={disabled}
           />

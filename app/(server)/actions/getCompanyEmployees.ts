@@ -8,14 +8,20 @@ export async function getCompanyEmployees({
   companyId,
   page,
   limit,
+  showMigrantEmployeesOnly,
 }: {
   companyId: number;
   page: number;
   limit: number;
+  showMigrantEmployeesOnly?: boolean;
 }) {
   const sessionId = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   const req = fetch(
-    `${process.env.API_BASE_URL}/companies/my/get-employee/${companyId}?page=${page}&limit=${limit}`,
+    `${
+      process.env.API_BASE_URL
+    }/companies/my/get-employee/${companyId}?page=${page}&limit=${limit}&show_migrants=${
+      showMigrantEmployeesOnly ? "true" : "false"
+    }`,
     {
       headers: {
         Authorization: `Bearer ${sessionId?.value}`,

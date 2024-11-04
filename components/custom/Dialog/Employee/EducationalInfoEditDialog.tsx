@@ -20,6 +20,7 @@ import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function EducationalInfoEditDialog({
   employee_id,
@@ -41,6 +42,77 @@ export default function EducationalInfoEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const transcript = fd.get("transcript") as File | undefined;
+      const certificate = fd.get("certificate") as File | undefined;
+
+      setLoading(true);
+      // Request api here
+
+      var transcript_link = data?.transcript_link ?? "";
+      var certificate_link = data?.certificate_link ?? "";
+
+      const uploadTasks = [];
+      if (transcript) uploadTasks.push(upload(transcript));
+      else {
+        uploadTasks.push(
+          new Promise<{
+            data: {
+              message: string;
+              fileUrl: string;
+            };
+            error?: undefined;
+          }>((resolve, reject) => {
+            resolve({
+              data: {
+                message: "Default Transcript",
+                fileUrl: transcript_link,
+              },
+            });
+          })
+        );
+      }
+      if (certificate) uploadTasks.push(upload(certificate));
+      else {
+        uploadTasks.push(
+          new Promise<{
+            data: {
+              message: string;
+              fileUrl: string;
+            };
+            error?: undefined;
+          }>((resolve, reject) => {
+            resolve({
+              data: {
+                message: "Default Certificate",
+                fileUrl: certificate_link,
+              },
+            });
+          })
+        );
+      }
+
+      const [trnsc, cert] = await Promise.all(uploadTasks);
+      if (trnsc.data) transcript_link = trnsc.data.fileUrl;
+      else {
+        toast({
+          title: "Failed to upload",
+          description: `Failed to upload the transcript file, please try again later. Max file size 1.5MB. Error encountered: ${trnsc.error.message}`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+      if (cert.data) certificate_link = cert.data.fileUrl;
+      else {
+        toast({
+          title: "Failed to upload",
+          description: `Failed to upload the certificate file, please try again later. Max file size 1.5MB. Error encountered: ${cert.error.message}`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const educationalDetails = {
         employee_id: Number.parseInt(`${employee_id}`),
         institution_name: fd.get("institution_name") as string,
@@ -48,16 +120,14 @@ export default function EducationalInfoEditDialog({
         subject: fd.get("subject") as string | null,
         passing_year: fd.get("passing_year") as string | null,
         grade: fd.get("grade") as string | null,
-        transcript_link: fd.get("transcript_link") as string | null,
-        certificate_link: fd.get("certificate_link") as string | null,
+        transcript_link,
+        certificate_link,
       };
 
       const reqBod = data
         ? Object.assign(data, educationalDetails)
         : educationalDetails;
 
-      setLoading(true);
-      // Request api here
       try {
         const apiRes = await fetch(`/api/employee/educational-info`, {
           method: data ? "PATCH" : "POST",

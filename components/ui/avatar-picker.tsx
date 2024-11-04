@@ -8,11 +8,19 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholderIcon?: React.ReactNode;
   onPick?: (image: File) => void;
   variant?: "circle" | "square" | "video";
+  skeleton?: React.ReactNode;
 }
 
 const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, placeholderIcon, onPick, variant = "circle", ...props },
+    {
+      className,
+      placeholderIcon,
+      onPick,
+      variant = "circle",
+      skeleton,
+      ...props
+    },
     ref
   ) => {
     const [selectedImage, setSelectedImage] = useState<File>();
@@ -74,7 +82,8 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
             src={imageURL}
           />
         ) : (
-          placeholderIcon ?? (
+          placeholderIcon ??
+          skeleton ?? (
             <Icons.user
               className={cn(
                 "size-1/2",

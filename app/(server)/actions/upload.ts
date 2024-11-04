@@ -4,6 +4,16 @@ import { withError } from "@/utils/Debug";
 import SiteConfig from "@/utils/SiteConfig";
 import { cookies } from "next/headers";
 
+export interface IUploadResult {
+  message: string;
+  fileUrl: string;
+}
+
+export interface IUploadResponse {
+  data?: IUploadResult;
+  error?: Error;
+}
+
 export async function upload(file: File) {
   if (file.size > SiteConfig.maxFileSize) {
     return {
@@ -26,10 +36,7 @@ export async function upload(file: File) {
     body: fd,
   });
 
-  const { data, error } = await withError<{
-    message: string;
-    fileUrl: string;
-  }>(req);
+  const { data, error } = await withError<IUploadResult>(req);
 
   if (error) {
     console.error("Actions > Upload file > Failed to upload file", error);

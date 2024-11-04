@@ -87,20 +87,16 @@ export default function ContactInfoFormFragment({
             type="file"
             name="proof_of_address_doc"
           />
-        ) : (
-          <Link
-            className="w-full"
-            href={data?.proof_address_doc_link ?? "#proof-of-address-download"}
-            passHref
-          >
-            <Button
-              id="proof-of-address-download"
-              disabled={!data || !data.proof_address_doc_link}
-              className={cn(ButtonBlue, "w-full")}
-            >
-              <Icons.download /> View Document
+        ) : data?.proof_address_doc_link ? (
+          <Link passHref href={data.proof_address_doc_link} target="_blank">
+            <Button className={cn(ButtonBlue, "w-full")}>
+              <Icons.externalLink /> View Document
             </Button>
           </Link>
+        ) : (
+          <Button className={ButtonBlue} disabled>
+            <Icons.externalLink /> View Document
+          </Button>
         )}
       </div>
     </>

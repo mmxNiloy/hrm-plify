@@ -22,6 +22,7 @@ import { IEmployeeEussDbsData } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { IUploadResponse, upload } from "@/app/(server)/actions/upload";
 
 export default function EussDbsEditDialog({
   employee_id,
@@ -43,6 +44,33 @@ export default function EussDbsEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const euss_doc = fd.get("euss_doc") as File | undefined;
+      const dbs_doc = fd.get("dbs_doc") as File | undefined;
+
+      setLoading(true);
+
+      const [eussDocUpload, dbsDocUpload] = await Promise.all([
+        euss_doc
+          ? upload(euss_doc)
+          : new Promise<IUploadResponse>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default EUSS doc link",
+                  fileUrl: data?.euss_doc ?? "",
+                },
+              });
+            }),
+        dbs_doc
+          ? upload(dbs_doc)
+          : new Promise<IUploadResponse>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default DBS doc link",
+                  fileUrl: data?.dbs_doc ?? "",
+                },
+              });
+            }),
+      ]);
 
       const combinedDetails = {
         id: 0,
@@ -55,7 +83,7 @@ export default function EussDbsEditDialog({
         euss_expiry_date: fd.get("euss_expiry_date")
           ? new Date(fd.get("euss_expiry_date") as string)
           : null,
-        euss_doc: "", // TODO: File upload handling here?
+        euss_doc: eussDocUpload.data?.fileUrl ?? data?.euss_doc ?? "",
         euss_remarks: (fd.get("euss_remarks") as string | null) ?? "",
         euss_is_current: fd.get("euss_is_current")
           ? fd.get("euss_is_current") === "yes"
@@ -71,7 +99,7 @@ export default function EussDbsEditDialog({
         dbs_expiry_date: fd.get("dbs_expiry_date")
           ? new Date(fd.get("dbs_expiry_date") as string)
           : null,
-        dbs_doc: "", // TODO: Upload file handling here?
+        dbs_doc: dbsDocUpload.data?.fileUrl ?? data?.dbs_doc ?? "",
         dbs_type: (fd.get("dbs_type") as string | null) ?? "",
         dbs_is_current: fd.get("dbs_is_current")
           ? fd.get("dbs_is_current") === "yes"
@@ -83,8 +111,6 @@ export default function EussDbsEditDialog({
       const reqBod = data
         ? Object.assign(data, combinedDetails)
         : combinedDetails;
-
-      setLoading(true);
 
       try {
         const apiRes = await fetch(`/api/employee/euss-dbs-info`, {

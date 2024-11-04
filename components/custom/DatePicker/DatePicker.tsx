@@ -16,10 +16,12 @@ import { DateRange } from "react-day-picker";
 
 interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   name?: string;
+  readOnly?: boolean;
+  disabled?: boolean;
 }
 
 const DatePicker = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, name, ...props }, ref) => {
+  ({ className, name, readOnly, disabled, ...props }, ref) => {
     const [date, setDate] = useState<Date | undefined>();
 
     return (
@@ -27,6 +29,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, InputProps>(
         <Popover data-error={!date ? "no-value" : "no-error"}>
           <PopoverTrigger asChild>
             <Button
+              disabled={readOnly || disabled}
               id="date"
               variant={"outline"}
               className={cn(

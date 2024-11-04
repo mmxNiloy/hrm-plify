@@ -102,10 +102,11 @@ export default function EducationDetailsFormFragment({
             type="file"
             name="transcript"
           />
-        ) : (
+        ) : data?.transcript_link ? (
           <Link
+            target="_blank"
             className="w-full"
-            href={data?.transcript_link ?? "#transcript-download"}
+            href={data.transcript_link}
             passHref
           >
             <Button
@@ -116,6 +117,10 @@ export default function EducationDetailsFormFragment({
               <Icons.download /> View Transcript
             </Button>
           </Link>
+        ) : (
+          <Button disabled className={cn(ButtonBlue, "w-full")}>
+            <Icons.info /> No file attached
+          </Button>
         )}
       </div>
 
@@ -128,10 +133,11 @@ export default function EducationDetailsFormFragment({
             type="file"
             name="certificate"
           />
-        ) : (
+        ) : data?.certificate_link ? (
           <Link
+            target="_blank"
             className="w-full"
-            href={data?.certificate_link ?? "#certificate-download"}
+            href={data?.certificate_link}
             passHref
           >
             <Button
@@ -142,6 +148,10 @@ export default function EducationDetailsFormFragment({
               <Icons.download /> View Certificate
             </Button>
           </Link>
+        ) : (
+          <Button disabled className={cn(ButtonBlue, "w-full")}>
+            <Icons.info /> No file attached
+          </Button>
         )}
       </div>
     </>
