@@ -49,7 +49,7 @@ export default function RTWEmployeeSelectionTab({
           onValueChange={(e) => {
             setSelectedEmp(e);
             setSelectedEmployee(
-              employees.find((emp) => `${emp.employee_id}` === selectedEmp)
+              employees.find((emp) => `${emp.employee_id}` === e)
             );
           }}
         >
@@ -80,13 +80,17 @@ export default function RTWEmployeeSelectionTab({
           key={`selected-employee-${selectedEmp}-joining-date`}
           readOnly
           defaultValue={getSelectedEmployeesDateOfJoining()}
-          onChange={(e) => setDateOfCheck(e.target.value)}
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Date of Check</Label>
-        <Input name="date_of_check" type="date" required />
+        <Input
+          name="date_of_check"
+          type="date"
+          required
+          onChange={(e) => setDateOfCheck(e.target.value)}
+        />
       </div>
     </div>
   );

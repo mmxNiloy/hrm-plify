@@ -8,6 +8,7 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 
 export default async function EmployeeDashboard({
   params,
@@ -17,13 +18,16 @@ export default async function EmployeeDashboard({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const company = await getCompanyData(companyId);
+  const [company, companyExtra] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+  ]);
 
-  if (company.error) {
+  if (company.error || companyExtra.error) {
     return (
       <div className="flex flex-col gap-2">
         <p className="text-xl font-semibold">Employee Management Dashboard</p>
-        <ErrorFallbackCard error={company.error} />
+        <ErrorFallbackCard error={company.error ?? companyExtra.error} />
       </div>
     );
   }
@@ -38,9 +42,9 @@ export default async function EmployeeDashboard({
       />
 
       <div className="grid lg:grid-cols-2 gap-2">
-        <EmployeeStatsCard />
+        <EmployeeStatsCard {...companyExtra.data} />
 
-        <StaffReportCard companyId={companyId} />
+        <StaffReportCard {...companyExtra.data} />
       </div>
     </main>
   );

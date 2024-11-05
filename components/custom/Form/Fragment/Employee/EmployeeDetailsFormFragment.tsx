@@ -60,6 +60,7 @@ export default function EmployeeDetailsFormFragment({
       {dialogForm && (
         <div className="row-span-3 flex flex-col gap-2 items-center justify-center">
           <AvatarPicker
+            key={`user-image-${data?.image}`}
             src={data?.image}
             readOnly={readOnly}
             disabled={disabled}
@@ -90,6 +91,7 @@ export default function EmployeeDetailsFormFragment({
       {!dialogForm && (
         <div className="row-span-3 flex flex-col gap-2 items-center justify-center">
           <AvatarPicker
+            key={`user-image-${data?.image}`}
             src={data?.image}
             className="w-52"
             readOnly={readOnly}

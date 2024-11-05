@@ -199,6 +199,7 @@ export default function CompanyProfileFormFragment({
         <Label htmlFor="logo-input">Logo</Label>
         <div className="relative">
           <AvatarPicker
+            key={`company-logo-${data?.logo}`}
             readOnly={readOnly}
             disabled={disabled}
             name="logo"

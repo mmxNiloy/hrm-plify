@@ -86,7 +86,7 @@ export default function RTWCheckTypeTab() {
         <Label className={RequiredAsterisk}>Medium of Check</Label>
         <RadioGroup
           required
-          name="type_of_check"
+          name="medium_of_check"
           defaultValue="in-person-check"
         >
           <div className="flex gap-2 items-center">
@@ -112,7 +112,7 @@ export default function RTWCheckTypeTab() {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Evidence Presented</SelectLabel>
-              <SelectItem value="correspondance">
+              <SelectItem value="proof_of_address">
                 Proof of Correspondance Address
               </SelectItem>
               <SelectItem value="passport">Passport Document</SelectItem>

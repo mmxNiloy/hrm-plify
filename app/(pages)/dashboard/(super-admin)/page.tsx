@@ -1,6 +1,7 @@
 "use server";
 import { getCompanies } from "@/app/(server)/actions/getCompanies";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -48,16 +49,23 @@ export default async function DashboardPage({
                 <CommandItem key={`company-id-${comp.company_id}`}>
                   <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
                     <div className="flex gap-4">
-                      <span
-                        style={{
-                          backgroundColor: stringToColor(comp.company_name),
-                        }}
-                        className={
-                          "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
+                      <AvatarPicker
+                        readOnly
+                        src={comp.logo}
+                        skeleton={
+                          <span
+                            style={{
+                              backgroundColor: stringToColor(comp.company_name),
+                            }}
+                            className={
+                              "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
+                            }
+                          >
+                            {comp.company_name.charAt(0).toUpperCase()}
+                          </span>
                         }
-                      >
-                        {comp.company_name.charAt(0).toUpperCase()}
-                      </span>
+                        className="size-10 p-0"
+                      />
                       <div className="flex flex-col gap-2">
                         <p className="font-semibold text-xl">
                           {comp.company_name}

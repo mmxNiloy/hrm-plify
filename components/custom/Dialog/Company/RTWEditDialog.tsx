@@ -41,6 +41,7 @@ import { IDutyRoster } from "@/schema/RotaSchema";
 import RTWEditTabs from "../../Tabs/RTWEditTabs";
 import { ICompanyUser } from "@/schema/UserSchema";
 import RTWFormContextProvider from "@/providers/RTWFormContextProvider";
+import { WIPToastOptions } from "@/utils/Misc";
 
 interface Props {
   company_id: number;
@@ -49,6 +50,10 @@ interface Props {
   asEditable?: boolean;
   employees?: IEmployeeWithUserMetadata[];
 }
+
+type CheckType = "initial-check" | "follow-up-check";
+type CheckMedium = "in-person-check" | "online-check";
+type Evidence = "proof_of_address" | "passport";
 
 export default function RTWEditDialog({
   data,
@@ -70,16 +75,85 @@ export default function RTWEditDialog({
   const handleNextTab = useCallback(() => {
     if (formRef.current) {
       const fd = new FormData(formRef.current);
+      const [
+        employee_id,
+        date_of_check,
+        type_of_check,
+        medium_of_check,
+        evidence_presented,
+        time_of_check,
+        list_a_options,
+        list_b_group_1_options,
+        list_b_group_2_options,
+      ] = [
+        Number.parseInt((fd.get("employee_id") as string | undefined) ?? "0"),
+        fd.get("date_of_check") as string | undefined,
+        fd.get("type_of_check") as CheckType | undefined,
+        fd.get("medium_of_check") as CheckMedium | undefined,
+        fd.get("evidence_presented") as Evidence | undefined,
+        fd.get("time_of_check") as string | undefined,
+        fd.getAll("list_a_options") as string[] | undefined,
+        fd.getAll("list_b_group_1_options") as string[] | undefined,
+        fd.getAll("list_b_group_2_options") as string[] | undefined,
+      ];
       console.log("Form Data", fd);
+
+      if (currentTabIndex == 0) {
+        // Check if an employee is selected and a date is selected
+        if (Number.isNaN(employee_id) || employee_id == 0 || !date_of_check) {
+          toast({
+            title: "Validation failed!",
+            description:
+              "Please select an employee and the date of check before proceeding.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+      if (currentTabIndex == 1) {
+        if (
+          (type_of_check !== "initial-check" &&
+            type_of_check !== "follow-up-check") ||
+          (medium_of_check !== "in-person-check" &&
+            medium_of_check !== "online-check") ||
+          (evidence_presented !== "passport" &&
+            evidence_presented !== "proof_of_address") ||
+          !time_of_check
+        ) {
+          toast({
+            title: "Validation failed!",
+            description: "Please fill out the required fields.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
+      if (currentTabIndex == 2) {
+        const n =
+          (list_a_options?.length ?? 0) +
+          (list_b_group_1_options?.length ?? 0) +
+          (list_b_group_2_options?.length ?? 0);
+        if (n < 1) {
+          toast({
+            title: "Validation failed!",
+            description: "Please fill out the required fields.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
 
       setCurrentTabIndex((oldVal) => oldVal + 1);
     }
-  }, []);
+  }, [currentTabIndex, toast]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       e.stopPropagation();
+
+      toast(WIPToastOptions);
 
       const fd = new FormData(e.currentTarget);
 
@@ -128,7 +202,7 @@ export default function RTWEditDialog({
 
       setLoading(false);
     },
-    []
+    [toast]
   );
 
   return (
@@ -137,6 +211,7 @@ export default function RTWEditDialog({
       onOpenChange={(e) => {
         if (!e) {
           setSelectedEmployee(undefined);
+          setCurrentTabIndex(0);
           setOpen(false);
         } else setOpen(true);
       }}
@@ -192,6 +267,7 @@ export default function RTWEditDialog({
                 <Icons.cross /> Close
               </Button>
             </DialogClose>
+            <span className="flex-grow" />
             <Button
               type="button"
               size={"sm"}
@@ -202,32 +278,29 @@ export default function RTWEditDialog({
               <Icons.chevronLeft />
               Back
             </Button>
-            {currentTabIndex < 4 ? (
-              <Button
-                onClick={handleNextTab}
-                type="button"
-                size={"sm"}
-                disabled={loading}
-                className={ButtonBlue}
-              >
-                Next
-                <Icons.chevronRight />
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                disabled={loading}
-                className={ButtonSuccess}
-                size="sm"
-              >
-                {loading ? (
-                  <Icons.spinner className="animate-spin ease-in-out" />
-                ) : (
-                  <Icons.check />
-                )}{" "}
-                Submit
-              </Button>
-            )}
+            <Button
+              onClick={handleNextTab}
+              type="button"
+              size={"sm"}
+              disabled={loading || currentTabIndex > 3}
+              className={ButtonBlue}
+            >
+              Next
+              <Icons.chevronRight />
+            </Button>
+            <Button
+              type="submit"
+              disabled={loading || currentTabIndex < 4}
+              className={ButtonSuccess}
+              size="sm"
+            >
+              {loading ? (
+                <Icons.spinner className="animate-spin ease-in-out" />
+              ) : (
+                <Icons.check />
+              )}{" "}
+              Submit
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

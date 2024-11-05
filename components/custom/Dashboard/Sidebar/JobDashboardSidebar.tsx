@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/accordion";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import MySidebarHeader from "./MySidebarHeader";
+import { BackLinkButton } from "./BackLinkButton";
 
 export default function JobDashboardSidebar({
   company,
@@ -26,41 +28,19 @@ export default function JobDashboardSidebar({
   return (
     <Sidebar
       className="overflow-auto"
-      open={open || hovered}
-      onMouseEnter={(e) => setHovered(true)}
-      onMouseLeave={(e) => setHovered(false)}
+      open={
+        open
+        // || hovered
+      }
+      // onMouseEnter={(e) => setHovered(true)}
+      // onMouseLeave={(e) => setHovered(false)}
     >
       <SidebarContent>
-        <SidebarHeader
-          onClick={(e) => setOpen(!open)}
-          title={company.company_name}
-          className={
-            "bg-accent space-y-0 cursor-pointer flex flex-row gap-2 items-center justify-center rounded-md mb-4"
-          }
-        >
-          <p
-            className={cn(
-              "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
-              open || hovered ? "" : "hidden"
-            )}
-          >
-            {company.company_name}
-          </p>
-          <span className="size-10 flex relative rounded-full items-center justify-center">
-            <Icons.chevronLeft
-              className={cn(
-                "absolute transition-all",
-                open ? "rotate-0 scale-100" : "rotate-180 scale-0"
-              )}
-            />
-            <Icons.chevronRight
-              className={cn(
-                "transition-all",
-                open ? "rotate-180 scale-0" : "rotate-0 scale-100"
-              )}
-            />
-          </span>
-        </SidebarHeader>
+        <MySidebarHeader
+          open={open}
+          onClick={() => setOpen((old) => !old)}
+          company={company}
+        />
 
         <SidebarLink href={`/dashboard/company/${company.company_id}/job`}>
           <Icons.home />
@@ -244,7 +224,8 @@ export default function JobDashboardSidebar({
             Message Center
           </span>
         </SidebarLink>
-        {isAccordionOpen > 0 && <span className="h-8"></span>}
+        <BackLinkButton />
+        <span className="h-8"></span>
       </SidebarContent>
     </Sidebar>
   );

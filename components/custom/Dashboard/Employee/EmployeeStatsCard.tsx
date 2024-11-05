@@ -15,6 +15,10 @@ import "chart.js/auto";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
+import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
+import { IDesignation } from "@/schema/DesignationSchema";
+import { differenceInCalendarDays } from "date-fns";
+import Link from "next/link";
 const Bar = dynamic(() => import("react-chartjs-2").then((mod) => mod.Bar), {
   ssr: false,
 });
@@ -53,7 +57,12 @@ const empStats = {
   ],
 };
 
-export default function EmployeeStatsCard() {
+interface Props {
+  employees: IEmployeeWithUserMetadata[];
+  designations: IDesignation[];
+}
+
+export default function EmployeeStatsCard({ employees, designations }: Props) {
   return (
     <Card>
       <CardHeader>
@@ -81,33 +90,53 @@ export default function EmployeeStatsCard() {
             <TableBody className="text-xs">
               <TableRow className="*:p-2">
                 <TableCell>Active Employees</TableCell>
-                <TableCell>22</TableCell>
+                <TableCell>{employees.length}</TableCell>
                 <TableCell>
-                  <Button
-                    className="rounded-full bg-blue-500 hover:bg-blue-400 text-white text-xs gap-1"
-                    size="sm"
-                  >
-                    <Icons.visible className="size-4" /> View All
-                  </Button>
+                  <Link passHref href={"all"}>
+                    <Button
+                      className="rounded-full bg-blue-500 hover:bg-blue-400 text-white text-xs gap-1"
+                      size="sm"
+                    >
+                      <Icons.visible className="size-4" /> View All
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
               <TableRow className="*:p-2">
                 <TableCell>Migrant Employees</TableCell>
-                <TableCell>7</TableCell>
                 <TableCell>
-                  <Button
-                    className="rounded-full bg-purple-500 hover:bg-purple-400 text-white text-xs gap-1"
-                    size="sm"
-                  >
-                    <Icons.visible className="size-4" /> View All
-                  </Button>
+                  {
+                    employees.filter((emp) => emp.nationality !== "British")
+                      .length
+                  }
+                </TableCell>
+                <TableCell>
+                  <Link href="migrant" passHref>
+                    <Button
+                      className="rounded-full bg-purple-500 hover:bg-purple-400 text-white text-xs gap-1"
+                      size="sm"
+                    >
+                      <Icons.visible className="size-4" /> View All
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
               <TableRow className="*:p-2">
                 <TableCell>New Hires</TableCell>
-                <TableCell>2</TableCell>
+                <TableCell>
+                  {
+                    employees.filter(
+                      (emp) =>
+                        differenceInCalendarDays(
+                          new Date(emp.hire_date ?? new Date()),
+                          new Date()
+                        ) <= 180
+                    ).length
+                  }
+                </TableCell>
                 <TableCell>
                   <Button
+                    disabled
                     className="rounded-full bg-green-500 hover:bg-green-400 text-white text-xs gap-1"
                     size="sm"
                   >

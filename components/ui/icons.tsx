@@ -761,7 +761,26 @@ const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 VersionIcon.displayName = "VersionIcon";
 
+const BrokenImage = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      className={cn("fill-current", className)}
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        d="M13 1a2 2 0 0 1 1.995 1.85L15 3v3.172l-2 2V3H3v10h5.172l-2 2H3a2 2 0 0 1-1.995-1.85L1 13V3a2 2 0 0 1 1.85-1.995L3 1zm2 8v4a2 2 0 0 1-1.85 1.995L13 15H9l2-2h2v-2zM9.5 8l1.713 1.958L9.173 12H4v-1.2L5.5 9l1.524 1.83zm-3-3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3"
+      />
+    </svg>
+  )
+);
+BrokenImage.displayName = "BrokenImage";
+
 const Icons = {
+  brokenImage: BrokenImage,
   externalLink: ExternalLink,
   reset: RotateCcw,
   zoomIn: ZoomIn,

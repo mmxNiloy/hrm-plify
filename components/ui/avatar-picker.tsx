@@ -1,7 +1,13 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import React, { ChangeEvent, useCallback, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Icons from "./icons";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -23,6 +29,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const [error, setError] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<File>();
     const [imageURL, setImageURL] = useState<string | undefined>(props.src);
     const handleImageSelect = useCallback(
@@ -38,8 +45,11 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
       [onPick]
     );
 
-    const inputRef: React.LegacyRef<HTMLInputElement> | undefined =
-      useRef(null);
+    const inputRef: React.Ref<HTMLInputElement> | undefined = useRef(null);
+
+    useEffect(() => {
+      setError(false);
+    }, [props.src]);
 
     return (
       <div
@@ -66,8 +76,9 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
           ref={inputRef}
           {...props}
         />
-        {imageURL ? (
+        {imageURL && !error ? (
           <Image
+            onError={(e) => setError(true)}
             unoptimized
             height={0}
             width={0}
@@ -81,16 +92,24 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             src={imageURL}
           />
+        ) : placeholderIcon ? (
+          placeholderIcon
+        ) : skeleton ? (
+          skeleton
+        ) : error ? (
+          <Icons.brokenImage
+            className={cn(
+              "size-1/2",
+              props.disabled || props.readOnly ? "" : "group-hover:invisible"
+            )}
+          />
         ) : (
-          placeholderIcon ??
-          skeleton ?? (
-            <Icons.user
-              className={cn(
-                "size-1/2",
-                props.disabled || props.readOnly ? "" : "group-hover:invisible"
-              )}
-            />
-          )
+          <Icons.user
+            className={cn(
+              "size-1/2",
+              props.disabled || props.readOnly ? "" : "group-hover:invisible"
+            )}
+          />
         )}
 
         {!(props.disabled || props.readOnly) && (

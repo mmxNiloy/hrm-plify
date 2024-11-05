@@ -110,6 +110,7 @@ export default async function ProfilePage() {
 
             <div className="px-8 w-full flex flex-row items-end justify-between">
               <AvatarPicker
+                key={`profile-avatar-`}
                 name="file"
                 className="size-48 -mt-24 border border-muted-foreground/50 shadow-lg"
               />

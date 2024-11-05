@@ -13,15 +13,16 @@ import { ICompanyUser } from "@/schema/UserSchema";
 import RTWEmployeeSelectionTab from "./RTWEmployeeSelectionTab";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import RTWCheckTypeTab from "./RTWCheckTypeTab";
+import RTWPhysicalCheckTab from "./RTWPhysicalCheckTab";
+import RTWStep2CheckTab from "./RTWStep2Check";
+import RTWStep3CopyTab from "./RTWStep3Copy";
 
 type TabValue =
   | "employee"
   | "check-type"
-  | "key-contact"
-  | "l1-user"
-  | "address"
-  | "trade"
-  | "documents";
+  | "physical-check"
+  | "step-2-check"
+  | "step-3-copy";
 
 interface TabItem {
   value: TabValue;
@@ -51,6 +52,21 @@ export default function RTWEditTabs({
         value: "check-type",
         title: "Check Type",
         content: <RTWCheckTypeTab />,
+      },
+      {
+        value: "physical-check",
+        title: "Physical Check",
+        content: <RTWPhysicalCheckTab />,
+      },
+      {
+        value: "step-2-check",
+        title: "Step 2: Check",
+        content: <RTWStep2CheckTab />,
+      },
+      {
+        value: "step-3-copy",
+        title: "Step 3: Copy",
+        content: <RTWStep3CopyTab />,
       },
     ],
     [employees]
