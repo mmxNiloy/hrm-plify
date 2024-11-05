@@ -38,6 +38,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
           const mFile = e.target.files[0];
           setSelectedImage(mFile);
           setImageURL(URL.createObjectURL(mFile));
+          setError(false);
 
           if (onPick) onPick(mFile);
         }
