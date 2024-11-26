@@ -27,7 +27,12 @@ export async function generateAttendance({
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const req = fetch(`${process.env.API_BASE_URL}/attendance/admin/generate`, {
     method: "POST",
-    body: JSON.stringify({ company_id, employee_id, from_date, to_date }),
+    body: JSON.stringify({
+      company_id: Number.parseInt(`${company_id}`),
+      employee_id,
+      from_date,
+      to_date,
+    }),
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${session}`,

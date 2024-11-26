@@ -19,6 +19,7 @@ import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
 import { ITax } from "@/schema/TaxSchema";
 import { IPaymentType } from "@/schema/PaymentTypeSchema";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function PaymentTypeEditPopover({
   company_id,
@@ -153,7 +154,9 @@ export default function PaymentTypeEditPopover({
               className={cn(ButtonBlue, "w-full")}
               size={"icon"}
               type="submit"
-              disabled={loading}
+              disabled={
+                loading || SiteConfig.featureFlags.disableExperimentalUI
+              }
               title="Submit"
             >
               <Icons.check /> Submit

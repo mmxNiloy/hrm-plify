@@ -16,6 +16,7 @@ import RTWCheckTypeTab from "./RTWCheckTypeTab";
 import RTWPhysicalCheckTab from "./RTWPhysicalCheckTab";
 import RTWStep2CheckTab from "./RTWStep2Check";
 import RTWStep3CopyTab from "./RTWStep3Copy";
+import { IRightToWork } from "@/schema/RightToWork";
 
 type TabValue =
   | "employee"
@@ -34,9 +35,11 @@ interface Props {
   readOnly?: boolean;
   employees: IEmployeeWithUserMetadata[];
   currentTabIndex?: number;
+  data?: IRightToWork;
 }
 
 export default function RTWEditTabs({
+  data,
   readOnly,
   employees,
   currentTabIndex = 0,
@@ -46,30 +49,36 @@ export default function RTWEditTabs({
       {
         value: "employee",
         title: "Employee",
-        content: <RTWEmployeeSelectionTab employees={employees} />,
+        content: (
+          <RTWEmployeeSelectionTab
+            readOnly={readOnly}
+            employees={employees}
+            data={data}
+          />
+        ),
       },
       {
         value: "check-type",
         title: "Check Type",
-        content: <RTWCheckTypeTab />,
+        content: <RTWCheckTypeTab readOnly={readOnly} data={data} />,
       },
       {
         value: "physical-check",
         title: "Physical Check",
-        content: <RTWPhysicalCheckTab />,
+        content: <RTWPhysicalCheckTab readOnly={readOnly} data={data} />,
       },
       {
         value: "step-2-check",
         title: "Step 2: Check",
-        content: <RTWStep2CheckTab />,
+        content: <RTWStep2CheckTab readOnly={readOnly} data={data} />,
       },
       {
         value: "step-3-copy",
         title: "Step 3: Copy",
-        content: <RTWStep3CopyTab />,
+        content: <RTWStep3CopyTab readOnly={readOnly} data={data} />,
       },
     ],
-    [employees]
+    [data, employees, readOnly]
   );
 
   // const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
+import { Button } from "@/components/ui/button";
 
 export default function CompanyDashboardSidebar({
   company,
@@ -154,14 +155,24 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              <SidebarLink
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/wage-pay-mode`}
               >
                 <Icons.pay />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Wages Pay Mode
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
+              <Button
+                variant={"ghost"}
+                className="justify-start gap-2"
+                disabled
+              >
+                <Icons.pay />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Wages Pay Mode
+                </span>
+              </Button>
             </AccordionContent>
           </AccordionItem>
 

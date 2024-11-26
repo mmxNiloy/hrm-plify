@@ -73,7 +73,7 @@ export default function SponsorComplianceDashboardSidebar({
         >
           <Icons.lawBuilding />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Right to Work checks
+            Right to Work Checks
           </span>
         </SidebarLink>
 

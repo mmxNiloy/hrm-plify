@@ -9,10 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { IRightToWork } from "@/schema/RightToWork";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
+import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 
-export default function RTWStep2CheckTab() {
+export default function RTWStep2CheckTab({
+  data,
+  readOnly,
+}: IFormFragmentProps<IRightToWork>) {
   return (
     <div className="grid grid-cols-2 gap-4">
       <p className="text-xs col-span-full">
@@ -26,7 +31,11 @@ export default function RTWStep2CheckTab() {
           appearance?
         </Label>
 
-        <Select name="is_photo_consistent" defaultValue="yes">
+        <Select
+          disabled={readOnly}
+          name="is_photo_consistent"
+          defaultValue={data?.is_photo_consistent ?? "yes"}
+        >
           <SelectTrigger>
             <SelectValue
               placeholder="Are photographs consistent across documents and with the person's
@@ -49,7 +58,11 @@ export default function RTWStep2CheckTab() {
           Are dates of birth correct and consistent across documents?
         </Label>
 
-        <Select name="is_dob_consistent" defaultValue="yes">
+        <Select
+          disabled={readOnly}
+          name="is_dob_consistent"
+          defaultValue={data?.is_dob_consistent ?? "yes"}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Are dates of birth correct and consistent across documents?" />
           </SelectTrigger>
@@ -70,7 +83,11 @@ export default function RTWStep2CheckTab() {
           future i.e. they have not passed (if applicable)?
         </Label>
 
-        <Select name="is_not_expired" defaultValue="yes">
+        <Select
+          disabled={readOnly}
+          name="is_not_expired"
+          defaultValue={data?.is_not_expired ?? "yes"}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Are expiry dates for time-limited permission to be in the UK in the future i.e. they have not passed (if applicable)?" />
           </SelectTrigger>
@@ -95,7 +112,11 @@ export default function RTWStep2CheckTab() {
           UK for which they will be employed.)
         </Label>
 
-        <Select name="is_not_restricted" defaultValue="yes">
+        <Select
+          disabled={readOnly}
+          name="is_not_restricted"
+          defaultValue={data?.is_not_restricted ?? "yes"}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select an Option" />
           </SelectTrigger>
@@ -116,7 +137,11 @@ export default function RTWStep2CheckTab() {
           and belongs to the holder?
         </Label>
 
-        <Select name="is_doc_genuine" defaultValue="yes">
+        <Select
+          disabled={readOnly}
+          name="is_doc_genuine"
+          defaultValue={data?.is_doc_genuine ?? "yes"}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Are you satisfied the document is genuine, has not been tampered with and belongs to the holder?" />
           </SelectTrigger>
@@ -138,7 +163,11 @@ export default function RTWStep2CheckTab() {
           documents should also be photocopied and a copy retained.)
         </Label>
 
-        <Select name="is_name_consistent" defaultValue="yes">
+        <Select
+          disabled={readOnly}
+          name="is_name_consistent"
+          defaultValue={data?.is_name_consistent ?? "yes"}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Have you checked the reasons for any different names across documents (e.g. marriage certificate, divorce decree, deed poll)? (Supporting documents should also be photocopied and a copy retained.)" />
           </SelectTrigger>

@@ -21,12 +21,18 @@ import { DatePicker } from "../../DatePicker/DatePicker";
 import { ICompanyUser } from "@/schema/UserSchema";
 import { Input } from "@/components/ui/input";
 import RTWFormContext from "@/context/RTWFormContext";
+import { IRightToWork } from "@/schema/RightToWork";
+import { IFormFragmentProps } from "@/utils/Types";
+
+interface Props extends IFormFragmentProps<IRightToWork> {
+  employees: IEmployeeWithUserMetadata[];
+}
 
 export default function RTWEmployeeSelectionTab({
   employees,
-}: {
-  employees: IEmployeeWithUserMetadata[];
-}) {
+  readOnly = false,
+  data,
+}: Props) {
   const { setSelectedEmployee, setDateOfCheck } = useContext(RTWFormContext);
   const [selectedEmp, setSelectedEmp] = useState<string | undefined>(undefined);
 
@@ -46,6 +52,8 @@ export default function RTWEmployeeSelectionTab({
         <Select
           required
           name="employee_id"
+          disabled={readOnly}
+          defaultValue={data ? `${data.employee_id}` : undefined}
           onValueChange={(e) => {
             setSelectedEmp(e);
             setSelectedEmployee(
@@ -79,7 +87,17 @@ export default function RTWEmployeeSelectionTab({
           type="date"
           key={`selected-employee-${selectedEmp}-joining-date`}
           readOnly
-          defaultValue={getSelectedEmployeesDateOfJoining()}
+          defaultValue={
+            data && data.employee
+              ? toYYYYMMDD(
+                  new Date(
+                    data.employee.date_of_joining ??
+                      data.employee.hire_date ??
+                      new Date()
+                  )
+                )
+              : getSelectedEmployeesDateOfJoining()
+          }
         />
       </div>
 
@@ -89,6 +107,12 @@ export default function RTWEmployeeSelectionTab({
           name="date_of_check"
           type="date"
           required
+          readOnly={readOnly}
+          defaultValue={
+            data
+              ? toYYYYMMDD(new Date(data.date_of_check ?? new Date()))
+              : undefined
+          }
           onChange={(e) => setDateOfCheck(e.target.value)}
         />
       </div>

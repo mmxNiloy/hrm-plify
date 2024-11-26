@@ -40,14 +40,14 @@ export default function AttendanceDashboardSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/attendance/stats`}
         >
           <Icons.chart />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Attendance Statistics
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
 
         <SidebarLink
           href={`/dashboard/company/${company.company_id}/attendance/absent-report`}

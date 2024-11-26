@@ -35,13 +35,13 @@ export default async function SCRightToWorkPage({
   const [company, companyExtra, rtws] = await Promise.all([
     getCompanyDetails(companyId),
     getCompanyExtraData(companyId),
-    getCompanyRightToWorkChecks({ companyId, page, limit, experimental: true }),
+    getCompanyRightToWorkChecks({ companyId, page, limit }),
   ]);
 
   if (company.error || companyExtra.error || rtws.error) {
     return (
       <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Sponsor Management Dossier</p>
+        <p className="text-xl font-semibold">Right to Work Checks</p>
 
         <ErrorFallbackCard
           error={company.error ?? companyExtra.error ?? rtws.error}
@@ -52,7 +52,7 @@ export default async function SCRightToWorkPage({
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Monitoring and Reporting</p>
+      <p className="text-xl font-semibold">Right to Work Checks</p>
 
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
@@ -69,7 +69,11 @@ export default async function SCRightToWorkPage({
       </div>
       <StaticDataTable
         columns={CompanyRTWDataTableColumns}
-        data={rtws.data.data}
+        data={rtws.data.data.map((item) => ({
+          ...item.body,
+          employee: item.employee,
+          company_employees: companyExtra.data.employees,
+        }))}
         pageCount={rtws.data.total_page}
       />
     </main>

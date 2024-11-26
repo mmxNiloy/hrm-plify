@@ -41,13 +41,22 @@ import { IDutyRoster } from "@/schema/RotaSchema";
 import RTWEditTabs from "../../Tabs/RTWEditTabs";
 import { ICompanyUser } from "@/schema/UserSchema";
 import RTWFormContextProvider from "@/providers/RTWFormContextProvider";
-import { WIPToastOptions } from "@/utils/Misc";
+import {
+  RTWListAOptions,
+  RTWListBGroup1Options,
+  RTWListBGroup2Options,
+  toYYYYMMDD,
+  WIPToastOptions,
+} from "@/utils/Misc";
+import { IRightToWork, IRightToWorkBase } from "@/schema/RightToWork";
+import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 
 interface Props {
   company_id: number;
-  data?: IPayroll;
+  data?: IRightToWork;
   asIcon?: boolean;
   asEditable?: boolean;
+  readOnly?: boolean;
   employees?: IEmployeeWithUserMetadata[];
 }
 
@@ -61,6 +70,7 @@ export default function RTWEditDialog({
   employees = [],
   company_id,
   asEditable = false,
+  readOnly = false,
 }: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -73,6 +83,11 @@ export default function RTWEditDialog({
   const formRef: React.Ref<HTMLFormElement> | undefined = useRef(null);
 
   const handleNextTab = useCallback(() => {
+    if (readOnly) {
+      setCurrentTabIndex((oldVal) => oldVal + 1);
+      return;
+    }
+
     if (formRef.current) {
       const fd = new FormData(formRef.current);
       const [
@@ -92,11 +107,30 @@ export default function RTWEditDialog({
         fd.get("medium_of_check") as CheckMedium | undefined,
         fd.get("evidence_presented") as Evidence | undefined,
         fd.get("time_of_check") as string | undefined,
-        fd.getAll("list_a_options") as string[] | undefined,
-        fd.getAll("list_b_group_1_options") as string[] | undefined,
-        fd.getAll("list_b_group_2_options") as string[] | undefined,
+        ...[
+          RTWListAOptions.map(
+            (_, index) =>
+              (fd.get(`list_a_options_${index}`) as string | undefined) ?? "off"
+          ),
+        ],
+        ...[
+          RTWListBGroup1Options.map(
+            (_, index) =>
+              (fd.get(`list_b_group_1_options_${index}`) as
+                | string
+                | undefined) ?? "off"
+          ),
+        ],
+        ...[
+          RTWListBGroup2Options.map(
+            (_, index) =>
+              (fd.get(`list_b_group_2_options_${index}`) as
+                | string
+                | undefined) ?? "off"
+          ),
+        ],
       ];
-      console.log("Form Data", fd);
+      // console.log("Form Data", Object.fromEntries(fd.entries()));
 
       if (currentTabIndex == 0) {
         // Check if an employee is selected and a date is selected
@@ -146,63 +180,213 @@ export default function RTWEditDialog({
 
       setCurrentTabIndex((oldVal) => oldVal + 1);
     }
-  }, [currentTabIndex, toast]);
+  }, [currentTabIndex, readOnly, toast]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       e.stopPropagation();
 
-      toast(WIPToastOptions);
+      // toast(WIPToastOptions);
 
       const fd = new FormData(e.currentTarget);
 
-      const rtw = {
-        // Get rtw values from the form data or the data param
+      const [
+        employee_id,
+        date_of_check,
+        type_of_check,
+        medium_of_check,
+        evidence_presented,
+        time_of_check,
+        list_a_options,
+        list_b_group_1_options,
+        list_b_group_2_options,
+      ] = [
+        Number.parseInt((fd.get("employee_id") as string | undefined) ?? "0"),
+        (fd.get("date_of_check") as string | undefined) ??
+          toYYYYMMDD(new Date()),
+        (fd.get("type_of_check") as CheckType | undefined) ?? "",
+        (fd.get("medium_of_check") as CheckMedium | undefined) ?? "",
+        (fd.get("evidence_presented") as Evidence | undefined) ?? "",
+        (fd.get("time_of_check") as string | undefined) ??
+          new Date().toTimeString(),
+        ...[
+          RTWListAOptions.map(
+            (_, index) =>
+              (fd.get(`list_a_options_${index}`) as string | undefined) ?? "off"
+          ),
+        ],
+        ...[
+          RTWListBGroup1Options.map(
+            (_, index) =>
+              (fd.get(`list_b_group_1_options_${index}`) as
+                | string
+                | undefined) ?? "off"
+          ),
+        ],
+        ...[
+          RTWListBGroup2Options.map(
+            (_, index) =>
+              (fd.get(`list_b_group_2_options_${index}`) as
+                | string
+                | undefined) ?? "off"
+          ),
+        ],
+      ];
+
+      var rtw: IRightToWorkBase = {
+        employee_id,
+        date_of_check,
+        type_of_check,
+        medium_of_check,
+        evidence_presented,
+        time_of_check,
+        list_a_options,
+        list_b_group_1_options,
+        list_b_group_2_options,
+        is_photo_consistent: fd.get("is_photo_consistent") as string,
+        is_dob_consistent: fd.get("is_dob_consistent") as string,
+        is_not_expired: fd.get("is_not_expired") as string,
+        is_not_restricted: fd.get("is_not_restricted") as string,
+        is_doc_genuine: fd.get("is_doc_genuine") as string,
+        is_name_consistent: fd.get("is_name_consistent") as string,
+        has_passport_copy: fd.get("has_hard_copy") as string,
+        has_all_other_docs: fd.get("has_all_other_docs") as string,
+        list_b_group_1_follow_up_date:
+          (fd.get("list_b_group_1_follow_up_date") as string | undefined) ?? "",
+        list_b_group_2_follow_up_date:
+          (fd.get("list_b_group_2_follow_up_date") as string | undefined) ?? "",
+        euss_follow_up_date:
+          (fd.get("euss_follow_up_date") as string | undefined) ?? "",
+        rtw_evidence_scan_1:
+          (fd.get("rtw_evidence_scan_1") as string | undefined) ?? "",
+        rtw_evidence_scan_1_file: fd.get("rtw_evidence_scan_1_file") as
+          | File
+          | undefined,
+        rtw_evidence_scan_1_file_url: data?.rtw_evidence_scan_1_file_url,
+        rtw_evidence_scan_2:
+          (fd.get("rtw_evidence_scan_2") as string | undefined) ?? "",
+        rtw_evidence_scan_2_file: fd.get("rtw_evidence_scan_2_file") as
+          | File
+          | undefined,
+        rtw_evidence_scan_2_file_url: data?.rtw_evidence_scan_2_file_url,
+        rtw_report_doc: (fd.get("rtw_report_doc") as string | undefined) ?? "",
+        rtw_report_doc_file: fd.get("rtw_report_doc_file") as File | undefined,
+        rtw_report_doc_file_url: data?.rtw_report_doc_file_url,
+        rtw_check_result: fd.get("rtw_check_result") as string,
+        checker_name: fd.get("checker_name") as string,
+        checker_designation: fd.get("checker_designation") as string,
+        checker_contact: fd.get("checker_contact") as string,
+        checker_email: fd.get("checker_email") as string,
+        rtw_remarks: fd.get("rtw_remarks") as string,
+        is_copied_from_list_a:
+          ((fd.get("is_copied_from_list_a") as string | undefined) ??
+            "false") === "on",
+        is_copied_from_list_b_group_1:
+          ((fd.get("is_copied_from_list_b_group_1") as string | undefined) ??
+            "false") === "on",
+        is_copied_from_list_b_group_2:
+          ((fd.get("is_copied_from_list_b_group_2") as string | undefined) ??
+            "false") === "on",
       };
+
+      if (
+        rtw.rtw_evidence_scan_1_file ||
+        rtw.rtw_evidence_scan_2_file ||
+        rtw.rtw_report_doc_file
+      ) {
+        // Upload the images and get their url
+        const files = [
+          rtw.rtw_evidence_scan_1_file,
+          rtw.rtw_evidence_scan_2_file,
+          rtw.rtw_report_doc_file,
+        ];
+
+        const [scan1Upload, scan2Upload, docUpload] = await Promise.all(
+          files.map((file, index) => {
+            if (file) return upload(file);
+            return new Promise<
+              | {
+                  error: Error;
+                  data?: undefined;
+                }
+              | {
+                  data: IUploadResult;
+                  error?: undefined;
+                }
+            >((resolve, reject) => {
+              resolve({
+                data: {
+                  fileUrl:
+                    index == 0
+                      ? data?.rtw_evidence_scan_1_file_url ?? ""
+                      : index == 1
+                      ? data?.rtw_evidence_scan_2_file_url ?? ""
+                      : data?.rtw_report_doc_file_url ?? "",
+                  message: "Default Value",
+                },
+              });
+            });
+          })
+        );
+
+        if (scan1Upload.data) {
+          rtw.rtw_evidence_scan_1_file_url = scan1Upload.data.fileUrl;
+        }
+
+        if (scan2Upload.data) {
+          rtw.rtw_evidence_scan_2_file_url = scan2Upload.data.fileUrl;
+        }
+
+        if (docUpload.data) {
+          rtw.rtw_report_doc_file_url = docUpload.data.fileUrl;
+        }
+      }
 
       setLoading(true);
 
-      //   try {
-      //     const apiRes = await fetch(`/api/payroll`, {
-      //       method: data ? "PUT" : "POST",
-      //       body: JSON.stringify({
-      //         payroll,
-      //         employee_ids: [Number.parseInt(selectedEmployee ?? "0")],
-      //       }),
-      //     });
+      try {
+        console.log("RTW Request Body", rtw);
 
-      //     if (apiRes.ok) {
-      //       // Close dialog, show toast, refresh parent ssc
-      //       toast({
-      //         title: "Update Successful",
-      //         className: ToastSuccess,
-      //       });
-      //       // if (onSuccess) onSuccess(data.data.department_id);
+        const apiRes = await fetch(`/api/sponsor-compliance/rtw`, {
+          method: data ? "PUT" : "POST",
+          body: JSON.stringify({
+            ...rtw,
+            company_id,
+          }),
+        });
 
-      //       router.refresh();
-      //       setOpen(false);
-      //     } else {
-      //       // show a failure dialog
-      //       const res = await apiRes.json();
+        if (apiRes.ok) {
+          // Close dialog, show toast, refresh parent ssc
+          toast({
+            title: "Update Successful",
+            className: ToastSuccess,
+          });
+          // if (onSuccess) onSuccess(data.data.department_id);
 
-      //       toast({
-      //         title: "Update Failed",
-      //         description: JSON.stringify(res.message),
-      //         variant: "destructive",
-      //       });
-      //     }
-      //   } catch (err) {
-      //     // console.error("Failed to update employee personal information.", err);
-      //     toast({
-      //       title: "Update Failed",
-      //       variant: "destructive",
-      //     });
-      //   }
+          router.refresh();
+          setOpen(false);
+        } else {
+          // show a failure dialog
+          const res = await apiRes.json();
+
+          toast({
+            title: "Update Failed",
+            description: JSON.stringify(res.message),
+            variant: "destructive",
+          });
+        }
+      } catch (err) {
+        // console.error("Failed to update employee personal information.", err);
+        toast({
+          title: "Update Failed",
+          variant: "destructive",
+        });
+      }
 
       setLoading(false);
     },
-    [toast]
+    [company_id, data, router, toast]
   );
 
   return (
@@ -217,7 +401,11 @@ export default function RTWEditDialog({
       }}
     >
       <DialogTrigger asChild>
-        {asIcon ? (
+        {readOnly ? (
+          <Button variant={"ghost"} size="icon">
+            <Icons.visible />
+          </Button>
+        ) : asIcon ? (
           <Button variant={"ghost"} size="icon">
             <Icons.edit />
           </Button>
@@ -248,6 +436,8 @@ export default function RTWEditDialog({
             <div className="p-4">
               <RTWFormContextProvider>
                 <RTWEditTabs
+                  readOnly={readOnly}
+                  data={data}
                   employees={employees}
                   currentTabIndex={currentTabIndex}
                 />
@@ -290,7 +480,7 @@ export default function RTWEditDialog({
             </Button>
             <Button
               type="submit"
-              disabled={loading || currentTabIndex < 4}
+              disabled={loading || currentTabIndex < 4 || readOnly}
               className={ButtonSuccess}
               size="sm"
             >

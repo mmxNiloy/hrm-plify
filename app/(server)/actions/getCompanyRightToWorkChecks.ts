@@ -26,9 +26,10 @@ export async function getCompanyRightToWorkChecks({
 
     return { data };
   }
+
   const sessionId = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   const req = fetch(
-    `${process.env.API_BASE_URL}/company/operation/right-to-work?company_id=${companyId}&page=${page}&limit=${limit}`,
+    `${process.env.API_BASE_URL}/rtw/company/${companyId}?page=${page}&limit=${limit}`,
     {
       headers: {
         Authorization: `Bearer ${sessionId?.value}`,

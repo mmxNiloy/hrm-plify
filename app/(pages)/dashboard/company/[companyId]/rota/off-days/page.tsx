@@ -12,6 +12,8 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { StaticDataTable } from "@/components/ui/data-table";
+import { OffDaysDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/OffDaysDataTableColumns";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -67,11 +69,13 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
         />
       </div>
 
-      <OffDaysDataTable
+      <StaticDataTable
+        showOptions={false}
         data={paginatedOffDays.data.data.map((item) => ({
           ...item,
           shifts: allShifts.data.data,
         }))}
+        columns={OffDaysDataTableColumns}
       />
     </main>
   );

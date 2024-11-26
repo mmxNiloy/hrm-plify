@@ -17,6 +17,7 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function EmploymentTypeEditPopover({
   company_id,
@@ -138,7 +139,9 @@ export default function EmploymentTypeEditPopover({
               className={cn(ButtonBlue, "w-full")}
               size={"icon"}
               type="submit"
-              disabled={loading}
+              disabled={
+                loading || SiteConfig.featureFlags.disableExperimentalUI
+              }
               title="Submit"
             >
               <Icons.check /> Submit

@@ -23,7 +23,7 @@ function getFilters(searchParams: ISearchParams) {
   return {
     employee_id: Math.max(
       0,
-      Number.parseInt((searchParams.employee_id as string | undefined) ?? "0")
+      Number.parseInt((searchParams.employee as string | undefined) ?? "0")
     ),
     from_date: searchParams.datepicker_from_date as string | undefined,
     end_date: searchParams.datepicker_to_date as string | undefined,

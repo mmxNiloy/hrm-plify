@@ -19,9 +19,13 @@ import {
   ButtonWarn,
 } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import CompanyDocumentFormFragment from "../../../Form/Fragment/Company/CompanyDocumentFormFragment";
 import { useToast } from "@/components/ui/use-toast";
+import { upload } from "@/app/(server)/actions/upload";
+import { setSourceMapsEnabled } from "process";
+import { useRouter } from "next/navigation";
+import { ToastSuccess } from "@/styles/toast.tailwind";
 
 export default function CompanyDocumentEditDialog({
   data,
@@ -35,36 +39,76 @@ export default function CompanyDocumentEditDialog({
   company_id: number;
 }) {
   const { toast } = useToast();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       e.stopPropagation();
+      setLoading(true);
+
       const fd = new FormData(e.currentTarget);
-      const apiRes = await fetch(`/api/company/document/${company_id}`, {
-        method: type === "edit" ? "PUT" : "POST",
-        body: fd,
+      var doc: ICompanyDoc = {
+        doc_id: data?.doc_id ?? 0,
+        company_id: Number.parseInt(`${company_id}`),
+        doc_type: fd.get("doc_type") as string,
+        doc_name: fd.get("doc_name") as string,
+      };
+
+      const docFile = fd.get("doc_file") as File | undefined;
+      var docLink = data?.doc_link ?? "";
+      if (docFile) {
+        const docUpload = await upload(docFile);
+        if (docUpload.error) {
+          toast({
+            title: "Failed to upload the document",
+            description: docUpload.error.message,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        docLink = docUpload.data.fileUrl;
+      }
+
+      doc.doc_link = docLink;
+
+      const apiRes = await fetch(`/api/company/document`, {
+        method: data ? "PATCH" : "POST",
+        body: JSON.stringify(doc),
       });
-      const res = await apiRes.json();
-      toast({
-        title: res.message,
-        description: JSON.stringify(res.data),
-      });
+      setLoading(false);
+      if (apiRes.ok) {
+        toast({
+          title: "Document Update Successful",
+          className: ToastSuccess,
+        });
+        setOpen(false);
+        router.refresh();
+      } else {
+        toast({
+          title: "Document Update Failed",
+          variant: "destructive",
+        });
+      }
     },
-    [company_id, toast, type]
+    [company_id, data, router, toast]
   );
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant={asIcon ? "ghost" : "default"}
-          className={type === "edit" ? ButtonWarn : ButtonBlue}
-          size={asIcon ? "icon" : "sm"}
-        >
-          {type === "edit" ? <Icons.edit /> : <Icons.plus />}{" "}
-          {!asIcon &&
-            (type === "edit" ? "Update Document" : "Create a Document")}
-        </Button>
+        {asIcon ? (
+          <Button variant={"ghost"} size="icon">
+            <Icons.edit />
+          </Button>
+        ) : (
+          <Button className={ButtonBlue}>
+            <Icons.plus /> Create a Document
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className={DialogContentWidth}>
@@ -95,11 +139,13 @@ export default function CompanyDocumentEditDialog({
               </Button>
             </DialogClose>
 
-            <Button
-              className={type === "edit" ? ButtonWarn : ButtonSuccess}
-              size={"sm"}
-            >
-              {type === "edit" ? (
+            <Button className={data ? ButtonWarn : ButtonSuccess} size={"sm"}>
+              {loading ? (
+                <>
+                  <Icons.spinner className="animate-spin ease-in-out" />
+                  Updating...
+                </>
+              ) : data ? (
                 <>
                   <Icons.update /> Update
                 </>

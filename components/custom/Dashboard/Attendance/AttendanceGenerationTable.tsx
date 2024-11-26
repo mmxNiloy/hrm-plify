@@ -30,6 +30,7 @@ import { format } from "date-fns";
 import React, { useCallback, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { AttendanceGenerationRecordDataTableColumns } from "../../DataTable/Columns/Attendance/AttendanceGenerationRecordDataTableColumns";
+import { RangedDatePicker } from "../../DatePicker/RangedDatePicker";
 
 interface Props {
   companyId: number;
@@ -103,9 +104,12 @@ export default function AttendanceGenerationTable({
           <Select
             required
             name={"employee_id"}
-            onValueChange={(e) =>
-              setEmployee(employees.find((item) => `${item.employee_id}` === e))
-            }
+            onValueChange={(e) => {
+              setAttendance([]);
+              setEmployee(
+                employees.find((item) => `${item.employee_id}` === e)
+              );
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select an Employee" />
@@ -129,47 +133,12 @@ export default function AttendanceGenerationTable({
 
         <div className="flex flex-col gap-2">
           <Label className={RequiredAsterisk}>Select a Date Range</Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id="date"
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <Icons.calendar className="mr-2 h-4 w-4" />
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "LLL dd, y")} -{" "}
-                      {format(date.to, "LLL dd, y")}
-                    </>
-                  ) : (
-                    format(date.from, "LLL dd, y")
-                  )
-                ) : (
-                  <span>Pick a date range</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={1}
-              />
-            </PopoverContent>
-          </Popover>
+          <RangedDatePicker name="generation_range" required requireRangeEnd />
         </div>
 
         <div className="flex flex-col gap-2">
           {/* Error message upon submit */}
-          {!date ||
+          {/* {!date ||
             (!date.to && (
               <p className="text-red-500 text-xs">
                 {!date || !date.from
@@ -178,12 +147,8 @@ export default function AttendanceGenerationTable({
                   ? "An ending date is required"
                   : ""}
               </p>
-            ))}
-          <Button
-            disabled={!date || !date.from || !date.to || loading}
-            className={ButtonSuccess}
-            type="submit"
-          >
+            ))} */}
+          <Button className={ButtonSuccess} type="submit">
             {loading ? (
               <Icons.spinner className="animate-spin ease-in-out" />
             ) : (
@@ -195,6 +160,7 @@ export default function AttendanceGenerationTable({
       </form>
 
       <StaticDataTable
+        showOptions={false}
         loading={loading}
         data={attendance.map((item) => ({ ...item, employee }))}
         columns={AttendanceGenerationRecordDataTableColumns}

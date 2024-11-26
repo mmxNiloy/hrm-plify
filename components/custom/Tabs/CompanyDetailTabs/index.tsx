@@ -108,7 +108,7 @@ export default function CompanyDetailTabs({
         content: (
           <CompanyDocumentsTab
             company_id={company.company_id}
-            data={company.company_doc_db}
+            data={company.company_docs_db}
             readOnly={readOnly}
           />
         ),

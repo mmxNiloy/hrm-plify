@@ -20,13 +20,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { RequiredAsterisk } from "@/styles/label.tailwind";
 import React, { useContext, useState } from "react";
 import VisaFrontSkeleton from "../../Employee/visa-front-skeleton";
 import RTWFormContext from "@/context/RTWFormContext";
 import { Textarea } from "@/components/ui/textarea";
+import { IFormFragmentProps } from "@/utils/Types";
+import { IRightToWork } from "@/schema/RightToWork";
 
-export default function RTWStep3CopyTab() {
+export default function RTWStep3CopyTab({
+  data,
+  readOnly,
+}: IFormFragmentProps<IRightToWork>) {
   const { selectedEmployee } = useContext(RTWFormContext);
   const [rtwEvidence1, setRTWEvidence1] = useState<string>();
   const [rtwEvidence2, setRTWEvidence2] = useState<string>();
@@ -44,7 +48,10 @@ export default function RTWStep3CopyTab() {
         <Checkbox
           name="has_passport_copy"
           id="has-passport-copy"
-          defaultChecked
+          defaultChecked={
+            data ? (data.has_passport_copy === "on" ? true : false) : true
+          }
+          disabled={readOnly}
         />
         <Label htmlFor="has-passport-copy">
           <b>Passports:</b> any page with the document expiry date, nationality,
@@ -55,8 +62,13 @@ export default function RTWStep3CopyTab() {
         </Label>
       </div>
       <div className="flex gap-2 col-span-full">
-        <Checkbox name="has_passport_copy" id="has-passport-copy" />
-        <Label htmlFor="has-passport-copy">
+        <Checkbox
+          disabled={readOnly}
+          defaultChecked={data?.has_all_other_docs === "on" ? true : false}
+          name="has_all_other_docs"
+          id="has-all-other-docs"
+        />
+        <Label htmlFor="has-all-other-docs">
           <b>All other documents:</b> the document in full, both sides of a
           biometric residence permit. You must also record and retain the date
           on which the check was made.
@@ -75,7 +87,13 @@ export default function RTWStep3CopyTab() {
       </p>
       <div className="flex flex-col gap-2 col-span-full">
         <div className="flex gap-2">
-          <Checkbox name="is_copied_from_list_a" id="is_copied_from_list_a" />
+          {/* TODO: Handle the case for readonly view here */}
+          <Checkbox
+            disabled={readOnly}
+            name="is_copied_from_list_a"
+            id="is_copied_from_list_a"
+            defaultChecked={data?.is_copied_from_list_a}
+          />
           <Label htmlFor="is_copied_from_list_a">
             <b>List A:</b> You have a continuous statutory excuse for the full
             duration of the person&apos;s employment with you. You are not
@@ -85,8 +103,10 @@ export default function RTWStep3CopyTab() {
 
         <div className="flex gap-2">
           <Checkbox
+            disabled={readOnly}
             name="is_copied_from_list_b_group_1"
             id="is_copied_from_list_b_group_1"
+            defaultChecked={data?.is_copied_from_list_b_group_1}
           />
           <Label htmlFor="is_copied_from_list_b_group_1">
             <b>List B - Group 1:</b> You have a time-limited statutory excuse
@@ -98,8 +118,10 @@ export default function RTWStep3CopyTab() {
 
         <div className="flex gap-2">
           <Checkbox
+            disabled={readOnly}
             name="is_copied_from_list_b_group_2"
             id="is_copied_from_list_b_group_2"
+            defaultChecked={data?.is_copied_from_list_b_group_2}
           />
           <Label htmlFor="is_copied_from_list_b_group_2">
             <b>List B - Group 2:</b> You have a time-limited statutory excuse
@@ -125,6 +147,8 @@ export default function RTWStep3CopyTab() {
                 type="date"
                 name="list_b_group_1_follow_up_date"
                 required
+                defaultValue={data?.list_b_group_1_follow_up_date}
+                readOnly={readOnly}
               />
             </TableCell>
           </TableRow>
@@ -135,13 +159,21 @@ export default function RTWStep3CopyTab() {
                 type="date"
                 name="list_b_group_2_follow_up_date"
                 required
+                defaultValue={data?.list_b_group_2_follow_up_date}
+                readOnly={readOnly}
               />
             </TableCell>
           </TableRow>
           <TableRow className="bg-muted">
             <TableCell>EUSS</TableCell>
             <TableCell>
-              <Input type="date" name="euss_follow_up_date" required />
+              <Input
+                type="date"
+                name="euss_follow_up_date"
+                required
+                defaultValue={data?.euss_follow_up_date}
+                readOnly={readOnly}
+              />
             </TableCell>
           </TableRow>
         </TableBody>
@@ -154,6 +186,8 @@ export default function RTWStep3CopyTab() {
           <Label>Select Document</Label>
           <Select
             name="rtw_evidence_scan_1"
+            defaultValue={data?.rtw_evidence_scan_1}
+            disabled={readOnly}
             onValueChange={(e) => setRTWEvidence1(e)}
           >
             <SelectTrigger>
@@ -174,10 +208,11 @@ export default function RTWStep3CopyTab() {
           <AvatarPicker
             key={`rtw-evidence-1-${rtwEvidence1}`}
             className="size-full max-h-64"
-            // TODO: get document photo here
+            src={data?.rtw_evidence_scan_1_file_url}
             name="rtw_evidence_scan_1_file"
             skeleton={<VisaFrontSkeleton />}
             variant="video"
+            readOnly={readOnly}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -187,6 +222,8 @@ export default function RTWStep3CopyTab() {
           <Select
             name="rtw_evidence_scan_2"
             onValueChange={(e) => setRTWEvidence2(e)}
+            defaultValue={data?.rtw_evidence_scan_2}
+            disabled={readOnly}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Document" />
@@ -206,10 +243,11 @@ export default function RTWStep3CopyTab() {
           <AvatarPicker
             key={`rtw-evidence-2-${rtwEvidence2}`}
             className="size-full max-h-64"
-            // TODO: get document photo here
+            src={data?.rtw_evidence_scan_2_file_url}
             name="rtw_evidence_scan_2_file"
             skeleton={<VisaFrontSkeleton />}
             variant="video"
+            readOnly={readOnly}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -219,6 +257,8 @@ export default function RTWStep3CopyTab() {
           <Select
             name="rtw_report_doc"
             onValueChange={(e) => setRTWReportDoc(e)}
+            defaultValue={data?.rtw_report_doc}
+            disabled={readOnly}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Document" />
@@ -238,17 +278,22 @@ export default function RTWStep3CopyTab() {
           <AvatarPicker
             key={`rtw-report-doc-${rtwReportDoc}`}
             className="size-full max-h-64"
-            // TODO: get document photo here
+            src={data?.rtw_report_doc_file_url}
             name="rtw_report_doc_file"
             skeleton={<VisaFrontSkeleton />}
             variant="video"
+            readOnly={readOnly}
           />
         </div>
 
         <div className="flex flex-col gap-2">
           <p>RTW Check Results</p>
           <Label>RTW Check Results</Label>
-          <Select name="rtw_check_result">
+          <Select
+            name="rtw_check_result"
+            defaultValue={data?.rtw_check_result}
+            disabled={readOnly}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select RTW Check Result" />
             </SelectTrigger>
@@ -263,20 +308,40 @@ export default function RTWStep3CopyTab() {
           </Select>
 
           <Label>Checker Name</Label>
-          <Input name="checker_name" required placeholder="Checker Name" />
+          <Input
+            name="checker_name"
+            required
+            placeholder="Checker Name"
+            defaultValue={data?.checker_name}
+            readOnly={readOnly}
+          />
 
           <Label>Designation</Label>
           <Input
             name="checker_designation"
             required
             placeholder="Designation"
+            defaultValue={data?.checker_designation}
+            readOnly={readOnly}
           />
 
           <Label>Contact No.</Label>
-          <Input name="checker_contact" required placeholder="Contact No." />
+          <Input
+            name="checker_contact"
+            required
+            placeholder="Contact No."
+            defaultValue={data?.checker_contact}
+            readOnly={readOnly}
+          />
 
           <Label>Email Address</Label>
-          <Input name="checker_email" required placeholder="Email Address" />
+          <Input
+            name="checker_email"
+            required
+            placeholder="Email Address"
+            defaultValue={data?.checker_email}
+            readOnly={readOnly}
+          />
         </div>
       </div>
 
@@ -287,6 +352,8 @@ export default function RTWStep3CopyTab() {
           rows={5}
           name="rtw_remarks"
           placeholder="Example: No dentist/sports job, No recourse to public fund. Maximum 20 hours weekly."
+          defaultValue={data?.rtw_remarks}
+          readOnly={readOnly}
         />
       </div>
     </div>

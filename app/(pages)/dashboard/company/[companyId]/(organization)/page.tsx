@@ -50,6 +50,8 @@ export default async function CompanyByIDPage({
     );
   }
 
+  // console.log("Company Details > Company Doc Db", company.data.company_docs_db);
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Details</p>

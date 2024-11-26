@@ -1,4 +1,5 @@
 "use client";
+import RTWEditDialog from "@/components/custom/Dialog/Company/RTWEditDialog";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
@@ -12,15 +13,16 @@ import Link from "next/link";
 
 export const CompanyRTWDataTableColumns: ColumnDef<IRightToWork>[] = [
   {
-    accessorKey: "id",
+    id: "id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,
+    cell: ({ row }) => row.index + 1,
   },
   {
     id: "employee-name",
     header: ({ column }) => <SortableHeader name="Employee" column={column} />,
     cell: ({ row }) =>
-      row.original.employees
-        ? getFullNameOfEmployee(row.original.employees)
+      row.original.employee
+        ? getFullNameOfEmployee(row.original.employee)
         : "N/A",
   },
   {
@@ -39,7 +41,14 @@ export const CompanyRTWDataTableColumns: ColumnDef<IRightToWork>[] = [
   },
   {
     id: "view-action",
-    cell: ({ row }) => <Icons.visible />,
+    cell: ({ row }) => (
+      <RTWEditDialog
+        data={row.original}
+        employees={row.original.company_employees}
+        company_id={row.original.employee!.company_id}
+        readOnly
+      />
+    ),
   },
   {
     id: "download-action",
@@ -47,6 +56,14 @@ export const CompanyRTWDataTableColumns: ColumnDef<IRightToWork>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => <Icons.edit />,
+    cell: ({ row }) => (
+      <RTWEditDialog
+        data={row.original}
+        employees={row.original.company_employees}
+        company_id={row.original.employee!.company_id}
+        asIcon
+        asEditable
+      />
+    ),
   },
 ];

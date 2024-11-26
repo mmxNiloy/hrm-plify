@@ -22,8 +22,13 @@ import { ICompanyUser } from "@/schema/UserSchema";
 import { Input } from "@/components/ui/input";
 import RTWFormContext from "@/context/RTWFormContext";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { IRightToWork } from "@/schema/RightToWork";
+import { IFormFragmentProps } from "@/utils/Types";
 
-export default function RTWCheckTypeTab() {
+export default function RTWCheckTypeTab({
+  data,
+  readOnly,
+}: IFormFragmentProps<IRightToWork>) {
   const { selectedEmployee, setSelectedEmployee, dateOfCheck } =
     useContext(RTWFormContext);
   const getSelectedEmployeesDateOfJoining = useCallback(() => {
@@ -44,7 +49,9 @@ export default function RTWCheckTypeTab() {
           name="employee_name"
           readOnly
           defaultValue={
-            selectedEmployee
+            data && data.employee
+              ? getFullNameOfEmployee(data.employee)
+              : selectedEmployee
               ? getFullNameOfEmployee(selectedEmployee)
               : undefined
           }
@@ -54,7 +61,11 @@ export default function RTWCheckTypeTab() {
 
       <div className="flex flex-col gap-2">
         <Label>Date of Check</Label>
-        <Input type="date" readOnly value={dateOfCheck} />
+        <Input
+          type="date"
+          readOnly
+          value={data?.date_of_check ?? dateOfCheck}
+        />
       </div>
 
       <div className="flex flex-col gap-2">
@@ -62,13 +73,27 @@ export default function RTWCheckTypeTab() {
         <Input
           type="date"
           readOnly
-          defaultValue={getSelectedEmployeesDateOfJoining()}
+          defaultValue={
+            data && data.employee
+              ? toYYYYMMDD(
+                  new Date(
+                    data.employee.date_of_joining ??
+                      data.employee.hire_date ??
+                      new Date()
+                  )
+                )
+              : getSelectedEmployeesDateOfJoining()
+          }
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Type of Check</Label>
-        <RadioGroup name="type_of_check" defaultValue="initial-check">
+        <RadioGroup
+          disabled={readOnly}
+          name="type_of_check"
+          defaultValue={data?.type_of_check ?? "initial-check"}
+        >
           <div className="flex gap-2 items-center">
             <RadioGroupItem value="initial-check" />
             <Label>Initial check before employment</Label>
@@ -86,8 +111,9 @@ export default function RTWCheckTypeTab() {
         <Label className={RequiredAsterisk}>Medium of Check</Label>
         <RadioGroup
           required
+          disabled={readOnly}
           name="medium_of_check"
-          defaultValue="in-person-check"
+          defaultValue={data?.medium_of_check ?? "in-person-check"}
         >
           <div className="flex gap-2 items-center">
             <RadioGroupItem value="in-person-check" />
@@ -104,7 +130,12 @@ export default function RTWCheckTypeTab() {
 
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Evidence Presented</Label>
-        <Select required name="evidence_presented">
+        <Select
+          required
+          disabled={readOnly}
+          defaultValue={data?.evidence_presented}
+          name="evidence_presented"
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select an Option" />
           </SelectTrigger>
@@ -123,7 +154,13 @@ export default function RTWCheckTypeTab() {
 
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Time of Check</Label>
-        <Input type="time" name="time_of_check" required />
+        <Input
+          type="time"
+          readOnly={readOnly}
+          name="time_of_check"
+          required
+          defaultValue={data?.time_of_check}
+        />
       </div>
     </div>
   );

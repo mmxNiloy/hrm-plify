@@ -71,7 +71,7 @@ export default function CompanyDocumentFormFragment({
         <Select
           required
           name="doc_type"
-          defaultValue={data?.doc_name ?? ""}
+          defaultValue={data?.doc_type ?? undefined}
           disabled={readOnly || disabled}
         >
           <SelectTrigger className="rounded-full" id="doc-type-select">
