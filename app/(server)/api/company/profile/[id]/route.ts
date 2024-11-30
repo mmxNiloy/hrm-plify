@@ -2,6 +2,7 @@ import { upload } from "@/app/(server)/actions/upload";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { IDProps } from "../../../apiParams";
+import SiteConfig from "@/utils/SiteConfig";
 
 export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
@@ -41,10 +42,13 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
     const founded_year = fd.get("founded_year"); // string
     const website = fd.get("website"); // string
     const logo = fd.get("logo") as File | undefined; // file
+    const logoUrl = fd.get("logo_url") as string | undefined;
     const is_active = fd.get("is_active") as "yes" | "no"; // enum('yes', 'no')
 
+    console.log("File included", logo);
+
     var uploadRes = undefined;
-    if (logo) {
+    if (logo && logo.size <= SiteConfig.maxFileSize) {
       uploadRes = await upload(logo);
     }
 
@@ -56,7 +60,7 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
       contact_number: contact_number as string,
       founded_year: Number.parseInt(founded_year as string),
       website: website as string,
-      logo: uploadRes?.data?.fileUrl ?? "",
+      logo: uploadRes?.data?.fileUrl ?? logoUrl ?? "",
       is_active: is_active === "yes" ? 1 : 0,
     };
 

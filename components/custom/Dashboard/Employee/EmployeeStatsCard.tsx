@@ -92,7 +92,7 @@ export default function EmployeeStatsCard({ employees, designations }: Props) {
                 <TableCell>Active Employees</TableCell>
                 <TableCell>{employees.length}</TableCell>
                 <TableCell>
-                  <Link passHref href={"all"}>
+                  <Link passHref href={"./employee/all"}>
                     <Button
                       className="rounded-full bg-blue-500 hover:bg-blue-400 text-white text-xs gap-1"
                       size="sm"
@@ -111,7 +111,7 @@ export default function EmployeeStatsCard({ employees, designations }: Props) {
                   }
                 </TableCell>
                 <TableCell>
-                  <Link href="migrant" passHref>
+                  <Link href="./employee/migrant" passHref>
                     <Button
                       className="rounded-full bg-purple-500 hover:bg-purple-400 text-white text-xs gap-1"
                       size="sm"

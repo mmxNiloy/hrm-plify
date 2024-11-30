@@ -20,12 +20,16 @@ import Icons from "@/components/ui/icons";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
+import { FilePicker } from "@/components/ui/file-picker";
+import { useContext } from "react";
+import EussDbsDialogContext from "@/context/EussDbsDialogContext";
 
 export default function EussFormFragment({
   data,
   readOnly,
   disabled,
 }: IFormFragmentProps<IEmployeeEussDbsData>) {
+  const { setEussDocError } = useContext(EussDbsDialogContext);
   return (
     <>
       {/* Reference No. (EUSS) */}
@@ -127,13 +131,13 @@ export default function EussFormFragment({
             </Button>
           )
         ) : (
-          <Input
+          <FilePicker
+            onError={() => setEussDocError(true)}
+            onSuccess={() => setEussDocError(false)}
+            className="data-[error=true]:border-red-500"
             key={`euss-doc-${data?.euss_doc}`}
-            type="file"
-            readOnly={readOnly}
             disabled={disabled}
             id="euss-doc"
-            defaultValue={data?.euss_doc ?? ""}
             placeholder="EUSS Document URL"
             name="euss_doc"
           />

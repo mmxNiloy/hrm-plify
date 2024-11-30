@@ -42,6 +42,7 @@ export default function CompanyDocumentEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,7 +60,7 @@ export default function CompanyDocumentEditDialog({
 
       const docFile = fd.get("doc_file") as File | undefined;
       var docLink = data?.doc_link ?? "";
-      if (docFile) {
+      if (docFile && !docError) {
         const docUpload = await upload(docFile);
         if (docUpload.error) {
           toast({
@@ -95,7 +96,7 @@ export default function CompanyDocumentEditDialog({
         });
       }
     },
-    [company_id, data, router, toast]
+    [company_id, data, docError, router, toast]
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -124,7 +125,10 @@ export default function CompanyDocumentEditDialog({
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <ScrollArea className="h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
-              <CompanyDocumentFormFragment data={data} />
+              <CompanyDocumentFormFragment
+                setDocError={setDocError}
+                data={data}
+              />
             </div>
           </ScrollArea>
 

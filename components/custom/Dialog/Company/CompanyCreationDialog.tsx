@@ -40,6 +40,7 @@ export default function CompanyCreationDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
+  const [imageFileError, setImageFileError] = useState<Boolean>(false);
 
   const handleCreateCompany = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,14 +49,12 @@ export default function CompanyCreationDialog({
 
       setLoading(true);
       const fd = new FormData(e.currentTarget);
-      if (asClient) {
-        fd.append("is_current_user_owner", "true");
-      }
+      fd.append("is_current_user_owner", asClient ? "true" : "false");
 
       // Try to upload the logo (if attached)
       const logoFile = fd.get("logo") as File | undefined;
       var logoUrl = "";
-      if (logoFile) {
+      if (logoFile && !imageFileError) {
         // Upload the logo
         const logoUpload = await upload(logoFile);
         if (logoUpload.error) {
@@ -108,7 +107,7 @@ export default function CompanyCreationDialog({
 
       setLoading(false);
     },
-    [asClient, router, toast]
+    [asClient, imageFileError, router, toast]
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -141,6 +140,7 @@ export default function CompanyCreationDialog({
           <ScrollArea className="h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
               <CompanyProfileFormFragment
+                onSizeExceeded={() => setImageFileError(false)}
                 asClient={asClient}
                 disabled={loading}
               />

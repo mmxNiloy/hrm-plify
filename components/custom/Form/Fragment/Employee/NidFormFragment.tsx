@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ComboBox } from "@/components/ui/combobox";
+import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,11 +24,15 @@ import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
 import React from "react";
 
+interface Props extends IFormFragmentProps<IEmployeeNid> {
+  setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
 export default function NidFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<IEmployeeNid>) {
+  setDocError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -156,8 +161,14 @@ export default function NidFormFragment({
             </Button>
           )
         ) : (
-          <Input
-            type="file"
+          <FilePicker
+            onError={() => {
+              if (setDocError) setDocError(true);
+            }}
+            onSuccess={() => {
+              if (setDocError) setDocError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             key={`document-${data?.document}`}
             id="document-input"
             name="document"

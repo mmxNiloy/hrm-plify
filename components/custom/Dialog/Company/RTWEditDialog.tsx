@@ -50,6 +50,7 @@ import {
 } from "@/utils/Misc";
 import { IRightToWork, IRightToWorkBase } from "@/schema/RightToWork";
 import { IUploadResult, upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface Props {
   company_id: number;
@@ -306,7 +307,8 @@ export default function RTWEditDialog({
 
         const [scan1Upload, scan2Upload, docUpload] = await Promise.all(
           files.map((file, index) => {
-            if (file) return upload(file);
+            if (file && file.size <= SiteConfig.maxFileSize)
+              return upload(file);
             return new Promise<
               | {
                   error: Error;

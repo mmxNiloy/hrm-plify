@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,11 +16,16 @@ import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
 import React from "react";
 
+interface Props extends IFormFragmentProps<ICompanyAuthorizedDetailsBase> {
+  setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
+
 export default function CompanyAuthorityFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<ICompanyAuthorizedDetailsBase>) {
+  setDocError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -155,12 +161,17 @@ export default function CompanyAuthorityFormFragment({
             </Button>
           </Link>
         ) : (
-          <Input
+          <FilePicker
             readOnly={readOnly}
             disabled={disabled}
-            type="file"
+            onError={() => {
+              if (setDocError) setDocError(true);
+            }}
+            onSuccess={() => {
+              if (setDocError) setDocError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             name="document"
-            className="rounded-full"
             id="document-input"
           />
         )}

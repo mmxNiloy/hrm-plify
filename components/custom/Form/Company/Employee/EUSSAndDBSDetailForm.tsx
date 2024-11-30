@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ComboBox } from "@/components/ui/combobox";
+import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -104,7 +105,7 @@ export default function EUSSAndDBSDetailForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="upload-document-input">Upload Document</Label>
-          <Input type="file" id="upload-document-input" name="euss_document" />
+          <FilePicker id="upload-document-input" name="euss_document" />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="current-passport-radio">
@@ -223,7 +224,7 @@ export default function EUSSAndDBSDetailForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="upload-document-input">Upload Document</Label>
-          <Input type="file" id="upload-document-input" name="dbs_document" />
+          <FilePicker id="upload-document-input" name="dbs_document" />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="current-passport-radio">

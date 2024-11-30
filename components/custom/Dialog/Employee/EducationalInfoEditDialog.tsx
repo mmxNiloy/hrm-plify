@@ -35,6 +35,8 @@ export default function EducationalInfoEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [certError, setCertError] = useState<Boolean>(false);
+  const [transcriptError, setTranscriptError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +54,7 @@ export default function EducationalInfoEditDialog({
       var certificate_link = data?.certificate_link ?? "";
 
       const uploadTasks = [];
-      if (transcript) uploadTasks.push(upload(transcript));
+      if (transcript && !transcriptError) uploadTasks.push(upload(transcript));
       else {
         uploadTasks.push(
           new Promise<{
@@ -71,7 +73,7 @@ export default function EducationalInfoEditDialog({
           })
         );
       }
-      if (certificate) uploadTasks.push(upload(certificate));
+      if (certificate && !certError) uploadTasks.push(upload(certificate));
       else {
         uploadTasks.push(
           new Promise<{
@@ -163,7 +165,7 @@ export default function EducationalInfoEditDialog({
       }
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [certError, data, employee_id, router, toast, transcriptError]
   );
 
   return (
@@ -200,7 +202,9 @@ export default function EducationalInfoEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <EducationDetailsFormFragment data={data} />
+              <EducationDetailsFormFragment
+                {...{ data, setTranscriptError, setCertError }}
+              />
             </div>
           </ScrollArea>
 

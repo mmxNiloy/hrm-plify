@@ -11,12 +11,18 @@ import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { toYYYYMMDD } from "@/utils/Misc";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { Textarea } from "@/components/ui/textarea";
+import { FilePicker } from "@/components/ui/file-picker";
+
+interface Props extends IFormFragmentProps<IEmployeePassportDetail> {
+  setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
 
 export default function PassportDetailsFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<IEmployeePassportDetail>) {
+  setDocError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -112,10 +118,16 @@ export default function PassportDetailsFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="document-input">Document</Label>
         {!readOnly ? (
-          <Input
+          <FilePicker
             disabled={disabled}
             id="document-input"
-            type="file"
+            onError={() => {
+              if (setDocError) setDocError(true);
+            }}
+            onSuccess={() => {
+              if (setDocError) setDocError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             name="document"
           />
         ) : data?.document ? (

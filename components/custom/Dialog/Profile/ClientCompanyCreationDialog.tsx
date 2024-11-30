@@ -29,6 +29,7 @@ import { IUser } from "@/schema/UserSchema";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
       // Try to upload the logo (if attached)
       const logoFile = fd.get("logo") as File | undefined;
       var logoUrl = "";
-      if (logoFile) {
+      if (logoFile && logoFile.size <= SiteConfig.maxFileSize) {
         // Upload the logo
         const logoUpload = await upload(logoFile);
         if (logoUpload.error) {

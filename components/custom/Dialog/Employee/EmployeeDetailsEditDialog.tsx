@@ -21,6 +21,7 @@ import React, { useCallback, useState } from "react";
 import EmployeeDetailsFormFragment from "../../Form/Fragment/Employee/EmployeeDetailsFormFragment";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function EmployeeDetailsEditDialog({
   data,
@@ -60,7 +61,7 @@ export default function EmployeeDetailsEditDialog({
       // If an image is selected, upload the image and set the new image source
       var image = data?.image ?? "";
 
-      if (profile_pic) {
+      if (profile_pic && profile_pic.size <= SiteConfig.maxFileSize) {
         const uploadRes = await upload(profile_pic);
         if (uploadRes.error) {
           toast({

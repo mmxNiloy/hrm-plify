@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ComboBox } from "@/components/ui/combobox";
+import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -119,8 +120,8 @@ export default function PassportAndVisaDetailForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="upload-document-input">Upload Document</Label>
-          <Input
-            type="file"
+          <FilePicker
+            className="data-[error=true]:border-red-500"
             id="upload-document-input"
             name="passport_document"
           />
@@ -259,7 +260,11 @@ export default function PassportAndVisaDetailForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="upload-document-input">Upload Document</Label>
-          <Input type="file" id="upload-document-input" name="visa_document" />
+          <FilePicker
+            className="data-[error=true]:border-red-500"
+            id="upload-document-input"
+            name="visa_document"
+          />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -274,8 +279,8 @@ export default function PassportAndVisaDetailForm({
           <Label htmlFor="upload-bank-side-document-input">
             Upload Bank Side Document
           </Label>
-          <Input
-            type="file"
+          <FilePicker
+            className="data-[error=true]:border-red-500"
             id="upload-bank-side-document-input"
             name="visa_bank_document"
           />

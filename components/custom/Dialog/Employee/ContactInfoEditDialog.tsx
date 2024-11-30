@@ -33,6 +33,7 @@ export default function ContactInfoEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,7 +46,7 @@ export default function ContactInfoEditDialog({
       setLoading(true);
 
       var document_link = data?.proof_address_doc_link ?? "";
-      if (doc) {
+      if (doc && !docError) {
         const docUpload = await upload(doc);
         if (docUpload.error) {
           toast({
@@ -111,7 +112,7 @@ export default function ContactInfoEditDialog({
       }
       setLoading(false);
     },
-    [data, employeeId, router, toast]
+    [data, docError, employeeId, router, toast]
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -137,7 +138,7 @@ export default function ContactInfoEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <ContactInfoFormFragment data={data} />
+              <ContactInfoFormFragment setDocError={setDocError} data={data} />
             </div>
           </ScrollArea>
 

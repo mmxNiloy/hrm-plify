@@ -11,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
 import React from "react";
@@ -46,6 +46,8 @@ export default async function CompanyDashboardPage({
       </main>
     );
   }
+
+  console.log("Super Admin > Companies > ", paginatedCompanies);
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Management</p>
@@ -62,10 +64,10 @@ export default async function CompanyDashboardPage({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <CompanyCreationDialog />
+        <CompanyCreationDialog asClient={false} />
       </div>
 
-      <DataTable
+      <StaticDataTable
         data={paginatedCompanies.data}
         columns={CompanyDataTableColumns}
         pageCount={paginatedCompanies.total_page}

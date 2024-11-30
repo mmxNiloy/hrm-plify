@@ -9,10 +9,15 @@ import React, {
   useState,
 } from "react";
 import Icons from "./icons";
+import SiteConfig from "@/utils/SiteConfig";
+import { useToast } from "./use-toast";
+import { ToastWarn } from "@/styles/toast.tailwind";
+import { withPrecision } from "@/utils/Misc";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholderIcon?: React.ReactNode;
   onPick?: (image: File) => void;
+  onSizeExceeded?: () => void;
   variant?: "circle" | "square" | "video";
   skeleton?: React.ReactNode;
 }
@@ -25,6 +30,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
       onPick,
       variant = "circle",
       skeleton,
+      onSizeExceeded,
       ...props
     },
     ref
@@ -32,10 +38,26 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
     const [error, setError] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<File>();
     const [imageURL, setImageURL] = useState<string | undefined>(props.src);
+    const { toast } = useToast();
+
     const handleImageSelect = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
           const mFile = e.target.files[0];
+          if (mFile.size > SiteConfig.maxFileSize) {
+            toast({
+              title: "File too large",
+              description: `Selected file exceeds the ${withPrecision({
+                num: SiteConfig.maxFileSize / 1e6,
+              })} MB limit. Current file size: ${withPrecision({
+                num: mFile.size / 1e6,
+              })} MB. Please select a file within the limit.`,
+              className: ToastWarn,
+            });
+            if (onSizeExceeded) onSizeExceeded();
+            return;
+          }
+
           setSelectedImage(mFile);
           setImageURL(URL.createObjectURL(mFile));
           setError(false);
@@ -43,7 +65,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
           if (onPick) onPick(mFile);
         }
       },
-      [onPick]
+      [onPick, onSizeExceeded, toast]
     );
 
     const inputRef: React.Ref<HTMLInputElement> | undefined = useRef(null);

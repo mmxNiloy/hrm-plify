@@ -21,8 +21,9 @@ import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
 import { IEmployeeEussDbsData } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ToastSuccess } from "@/styles/toast.tailwind";
+import { ToastSuccess, ToastWarn } from "@/styles/toast.tailwind";
 import { IUploadResponse, upload } from "@/app/(server)/actions/upload";
+import EussDbsDialogContext from "@/context/EussDbsDialogContext";
 
 export default function EussDbsEditDialog({
   employee_id,
@@ -37,6 +38,8 @@ export default function EussDbsEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [eussDocError, setEussDocError] = useState<Boolean>(false);
+  const [dbsDocError, setDbsDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,8 +52,17 @@ export default function EussDbsEditDialog({
 
       setLoading(true);
 
+      if (eussDocError || dbsDocError) {
+        toast({
+          title: "File too large",
+          description:
+            "Attached document exceeds file limit. File(s) will not be uploaded.",
+          className: ToastWarn,
+        });
+      }
+
       const [eussDocUpload, dbsDocUpload] = await Promise.all([
-        euss_doc
+        euss_doc && !eussDocError
           ? upload(euss_doc)
           : new Promise<IUploadResponse>((resolve, reject) => {
               resolve({
@@ -60,7 +72,7 @@ export default function EussDbsEditDialog({
                 },
               });
             }),
-        dbs_doc
+        dbs_doc && !dbsDocError
           ? upload(dbs_doc)
           : new Promise<IUploadResponse>((resolve, reject) => {
               resolve({
@@ -143,7 +155,7 @@ export default function EussDbsEditDialog({
 
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [data, dbsDocError, employee_id, eussDocError, router, toast]
   );
 
   return (
@@ -183,12 +195,21 @@ export default function EussDbsEditDialog({
               <p className="text-lg font-semibold col-span-full">
                 EUSS/Time Limit Information
               </p>
-              <EussFormFragment data={data} />
+              <EussDbsDialogContext.Provider
+                value={{
+                  eussDocError,
+                  setEussDocError,
+                  dbsDocError,
+                  setDbsDocError,
+                }}
+              >
+                <EussFormFragment data={data} />
 
-              <p className="text-lg font-semibold col-span-full">
-                Disclosure and Barring Service (DBS) Details
-              </p>
-              <DbsFormFragment data={data} />
+                <p className="text-lg font-semibold col-span-full">
+                  Disclosure and Barring Service (DBS) Details
+                </p>
+                <DbsFormFragment data={data} />
+              </EussDbsDialogContext.Provider>
             </div>
           </ScrollArea>
 

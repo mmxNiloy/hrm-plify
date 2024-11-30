@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function VisaBrpEditDialog({
   employee_id,
@@ -54,7 +55,7 @@ export default function VisaBrpEditDialog({
       };
 
       const [fImgUpload, bImgUpload] = await Promise.all([
-        fImg
+        fImg && fImg.size <= SiteConfig.maxFileSize
           ? upload(fImg)
           : new Promise<{
               data: {
@@ -71,7 +72,7 @@ export default function VisaBrpEditDialog({
                 error: undefined,
               });
             }),
-        bImg
+        bImg && bImg.size <= SiteConfig.maxFileSize
           ? upload(bImg)
           : new Promise<{
               data: {

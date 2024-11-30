@@ -36,6 +36,7 @@ export default function PassportDetailsEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,7 +49,7 @@ export default function PassportDetailsEditDialog({
       setLoading(true);
       // Request API here
       var document_link = data?.document ?? "";
-      if (doc) {
+      if (doc && !docError) {
         const uploadRes = await upload(doc);
         if (uploadRes.error) {
           toast({
@@ -107,7 +108,7 @@ export default function PassportDetailsEditDialog({
       }
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [data, docError, employee_id, router, toast]
   );
 
   return (
@@ -144,7 +145,10 @@ export default function PassportDetailsEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <PassportDetailsFormFragment data={data} />
+              <PassportDetailsFormFragment
+                setDocError={setDocError}
+                data={data}
+              />
             </div>
           </ScrollArea>
 

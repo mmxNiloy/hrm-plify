@@ -21,6 +21,7 @@ import React, { useCallback, useState } from "react";
 
 interface Props extends IFormFragmentProps<ICompany> {
   asClient?: boolean;
+  onSizeExceeded?: () => void;
 }
 
 export default function CompanyProfileFormFragment({
@@ -28,6 +29,7 @@ export default function CompanyProfileFormFragment({
   readOnly,
   disabled,
   asClient = false,
+  onSizeExceeded,
 }: Props) {
   return (
     <>
@@ -196,12 +198,14 @@ export default function CompanyProfileFormFragment({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="logo-input">Logo</Label>
+        <Input className="hidden" defaultValue={data?.logo} name="logo_url" />
         <div className="relative">
           <AvatarPicker
             key={`company-logo-${data?.logo}`}
             readOnly={readOnly}
             disabled={disabled}
             name="logo"
+            onSizeExceeded={onSizeExceeded}
             placeholderIcon={
               <Icons.factory
                 className={cn(

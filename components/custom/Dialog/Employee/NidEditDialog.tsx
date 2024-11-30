@@ -35,6 +35,7 @@ export default function NidEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,7 +48,7 @@ export default function NidEditDialog({
       setLoading(true);
 
       var document_link = data?.document ?? "";
-      if (doc) {
+      if (doc && !docError) {
         const docUpload = await upload(doc);
         if (docUpload.error) {
           toast({
@@ -109,7 +110,7 @@ export default function NidEditDialog({
       }
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [data, docError, employee_id, router, toast]
   );
 
   return (
@@ -146,7 +147,7 @@ export default function NidEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <NidFormFragment data={data} />
+              <NidFormFragment setDocError={setDocError} data={data} />
             </div>
           </ScrollArea>
 

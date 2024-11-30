@@ -618,3 +618,16 @@ export const RTWListBGroup2Options: string[] = [
   "An application registration card issued by the Home Office stating that the holder is permitted to take the employment in question, together with a Positive Verification Notice from the Home Office Employer Checking Service.",
   "A Positive Verification Notice issued by the Home Office Employer Checking Service to the employer or prospective employer, which indicates that the named person may stay in the UK and is permitted to do the work in question.",
 ];
+
+export function withPrecision({
+  num,
+  precision = 2,
+}: {
+  num: number;
+  precision?: number;
+}) {
+  if (precision < 1) precision = 1;
+  const shift = Math.pow(10, precision);
+
+  return (Math.round(num * shift) / shift).toFixed(precision);
+}

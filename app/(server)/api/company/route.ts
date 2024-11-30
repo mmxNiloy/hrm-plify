@@ -79,10 +79,14 @@ export async function POST(req: NextRequest) {
       website: (fd.get("website") ?? "") as string,
       logo: (fd.get("logo") ?? "") as string,
       contact_number: (fd.get("contact_number") ?? "") as string,
-      is_current_user_owner: Boolean(
-        (fd.get("is_current_user_owner") as string | undefined) ?? "false"
-      ),
+      is_current_user_owner:
+        ((fd.get("is_current_user_owner") as string | undefined) ?? "false") ===
+        "false"
+          ? false
+          : true,
     };
+
+    console.log("POST > Create company > Request Body >", data);
 
     const apiRes = await fetch(`${process.env.API_BASE_URL}/companies/create`, {
       method: "POST",

@@ -1,4 +1,5 @@
 import { ComboBox } from "@/components/ui/combobox";
+import { FilePicker } from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -329,8 +330,7 @@ export default function EmployeeDetailForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="proof-of-address-input">Proof of Address</Label>
-          <Input
-            type="file"
+          <FilePicker
             placeholder="Proof of address"
             defaultValue={defaultData?.proof_of_address ?? ""}
           />

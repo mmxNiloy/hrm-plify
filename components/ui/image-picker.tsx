@@ -3,6 +3,10 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React, { ChangeEvent, useCallback, useRef, useState } from "react";
 import Icons from "./icons";
+import SiteConfig from "@/utils/SiteConfig";
+import { ToastWarn } from "@/styles/toast.tailwind";
+import { useToast } from "./use-toast";
+import { withPrecision } from "@/utils/Misc";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   skeleton?: Readonly<React.ReactNode>;
@@ -12,17 +16,33 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const ImagePicker = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, skeleton, imageClassName, ...props }, ref) => {
     const [selectedImage, setSelectedImage] = useState<File>();
+    const { toast } = useToast();
+
     const handleImageSelect = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
+          const mFile = e.target.files[0];
+          if (mFile.size > SiteConfig.maxFileSize) {
+            toast({
+              title: "File too large",
+              description: `Selected file exceeds the ${withPrecision({
+                num: SiteConfig.maxFileSize / 1e6,
+              })} MB limit. Current file size: ${withPrecision({
+                num: mFile.size / 1e6,
+              })} MB. Please select a file within the limit.`,
+              className: ToastWarn,
+            });
+            setSelectedImage(undefined);
+            return;
+          }
+
           setSelectedImage(e.target.files[0]);
         }
       },
-      []
+      [toast]
     );
 
-    const inputRef: React.LegacyRef<HTMLInputElement> | undefined =
-      useRef(null);
+    const inputRef: React.Ref<HTMLInputElement> | undefined = useRef(null);
 
     return (
       <div

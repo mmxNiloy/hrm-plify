@@ -1,6 +1,7 @@
 "use server";
 
 import { withError } from "@/utils/Debug";
+import { withPrecision } from "@/utils/Misc";
 import SiteConfig from "@/utils/SiteConfig";
 import { cookies } from "next/headers";
 
@@ -15,10 +16,21 @@ export interface IUploadResponse {
 }
 
 export async function upload(file: File) {
+  if (file.size <= 0) {
+    // Ignore empty files
+    return {
+      error: new Error("File is empty!", {
+        cause: `Trying to upload an empty file. Please select a non-empty file.`,
+      }),
+    };
+  }
+
   if (file.size > SiteConfig.maxFileSize) {
     return {
       error: new Error("File too large", {
-        cause: `Trying to upload a file greater than ${SiteConfig.maxFileSize} bytes`,
+        cause: `Trying to upload a file greater than ${withPrecision({
+          num: SiteConfig.maxFileSize / 1e6,
+        })} MB`,
       }),
     };
   }
