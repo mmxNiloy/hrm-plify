@@ -64,7 +64,7 @@ export default function RTWCheckTypeTab({
         <Input
           type="date"
           readOnly
-          value={data?.date_of_check ?? dateOfCheck}
+          value={dateOfCheck ?? data?.date_of_check}
         />
       </div>
 
@@ -95,14 +95,17 @@ export default function RTWCheckTypeTab({
           defaultValue={data?.type_of_check ?? "initial-check"}
         >
           <div className="flex gap-2 items-center">
-            <RadioGroupItem value="initial-check" />
-            <Label>Initial check before employment</Label>
+            <RadioGroupItem id="radio-init-check" value="initial-check" />
+            <Label htmlFor="radio-init-check">
+              Initial check before employment
+            </Label>
           </div>
 
           <div className="flex gap-2 items-center">
-            <RadioGroupItem value="follow-up-check" />
-
-            <Label>Follow-up Check on an employee</Label>
+            <RadioGroupItem id="radio-followup-check" value="follow-up-check" />
+            <Label htmlFor="radio-followup-check">
+              Follow-up Check on an employee
+            </Label>
           </div>
         </RadioGroup>
       </div>
@@ -116,14 +119,20 @@ export default function RTWCheckTypeTab({
           defaultValue={data?.medium_of_check ?? "in-person-check"}
         >
           <div className="flex gap-2 items-center">
-            <RadioGroupItem value="in-person-check" />
-            <Label>In-person manual check with original documents</Label>
+            <RadioGroupItem
+              id="radio-in-person-check"
+              value="in-person-check"
+            />
+            <Label htmlFor="radio-in-person-check">
+              In-person manual check with original documents
+            </Label>
           </div>
 
           <div className="flex gap-2 items-center">
-            <RadioGroupItem value="online-check" />
-
-            <Label>Online right to work check</Label>
+            <RadioGroupItem id="radio-online-check" value="online-check" />
+            <Label htmlFor="radio-online-check">
+              Online right to work check
+            </Label>
           </div>
         </RadioGroup>
       </div>

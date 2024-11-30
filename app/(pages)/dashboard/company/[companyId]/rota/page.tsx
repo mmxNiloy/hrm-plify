@@ -1,9 +1,64 @@
-"use client";
+"use server";
+import React from "react";
+import { CompanyByIDPageProps } from "../PageProps";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import { getShifts } from "@/app/(server)/actions/getShifts";
+import ShiftManagementEditDialog from "@/components/custom/Dialog/Rota/ShiftManagementEditDialog";
+import ShiftManagementDataTable from "@/components/custom/DataTable/Rota/ShiftManagementDataTable";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
-import { usePathname, useRouter } from "next/navigation";
+interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
-export default function RotaDashboardPage() {
-  const pathname = usePathname();
-  const router = useRouter();
-  router.replace(pathname.concat("/shift"));
+export default async function RotaShiftManagementPage({
+  params,
+  searchParams,
+}: Props) {
+  const companyId = (await params).companyId;
+  const sParams = await searchParams;
+  const { limit, page } = getPaginationParams(sParams);
+
+  const user = JSON.parse(
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+
+  const [company, paginatedShifts] = await Promise.all([
+    getCompanyData(companyId),
+    getShifts({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+  ]);
+
+  if (company.error || paginatedShifts.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Shift Management</p>
+        <ErrorFallbackCard error={company.error ?? paginatedShifts.error} />
+      </main>
+    );
+  }
+
+  return (
+    <main className="container flex flex-col gap-2">
+      <p className="text-xl font-semibold">Shift Management</p>
+      <div className="flex items-center justify-between">
+        <MyBreadcrumbs
+          company={company.data}
+          user={user}
+          parent="Rota"
+          title="Shift Management"
+        />
+
+        <ShiftManagementEditDialog company_id={companyId} />
+      </div>
+
+      <ShiftManagementDataTable data={paginatedShifts.data.data} />
+    </main>
+  );
 }

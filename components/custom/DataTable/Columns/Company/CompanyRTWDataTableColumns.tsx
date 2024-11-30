@@ -13,9 +13,8 @@ import Link from "next/link";
 
 export const CompanyRTWDataTableColumns: ColumnDef<IRightToWork>[] = [
   {
-    id: "id",
+    accessorKey: "id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,
-    cell: ({ row }) => row.index + 1,
   },
   {
     id: "employee-name",

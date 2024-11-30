@@ -38,9 +38,7 @@ export default function RotaDashboardSidebar({
           </span>
         </SidebarLink> */}
 
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/rota/shift`}
-        >
+        <SidebarLink href={`/dashboard/company/${company.company_id}/rota`}>
           <Icons.clock />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Shift Management

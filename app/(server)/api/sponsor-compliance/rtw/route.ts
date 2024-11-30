@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
@@ -56,19 +56,22 @@ export async function PUT(req: NextRequest) {
   const bod = await req.json();
 
   try {
-    const apiRes = await fetch(`${process.env.API_BASE_URL}/rtw/edit`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${session.value}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bod),
-    });
+    const apiRes = await fetch(
+      `${process.env.API_BASE_URL}/rtw/update/${bod.id ?? 0}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${session.value}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bod),
+      }
+    );
 
     return NextResponse.json(await apiRes.json(), { status: apiRes.status });
   } catch (err) {
     console.error(
-      "PUT > Update Company RTW Checks > Failed to update RTW Checks\n",
+      "PATCH > Update Company RTW Checks > Failed to update RTW Checks\n",
       err
     );
     return NextResponse.json(

@@ -194,7 +194,6 @@ export default function CompanyProfileFormFragment({
         </div>
       </div>
 
-      {/* TODO: Replace logo with a file/image picker here */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="logo-input">Logo</Label>
         <div className="relative">

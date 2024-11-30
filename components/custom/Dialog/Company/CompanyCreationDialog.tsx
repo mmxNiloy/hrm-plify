@@ -27,6 +27,7 @@ import React, { useCallback, useState } from "react";
 import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfileFormFragment";
 import { cn } from "@/lib/utils";
 import refreshUserCookie from "@/app/(server)/actions/refreshUserCookie";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function CompanyCreationDialog({
   asClient = false,
@@ -51,7 +52,26 @@ export default function CompanyCreationDialog({
         fd.append("is_current_user_owner", "true");
       }
 
+      // Try to upload the logo (if attached)
+      const logoFile = fd.get("logo") as File | undefined;
+      var logoUrl = "";
+      if (logoFile) {
+        // Upload the logo
+        const logoUpload = await upload(logoFile);
+        if (logoUpload.error) {
+          toast({
+            title: "Upload Failed",
+            description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+            variant: "destructive",
+          });
+        } else {
+          logoUrl = logoUpload.data.fileUrl;
+        }
+      }
+
       try {
+        fd.delete("logo");
+        fd.append("logo", logoUrl);
         const apiRes = await fetch("/api/company", {
           method: "POST",
           body: fd,

@@ -2,6 +2,7 @@ import { IEmployeeWithUserMetadata } from "./EmployeeSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface IRightToWorkBase {
+  id: number;
   employee_id: number;
   date_of_check: string;
   type_of_check: string;
@@ -50,6 +51,7 @@ export interface IRightToWork extends IRightToWorkBase {
 
 export interface IPaginatedRTW extends IPaginatedResponse {
   data: {
+    id: number;
     body: IRightToWorkBase;
     employee: IEmployeeWithUserMetadata;
   }[];

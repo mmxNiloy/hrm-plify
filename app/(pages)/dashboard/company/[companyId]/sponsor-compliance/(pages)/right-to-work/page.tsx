@@ -73,6 +73,7 @@ export default async function SCRightToWorkPage({
           ...item.body,
           employee: item.employee,
           company_employees: companyExtra.data.employees,
+          id: item.id,
         }))}
         pageCount={rtws.data.total_page}
       />

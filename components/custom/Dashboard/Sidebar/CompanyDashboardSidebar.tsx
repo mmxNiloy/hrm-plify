@@ -244,7 +244,7 @@ export default function CompanyDashboardSidebar({
               </SidebarLink>
 
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/rota/shift`}
+                href={`/dashboard/company/${company.company_id}/rota`}
               >
                 <Icons.cycle />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">

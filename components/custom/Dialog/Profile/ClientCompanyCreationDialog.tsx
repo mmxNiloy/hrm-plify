@@ -28,6 +28,7 @@ import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfi
 import { IUser } from "@/schema/UserSchema";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
   const router = useRouter();
@@ -43,7 +44,27 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
       setLoading(true);
       const fd = new FormData(e.currentTarget);
 
+      // Try to upload the logo (if attached)
+      const logoFile = fd.get("logo") as File | undefined;
+      var logoUrl = "";
+      if (logoFile) {
+        // Upload the logo
+        const logoUpload = await upload(logoFile);
+        if (logoUpload.error) {
+          toast({
+            title: "Upload Failed",
+            description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+            variant: "destructive",
+          });
+        } else {
+          logoUrl = logoUpload.data.fileUrl;
+        }
+      }
+
       try {
+        fd.delete("logo");
+        fd.append("logo", logoUrl);
+
         const apiRes = await fetch("/api/company/client", {
           method: "POST",
           body: fd,

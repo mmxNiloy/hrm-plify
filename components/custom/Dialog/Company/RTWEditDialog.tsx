@@ -101,7 +101,8 @@ export default function RTWEditDialog({
         list_b_group_1_options,
         list_b_group_2_options,
       ] = [
-        Number.parseInt((fd.get("employee_id") as string | undefined) ?? "0"),
+        data?.employee_id ??
+          Number.parseInt((fd.get("employee_id") as string | undefined) ?? "0"),
         fd.get("date_of_check") as string | undefined,
         fd.get("type_of_check") as CheckType | undefined,
         fd.get("medium_of_check") as CheckMedium | undefined,
@@ -180,7 +181,7 @@ export default function RTWEditDialog({
 
       setCurrentTabIndex((oldVal) => oldVal + 1);
     }
-  }, [currentTabIndex, readOnly, toast]);
+  }, [currentTabIndex, data?.employee_id, readOnly, toast]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -235,6 +236,7 @@ export default function RTWEditDialog({
       ];
 
       var rtw: IRightToWorkBase = {
+        id: data?.id ?? 0,
         employee_id,
         date_of_check,
         type_of_check,
@@ -349,7 +351,7 @@ export default function RTWEditDialog({
         console.log("RTW Request Body", rtw);
 
         const apiRes = await fetch(`/api/sponsor-compliance/rtw`, {
-          method: data ? "PUT" : "POST",
+          method: data ? "PATCH" : "POST",
           body: JSON.stringify({
             ...rtw,
             company_id,

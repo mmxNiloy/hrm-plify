@@ -52,7 +52,7 @@ export default function RTWEmployeeSelectionTab({
         <Select
           required
           name="employee_id"
-          disabled={readOnly}
+          disabled={readOnly || Boolean(data)}
           defaultValue={data ? `${data.employee_id}` : undefined}
           onValueChange={(e) => {
             setSelectedEmp(e);
