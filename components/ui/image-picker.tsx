@@ -88,7 +88,7 @@ const ImagePicker = React.forwardRef<HTMLInputElement, InputProps>(
               imageClassName,
               "rounded-md size-full bg-slate-500 object-contain object-center"
             )}
-            src={props.src}
+            src={props.src.trim()}
           />
         ) : (
           <>

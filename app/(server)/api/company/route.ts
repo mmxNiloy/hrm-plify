@@ -50,6 +50,7 @@ export async function GET(req: NextRequest) {
 
 interface IPostBody extends ICompanyCreationBody {
   is_current_user_owner?: boolean;
+  is_active: 0 | 1;
 }
 
 export async function POST(req: NextRequest) {
@@ -84,6 +85,7 @@ export async function POST(req: NextRequest) {
         "false"
           ? false
           : true,
+      is_active: (fd.get("is_active") as string | undefined) === "yes" ? 1 : 0,
     };
 
     console.log("POST > Create company > Request Body >", data);
