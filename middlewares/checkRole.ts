@@ -1,5 +1,4 @@
 import { IRoles, IUser } from "@/schema/UserSchema";
-import { decrypt } from "@/utils/Security";
 import { NextRequest } from "next/server";
 
 export function checkRole(
