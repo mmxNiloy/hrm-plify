@@ -18,7 +18,8 @@ export default async function RotaShiftManagementPage({
   params,
   searchParams,
 }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const sParams = await searchParams;
   const { limit, page } = getPaginationParams(sParams);
 

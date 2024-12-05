@@ -133,9 +133,7 @@ export default function DesignationEditPopover({
               className={cn(ButtonBlue, "w-full")}
               size={"icon"}
               type="submit"
-              disabled={
-                loading || SiteConfig.featureFlags.disableExperimentalUI
-              }
+              disabled={loading}
               title="Submit"
             >
               <Icons.check /> Submit

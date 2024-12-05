@@ -14,7 +14,8 @@ export default async function PayrollDashboardLayout({
   children,
   params,
 }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyData(companyId);
 
   if (company.error) {

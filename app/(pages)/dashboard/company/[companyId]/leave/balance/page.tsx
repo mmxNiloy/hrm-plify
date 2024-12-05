@@ -20,7 +20,8 @@ export default async function CompanyLeaveBalancePage({
   params,
   searchParams,
 }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const { page, limit } = getPaginationParams(await searchParams);
 
   const user = JSON.parse(

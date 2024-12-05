@@ -18,7 +18,8 @@ import { OffDaysDataTableColumns } from "@/components/custom/DataTable/Columns/R
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function RotaDayOffPage({ params, searchParams }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;

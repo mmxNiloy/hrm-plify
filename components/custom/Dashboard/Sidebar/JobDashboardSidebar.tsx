@@ -79,19 +79,11 @@ export default function JobDashboardSidebar({
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/all`}
               >
-                Job List
+                <Icons.list />
+                Job Listings
               </SidebarLink>
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/posting`}
-              >
-                Job Posting
-              </SidebarLink>
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/published`}
-              >
-                Job Published
-              </SidebarLink>
-              <SidebarLink
+
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/applied`}
               >
                 Job Applied
@@ -115,12 +107,12 @@ export default function JobDashboardSidebar({
                 href={`/dashboard/company/${company.company_id}/job/rejected`}
               >
                 Rejected
-              </SidebarLink>
+              </SidebarLink> */}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
 
-        <SidebarLink
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/job/offer-letter`}
         >
           <Icons.mail />
@@ -143,10 +135,10 @@ export default function JobDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Status Search
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
 
         {/* Mock Interview Accordion */}
-        {!(open || hovered) && (
+        {/* {!(open || hovered) && (
           <Button
             variant={"ghost"}
             className={cn(
@@ -223,7 +215,7 @@ export default function JobDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Message Center
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
         <BackLinkButton />
         <span className="h-8"></span>
       </SidebarContent>

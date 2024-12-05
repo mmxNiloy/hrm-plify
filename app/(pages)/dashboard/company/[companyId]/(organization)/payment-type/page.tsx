@@ -12,7 +12,8 @@ import PaymentTypeEditPopover from "@/components/custom/Popover/Company/PaymentT
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function TaxPage({ params }: CompanyByIDPageProps) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;

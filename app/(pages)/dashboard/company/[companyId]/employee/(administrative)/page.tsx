@@ -13,7 +13,8 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 export default async function EmployeeDashboard({
   params,
 }: CompanyByIDPageProps) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;

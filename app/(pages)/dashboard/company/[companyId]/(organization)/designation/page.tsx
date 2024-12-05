@@ -19,7 +19,8 @@ export default async function DesignationsPage({
   params,
   searchParams,
 }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const { limit, page } = getPaginationParams(await searchParams);
   const [company, designations] = await Promise.all([
     getCompanyData(companyId),

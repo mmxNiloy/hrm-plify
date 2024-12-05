@@ -7,35 +7,43 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { getDesignations } from "@/app/(server)/actions/getDesignations";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { JobsDataTableColumns } from "@/components/custom/DataTable/Columns/JobsDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyJobListings } from "@/app/(server)/actions/getCompanyJobListings";
+import { JobListingDataTableColumns } from "@/components/custom/DataTable/Columns/Recruitment/JobListingDataTableColumns";
+import JobListingEditDialog from "@/components/custom/Dialog/Recruitment/JobListingEditDialog";
+import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
-export default async function AllJobsPage({ params, searchParams }: Props) {
-  const companyId = (await params).companyId;
+export default async function JobListingsPage({ params, searchParams }: Props) {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
   const { limit, page } = getPaginationParams(await searchParams);
 
-  const [company, designations] = await Promise.all([
+  const [company, jobs, employee, companyExtra] = await Promise.all([
     getCompanyData(companyId),
-    getDesignations({
+    getCompanyJobListings({
       company_id: companyId,
       page,
       limit,
     }),
+    getEmployeeData(),
+    getCompanyExtraData(companyId),
   ]);
 
-  if (company.error || designations.error) {
+  if (company.error || jobs.error || companyExtra.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">All Jobs</p>
-        <ErrorFallbackCard error={company.error ?? designations.error} />
+        <ErrorFallbackCard error={company.error ?? jobs.error} />
       </main>
     );
   }
@@ -50,11 +58,21 @@ export default async function AllJobsPage({ params, searchParams }: Props) {
           parent="Job & Recruitment"
           title="All Jobs"
         />
-        <AnimatedTrigger disabled label="Create a Job (WIP)" />
-        {/* <CreateJobPopover company_id={params.companyId} /> */}
+        <JobListingEditDialog
+          company_id={companyId}
+          companyData={companyExtra.data}
+          employeeId={employee.data?.data?.employee_id ?? 0}
+        />
       </div>
 
-      <DataTable data={designations.data} columns={JobsDataTableColumns} />
+      <StaticDataTable
+        pageCount={jobs.data.total_page}
+        data={jobs.data.data.map((item) => ({
+          ...item,
+          companyData: companyExtra.data,
+        }))}
+        columns={JobListingDataTableColumns}
+      />
     </main>
   );
 }

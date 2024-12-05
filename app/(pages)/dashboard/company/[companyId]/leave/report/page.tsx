@@ -30,7 +30,8 @@ export default async function CompanyLeaveReportPage({
   params,
   searchParams,
 }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const sParams = await searchParams;
   const { page, limit } = getPaginationParams(sParams);
 

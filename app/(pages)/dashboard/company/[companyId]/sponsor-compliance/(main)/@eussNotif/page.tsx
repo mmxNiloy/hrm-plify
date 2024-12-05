@@ -17,7 +17,8 @@ export default async function EUSSNotificationsSlot({
   params,
 }: Props) {
   const sParams = await searchParams;
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const { limit, page } = getPaginationParams(sParams, "euss");
   const empDocs = await getCompanyEmployeeDocuments({
     companyId,

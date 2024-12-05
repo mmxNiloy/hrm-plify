@@ -11,7 +11,8 @@ import { ITreeNode } from "@/schema/OrganogramSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const [company, companyExtra] = await Promise.all([
     getCompanyData(companyId),
     getCompanyExtraData(companyId),

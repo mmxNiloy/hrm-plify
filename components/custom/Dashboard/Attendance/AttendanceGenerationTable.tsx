@@ -2,7 +2,7 @@
 import { generateAttendance } from "@/app/(server)/actions/generateAttendance";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 import {
@@ -54,6 +54,21 @@ export default function AttendanceGenerationTable({
       e.preventDefault();
       e.stopPropagation();
 
+      const fd = new FormData(e.currentTarget);
+      const data = {
+        employee_id: Number.parseInt(
+          (fd.get("employee_id") as string | undefined) ?? "0"
+        ),
+        company_id: Number.parseInt(`${companyId}`),
+        from_date: fd.get("datepicker_from_date") as string,
+        to_date: fd.get("datepicker_to_date") as string,
+      };
+
+      setDate({
+        from: new Date(data.from_date),
+        to: new Date(data.to_date),
+      });
+
       if (!date || !date.from || !date.to) {
         toast({
           title: "Date Range Error",
@@ -63,16 +78,6 @@ export default function AttendanceGenerationTable({
         });
         return;
       }
-
-      const fd = new FormData(e.currentTarget);
-      const data = {
-        employee_id: Number.parseInt(
-          (fd.get("employee_id") as string | undefined) ?? "0"
-        ),
-        company_id: companyId,
-        from_date: fd.get("datepicker_from_date") as string,
-        to_date: fd.get("datepicker_to_date") as string,
-      };
 
       setLoading(true);
 
@@ -159,8 +164,8 @@ export default function AttendanceGenerationTable({
         </div>
       </form>
 
-      <StaticDataTable
-        showOptions={false}
+      <DataTable
+        // showOptions={false}
         loading={loading}
         data={attendance.map((item) => ({ ...item, employee }))}
         columns={AttendanceGenerationRecordDataTableColumns}

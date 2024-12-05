@@ -138,6 +138,7 @@ import {
   ZoomOut,
   RotateCcw,
   ExternalLink,
+  Copy,
 } from "lucide-react";
 import React from "react";
 
@@ -780,6 +781,7 @@ const BrokenImage = React.forwardRef<SVGElement, SVGAttributes>(
 BrokenImage.displayName = "BrokenImage";
 
 const Icons = {
+  copy: Copy,
   brokenImage: BrokenImage,
   externalLink: ExternalLink,
   reset: RotateCcw,

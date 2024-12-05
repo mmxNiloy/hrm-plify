@@ -33,7 +33,8 @@ export default async function SponsorComplianceDashboardLayout({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
 
   const company = await getCompanyData(companyId);
 

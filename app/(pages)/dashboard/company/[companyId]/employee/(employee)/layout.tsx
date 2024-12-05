@@ -15,7 +15,8 @@ interface Props extends LayoutProps, CompanyByIDPageProps {}
 
 export default async function EmployeeHomeLayout({ children, params }: Props) {
   // Get company information
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;

@@ -38,7 +38,8 @@ export default async function EmployeeAttendancePage({
   params,
   searchParams,
 }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -71,7 +72,7 @@ export default async function EmployeeAttendancePage({
 
   // Get report data from the server
   const reports = await getAttendanceReports({
-    company_id: companyId,
+    company_id: Number.parseInt(`${companyId}`),
     limit,
     page,
     filters,

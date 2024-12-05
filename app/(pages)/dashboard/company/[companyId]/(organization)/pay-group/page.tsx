@@ -20,7 +20,8 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 
 export default async function PayGroupPage({ params }: CompanyByIDPageProps) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;

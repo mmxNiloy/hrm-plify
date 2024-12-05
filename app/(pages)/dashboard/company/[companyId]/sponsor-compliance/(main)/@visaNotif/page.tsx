@@ -16,7 +16,8 @@ export default async function VisaNotificationsSlot({
   params,
 }: Props) {
   const sParams = await searchParams;
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const { limit, page } = getPaginationParams(sParams, "visa");
   const empDocs = await getCompanyEmployeeDocuments({ companyId, page, limit });
 

@@ -204,14 +204,24 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              <SidebarLink
+              <Button
+                disabled
+                className="justify-start gap-2"
+                variant={"ghost"}
+              >
+                <Icons.userKey />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  User Access Management
+                </span>
+              </Button>
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/user-access`}
               >
                 <Icons.userKey />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   User Access Management
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/leave`}

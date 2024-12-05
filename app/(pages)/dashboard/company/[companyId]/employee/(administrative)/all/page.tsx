@@ -32,7 +32,8 @@ export default async function AllEmployeePage({
   showMigrantEmployeesOnly,
 }: Props) {
   // Get company information
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const sParams = await searchParams;
   const { limit, page } = getPaginationParams(sParams);
 

@@ -54,7 +54,7 @@ export default function LeaveRequestEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const leaveReq: ILeaveRequest = {
-        company_id: company_id,
+        company_id: Number.parseInt(`${company_id}`),
         employee_id: data?.employee_id ?? employee_id ?? 0,
         end_date: new Date(
           (fd.get("end_date") as string | undefined) ?? new Date()

@@ -58,11 +58,13 @@ export default function CompanyCreationDialog({
         // Upload the logo
         const logoUpload = await upload(logoFile);
         if (logoUpload.error) {
-          toast({
-            title: "Upload Failed",
-            description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
-            variant: "destructive",
-          });
+          if (logoFile.size > 0) {
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+              variant: "destructive",
+            });
+          }
         } else {
           logoUrl = logoUpload.data.fileUrl;
         }

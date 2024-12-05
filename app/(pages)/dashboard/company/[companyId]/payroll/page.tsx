@@ -45,7 +45,8 @@ export default async function PayRollManagementPage({
   const selectedEmployee = sParams.employee as string | undefined;
   const selectedDate = sParams.pay_period as string | undefined;
 
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;

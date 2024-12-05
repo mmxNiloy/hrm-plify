@@ -25,7 +25,8 @@ export default async function EmploymentTypePage({
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyData(companyId);
 
   // TODO: Hit the api and get actual employment types

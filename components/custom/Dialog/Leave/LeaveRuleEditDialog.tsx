@@ -44,7 +44,7 @@ export default function LeaveRuleEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const leaveType: ILeaveRule = {
-        company_id: company_id,
+        company_id: Number.parseInt(`${company_id}`),
         effective_from: new Date(
           (fd.get("effective_from") as string | undefined) ?? new Date()
         ),

@@ -19,7 +19,8 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function HolidayListPage({ params, searchParams }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const { limit, page } = getPaginationParams(await searchParams);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"

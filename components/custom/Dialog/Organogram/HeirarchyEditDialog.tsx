@@ -55,7 +55,7 @@ export default function HeirarchyEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const leaveType: IOrganogramHeirarchyRecord = {
-        company_id: company_id,
+        company_id: Number.parseInt(`${company_id}`),
         heirarchy_record_id: data?.heirarchy_record_id ?? 1,
         designation_id: Number.parseInt(
           (fd.get("designation_id") as string | undefined) ?? "0"

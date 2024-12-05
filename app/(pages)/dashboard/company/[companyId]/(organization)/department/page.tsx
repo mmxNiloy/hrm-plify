@@ -17,7 +17,8 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
 export default async function DepartmentPage({ params, searchParams }: Props) {
-  const companyId = (await params).companyId;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const { page, limit } = getPaginationParams(await searchParams);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
