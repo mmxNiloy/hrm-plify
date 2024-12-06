@@ -1,3 +1,5 @@
+import { ICompany, IDepartment } from "./CompanySchema";
+import { IDesignation } from "./DesignationSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface IJobListing {
@@ -14,6 +16,10 @@ export interface IJobListing {
   status?: number;
   created_at?: Date;
   updated_at?: Date;
+
+  company?: ICompany;
+  department?: IDepartment;
+  designation?: IDesignation;
 }
 
 export interface IPaginatedJobListing extends IPaginatedResponse {

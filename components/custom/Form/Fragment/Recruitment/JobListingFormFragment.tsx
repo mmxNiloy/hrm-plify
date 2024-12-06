@@ -1,16 +1,6 @@
 "use client";
 import { generateJobDescription } from "@/app/(server)/actions/generateJobDescription";
-import { MonthPicker } from "@/components/custom/DatePicker/MonthPicker";
-import { MultiSelect } from "@/components/custom/Multiselect";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { LabelledComboBox } from "@/components/ui/combobox";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,20 +17,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { ICompanyExtraData } from "@/schema/CompanySchema";
-import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
-import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
 import { IJobListing } from "@/schema/JobSchema";
-import { IPayroll, ISalaryStructure } from "@/schema/Payroll";
+import Markdown from "react-markdown";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import {
-  dateDiffInDays,
-  getFullNameOfEmployee,
-  toYYYYMMDD,
-  weekDays,
-} from "@/utils/Misc";
-import { generateHash } from "@/utils/Security";
+import { toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 interface Props extends IFormFragmentProps<IJobListing> {
   companyId: number;
@@ -244,7 +226,7 @@ export default function JobListingFormFragment({
         </RadioGroup>
       </div>
 
-      <div className="relative flex flex-col gap-2 w-full col-span-full">
+      <div className="relative flex flex-col gap-2 w-full">
         <div className="flex items-center justify-between">
           <Label className={RequiredAsterisk}>Job Description</Label>
           <Button
@@ -294,6 +276,13 @@ export default function JobListingFormFragment({
         <p className="px-2 py-1 bg-slate-300/50 backdrop-blur-sm rounded-full absolute bottom-2 right-2 text-xs z-50">
           {jobDesc.length} / 5000
         </p>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label>Preview</Label>
+        <div className="h-[14.625rem] overflow-scroll border rounded-md p-2">
+          <Markdown className={"prose text-xs"}>{jobDesc}</Markdown>
+        </div>
       </div>
     </>
   );
