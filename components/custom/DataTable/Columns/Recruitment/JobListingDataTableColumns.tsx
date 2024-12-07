@@ -15,6 +15,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback } from "react";
+import Markdown from "react-markdown";
 
 interface Props extends IJobListing {
   companyData: ICompanyExtraData;
@@ -35,7 +36,9 @@ export const JobListingDataTableColumns: ColumnDef<Props>[] = [
       <SortableHeader column={column} name="Job Description" />
     ),
     cell: ({ row }) => (
-      <p className="max-w-72 text-ellipsis line-clamp-3">{row.original.desc}</p>
+      <div className="w-72 text-ellipsis line-clamp-3">
+        <Markdown className="prose text-xs">{row.original.desc}</Markdown>
+      </div>
     ),
   },
   {

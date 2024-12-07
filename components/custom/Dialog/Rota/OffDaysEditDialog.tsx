@@ -137,8 +137,8 @@ export default function OffDaysEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

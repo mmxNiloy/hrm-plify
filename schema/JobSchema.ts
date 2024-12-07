@@ -25,3 +25,25 @@ export interface IJobListing {
 export interface IPaginatedJobListing extends IPaginatedResponse {
   data: IJobListing[];
 }
+
+export interface IJobApplicant {
+  job_id: number;
+  company_id: number;
+
+  first_name: string;
+  middle_name?: string;
+  last_name: string;
+  email: string;
+  cv_url: string; // Resume/CV
+  cover_letter_url?: string;
+
+  job_status?: string; // Handled in the server
+  uni_key: string; // Send empty string. Ignore this
+
+  last_date?: Date;
+  job?: IJobListing;
+}
+
+export interface IPaginatedJobApplicants extends IPaginatedResponse {
+  data: IJobApplicant[];
+}

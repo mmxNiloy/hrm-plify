@@ -427,8 +427,8 @@ export default function RTWEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
           {/* <DialogDescription>
             Bonus and deduction options are available for one employee only.

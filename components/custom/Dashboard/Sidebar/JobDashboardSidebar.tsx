@@ -83,11 +83,14 @@ export default function JobDashboardSidebar({
                 Job Listings
               </SidebarLink>
 
-              {/* <SidebarLink
+              <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/applied`}
               >
-                Job Applied
+                <Icons.usersCheck />
+                Job Applications
               </SidebarLink>
+
+              {/* 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/short-listing`}
               >
