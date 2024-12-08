@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { getAbsentReports } from "@/app/(server)/actions/getAbsentReport";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AbsentReportGenerator from "@/components/custom/PDF/AbsentReportGenerator";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -79,43 +80,15 @@ export default async function AbsentReportPage({
         />
 
         <div className="flex gap-4">
-          <form
-            action={"/api/attendance/pdf?_ref=absent"}
-            method="POST"
-            target="_blank"
-          >
-            <div className="sr-only">
-              <Input readOnly defaultValue={companyId} name="company_id" />
-              <Input
-                readOnly
-                defaultValue={filters.employee_id}
-                name="employee_id"
-              />
-              <Input
-                readOnly
-                defaultValue={filters.from_date}
-                name="from_date"
-              />
-              <Input readOnly defaultValue={filters.end_date} name="end_date" />
-              <Input readOnly defaultValue={filters.sort} name="sort" />
-            </div>
-            <Button
-              disabled
-              variant={"destructive"}
-              className="gap-2 rounded-full"
-            >
-              <Icons.pdf />
-              Download PDF (WIP)
-            </Button>
-          </form>
+          <AbsentReportGenerator company={company.data} filters={filters} />
           <AttendanceReportFilterPopover {...companyExtraData.data} />
         </div>
       </div>
 
       <StaticDataTable
-        data={reports.data}
+        data={reports.data.data}
+        pageCount={reports.data.total_page}
         columns={AttendanceReportDataTableColumns}
-        // pageCount={paginatedAttendance.total_page}
       />
     </main>
   );

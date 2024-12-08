@@ -66,7 +66,8 @@ export default function LeaveDashboardSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink
+        {/* TODO: Future Features */}
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/leave/rules`}
         >
           <Icons.lawBuilding />
@@ -100,7 +101,7 @@ export default function LeaveDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Leave Report
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
 
         <BackLinkButton />
       </SidebarContent>

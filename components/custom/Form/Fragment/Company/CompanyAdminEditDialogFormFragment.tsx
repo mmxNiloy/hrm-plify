@@ -29,6 +29,7 @@ export default function CompanyAdminEditDialogFormFragment({
           Email
         </Label>
         <Input
+          defaultValue={data?.users.email}
           required
           id="email-input"
           name="email"
@@ -50,6 +51,7 @@ export default function CompanyAdminEditDialogFormFragment({
         </Label>
         <Input
           required
+          defaultValue={data?.users.first_name}
           id="first-name-input"
           name="fname"
           placeholder="First Name"
@@ -62,6 +64,7 @@ export default function CompanyAdminEditDialogFormFragment({
         </Label>
         <Input
           required
+          defaultValue={data?.users.middle_name}
           id="middle-name-input"
           name="mname"
           placeholder="Middle Name"
@@ -74,6 +77,7 @@ export default function CompanyAdminEditDialogFormFragment({
         </Label>
         <Input
           required
+          defaultValue={data?.users.last_name}
           id="last-name-input"
           name="lname"
           placeholder="Last Name"
@@ -82,7 +86,11 @@ export default function CompanyAdminEditDialogFormFragment({
 
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Role</Label>
-        <Select required name="company_role_id">
+        <Select
+          defaultValue={data?.company_role_id.toString()}
+          required
+          name="company_role_id"
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select a Role" />
           </SelectTrigger>

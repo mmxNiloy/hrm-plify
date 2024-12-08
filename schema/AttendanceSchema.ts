@@ -46,3 +46,7 @@ export interface IAttendanceReport {
   attendance_date: Date;
   employees: IEmployeeWithUserMetadata;
 }
+
+export interface IPaginatedAttendanceReport extends IPaginatedResponse {
+  data: IAttendanceReport[];
+}

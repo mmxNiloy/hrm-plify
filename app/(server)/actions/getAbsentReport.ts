@@ -1,6 +1,9 @@
 "use server";
 
-import { IAttendanceReport } from "@/schema/AttendanceSchema";
+import {
+  IAttendanceReport,
+  IPaginatedAttendanceReport,
+} from "@/schema/AttendanceSchema";
 import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
@@ -51,10 +54,7 @@ export async function getAbsentReports({
     }
   );
 
-  const { data, error } = await withError<{
-    message: string;
-    data: IAttendanceReport[];
-  }>(req);
+  const { data, error } = await withError<IPaginatedAttendanceReport>(req);
 
   if (error) {
     console.error(
@@ -65,5 +65,5 @@ export async function getAbsentReports({
     return { error };
   }
 
-  return { data: data.data };
+  return { data };
 }

@@ -77,6 +77,12 @@
   }
 }
 
+@layer base {
+  img {
+    display: initial;
+  }
+}
+
 .embla {
   overflow: hidden;
 }

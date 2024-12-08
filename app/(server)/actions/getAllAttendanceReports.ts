@@ -1,6 +1,6 @@
 "use server";
 
-import { IPaginatedAttendanceReport } from "@/schema/AttendanceSchema";
+import { IAttendanceReport } from "@/schema/AttendanceSchema";
 import {
   AttendanceReportFilter,
   generateAttendanceReportFilterParams,
@@ -8,13 +8,21 @@ import {
 import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
+interface Filter {
+  employee_id?: number;
+  sort: string;
+  from_date?: string;
+  end_date?: string;
+}
+
 interface Props {
   company_id: number;
   limit: number;
   page: number;
   filters?: AttendanceReportFilter;
 }
-export async function getAttendanceReports({
+
+export async function getAllAttendanceReports({
   company_id,
   limit,
   page,
@@ -27,7 +35,7 @@ export async function getAttendanceReports({
   const req = fetch(
     `${
       process.env.API_BASE_URL
-    }/attendance/admin/generate-report/${company_id}?page=${page}&limit=${limit}${generateAttendanceReportFilterParams(
+    }/attendance/admin/generate-report/all/${company_id}?page=${page}&limit=${limit}${generateAttendanceReportFilterParams(
       filters
     )}`,
     {
@@ -37,10 +45,10 @@ export async function getAttendanceReports({
     }
   );
 
-  const { data, error } = await withError<IPaginatedAttendanceReport>(req);
+  const { data, error } = await withError<IAttendanceReport[]>(req);
   if (error) {
     console.error(
-      "Actions > Get Attendance Report > Failed to get attendance report",
+      "Actions > Get All Attendance Reports > Failed to get all attendance reports",
       error
     );
 

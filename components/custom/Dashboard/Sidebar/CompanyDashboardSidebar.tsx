@@ -101,7 +101,7 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              <SidebarLink
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/employment-type`}
               >
                 <Icons.userCog />
@@ -153,7 +153,7 @@ export default function CompanyDashboardSidebar({
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Payment Type
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
 
               {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/wage-pay-mode`}
@@ -163,7 +163,7 @@ export default function CompanyDashboardSidebar({
                   Wages Pay Mode
                 </span>
               </SidebarLink> */}
-              <Button
+              {/* <Button
                 variant={"ghost"}
                 className="justify-start gap-2"
                 disabled
@@ -172,7 +172,7 @@ export default function CompanyDashboardSidebar({
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Wages Pay Mode
                 </span>
-              </Button>
+              </Button> */}
             </AccordionContent>
           </AccordionItem>
 
@@ -192,6 +192,15 @@ export default function CompanyDashboardSidebar({
                 <Icons.employees />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Employee Management
+                </span>
+              </SidebarLink>
+
+              <SidebarLink
+                href={`/dashboard/company/${company.company_id}/organogram`}
+              >
+                <Icons.chart />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Organogram Chart
                 </span>
               </SidebarLink>
 
@@ -298,15 +307,6 @@ export default function CompanyDashboardSidebar({
                 <Icons.money />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Payroll Management
-                </span>
-              </SidebarLink>
-
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/organogram`}
-              >
-                <Icons.chart />
-                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-                  Organogram Chart
                 </span>
               </SidebarLink>
 

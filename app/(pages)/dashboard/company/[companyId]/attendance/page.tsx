@@ -11,11 +11,9 @@ import { getPaginationParams } from "@/utils/Misc";
 import { getAttendanceReports } from "@/app/(server)/actions/getAttendanceReports";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { AttendanceReportDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceReportDataTableColumns";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AttendanceReportGenerator from "@/components/custom/PDF/AttendanceReportGenerator";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -23,7 +21,7 @@ function getFilters(searchParams: ISearchParams) {
   return {
     employee_id: Math.max(
       0,
-      Number.parseInt((searchParams.employee_id as string | undefined) ?? "0")
+      Number.parseInt((searchParams.employee as string | undefined) ?? "0")
     ),
     from_date: searchParams.datepicker_from_date as string | undefined,
     end_date: searchParams.datepicker_to_date as string | undefined,
@@ -67,7 +65,7 @@ export default async function AttendanceReportPage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
+    <main id="pdf-view" className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Attendance Report</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
@@ -79,39 +77,16 @@ export default async function AttendanceReportPage({
         />
 
         <div className="flex gap-4">
-          <form action={"/api/attendance/pdf"} method="POST" target="_blank">
-            <div className="sr-only">
-              <Input readOnly defaultValue={companyId} name="company_id" />
-              <Input
-                readOnly
-                defaultValue={filters.employee_id}
-                name="employee_id"
-              />
-              <Input
-                readOnly
-                defaultValue={filters.from_date}
-                name="from_date"
-              />
-              <Input readOnly defaultValue={filters.end_date} name="end_date" />
-              <Input readOnly defaultValue={filters.sort} name="sort" />
-            </div>
-            <Button
-              disabled
-              variant={"destructive"}
-              className="gap-2 rounded-full"
-            >
-              <Icons.pdf />
-              Download PDF (WIP)
-            </Button>
-          </form>
+          <AttendanceReportGenerator company={company.data} filters={filters} />
+
           <AttendanceReportFilterPopover {...companyExtraData.data} />
         </div>
       </div>
 
       <StaticDataTable
-        data={reports.data}
+        data={reports.data.data}
+        pageCount={reports.data.total_page}
         columns={AttendanceReportDataTableColumns}
-        // pageCount={paginatedAttendance.total_page}
       />
     </main>
   );
