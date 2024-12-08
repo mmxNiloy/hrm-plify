@@ -133,9 +133,9 @@ export default async function EmployeeAttendancePage({
       </div>
 
       <StaticDataTable
-        data={reports.data}
+        data={reports.data.data}
         columns={AttendanceReportDataTableColumns}
-        // pageCount={paginatedAttendance.total_page}
+        pageCount={reports.data.total_page}
       />
     </main>
   );
