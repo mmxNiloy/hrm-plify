@@ -19,6 +19,7 @@ import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AttendanceReportGenerator from "@/components/custom/PDF/AttendanceReportGenerator";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -100,31 +101,7 @@ export default async function EmployeeAttendancePage({
         />
 
         <div className="flex gap-4">
-          <form action={"/api/attendance/pdf"} method="POST" target="_blank">
-            <div className="sr-only">
-              <Input readOnly defaultValue={companyId} name="company_id" />
-              <Input
-                readOnly
-                defaultValue={employee.data.data.employee_id}
-                name="employee_id"
-              />
-              <Input
-                readOnly
-                defaultValue={filters.from_date}
-                name="from_date"
-              />
-              <Input readOnly defaultValue={filters.end_date} name="end_date" />
-              <Input readOnly defaultValue={filters.sort} name="sort" />
-            </div>
-            <Button
-              disabled
-              variant={"destructive"}
-              className="gap-2 rounded-full"
-            >
-              <Icons.pdf />
-              Download PDF (WIP)
-            </Button>
-          </form>
+          <AttendanceReportGenerator company={company.data} filters={filters} />
           <AttendanceReportFilterPopover
             asEmployee
             {...companyExtraData.data}
