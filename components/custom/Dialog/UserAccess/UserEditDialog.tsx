@@ -57,6 +57,8 @@ export default function UserEditDialog({
         userAccess: (fd.getAll("userAccess") as string[]).map((item) =>
           Number.parseInt(item)
         ),
+        created_at: "",
+        updated_at: "",
       };
 
       console.log("System User Request Body >", user);

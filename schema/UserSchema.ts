@@ -14,8 +14,8 @@ export interface IUserBase {
   first_name: string;
   last_name: string;
   status: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
   middle_name: string;
 
   password?: string;
