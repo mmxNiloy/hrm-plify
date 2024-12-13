@@ -14,7 +14,7 @@ import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ILeaveType } from "@/schema/LeaveSchema";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import LeaveTypeFormFragment from "../../Form/Fragment/Leave/LeaveTypeFormFragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { useRouter } from "next/navigation";
@@ -45,6 +45,7 @@ export default function NodeEditDialog({
   menuItemLabel,
   menuItemIcon,
   node,
+  designations,
 }: {
   asIcon?: boolean;
   companyId: number;
@@ -62,9 +63,11 @@ export default function NodeEditDialog({
     parent?: ITreeNode;
     child: IEmployeeWithUserMetadata;
   }) => void;
+  designations: IDesignation[];
 }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+
   const router = useRouter();
   const { toast } = useToast();
 
@@ -75,6 +78,13 @@ export default function NodeEditDialog({
   const treeNodes = useMemo(() => {
     return employees.filter((emp) => emp.is_node);
   }, [employees]);
+
+  const [filteredParents, setFilteredParents] = useState<
+    IEmployeeWithUserMetadata[]
+  >([]);
+  const [filteredChildren, setFilteredChildren] = useState<
+    IEmployeeWithUserMetadata[]
+  >([]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,6 +127,38 @@ export default function NodeEditDialog({
     [availableNodes, onSubmit, toast, tree, treeNodes]
   );
 
+  const handleParentDesignationChange = useCallback(
+    (val: string) => {
+      setFilteredParents(
+        treeNodes.filter((item) => val === `${item.designation_id}`)
+      );
+    },
+    [treeNodes]
+  );
+
+  const handleChildDesingationChange = useCallback(
+    (val: string) => {
+      setFilteredChildren(
+        availableNodes.filter((item) => val === `${item.designation_id}`)
+      );
+    },
+    [availableNodes]
+  );
+
+  useEffect(() => {
+    if (!open) {
+      // Reset the states
+      setFilteredChildren([]);
+      setFilteredParents([]);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (parentNode) {
+      setFilteredParents([parentNode.data]);
+    }
+  }, [parentNode]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -154,7 +196,26 @@ export default function NodeEditDialog({
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
-            <div className="grid grid-cols-1 p-4 gap-4">
+            <div className="grid grid-cols-2 p-4 gap-4">
+              <p className="col-span-full font-semibold">Parent Node</p>
+
+              <div className="flex flex-col gap-2">
+                <Label className={RequiredAsterisk}>Select Designation</Label>
+                <LabelledComboBox
+                  name="parent_designation"
+                  required
+                  defaultValue={
+                    parentNode ? `${parentNode.data.designation_id}` : undefined
+                  }
+                  disabled={treeNodes.length < 1}
+                  items={designations.map((d) => ({
+                    label: d.designation_name,
+                    value: `${d.designation_id}`,
+                  }))}
+                  onValueChange={handleParentDesignationChange}
+                />
+              </div>
+
               <div className="flex flex-col gap-2">
                 <Label className={RequiredAsterisk}>Select a Parent Node</Label>
                 <LabelledComboBox
@@ -163,11 +224,30 @@ export default function NodeEditDialog({
                   defaultValue={
                     parentNode ? `${parentNode.data.employee_id}` : undefined
                   }
-                  disabled={treeNodes.length < 1}
-                  items={treeNodes.map((n) => ({
+                  disabled={filteredParents.length < 1}
+                  items={filteredParents.map((n) => ({
                     label: getFullNameOfEmployee(n),
                     value: `${n.employee_id}`,
                   }))}
+                />
+              </div>
+
+              <p className="col-span-full font-semibold">Child Node</p>
+
+              <div className="flex flex-col gap-2">
+                <Label className={RequiredAsterisk}>Select Designation</Label>
+                <LabelledComboBox
+                  name="child_designation"
+                  required
+                  defaultValue={
+                    node ? `${node.data.designation_id}` : undefined
+                  }
+                  disabled={availableNodes.length < 1}
+                  items={designations.map((d) => ({
+                    label: d.designation_name,
+                    value: `${d.designation_id}`,
+                  }))}
+                  onValueChange={handleChildDesingationChange}
                 />
               </div>
 
@@ -177,8 +257,8 @@ export default function NodeEditDialog({
                   name="child"
                   required
                   defaultValue={node ? `${node.data.employee_id}` : undefined}
-                  disabled={availableNodes.length < 1}
-                  items={availableNodes.map((emp) => ({
+                  disabled={filteredChildren.length < 1}
+                  items={filteredChildren.map((emp) => ({
                     label: getFullNameOfEmployee(emp),
                     value: `${emp.employee_id}`,
                   }))}

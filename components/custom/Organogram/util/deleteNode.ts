@@ -3,7 +3,15 @@ import { OrgChartProps } from "../OrgChartProps";
 
 export default function deleteNodes(
   node: ITreeNode | undefined,
-  { tree, companyId, employees, setOrgTree, setEmployees }: OrgChartProps
+  {
+    tree,
+    companyId,
+    employees,
+    setOrgTree,
+    setEmployees,
+    company,
+    designations,
+  }: OrgChartProps
 ) {
   if (!node) return;
   if (node.children) {
@@ -14,6 +22,8 @@ export default function deleteNodes(
         employees,
         setOrgTree,
         setEmployees,
+        designations,
+        company,
       })
     );
   }

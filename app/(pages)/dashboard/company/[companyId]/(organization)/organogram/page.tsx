@@ -9,6 +9,9 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import OrgChart from "@/components/custom/Organogram/OrgChart";
 import { ITreeNode } from "@/schema/OrganogramSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
+import { ButtonBlue } from "@/styles/button.tailwind";
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
   var companyId = (await params).companyId;
@@ -35,7 +38,12 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
       <p className="text-xl font-semibold">Organogram Chart</p>
       <MyBreadcrumbs company={company.data} user={user} title="Organogram" />
 
-      <OrgChart employees={companyExtra.data.employees} companyId={companyId} />
+      <OrgChart
+        company={company.data}
+        employees={companyExtra.data.employees}
+        designations={companyExtra.data.designations}
+        companyId={companyId}
+      />
     </main>
   );
 }

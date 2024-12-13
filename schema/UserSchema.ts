@@ -14,18 +14,34 @@ export interface IUserBase {
   first_name: string;
   last_name: string;
   status: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   middle_name: string;
+
+  password?: string;
 }
 
 export interface IUserWithEmployeeData extends IUserBase {
   employee_data?: IEmployee;
 }
 
+export interface IPermission {
+  // Code
+  permission_id: number;
+  permission_name: string;
+  description: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface IUser extends IUserBase {
   user_roles?: IUserRoles;
   usercompany?: ICompanyUser;
+  access_permissions: {
+    permission: IPermission;
+    permission_id: number;
+  }[];
+  userAccess?: number[];
 }
 
 export interface IUserRoles {

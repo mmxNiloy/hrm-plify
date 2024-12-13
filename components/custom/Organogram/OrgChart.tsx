@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import { ITreeNode } from "@/schema/OrganogramSchema";
 import { PrimeReactProvider } from "primereact/api";
@@ -16,15 +16,85 @@ import { OrgChartProps } from "./OrgChartProps";
 import addNode from "./util/addNode";
 import CanvasControls from "./CanvasControls";
 import nodeTemplate from "./util/nodeTemplate";
-import { useToast } from "@/components/ui/use-toast";
+import { buildGraph } from "./util/buildGraph";
 
 export default function OrgChart({
   employees,
   companyId,
+  designations,
+  company,
 }: Omit<OrgChartProps, "tree">) {
   const [emp, setEmp] = useState<IEmployeeWithUserMetadata[]>([...employees]);
 
+  const findChildren = useCallback(
+    (treeMap: Number[][], parent: Number): ITreeNode[] => {
+      const kids = treeMap.filter((item) => item[1] == parent);
+      const kidsData = kids
+        .map((item) => employees.find((e) => e.employee_id == item[0]))
+        .filter((item) => item !== undefined);
+      return kidsData.map((k) => {
+        const node = {
+          data: k,
+          children: findChildren(treeMap, k.employee_id),
+          expanded: true,
+        } as ITreeNode;
+
+        node.children?.forEach((item) => {
+          item.data.parent = node;
+        });
+
+        return node;
+      });
+    },
+    [employees]
+  );
+
+  const restoreTree = useCallback(() => {
+    const treeMap = JSON.parse(
+      localStorage.getItem("organogram") ?? "[]"
+    ) as Number[][];
+
+    const root = treeMap.find((r) => r[1] == -1);
+    if (!root) return { tree: [], employees: [...employees] };
+    const rootData = employees.find((item) => item.employee_id == root[0]);
+    if (!rootData) return { tree: [], employees: [...employees] };
+
+    const rootNode = {
+      data: rootData,
+      children: findChildren(treeMap, root[0]),
+      expanded: true,
+    };
+
+    rootNode.children.forEach((item) => {
+      item.data.parent = rootNode;
+    });
+
+    const tree: ITreeNode[] = [rootNode];
+
+    return {
+      tree,
+      employees: employees.map((e) => ({
+        ...e,
+        is_node: treeMap.find((item) => item[0] == e.employee_id) !== undefined,
+      })),
+    };
+  }, [employees, findChildren]);
+
   const [orgTree, setOrgTree] = useState<ITreeNode[]>([]);
+
+  const canvasRef = useRef<OrganizationChart>(null);
+
+  const saveGraph = useCallback(async () => {
+    const g = buildGraph(orgTree);
+
+    localStorage.setItem("organogram", JSON.stringify(Array.from(g.entries())));
+  }, [orgTree]);
+
+  // useEffect(() => {
+  //   const { tree, employees } = restoreTree();
+  //   setOrgTree(tree);
+  //   setEmp(employees);
+  // }, [restoreTree]);
 
   if (orgTree.length < 1) {
     return (
@@ -32,8 +102,11 @@ export default function OrgChart({
         <Icons.info className="size-16" />
         <p>Add nodes to create an Organogram Chart</p>
         <NodeEditDialog
+          designations={designations}
           onSubmit={({ parent, child }) => {
             addNode({ parent, child }, setOrgTree, setEmp);
+
+            // saveGraph();
           }}
           tree={orgTree}
           companyId={companyId}
@@ -71,10 +144,15 @@ export default function OrgChart({
                   employees: emp,
                   setOrgTree,
                   setEmployees: setEmp,
+                  designations,
+                  canvasRef,
+                  company,
                 }}
               />
+
               <TransformComponent wrapperClass="min-w-full max-w-full min-h-[calc(100vh-12rem)] max-h-[calc(100vh-12rem)] items-center justify-center">
                 <OrganizationChart
+                  ref={canvasRef}
                   value={orgTree}
                   nodeTemplate={(n) =>
                     nodeTemplate(n as ITreeNode, {
@@ -83,6 +161,8 @@ export default function OrgChart({
                       setOrgTree,
                       setEmployees: setEmp,
                       companyId,
+                      designations,
+                      company,
                     })
                   }
                   pt={{

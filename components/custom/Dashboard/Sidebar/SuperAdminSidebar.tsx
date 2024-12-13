@@ -49,12 +49,12 @@ export default function SuperAdminSidebar({ user }: { user: IUser }) {
           </span>
         </SidebarLink>
 
-        {/* <SidebarLink href={"/dashboard/user"}>
+        <SidebarLink href={"/dashboard/user"}>
           <Icons.users />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Users
           </span>
-        </SidebarLink> */}
+        </SidebarLink>
 
         {/* <SidebarLink href={"/dashboard/analytics"}>
           <Icons.analytics />
@@ -63,12 +63,12 @@ export default function SuperAdminSidebar({ user }: { user: IUser }) {
           </span>
         </SidebarLink> */}
 
-        <Button variant={"ghost"} className="justify-start gap-2" disabled>
+        {/* <Button variant={"ghost"} className="justify-start gap-2" disabled>
           <Icons.users />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Users
           </span>
-        </Button>
+        </Button> */}
 
         <Button variant={"ghost"} className="justify-start gap-2" disabled>
           <Icons.analytics />
