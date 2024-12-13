@@ -1,6 +1,6 @@
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { ISearchParams } from "./Types";
-import { IUser } from "@/schema/UserSchema";
+import { IUser, IUserBase } from "@/schema/UserSchema";
 
 export const nationalities: string[] = [
   "Afghan",
@@ -509,7 +509,7 @@ export function dateDiffInDays(a: Date, b: Date) {
 export function getFullNameOfEmployee(employee: IEmployeeWithUserMetadata) {
   return getFullNameOfUser(employee.user);
 }
-export function getFullNameOfUser(user: IUser) {
+export function getFullNameOfUser(user: IUserBase) {
   return `${user.first_name}${
     user.middle_name.length > 0 ? ` ${user.middle_name}` : ""
   } ${user.last_name}`;
