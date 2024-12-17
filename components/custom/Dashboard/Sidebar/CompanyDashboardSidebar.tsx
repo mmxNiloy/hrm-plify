@@ -271,14 +271,14 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              <SidebarLink
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/task`}
               >
                 <Icons.todo />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Task Management
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/holiday`}

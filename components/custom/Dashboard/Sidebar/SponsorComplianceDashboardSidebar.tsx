@@ -127,7 +127,7 @@ export default function SponsorComplianceDashboardSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/sponsor-compliance/message-center`}
         >
           <Icons.chat />
@@ -135,7 +135,7 @@ export default function SponsorComplianceDashboardSidebar({
             Message Center
           </span>
         </SidebarLink>
-
+          */}
         <SidebarLink
           href={`/dashboard/company/${company.company_id}/sponsor-compliance/staff-report`}
         >
@@ -154,7 +154,7 @@ export default function SponsorComplianceDashboardSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/sponsor-compliance/change-of-circumstances`}
         >
           <Icons.userCog />
@@ -170,7 +170,7 @@ export default function SponsorComplianceDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Contract Agreement
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
 
         <BackLinkButton />
 
