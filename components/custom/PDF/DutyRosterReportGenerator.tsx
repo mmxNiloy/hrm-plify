@@ -145,7 +145,7 @@ export default function DutyRosterReportGenerator({
     generatePdf(reports);
 
     setLoading(false);
-  }, [company, generatePdf, toast]);
+  }, [generatePdf, toast, reports]);
 
   return (
     <Button

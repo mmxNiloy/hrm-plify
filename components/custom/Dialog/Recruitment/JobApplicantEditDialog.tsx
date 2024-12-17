@@ -87,6 +87,7 @@ export default function JobApplicantEditDialog({
       ]);
 
       const jobApp: IJobApplicant = {
+        id: data?.id ?? 0,
         job_id: job.id,
         company_id: job.company_id,
         first_name: fd.get("first_name") as string,
@@ -128,6 +129,7 @@ export default function JobApplicantEditDialog({
       clError,
       data?.cover_letter_url,
       data?.cv_url,
+      data?.id,
       job.company_id,
       job.id,
       job.lastDate,

@@ -14,22 +14,14 @@ import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Colum
 import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
-interface Props extends ISearchParamsProps, CompanyByIDPageProps {
-  parent?: string;
-  readOnly?: boolean;
-  showMigrantEmployeesOnly?: boolean;
-  title?: string;
-  grandParent?: string;
-}
+interface MigrantEmployeePageProps
+  extends ISearchParamsProps,
+    CompanyByIDPageProps {}
 
 export default async function MigrantEmployeePage({
   params,
   searchParams,
-  parent,
-  grandParent,
-  title,
-  readOnly,
-}: Props) {
+}: MigrantEmployeePageProps) {
   // Get company information
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
@@ -69,14 +61,13 @@ export default async function MigrantEmployeePage({
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent={parent ?? "Company Management"}
-          title={title ?? "Migrant Employees"}
-          grandParent={grandParent}
+          parent={"Company Management"}
+          title={"Migrant Employees"}
         />
       </div>
 
       <StaticDataTable
-        data={employees.data.data.map((item) => ({ ...item, readOnly }))}
+        data={employees.data.data.map((item) => ({ ...item }))}
         columns={CompanyUserDataTableColumns}
         pageCount={employees.data.total_page}
       />
