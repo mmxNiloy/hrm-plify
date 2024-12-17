@@ -13,6 +13,8 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import SalaryStructureEditDialog from "@/components/custom/Dialog/Payroll/SalaryStructureEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getPaginationParams } from "@/utils/Misc";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -20,6 +22,22 @@ export default async function SalaryStructPage({
   params,
   searchParams,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_payroll_read");
+  const writeAccess = mPermissions.find(
+    (item) => item === "cmp_payroll_create"
+  );
+  const updateAccess = mPermissions.find(
+    (item) => item === "cmp_payroll_update"
+  );
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   const { page, limit } = getPaginationParams(await searchParams);
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
@@ -59,10 +77,12 @@ export default async function SalaryStructPage({
           title="Salary Structure"
         />
 
-        <SalaryStructureEditDialog
-          company_id={companyId}
-          employees={companyExtra.data.employees}
-        />
+        {writeAccess && (
+          <SalaryStructureEditDialog
+            company_id={companyId}
+            employees={companyExtra.data.employees}
+          />
+        )}
       </div>
 
       <StaticDataTable
@@ -70,6 +90,7 @@ export default async function SalaryStructPage({
         data={salaryStructs.data.data.map((item) => ({
           ...item,
           companyEmployees: companyExtra.data.employees,
+          updateAccess: updateAccess ? true : false,
         }))}
         pageCount={salaryStructs.data.total_page}
       />

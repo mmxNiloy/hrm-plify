@@ -55,12 +55,12 @@ export default function EmployeeDashboardSidebar({
             Migrant Employees
           </span>
         </SidebarLink>
-        <SidebarLink
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/change-of-circumstances`}
         >
           <Icons.files />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Change of Circumstnces
+            Change of Circumstances
           </span>
         </SidebarLink>
         <SidebarLink
@@ -70,7 +70,7 @@ export default function EmployeeDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Contract Agreement
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
 
         <BackLinkButton />
       </SidebarContent>

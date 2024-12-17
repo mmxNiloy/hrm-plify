@@ -27,6 +27,7 @@ export interface IPaginatedJobListing extends IPaginatedResponse {
 }
 
 export interface IJobApplicant {
+  id: number;
   job_id: number;
   company_id: number;
 

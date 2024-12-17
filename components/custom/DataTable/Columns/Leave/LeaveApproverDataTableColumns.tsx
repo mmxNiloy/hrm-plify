@@ -6,7 +6,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import LeaveApproverEditDialog from "../../../Dialog/Leave/LeaveApproverEditDialog";
 
-export const LeaveApproverDataTableColumns: ColumnDef<ILeaveApprover>[] = [
+interface Props extends ILeaveApprover {
+  updateAccess?: boolean;
+}
+
+export const LeaveApproverDataTableColumns: ColumnDef<Props>[] = [
   {
     accessorKey: "approver_id",
     header: ({ column }) => <SortableHeader column={column} name="ID" />,
@@ -37,15 +41,19 @@ export const LeaveApproverDataTableColumns: ColumnDef<ILeaveApprover>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => (
-      <LeaveApproverEditDialog
-        data={row.original}
-        employees={[
-          { ...row.original.employees!, employee_id: row.original.employee_id },
-        ]}
-        company_id={row.original.company_id}
-        asIcon
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <LeaveApproverEditDialog
+          data={row.original}
+          employees={[
+            {
+              ...row.original.employees!,
+              employee_id: row.original.employee_id,
+            },
+          ]}
+          company_id={row.original.company_id}
+          asIcon
+        />
+      ),
   },
 ];

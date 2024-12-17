@@ -15,10 +15,24 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function HolidayListPage({ params, searchParams }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_hol_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_hol_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_hol_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const { limit, page } = getPaginationParams(await searchParams);
@@ -58,16 +72,19 @@ export default async function HolidayListPage({ params, searchParams }: Props) {
           title="Holiday List"
         />
 
-        <HolidayEditDialog
-          holidayTypes={holidayTypes.data}
-          company_id={companyId}
-        />
+        {writeAccess && (
+          <HolidayEditDialog
+            holidayTypes={holidayTypes.data}
+            company_id={companyId}
+          />
+        )}
       </div>
 
       <DataTable
         data={holidays.data.map((item) => ({
           ...item,
           company_holiday_types: holidayTypes.data,
+          updateAccess: updateAccess ? true : false,
         }))}
         columns={HolidayListDataTableColumns}
       />

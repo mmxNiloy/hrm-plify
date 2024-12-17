@@ -28,9 +28,11 @@ export default function NavProfile({
             <div className="flex flex-col gap-1">
               <p className="text-start font-semibold text-sm">{`${
                 user.first_name
-              }${user.middle_name.length > 0 ? ` ${user.middle_name}` : ""} ${
-                user.last_name
-              }`}</p>
+              }${
+                (user.middle_name?.length ?? 0) > 0
+                  ? ` ${user.middle_name}`
+                  : ""
+              } ${user.last_name}`}</p>
               <p className="text-start text-xs">{user.email}</p>
               {company && (
                 <p className="text-start text-xs">{company.company_name}</p>

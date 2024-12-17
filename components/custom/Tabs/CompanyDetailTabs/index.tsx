@@ -46,37 +46,12 @@ export default function CompanyDetailTabs({
           <CompanyAuthorityTab
             id={company.company_authorised_details?.authorised_id}
             company_id={company.company_id}
-            data={company.company_authorised_details}
+            data={company}
             readOnly={readOnly}
           />
         ),
       },
-      {
-        value: "key-contact",
-        title: "Key Contact",
-        content: (
-          <CompanyAuthorityTab
-            id={company.company_key_contact?.key_contact_id}
-            company_id={company.company_id}
-            title="Key Contact"
-            data={company.company_key_contact}
-            readOnly={readOnly}
-          />
-        ),
-      },
-      {
-        value: "l1-user",
-        title: "Level 1 User",
-        content: (
-          <CompanyAuthorityTab
-            id={company.company_l1_user?.l1_user_id}
-            company_id={company.company_id}
-            title="Level 1 User"
-            data={company.company_l1_user}
-            readOnly={readOnly}
-          />
-        ),
-      },
+
       {
         value: "address",
         title: "Address",

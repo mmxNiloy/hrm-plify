@@ -46,7 +46,7 @@ export default function AttendanceReportGenerator({
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
           if (ctx) {
-            const size = 30; // Circle size
+            const size = 256; // Circle size
             canvas.width = size;
             canvas.height = size;
 

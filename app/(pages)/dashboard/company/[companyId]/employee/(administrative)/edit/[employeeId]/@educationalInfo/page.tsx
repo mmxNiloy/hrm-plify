@@ -11,10 +11,24 @@ import { getEducationalInfo } from "@/app/(server)/actions/employee/getEducation
 import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { EducationalInfoDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EducationalInfoDataTableColumns";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 export default async function EducationalInfoSlot({
   params,
 }: EditEmployeeByIdProps) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   const { employeeId, companyId } = await params;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -37,10 +51,13 @@ export default async function EducationalInfoSlot({
     <div className="flex flex-col gap-4 p-8 border rounded-md">
       <div className="w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Educational Information</p>
-        <EducationalInfoEditDialog employee_id={employeeId} />
+        {writeAccess && <EducationalInfoEditDialog employee_id={employeeId} />}
       </div>
       <DataTable
-        data={educationalInfo}
+        data={educationalInfo.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
         columns={EducationalInfoDataTableColumns}
       />
     </div>

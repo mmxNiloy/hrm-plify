@@ -9,10 +9,24 @@ import VisaBrpEditDialog from "@/components/custom/Dialog/Employee/VisaBrpEditDi
 import VisaBrpFormFragment from "@/components/custom/Form/Fragment/Employee/VisaBrpFormFragment";
 import { getVisaBRPInfo } from "@/app/(server)/actions/employee/getVisaBRPInfo";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 export default async function VisaBRPDetailSlot({
   params,
 }: EditEmployeeByIdProps) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   const { employeeId, companyId } = await params;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -34,7 +48,9 @@ export default async function VisaBRPDetailSlot({
     <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">VISA/BRP Information</p>
-        <VisaBrpEditDialog data={visaBrp} employee_id={employeeId} />
+        {updateAccess && (
+          <VisaBrpEditDialog data={visaBrp} employee_id={employeeId} />
+        )}
       </div>
       <VisaBrpFormFragment data={visaBrp} readOnly />
     </div>

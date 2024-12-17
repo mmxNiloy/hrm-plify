@@ -10,6 +10,8 @@ import HolidayDashboardSidebar from "@/components/custom/Dashboard/Sidebar/Holid
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -17,6 +19,18 @@ export default async function HolidayDashboardPageLayout({
   children,
   params,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_hol_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_hol_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_hol_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   // Get company information
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);

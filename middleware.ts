@@ -6,6 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const session = validateSession(req);
   const userRole = checkRole(req);
+  const cks = await cookies();
+
+  // console.log("Middleware > User Role", userRole);
 
   // redirect unauthorized users
   if (req.nextUrl.pathname.startsWith("/dashboard") && !session) {
@@ -20,12 +23,8 @@ export async function middleware(req: NextRequest) {
   // Default dashboard of each user
   if (req.nextUrl.pathname.endsWith("/dashboard")) {
     if (!userRole) {
-      (await cookies()).delete(
-        process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ?? "hrmplify_session_token"
-      );
-      (await cookies()).delete(
-        process.env.NEXT_PUBLIC_COOKIE_USER_KEY ?? "hrmplify_user_data"
-      );
+      cks.delete(process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY!);
+      cks.delete(process.env.NEXT_PUBLIC_COOKIE_USER_KEY!);
       return NextResponse.redirect(
         new URL("/?_ref=permission-denied", req.url)
       );

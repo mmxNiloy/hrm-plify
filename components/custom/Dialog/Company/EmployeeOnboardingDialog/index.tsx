@@ -23,15 +23,20 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import EmployeeOnboardingFormFragment from "../../../Form/Fragment/Company/EmployeeOnboardingFormFragment";
+import { IJobApplicant } from "@/schema/JobSchema";
 
 export default function EmployeeOnboardingDialog({
   company_id,
   departments,
   designations,
+  data,
+  asIcon,
 }: {
   company_id: number;
   departments: IDepartment[];
   designations: IDesignation[];
+  data?: IJobApplicant;
+  asIcon?: boolean;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -91,9 +96,15 @@ export default function EmployeeOnboardingDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={ButtonBlue}>
-          <Icons.plus /> Add an Employee
-        </Button>
+        {asIcon ? (
+          <Button size="icon" variant={"ghost"}>
+            <Icons.userPlus />
+          </Button>
+        ) : (
+          <Button className={ButtonBlue}>
+            <Icons.plus /> Add an Employee
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent
@@ -115,6 +126,7 @@ export default function EmployeeOnboardingDialog({
           {/* Form body */}
           <div className="flex flex-col gap-4 h-[70vh]">
             <EmployeeOnboardingFormFragment
+              data={data}
               departments={departments}
               designations={designations}
             />

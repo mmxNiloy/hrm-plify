@@ -8,6 +8,8 @@ import JobDashboardSidebar from "@/components/custom/Dashboard/Sidebar/JobDashbo
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends LayoutProps, CompanyByIDPageProps {}
 
@@ -15,6 +17,19 @@ export default async function CompanyJobsPageLayout({
   children,
   params,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_job_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_job_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_job_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   // Get company information
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);

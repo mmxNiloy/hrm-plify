@@ -11,10 +11,25 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import ServiceInformationEditDialog from "@/components/custom/Dialog/Employee/ServiceInformationEditDialog";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 export default async function PersonalInfoSlot({
   params,
 }: EditEmployeeByIdProps) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   const { employeeId, companyId } = await params;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -43,7 +58,7 @@ export default async function PersonalInfoSlot({
     <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Personal Information</p>
-        <EmployeeDetailsEditDialog data={personalInfo.data} />
+        {updateAccess && <EmployeeDetailsEditDialog data={personalInfo.data} />}
       </div>
       <EmployeeDetailsFormFragment data={personalInfo.data} readOnly />
 

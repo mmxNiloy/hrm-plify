@@ -50,7 +50,7 @@ export default function UserConfigFormFragment({
                   key={`employee-${item.employee_id}`}
                   value={`${item.employee_id}`}
                 >{`${item.user.first_name}${
-                  item.user.middle_name.length > 0
+                  (item.user.middle_name?.length ?? 0) > 0
                     ? ` ${item.user.middle_name}`
                     : ""
                 } ${item.user.last_name}`}</SelectItem>

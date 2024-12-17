@@ -9,10 +9,25 @@ import getCompanyAdmin from "@/app/(server)/actions/getCompanyAdmin";
 import CompanyAdminEditDialog from "@/components/custom/Dialog/Company/CompanyAdminEditDialog";
 import { CompanyAdminListDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyAdminListDataTableColumns";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 export default async function CompanyAdminPage({
   params,
 }: CompanyByIDPageProps) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_admin_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_admin_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_admin_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
@@ -42,10 +57,13 @@ export default async function CompanyAdminPage({
     <div className="flex flex-col gap-2">
       <div className="w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Company Admin</p>
-        <CompanyAdminEditDialog companyId={companyId} />
+        {writeAccess && <CompanyAdminEditDialog companyId={companyId} />}
       </div>
       <DataTable
-        data={companyAdmins}
+        data={companyAdmins.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
         columns={CompanyAdminListDataTableColumns}
       />
     </div>

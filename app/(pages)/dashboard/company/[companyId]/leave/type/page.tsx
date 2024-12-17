@@ -12,6 +12,8 @@ import LeaveTypeEditDialog from "@/components/custom/Dialog/Leave/LeaveTypeEditD
 import { LeaveTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveTypeDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -19,6 +21,19 @@ export default async function CompanyLeaveTypePage({
   params,
   searchParams,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_leave_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_leave_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_leave_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
@@ -53,10 +68,16 @@ export default async function CompanyLeaveTypePage({
           title="Leave Type"
         />
 
-        <LeaveTypeEditDialog company_id={companyId} />
+        {writeAccess && <LeaveTypeEditDialog company_id={companyId} />}
       </div>
 
-      <DataTable columns={LeaveTypeDataTableColumns} data={leaveTypes.data} />
+      <DataTable
+        columns={LeaveTypeDataTableColumns}
+        data={leaveTypes.data.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
+      />
     </main>
   );
 }

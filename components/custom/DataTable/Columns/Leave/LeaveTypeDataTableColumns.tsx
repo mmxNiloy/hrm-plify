@@ -5,7 +5,11 @@ import { ILeaveType } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import LeaveTypeEditDialog from "../../../Dialog/Leave/LeaveTypeEditDialog";
 
-export const LeaveTypeDataTableColumns: ColumnDef<ILeaveType>[] = [
+interface Props extends ILeaveType {
+  updateAccess?: boolean;
+}
+
+export const LeaveTypeDataTableColumns: ColumnDef<Props>[] = [
   {
     accessorKey: "leave_type_id",
     header: ({ column }) => <SortableHeader column={column} name="ID" />,
@@ -28,12 +32,13 @@ export const LeaveTypeDataTableColumns: ColumnDef<ILeaveType>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => (
-      <LeaveTypeEditDialog
-        data={row.original}
-        company_id={row.original.company_id}
-        asIcon
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <LeaveTypeEditDialog
+          data={row.original}
+          company_id={row.original.company_id}
+          asIcon
+        />
+      ),
   },
 ];

@@ -9,6 +9,8 @@ import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends CompanyByIDPageProps {
   readOnly?: boolean;
@@ -22,6 +24,19 @@ export default async function CompanyByIDPage({
   parent,
   title,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_mgmt_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_mgmt_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_mgmt_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
@@ -64,7 +79,10 @@ export default async function CompanyByIDPage({
         title={title}
       />
 
-      <CompanyDetailTabs readOnly={readOnly} company={company.data} />
+      <CompanyDetailTabs
+        readOnly={readOnly || !updateAccess}
+        company={company.data}
+      />
     </main>
   );
 }

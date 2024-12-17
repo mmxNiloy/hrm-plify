@@ -1,5 +1,6 @@
 "use client";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ComboBox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -266,6 +267,16 @@ export default function EmployeeDetailsFormFragment({
           readOnly={readOnly}
           disabled={disabled}
         />
+      </div>
+      <div className="flex flex-row gap-2 items-center">
+        <Checkbox
+          disabled={readOnly || disabled}
+          name="is_foreign"
+          defaultChecked={data?.is_foreign}
+        />
+        <Label htmlFor="is-foreign-checkbox">
+          Are they a migrant employee?
+        </Label>
       </div>
     </>
   );

@@ -14,10 +14,24 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { OffDaysDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/OffDaysDataTableColumns";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export default async function RotaDayOffPage({ params, searchParams }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_rota_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_rota_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_rota_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
@@ -64,10 +78,12 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
           title="Off Days"
         />
 
-        <OffDaysEditDialog
-          shifts={allShifts.data.data}
-          company_id={companyId}
-        />
+        {writeAccess && (
+          <OffDaysEditDialog
+            shifts={allShifts.data.data}
+            company_id={companyId}
+          />
+        )}
       </div>
 
       <StaticDataTable
@@ -75,6 +91,7 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
         data={paginatedOffDays.data.data.map((item) => ({
           ...item,
           shifts: allShifts.data.data,
+          updateAccess: updateAccess ? true : false,
         }))}
         columns={OffDaysDataTableColumns}
       />

@@ -14,6 +14,8 @@ import LeaveApproverEditDialog from "@/components/custom/Dialog/Leave/LeaveAppro
 import { LeaveApproverDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveApproverDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -21,6 +23,19 @@ export default async function CompanyLeaveApproverPage({
   params,
   searchParams,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_leave_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_leave_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_leave_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const { page, limit } = getPaginationParams(await searchParams);
@@ -59,18 +74,23 @@ export default async function CompanyLeaveApproverPage({
           company={company.data}
           user={user}
           parent="Leave"
-          title="Leave Balance"
+          title="Leave Approvers"
         />
 
-        <LeaveApproverEditDialog
-          employees={companyExtraData.data.employees}
-          company_id={companyId}
-        />
+        {writeAccess && (
+          <LeaveApproverEditDialog
+            employees={companyExtraData.data.employees}
+            company_id={companyId}
+          />
+        )}
       </div>
 
       <DataTable
         columns={LeaveApproverDataTableColumns}
-        data={leaveApprovers.data}
+        data={leaveApprovers.data.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
       />
     </main>
   );

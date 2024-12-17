@@ -8,6 +8,8 @@ import RotaDashboardSidebar from "@/components/custom/Dashboard/Sidebar/RotaDash
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -15,6 +17,18 @@ export default async function RotaDashboardPageLayout({
   children,
   params,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_rota_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_rota_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_rota_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   // Get company information
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);

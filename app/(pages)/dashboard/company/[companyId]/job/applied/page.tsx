@@ -8,8 +8,23 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { getCompanyAllJobListingsMetadata } from "@/app/(server)/actions/getCompanyAllJobListingsMetadata";
 import CompanyJobListSelect from "@/components/custom/Recruitment/CompanyJobListSelect";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 export default async function JobAppliedPage({ params }: CompanyByIDPageProps) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_job_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_job_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_job_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
 
@@ -25,7 +40,7 @@ export default async function JobAppliedPage({ params }: CompanyByIDPageProps) {
   if (company.error || allJobs.error) {
     return (
       <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">All Jobs</p>
+        <p className="text-xl font-semibold">Job Applications</p>
         <ErrorFallbackCard error={company.error || allJobs.error} />
       </main>
     );
@@ -33,7 +48,7 @@ export default async function JobAppliedPage({ params }: CompanyByIDPageProps) {
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Jobs</p>
+      <p className="text-xl font-semibold">Job Applications</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           company={company.data}

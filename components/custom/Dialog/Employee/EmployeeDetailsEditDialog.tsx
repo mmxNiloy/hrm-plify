@@ -53,6 +53,7 @@ export default function EmployeeDetailsEditDialog({
         email: fd.get("email") as string,
         contact_number: fd.get("contact_number") as string,
         alternative_number: fd.get("alternative_number") as string,
+        is_foreign: Boolean(fd.get("is_foreign") as string),
       };
 
       setLoading(true);
@@ -61,7 +62,11 @@ export default function EmployeeDetailsEditDialog({
       // If an image is selected, upload the image and set the new image source
       var image = data?.image ?? "";
 
-      if (profile_pic && profile_pic.size <= SiteConfig.maxFileSize) {
+      if (
+        profile_pic &&
+        profile_pic.size > 0 &&
+        profile_pic.size <= SiteConfig.maxFileSize
+      ) {
         const uploadRes = await upload(profile_pic);
         if (uploadRes.error) {
           toast({

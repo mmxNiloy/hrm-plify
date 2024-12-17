@@ -19,7 +19,7 @@ export async function getCompanyEmployees({
   const req = fetch(
     `${
       process.env.API_BASE_URL
-    }/companies/my/get-employee/${companyId}?page=${page}&limit=${limit}&show_migrants=${
+    }/companies/my/get-employee/${companyId}?page=${page}&limit=${limit}&migrants_only=${
       showMigrantEmployeesOnly ? "true" : "false"
     }`,
     {

@@ -7,6 +7,9 @@ import LeaveDashboardSidebar from "@/components/custom/Dashboard/Sidebar/LeaveDa
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import PayrollDashboardSidebar from "@/components/custom/Dashboard/Sidebar/PayrollDashboardSidebar";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
+import { cookies } from "next/headers";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -14,6 +17,23 @@ export default async function PayrollDashboardLayout({
   children,
   params,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_payroll_read");
+  const writeAccess = mPermissions.find(
+    (item) => item === "cmp_payroll_create"
+  );
+  const updateAccess = mPermissions.find(
+    (item) => item === "cmp_payroll_update"
+  );
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyData(companyId);

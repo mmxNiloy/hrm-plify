@@ -511,7 +511,7 @@ export function getFullNameOfEmployee(employee: IEmployeeWithUserMetadata) {
 }
 export function getFullNameOfUser(user: IUserBase) {
   return `${user.first_name}${
-    user.middle_name.length > 0 ? ` ${user.middle_name}` : ""
+    (user.middle_name?.length ?? 0) > 0 ? ` ${user.middle_name}` : ""
   } ${user.last_name}`;
 }
 
@@ -630,4 +630,14 @@ export function withPrecision({
   const shift = Math.pow(10, precision);
 
   return (Math.round(num * shift) / shift).toFixed(precision);
+}
+
+export function toCapCase(str: string) {
+  const words = str.trim().split(" ");
+  const capitalizedWords = words.map((item) => {
+    if (item.length < 1) return item;
+    return item.charAt(0).toUpperCase().concat(item.substring(1));
+  });
+
+  return capitalizedWords.join(" ");
 }

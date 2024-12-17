@@ -13,6 +13,7 @@ import { StaticDataTable } from "@/components/ui/data-table";
 import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyUserDataTableColumns";
 import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {
   parent?: string;
@@ -31,6 +32,14 @@ export default async function AllEmployeePage({
   readOnly,
   showMigrantEmployeesOnly,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+
   // Get company information
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
@@ -71,7 +80,7 @@ export default async function AllEmployeePage({
         />
 
         {/* <EmployeeCreationDialog /> */}
-        {!readOnly && (
+        {!readOnly && writeAccess && (
           <EmployeeOnboardingDialog
             company_id={companyId}
             {...companyExtraData.data}
@@ -80,7 +89,10 @@ export default async function AllEmployeePage({
       </div>
 
       <StaticDataTable
-        data={employees.data.data.map((item) => ({ ...item, readOnly }))}
+        data={employees.data.data.map((item) => ({
+          ...item,
+          readOnly: readOnly || !updateAccess,
+        }))}
         columns={CompanyUserDataTableColumns}
         pageCount={employees.data.total_page}
       />

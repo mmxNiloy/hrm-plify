@@ -2,6 +2,7 @@
 import { getAllPermissions } from "@/app/(server)/actions/getAllPermissions";
 import { getAllSubadmins } from "@/app/(server)/actions/getAllSubadmins";
 import { getUserData } from "@/app/(server)/actions/getUserData";
+import AccessDenied from "@/components/custom/AccessDenied";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { UserDataTableColumns } from "@/components/custom/DataTable/Columns/UserAccess/UserDataTableColumns";
 import UserEditDialog from "@/components/custom/Dialog/UserAccess/UserEditDialog";
@@ -16,9 +17,24 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { TPermission } from "@/schema/Permissions";
+import { cookies } from "next/headers";
 import React from "react";
 
 export default async function UserListPage() {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "sys_user_read");
+  const writeAccess = mPermissions.find((item) => item === "sys_user_create");
+  const updateAccess = mPermissions.find((item) => item === "sys_user_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   const [userList, user, permissions] = await Promise.all([
     await getAllSubadmins(),
     await getUserData(),
@@ -46,14 +62,13 @@ export default async function UserListPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        {user?.user_roles?.roles.role_name === "Super Admin" && (
-          <UserEditDialog permissions={permissions.data} />
-        )}
+        {writeAccess && <UserEditDialog permissions={permissions.data} />}
       </div>
       <DataTable
         data={userList.data.map((item) => ({
           ...item,
           permissions: permissions.data,
+          updateAccess: updateAccess ? true : false,
         }))}
         columns={UserDataTableColumns}
       />

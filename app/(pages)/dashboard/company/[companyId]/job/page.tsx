@@ -9,6 +9,8 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 export default async function JobDashboardPage({
   params,

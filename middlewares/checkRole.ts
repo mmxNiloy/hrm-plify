@@ -9,6 +9,9 @@ export function checkRole(
       process.env.NEXT_PUBLIC_COOKIE_USER_KEY!
     );
     const userData = JSON.parse(userCookie?.value ?? "{}") as IUser;
+
+    // console.log("Middleware > User Cookie Data >", req.cookies);
+
     return {
       role: userData.user_roles?.roles ?? { role_name: "Guest" },
       company_id: userData.usercompany?.company_id ?? 0,

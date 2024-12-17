@@ -1,5 +1,6 @@
 "use client";
 
+import ShortlistingAlertDialog from "@/components/custom/AlertDialog/ShortlistingAlertDialog";
 import JobListingEditDialog from "@/components/custom/Dialog/Recruitment/JobListingEditDialog";
 import TextCapsule from "@/components/custom/TextCapsule";
 import { Button } from "@/components/ui/button";
@@ -11,12 +12,17 @@ import { ICompanyExtraData } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { IJobApplicant, IJobListing } from "@/schema/JobSchema";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { toCapCase } from "@/utils/Misc";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback } from "react";
 
-export const AllJobApplicationsDataTableColumns: ColumnDef<IJobApplicant>[] = [
+interface Props extends IJobApplicant {
+  updateAccess?: boolean;
+}
+
+export const AllJobApplicationsDataTableColumns: ColumnDef<Props>[] = [
   {
     id: "job-code",
     header: ({ column }) => <SortableHeader column={column} name="Job Code" />,
@@ -97,10 +103,32 @@ export const AllJobApplicationsDataTableColumns: ColumnDef<IJobApplicant>[] = [
     header: ({ column }) => <SortableHeader column={column} name="Status" />,
     cell: ({ row }) => (
       <div className="flex flex-row gap-2 items-center">
-        <TextCapsule className={"text-white bg-amber-500"}>
-          {row.original.job_status}
+        <TextCapsule
+          className={
+            row.original.job_status === "shortlisted"
+              ? "bg-blue-500"
+              : row.original.job_status === "onboarded"
+              ? "bg-green-500"
+              : "bg-amber-500"
+          }
+        >
+          {toCapCase(row.original.job_status ?? "Pending")}
         </TextCapsule>
       </div>
     ),
+  },
+  {
+    id: "action-shortlist",
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Shortlist?" />
+    ),
+    cell: ({ row }) =>
+      row.original.job_status !== "pending" ||
+      !row.original.updateAccess ? null : (
+        <ShortlistingAlertDialog
+          applicationId={row.original.id}
+          jobId={row.original.job?.id ?? 0}
+        />
+      ),
   },
 ];

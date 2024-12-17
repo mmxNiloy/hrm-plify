@@ -7,8 +7,15 @@ import { IUser } from "@/schema/UserSchema";
 import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
 import { Button } from "@/components/ui/button";
+import { TPermission } from "@/schema/Permissions";
 
-export default function SuperAdminSidebar({ user }: { user: IUser }) {
+export default function SuperAdminSidebar({
+  user,
+  permissions,
+}: {
+  user: IUser;
+  permissions: TPermission[];
+}) {
   const [open, setOpen] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
 
@@ -49,12 +56,14 @@ export default function SuperAdminSidebar({ user }: { user: IUser }) {
           </span>
         </SidebarLink>
 
-        <SidebarLink href={"/dashboard/user"}>
-          <Icons.users />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Users
-          </span>
-        </SidebarLink>
+        {permissions.find((item) => item === "sys_user_read") && (
+          <SidebarLink href={"/dashboard/user"}>
+            <Icons.users />
+            <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+              Users
+            </span>
+          </SidebarLink>
+        )}
 
         {/* <SidebarLink href={"/dashboard/analytics"}>
           <Icons.analytics />

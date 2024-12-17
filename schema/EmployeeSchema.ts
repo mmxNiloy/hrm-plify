@@ -16,6 +16,7 @@ export interface IEmployee {
   company_id: number;
   image?: string;
   gender?: string;
+  is_foreign?: boolean;
   ni_num: string;
   date_of_birth?: Date;
   marital_status?: string;

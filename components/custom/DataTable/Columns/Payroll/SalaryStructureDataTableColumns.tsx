@@ -12,6 +12,7 @@ import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 
 interface Props extends IEmployeeWithSalaryStructure {
   companyEmployees: IEmployeeWithUserMetadata[];
+  updateAccess?: boolean;
 }
 
 export const SalaryStructureDataTableColumns: ColumnDef<Props>[] = [
@@ -55,15 +56,16 @@ export const SalaryStructureDataTableColumns: ColumnDef<Props>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => (
-      <SalaryStructureEditDialog
-        currentEmployee={row.original.employee_id}
-        data={row.original.salaryStructure}
-        employees={row.original.companyEmployees}
-        company_id={row.original.company_id}
-        asIcon
-        asEditable
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <SalaryStructureEditDialog
+          currentEmployee={row.original.employee_id}
+          data={row.original.salaryStructure}
+          employees={row.original.companyEmployees}
+          company_id={row.original.company_id}
+          asIcon
+          asEditable
+        />
+      ),
   },
 ];

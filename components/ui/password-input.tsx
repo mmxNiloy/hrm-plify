@@ -23,6 +23,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           className={cn(className, "w-full pr-16")}
           {...props}
           name={name}
+          placeholder="Password"
         />
         <Button
           type="button"

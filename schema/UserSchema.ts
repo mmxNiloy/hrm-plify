@@ -5,6 +5,7 @@ import { IPaginatedResponse } from "./PaginatedResponse";
 export interface ILoginResponse {
   token: string;
   user: IUser;
+  permissions: string[];
 }
 
 export interface IUserBase {

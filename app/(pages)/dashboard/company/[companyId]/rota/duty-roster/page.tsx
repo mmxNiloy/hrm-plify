@@ -16,6 +16,11 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { DataTable } from "@/components/ui/data-table";
+import { DutyRosterDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/DutyRosterDataTableColumns";
+import DutyRosterReportGenerator from "@/components/custom/PDF/DutyRosterReportGenerator";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -39,6 +44,18 @@ export default async function RotaDutyRosterPage({
   params,
   searchParams,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_rota_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_rota_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_rota_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
@@ -84,81 +101,35 @@ export default async function RotaDutyRosterPage({
         />
 
         <span className="flex-grow" />
-        <form
-          method="POST"
-          action={`/api/rota/duty-roster/report/pdf`}
-          target="_blank"
-        >
-          <input
-            className="hidden"
-            readOnly
-            value={companyId}
-            name="company_id"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.employee_id}
-            name="employee_id"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.from_date}
-            name="from_date"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.end_date}
-            name="end_date"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.department_id}
-            name="department_id"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.shift_id}
-            name="shift_id"
-          />
 
-          <Button
-            disabled
-            className="bg-rose-500 hover:bg-rose-400 text-white rounded-full gap-2"
-            size="sm"
-          >
-            <Icons.pdf className="stroke-white fill-white" /> Download as PDF
-            File (WIP)
-          </Button>
-        </form>
-        <Button className={ButtonSuccess} size="sm" disabled>
-          <Icons.excel className="stroke-white fill-white" /> Download as Excel
-          File (WIP)
-        </Button>
+        <DutyRosterReportGenerator
+          company={company.data}
+          reports={paginatedDutyRoster.data.data}
+        />
       </div>
       <div className="flex items-center justify-end gap-2 mt-2 mb-2">
         {/* Duty Roster Filter */}
         <DutyRosterFilterDialog {...companyExtraData.data} />
 
         <span className="flex-grow"></span>
-        <DutyRosterEditDialog
-          company_id={companyId}
-          {...companyExtraData.data}
-          type="employee"
-        />
+        {writeAccess && (
+          <DutyRosterEditDialog
+            company_id={companyId}
+            {...companyExtraData.data}
+            type="employee"
+          />
+        )}
         {/* <DutyRosterEditDialog type="designation" /> */}
       </div>
 
-      <DutyRosterDataTable
+      <DataTable
+        columns={DutyRosterDataTableColumns}
         data={paginatedDutyRoster.data.data.map((item) => ({
           ...item,
           company_shifts: companyExtraData.data.shifts,
           company_departments: companyExtraData.data.departments,
           company_employees: companyExtraData.data.employees,
+          updateAccess: updateAccess ? true : false,
         }))}
       />
     </main>

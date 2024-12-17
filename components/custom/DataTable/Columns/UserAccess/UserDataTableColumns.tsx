@@ -9,6 +9,7 @@ import UserEditDialog from "@/components/custom/Dialog/UserAccess/UserEditDialog
 
 interface Props extends IUser {
   permissions: IPermission[];
+  updateAccess?: boolean;
 }
 
 export const UserDataTableColumns: ColumnDef<Props>[] = [
@@ -118,13 +119,14 @@ export const UserDataTableColumns: ColumnDef<Props>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => (
-      <UserEditDialog
-        permissions={row.original.permissions}
-        asIcon
-        data={row.original}
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <UserEditDialog
+          permissions={row.original.permissions}
+          asIcon
+          data={row.original}
+        />
+      ),
   },
 ];
 

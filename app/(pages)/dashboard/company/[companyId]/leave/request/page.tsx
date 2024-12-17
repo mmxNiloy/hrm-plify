@@ -12,6 +12,8 @@ import { getLeaveRequests } from "@/app/(server)/actions/getLeaveRequests";
 import { LeaveRequestDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveRequestDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -19,6 +21,19 @@ export default async function LeaveRequestPage({
   params,
   searchParams,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_leave_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_leave_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_leave_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
@@ -65,7 +80,7 @@ export default async function LeaveRequestPage({
           company={company.data}
           user={user}
           parent="Leave"
-          title="Leave Balance"
+          title="Leave Requests"
         />
       </div>
 
@@ -74,7 +89,7 @@ export default async function LeaveRequestPage({
         data={leaveRequests.data.data.map((item) => ({
           ...item,
           company_leave_types: leaveTypes.data,
-          can_edit: true,
+          can_edit: updateAccess || writeAccess ? true : false,
         }))}
         pageCount={leaveRequests.data.total_page}
       />

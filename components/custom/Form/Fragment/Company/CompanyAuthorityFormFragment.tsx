@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,17 @@ export default function CompanyAuthorityFormFragment({
 }: Props) {
   return (
     <>
+      <div className="col-span-full flex gap-2 items-center">
+        <Checkbox
+          disabled={readOnly || disabled}
+          id="is-same-as-key-contact"
+          name="is_same_as_key_contact"
+        />
+        <Label htmlFor="is-same-as-key-contact">
+          Is the same as Key Contact?
+        </Label>
+      </div>
+
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="first-name-input"

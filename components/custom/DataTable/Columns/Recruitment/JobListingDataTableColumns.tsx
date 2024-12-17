@@ -19,6 +19,7 @@ import Markdown from "react-markdown";
 
 interface Props extends IJobListing {
   companyData: ICompanyExtraData;
+  updateAccess?: boolean;
 }
 
 export const JobListingDataTableColumns: ColumnDef<Props>[] = [
@@ -77,15 +78,16 @@ export const JobListingDataTableColumns: ColumnDef<Props>[] = [
   },
   {
     id: "action-edit",
-    cell: ({ row }) => (
-      <JobListingEditDialog
-        asIcon
-        employeeId={row.original.employee_id}
-        data={row.original}
-        companyData={row.original.companyData}
-        company_id={row.original.company_id}
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <JobListingEditDialog
+          asIcon
+          employeeId={row.original.employee_id}
+          data={row.original}
+          companyData={row.original.companyData}
+          company_id={row.original.company_id}
+        />
+      ),
   },
 ];
 

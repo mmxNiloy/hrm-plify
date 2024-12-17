@@ -13,10 +13,25 @@ import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
 export default async function DepartmentPage({ params, searchParams }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_dept_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_dept_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_dept_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const { page, limit } = getPaginationParams(await searchParams);
@@ -54,10 +69,13 @@ export default async function DepartmentPage({ params, searchParams }: Props) {
           user={user}
           title="Designations"
         />
-        <DepartmentCreationPopover company_id={companyId} />
+        {writeAccess && <DepartmentCreationPopover company_id={companyId} />}
       </div>
       <StaticDataTable
-        data={paginatedDepartments.data.data}
+        data={paginatedDepartments.data.data.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
         pageCount={paginatedDepartments.data.total_page}
         columns={CompanyDepartmentDataTableColumns}
       />

@@ -12,6 +12,8 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -19,6 +21,19 @@ export default async function DesignationsPage({
   params,
   searchParams,
 }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_desg_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_desg_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_desg_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
   const { limit, page } = getPaginationParams(await searchParams);
@@ -55,11 +70,14 @@ export default async function DesignationsPage({
           title="Designations"
         />
 
-        <DesignationEditPopover company_id={companyId} />
+        {writeAccess && <DesignationEditPopover company_id={companyId} />}
       </div>
 
       <DataTable
-        data={designations.data}
+        data={designations.data.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
         columns={CompanyDesignationDataTableColumns}
       />
     </main>

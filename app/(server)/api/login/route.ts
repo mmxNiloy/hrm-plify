@@ -25,21 +25,38 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  console.log("POST > Login > Login response", data);
+  // Access Permissions is too large to store
+  // Store in a separate cookie
+  // ISSUE: Data too large, do not store this cookie.
+  const { access_permissions, ...userData } = data.user;
+  const expires = Date.now() + 43200000; // 12hrs
+
   // Send a cookie w\ user data
-  (await cookies()).set(process.env.COOKIE_SESSION_KEY!, data.token, {
+  const cks = await cookies();
+  cks.set(process.env.COOKIE_SESSION_KEY!, data.token, {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
-    expires: Date.now() + 43200000, // 12hrs
+    expires,
   });
-  (await cookies()).set(
-    process.env.COOKIE_USER_KEY!,
-    JSON.stringify(data.user),
+
+  cks.set(process.env.NEXT_PUBLIC_COOKIE_USER_KEY!, JSON.stringify(userData), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    expires,
+  });
+
+  // [!] Set user access cookie here
+  cks.set(
+    process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!,
+    JSON.stringify(data.permissions),
     {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      expires: Date.now() + 43200000, // 12hrs
+      expires,
     }
   );
 

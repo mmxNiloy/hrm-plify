@@ -5,7 +5,11 @@ import { IHolidayType } from "@/schema/HolidaySchema";
 import { ColumnDef } from "@tanstack/react-table";
 import HolidayTypeEditPopover from "../../../Popover/HolidayTypeEditPopover";
 
-export const HolidayTypeDataTableColumns: ColumnDef<IHolidayType>[] = [
+interface Props extends IHolidayType {
+  updateAccess?: boolean;
+}
+
+export const HolidayTypeDataTableColumns: ColumnDef<Props>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,
@@ -18,15 +22,13 @@ export const HolidayTypeDataTableColumns: ColumnDef<IHolidayType>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => {
-      // const employee = row.original;
-      return (
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
         <HolidayTypeEditPopover
           asIcon
           data={row.original}
           company_id={row.original.company_id}
         />
-      );
-    },
+      ),
   },
 ];
