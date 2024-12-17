@@ -65,12 +65,14 @@ export default async function PersonalInfoSlot({
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Service Information</p>
         {/* <CompanyProfileEditDialog data={data} /> */}
-        <ServiceInformationEditDialog
-          company={company.data}
-          data={personalInfo.data}
-          departments={companyExtraData.data.departments}
-          designations={companyExtraData.data.designations}
-        />
+        {updateAccess && (
+          <ServiceInformationEditDialog
+            company={company.data}
+            data={personalInfo.data}
+            departments={companyExtraData.data.departments}
+            designations={companyExtraData.data.designations}
+          />
+        )}
       </div>
       <ServiceDetailsFormFragment data={personalInfo.data} readOnly />
     </div>
