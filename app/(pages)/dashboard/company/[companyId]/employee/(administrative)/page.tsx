@@ -15,23 +15,9 @@ import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees"
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
 
-interface Props extends ISearchParamsProps, CompanyByIDPageProps {
-  parent?: string;
-  readOnly?: boolean;
-  showMigrantEmployeesOnly?: boolean;
-  title?: string;
-  grandParent?: string;
-}
+interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
-export default async function AllEmployeePage({
-  params,
-  searchParams,
-  parent,
-  grandParent,
-  title,
-  readOnly,
-  showMigrantEmployeesOnly,
-}: Props) {
+export default async function AllEmployeePage({ params, searchParams }: Props) {
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
     mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
@@ -53,7 +39,7 @@ export default async function AllEmployeePage({
   const [company, companyExtraData, employees] = await Promise.all([
     getCompanyData(companyId),
     getCompanyExtraData(companyId),
-    getCompanyEmployees({ companyId, page, limit, showMigrantEmployeesOnly }),
+    getCompanyEmployees({ companyId, page, limit }),
   ]);
 
   if (company.error || companyExtraData.error || employees.error) {
@@ -74,12 +60,11 @@ export default async function AllEmployeePage({
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          title={title ?? "All Employees"}
-          grandParent={grandParent}
+          title={"All Employees"}
         />
 
         {/* <EmployeeCreationDialog /> */}
-        {!readOnly && writeAccess && (
+        {writeAccess && (
           <EmployeeOnboardingDialog
             company_id={companyId}
             {...companyExtraData.data}
@@ -90,7 +75,7 @@ export default async function AllEmployeePage({
       <StaticDataTable
         data={employees.data.data.map((item) => ({
           ...item,
-          readOnly: readOnly || !updateAccess,
+          readOnly: !updateAccess,
         }))}
         columns={CompanyUserDataTableColumns}
         pageCount={employees.data.total_page}
