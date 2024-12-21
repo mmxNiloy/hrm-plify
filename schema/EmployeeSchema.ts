@@ -239,6 +239,9 @@ export interface IEmployeeWithUserMetadata extends IEmployee {
   designations?: IDesignation;
   departments?: IDepartment;
   leave_approvers?: ILeaveApprover;
+  contact_information?: IEmployeeContactInfo;
+  emp_passport?: IEmployeePassportDetail;
+  visa_brp?: IEmployeeVisaBrp;
 
   is_node?: boolean;
   parent?: ITreeNode;

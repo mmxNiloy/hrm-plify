@@ -119,6 +119,7 @@ export default function CompanyAuthorityEditDialog({
             <div className="p-1 grid grid-cols-2 gap-4">
               <CompanyAuthorityFormFragment
                 setDocError={setDocError}
+                title={title}
                 disabled={updating}
                 data={data}
               />

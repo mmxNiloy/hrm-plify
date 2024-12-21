@@ -73,6 +73,7 @@ export interface ICompanyAuthorizedDetailsBase {
   offence_history?: string;
   created_at?: Date;
   updated_at?: Date;
+  is_same_as_key_contact?: boolean;
 }
 
 export interface ICompanyAuthorisedDetails

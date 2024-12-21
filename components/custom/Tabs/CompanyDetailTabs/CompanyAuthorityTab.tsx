@@ -37,6 +37,7 @@ export default function CompanyAuthorityTab({
 
         <CompanyAuthorityFormFragment
           data={data?.company_authorised_details}
+          title={"Authorised Personnel"}
           readOnly
         />
       </div>
@@ -57,6 +58,7 @@ export default function CompanyAuthorityTab({
 
         <CompanyAuthorityFormFragment
           data={data?.company_key_contact}
+          title={"Key Contact"}
           readOnly
         />
       </div>
@@ -75,7 +77,11 @@ export default function CompanyAuthorityTab({
           )}
         </div>
 
-        <CompanyAuthorityFormFragment data={data?.company_l1_user} readOnly />
+        <CompanyAuthorityFormFragment
+          title={"Level 1 User"}
+          data={data?.company_l1_user}
+          readOnly
+        />
       </div>
     </div>
   );

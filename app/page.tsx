@@ -2,16 +2,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Icons from "@/components/ui/icons";
-import useEmblaCarousel from "embla-carousel-react";
-import AutoScroll from "embla-carousel-auto-scroll";
 import Image from "next/image";
 import SiteConfig from "@/utils/SiteConfig";
 import Navbar from "@/components/custom/Navbar/Navbar";
 import AuthCard from "@/components/custom/Auth/AuthCard";
 import Footer from "@/components/custom/Footer";
+import CompanyCarousel from "@/components/custom/CompanyCarousel";
+import CompanyCountText from "@/components/custom/CompanyCountText";
 
 export default function Home() {
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [AutoScroll()]);
   return (
     <main>
       <Navbar />
@@ -26,7 +25,7 @@ export default function Home() {
             sophisticated HR software
           </p>
 
-          <div className="mt-8 flex flex-row items-center justify-center has-[input]:focus-within:ring-2 ring-offset-2 ring-primary rounded-full">
+          {/* <div className="mt-8 flex flex-row items-center justify-center has-[input]:focus-within:ring-2 ring-offset-2 ring-primary rounded-full">
             <Input
               type="email"
               className="rounded-s-full ring-0 focus-visible:ring-0 focus:ring-0 focus-within:ring-0"
@@ -36,7 +35,7 @@ export default function Home() {
             <Button className="bg-blue-500 hover:bg-blue-400 text-white rounded-e-full ring-0 focus-visible:ring-0 focus:ring-0 focus-within:ring-0">
               Subscribe to our newsletter
             </Button>
-          </div>
+          </div> */}
         </div>
 
         <div className="w-1/2 flex items-center justify-center">
@@ -44,25 +43,12 @@ export default function Home() {
         </div>
       </div>
 
-      <p className="mt-16 text-4xl font-extrabold text-center">
-        We have XX+ users worldwide
-      </p>
+      <CompanyCountText />
       <p className="text-muted-foreground text-xl text-center">
         Here are some of our clients
       </p>
 
-      <div className="embla container" ref={emblaRef}>
-        <div className="embla__container gap-4">
-          {Array.from({ length: 15 }, (_, index) => index).map((item) => (
-            <div
-              className="embla__slide flex gap-1 px-2 py-4 bg-muted rounded-md"
-              key={`customer-slide-${item}`}
-            >
-              <Icons.user /> Customer #{item + 1}
-            </div>
-          ))}
-        </div>
-      </div>
+      <CompanyCarousel />
 
       <div className="mt-16 bg-[url('/red-white-abstract-bg.jpg')] bg-cover bg-center flex flex-col gap-2 items-center justify-center">
         <Image

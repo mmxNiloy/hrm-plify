@@ -8,6 +8,7 @@ interface IReqBody extends ICompanyAuthorizedDetailsBase {
   endpoint: string;
   document?: File;
   type: "Authorised Personnel" | "Key Contact" | "Level 1 User";
+  is_same_as_key_contact: boolean;
 }
 
 export async function POST(req: NextRequest, { params }: IDProps) {
@@ -122,6 +123,9 @@ function makeRequestBody(
   const email = fd.get("email") as string; // string
   const document = fd.get("document") as File | undefined; // file
   const offence_history = fd.get("offence_history") as string; // string
+  const is_same_as_key_contact = Boolean(
+    fd.get("is_same_as_key_contact") as string
+  );
   const type = fd.get("type") as
     | "Authorised Personnel"
     | "Key Contact"
@@ -154,5 +158,6 @@ function makeRequestBody(
     offence_history,
     endpoint,
     type,
+    is_same_as_key_contact,
   };
 }

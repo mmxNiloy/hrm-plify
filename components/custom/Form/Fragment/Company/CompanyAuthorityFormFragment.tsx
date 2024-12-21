@@ -19,6 +19,7 @@ import React from "react";
 
 interface Props extends IFormFragmentProps<ICompanyAuthorizedDetailsBase> {
   setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+  title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
 }
 
 export default function CompanyAuthorityFormFragment({
@@ -26,19 +27,29 @@ export default function CompanyAuthorityFormFragment({
   readOnly,
   disabled,
   setDocError,
+  title,
 }: Props) {
   return (
     <>
-      <div className="col-span-full flex gap-2 items-center">
-        <Checkbox
-          disabled={readOnly || disabled}
-          id="is-same-as-key-contact"
-          name="is_same_as_key_contact"
-        />
-        <Label htmlFor="is-same-as-key-contact">
-          Is the same as Key Contact?
-        </Label>
-      </div>
+      {!readOnly && (
+        <div className="col-span-full flex gap-2 items-center">
+          <Checkbox
+            defaultChecked={data?.is_same_as_key_contact}
+            disabled={readOnly || disabled}
+            id="is-same-as-key-contact"
+            name="is_same_as_key_contact"
+          />
+          <Label htmlFor="is-same-as-key-contact">
+            Are{" "}
+            {title === "Authorised Personnel"
+              ? "Key Contact and L1 User"
+              : title === "Key Contact"
+              ? "Authorised Personnel and L1 User"
+              : "Authorised Personnel and Key Contact"}{" "}
+            the same as {title}?
+          </Label>
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         <Label

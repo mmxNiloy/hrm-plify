@@ -23,6 +23,7 @@ interface Props extends ISearchParamsProps, CompanyByIDPageProps {
   grandParent?: string;
 }
 
+//! Depricated
 export default async function AllEmployeePage({
   params,
   searchParams,

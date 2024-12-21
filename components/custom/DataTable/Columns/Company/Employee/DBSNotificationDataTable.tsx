@@ -2,14 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
-import {
-  IEmployeePassportDetail,
-  IEmployeeDocument,
-  IEmployeeWithVisaDetails,
-} from "@/schema/EmployeeSchema";
+import { IEmployeeDocument } from "@/schema/EmployeeSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
-import PassportDetailsEditDialog from "../../../../Dialog/Employee/PassportDetailsEditDialog";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import { addDays } from "date-fns";
 
