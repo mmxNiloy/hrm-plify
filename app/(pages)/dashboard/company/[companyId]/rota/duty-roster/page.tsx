@@ -1,9 +1,6 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { Button } from "@/components/ui/button";
-import { ButtonSuccess } from "@/styles/button.tailwind";
-import Icons from "@/components/ui/icons";
 import { ISearchParams, ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
@@ -11,7 +8,6 @@ import { getDutyRosters } from "@/app/(server)/actions/getDutyRosters";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import DutyRosterFilterDialog from "@/components/custom/Dialog/Rota/DutyRosterFilterDialog";
 import DutyRosterEditDialog from "@/components/custom/Dialog/Rota/DutyRosterEditDialog";
-import DutyRosterDataTable from "@/components/custom/DataTable/Rota/DutyRosterDataTable";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -21,8 +17,23 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { DataTable } from "@/components/ui/data-table";
 import { DutyRosterDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/DutyRosterDataTableColumns";
 import DutyRosterReportGenerator from "@/components/custom/PDF/DutyRosterReportGenerator";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Duty Roster`,
+  };
+}
 
 function getFilters(searchParams: ISearchParams) {
   const { department_id, shift_id, employee_id, from_date, end_date } =

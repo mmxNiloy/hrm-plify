@@ -8,6 +8,7 @@ import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function EmployeeDashboardSidebar({
   company,
@@ -89,7 +90,18 @@ export default function EmployeeDashboardSidebar({
           </span>
         </SidebarLink> */}
 
-        <BackLinkButton />
+        {pathname.includes("edit") ? (
+          <Link passHref href={pathname.split("edit")[0]} title="Go Back">
+            <Button variant={"link"} size={"sm"} className="gap-2 w-full">
+              <Icons.chevronLeft />
+              <span className="group-data-[state=closed]/sidebar:hidden">
+                Back
+              </span>
+            </Button>
+          </Link>
+        ) : (
+          <BackLinkButton />
+        )}
       </SidebarContent>
     </Sidebar>
   );

@@ -79,13 +79,14 @@ SidebarViewport.displayName = "SidebarViewport";
 interface SidebarLinkProps extends React.HTMLAttributes<HTMLButtonElement> {
   href: string;
   passHref?: boolean;
+  target?: React.HTMLAttributeAnchorTarget;
 }
 
 const SidebarLink = React.forwardRef<HTMLButtonElement, SidebarLinkProps>(
-  ({ className, href, children, ...props }, ref) => {
+  ({ className, href, children, target, ...props }, ref) => {
     const path = usePathname();
     return (
-      <Link className={"w-full"} href={href} passHref>
+      <Link target={target} className={"w-full"} href={href} passHref>
         <Button
           ref={ref}
           {...props}

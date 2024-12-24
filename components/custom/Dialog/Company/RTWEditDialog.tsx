@@ -51,6 +51,7 @@ import {
 import { IRightToWork, IRightToWorkBase } from "@/schema/RightToWork";
 import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
+import { cn } from "@/lib/utils";
 
 interface Props {
   company_id: number;
@@ -477,7 +478,7 @@ export default function RTWEditDialog({
               type="button"
               size={"sm"}
               disabled={loading || currentTabIndex > 3}
-              className={ButtonBlue}
+              className={cn(ButtonBlue, currentTabIndex > 3 ? "hidden" : "")}
             >
               Next
               <Icons.chevronRight />
@@ -485,7 +486,7 @@ export default function RTWEditDialog({
             <Button
               type="submit"
               disabled={loading || currentTabIndex < 4 || readOnly}
-              className={ButtonSuccess}
+              className={cn(ButtonSuccess, currentTabIndex < 4 ? "hidden" : "")}
               size="sm"
             >
               {loading ? (

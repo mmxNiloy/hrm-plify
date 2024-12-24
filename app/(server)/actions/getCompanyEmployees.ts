@@ -20,7 +20,7 @@ export async function getCompanyEmployees({
     `${
       process.env.API_BASE_URL
     }/companies/my/get-employee/${companyId}?page=${page}&limit=${limit}&migrants_only=${
-      showMigrantEmployeesOnly ? "true" : "false"
+      showMigrantEmployeesOnly ? "1" : "0"
     }`,
     {
       headers: {

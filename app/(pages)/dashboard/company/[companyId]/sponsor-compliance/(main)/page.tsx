@@ -1,9 +1,26 @@
+"use server";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+import { CompanyByIDPageProps } from "../../PageProps";
 
-export default function SponsorCompliancePage() {
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Sponsor Compliance`,
+  };
+}
+
+export default async function SponsorCompliancePage() {
   return (
     <Link
       className="w-fit"

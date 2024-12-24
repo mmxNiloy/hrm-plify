@@ -270,6 +270,8 @@ export default function EmployeeDetailsFormFragment({
       </div>
       <div className="flex flex-row gap-2 items-center">
         <Checkbox
+          id="is-foreign-checkbox"
+          key={`is-foreign-checkbox-${data?.is_foreign}`}
           disabled={readOnly || disabled}
           name="is_foreign"
           defaultChecked={data?.is_foreign}

@@ -6,6 +6,21 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { Metadata } from "next";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Edit Employee Data`,
+  };
+}
 
 export default async function EditEmployeeInfoByUserIdPage({
   params,

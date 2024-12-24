@@ -10,6 +10,21 @@ import { getCompanyAllJobListingsMetadata } from "@/app/(server)/actions/getComp
 import CompanyJobListSelect from "@/components/custom/Recruitment/CompanyJobListSelect";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Job Applicants`,
+  };
+}
 
 export default async function JobAppliedPage({ params }: CompanyByIDPageProps) {
   const mCookies = await cookies();

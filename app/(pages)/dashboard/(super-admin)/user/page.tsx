@@ -18,8 +18,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { TPermission } from "@/schema/Permissions";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import React from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  // const user = await getUserData();
+  return {
+    title: `Artemis | System Users | Super Admin`,
+  };
+}
 
 export default async function UserListPage() {
   const mCookies = await cookies();

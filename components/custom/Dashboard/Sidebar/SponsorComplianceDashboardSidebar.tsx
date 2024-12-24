@@ -51,7 +51,8 @@ export default function SponsorComplianceDashboardSidebar({
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/employees`}
+          target="_blank"
+          href={`/dashboard/company/${company.company_id}/employee`}
         >
           <Icons.employees />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -60,7 +61,8 @@ export default function SponsorComplianceDashboardSidebar({
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/employees/migrant`}
+          target="_blank"
+          href={`/dashboard/company/${company.company_id}/employee/migrant`}
         >
           <Icons.employee />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -78,7 +80,8 @@ export default function SponsorComplianceDashboardSidebar({
         </SidebarLink>
 
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/recruitment`}
+          target={"_blank"}
+          href={`/dashboard/company/${company.company_id}/job`}
         >
           <Icons.userSearch />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -86,14 +89,20 @@ export default function SponsorComplianceDashboardSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink href={`/dashboard/company/${company.company_id}/leave`}>
+        <SidebarLink
+          target="_blank"
+          href={`/dashboard/company/${company.company_id}/leave`}
+        >
           <Icons.leave />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Leave Management
           </span>
         </SidebarLink>
 
-        <SidebarLink href={`/dashboard/company/${company.company_id}/payroll`}>
+        <SidebarLink
+          target="_blank"
+          href={`/dashboard/company/${company.company_id}/payroll`}
+        >
           <Icons.pay />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Payroll
@@ -137,7 +146,8 @@ export default function SponsorComplianceDashboardSidebar({
         </SidebarLink>
           */}
         <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/staff-report`}
+          target="_blank"
+          href={`/dashboard/company/${company.company_id}/employee/staff-report`}
         >
           <Icons.list />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
@@ -146,6 +156,7 @@ export default function SponsorComplianceDashboardSidebar({
         </SidebarLink>
 
         <SidebarLink
+          target="_blank"
           href={`/dashboard/company/${company.company_id}/attendance/absent-report`}
         >
           <Icons.todo />

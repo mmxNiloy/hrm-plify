@@ -11,11 +11,23 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps {
   readOnly?: boolean;
   parent?: string;
   title?: string;
+}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${company.data?.company_name ?? "Company Dashboard"}`,
+  };
 }
 
 export default async function CompanyByIDPage({

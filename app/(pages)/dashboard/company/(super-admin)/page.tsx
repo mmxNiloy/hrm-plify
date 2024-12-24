@@ -16,8 +16,16 @@ import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { TPermission } from "@/schema/Permissions";
 import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import React from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  // const user = await getUserData();
+  return {
+    title: `Artemis | Companies | Super Admin`,
+  };
+}
 
 export default async function CompanyDashboardPage({
   searchParams,

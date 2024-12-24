@@ -6,9 +6,17 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/schema/UserSchema";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  // const user = await getUserData();
+  return {
+    title: `Artemis | Welcome`,
+  };
+}
 
 export default async function GuestDashboard() {
   const user = JSON.parse(

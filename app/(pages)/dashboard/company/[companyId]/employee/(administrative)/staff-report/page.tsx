@@ -15,8 +15,23 @@ import { getPaginationParams } from "@/utils/Misc";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { StaffReportDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/StaffReportDataTableColumns";
 import StaffReportGenerator from "@/components/custom/PDF/StaffReportGenerator";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Staff Report`,
+  };
+}
 
 export default async function StaffReportPage({ params, searchParams }: Props) {
   const mCookies = await cookies();

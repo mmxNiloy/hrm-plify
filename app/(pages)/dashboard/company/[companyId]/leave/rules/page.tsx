@@ -12,6 +12,7 @@ import LeaveRuleEditDialog from "@/components/custom/Dialog/Leave/LeaveRuleEditD
 import { LeaveRulesDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveRulesDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getPaginationParams } from "@/utils/Misc";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -25,11 +26,14 @@ export default async function CompanyLeaveRulesPage({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
+  const sParams = await searchParams;
+  const { page, limit } = getPaginationParams(sParams);
   const [company, leaveTypes] = await Promise.all([
     getCompanyData(companyId),
     getCompanyLeaveTypes({
       company_id: companyId,
-      searchParams,
+      page,
+      limit,
     }),
   ]);
 

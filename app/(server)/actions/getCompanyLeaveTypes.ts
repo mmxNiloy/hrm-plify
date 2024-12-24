@@ -6,16 +6,13 @@ import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
 import { cookies } from "next/headers";
 
-interface Props extends ISearchParamsProps {
-  company_id: string | number;
+interface Props {
+  company_id: number;
+  page: number;
+  limit: number;
 }
 
-export async function getCompanyLeaveTypes({
-  company_id,
-  searchParams,
-}: Props) {
-  const { page, limit } = getPaginationParams(await searchParams);
-
+export async function getCompanyLeaveTypes({ company_id, page, limit }: Props) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 

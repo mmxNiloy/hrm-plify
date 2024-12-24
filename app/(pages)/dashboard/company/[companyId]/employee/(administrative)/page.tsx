@@ -14,8 +14,23 @@ import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Colum
 import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Employees`,
+  };
+}
 
 export default async function AllEmployeePage({ params, searchParams }: Props) {
   const mCookies = await cookies();

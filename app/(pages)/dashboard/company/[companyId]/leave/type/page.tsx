@@ -14,8 +14,24 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
+import { getPaginationParams } from "@/utils/Misc";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Leave Types`,
+  };
+}
 
 export default async function CompanyLeaveTypePage({
   params,
@@ -40,11 +56,15 @@ export default async function CompanyLeaveTypePage({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
+  const sParams = await searchParams;
+  const { page, limit } = getPaginationParams(sParams);
+
   const [company, leaveTypes] = await Promise.all([
     getCompanyData(companyId),
     getCompanyLeaveTypes({
       company_id: companyId,
-      searchParams,
+      page,
+      limit,
     }),
   ]);
 

@@ -7,11 +7,22 @@ import { CompanyByIDPageProps } from "../../PageProps";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import OrgChart from "@/components/custom/Organogram/OrgChart";
-import { ITreeNode } from "@/schema/OrganogramSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Organogram Chart`,
+  };
+}
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
   var companyId = (await params).companyId;

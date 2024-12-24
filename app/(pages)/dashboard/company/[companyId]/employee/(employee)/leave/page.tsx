@@ -36,7 +36,8 @@ export default async function EmployeeLeaveRequestPage({
     getCompanyData(companyId),
     getCompanyLeaveTypes({
       company_id: companyId,
-      searchParams,
+      page,
+      limit,
     }),
     getEmployeeData(),
     getLeaveRequests({

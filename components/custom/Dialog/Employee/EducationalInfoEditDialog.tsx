@@ -54,7 +54,8 @@ export default function EducationalInfoEditDialog({
       var certificate_link = data?.certificate_link ?? "";
 
       const uploadTasks = [];
-      if (transcript && !transcriptError) uploadTasks.push(upload(transcript));
+      if (transcript && transcript.size > 0 && !transcriptError)
+        uploadTasks.push(upload(transcript));
       else {
         uploadTasks.push(
           new Promise<{
@@ -73,7 +74,8 @@ export default function EducationalInfoEditDialog({
           })
         );
       }
-      if (certificate && !certError) uploadTasks.push(upload(certificate));
+      if (certificate && certificate.size > 0 && !certError)
+        uploadTasks.push(upload(certificate));
       else {
         uploadTasks.push(
           new Promise<{

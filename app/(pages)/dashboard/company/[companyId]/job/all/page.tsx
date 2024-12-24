@@ -4,13 +4,10 @@ import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { getDesignations } from "@/app/(server)/actions/getDesignations";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
-import { JobsDataTableColumns } from "@/components/custom/DataTable/Columns/JobsDataTableColumns";
+import { StaticDataTable } from "@/components/ui/data-table";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyJobListings } from "@/app/(server)/actions/getCompanyJobListings";
 import { JobListingDataTableColumns } from "@/components/custom/DataTable/Columns/Recruitment/JobListingDataTableColumns";
@@ -19,8 +16,23 @@ import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | All Jobs`,
+  };
+}
 
 export default async function JobListingsPage({ params, searchParams }: Props) {
   const mCookies = await cookies();

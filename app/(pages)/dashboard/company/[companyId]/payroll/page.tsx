@@ -3,7 +3,6 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { getSalaryStructure } from "@/app/(server)/actions/getSalaryStructure";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import WIPPage from "@/components/custom/Placeholder/WIPPage";
 import { IUser } from "@/schema/UserSchema";
 import { ISearchParamsProps } from "@/utils/Types";
 import { cookies } from "next/headers";
@@ -12,17 +11,13 @@ import { CompanyByIDPageProps } from "../PageProps";
 import PayrollEditDialog from "@/components/custom/Dialog/Payroll/PayrollEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getFullNameOfEmployee, getPaginationParams } from "@/utils/Misc";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import { PayrollDataTableColumns } from "@/components/custom/DataTable/Columns/Payroll/PayrollDataTableColumns";
-import { MultiSelect } from "@/components/custom/Multiselect";
-import PayrollFormFragment from "@/components/custom/Form/Fragment/Payroll/PayrollFormFragment";
 import { Button } from "@/components/ui/button";
-import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
+import { ButtonSuccess } from "@/styles/button.tailwind";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
-import PayrollFilterPopover from "@/components/custom/Popover/Payroll/PayrollFilterPopover";
 import { getPayroll } from "@/app/(server)/actions/getPayroll";
-import { cn } from "@/lib/utils";
 import { MonthPicker } from "@/components/custom/DatePicker/MonthPicker";
 import {
   Select,
@@ -33,8 +28,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Payroll Management`,
+  };
+}
 
 export default async function PayRollManagementPage({
   params,

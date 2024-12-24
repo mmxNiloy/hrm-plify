@@ -7,15 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
-import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import Link from "next/link";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { getHolidayTypes } from "@/app/(server)/actions/getHolidayTypes";
 import { getHolidays } from "@/app/(server)/actions/getHolidays";
 import { HolidayListDataTableColumns } from "@/components/custom/DataTable/Columns/Holiday/HolidayListDataTableColumns";
@@ -24,6 +22,21 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Holiday Management`,
+  };
+}
 
 export default async function HolidayDashboardPage({
   params,

@@ -24,6 +24,8 @@ import { Progress } from "@/components/ui/progress";
 import JoinOrCreateCompanyDialog from "@/components/custom/Dialog/Profile/JoinOrCreateCompanyDialog";
 import JoinCompanyPopover from "@/components/custom/Popover/Profile/JoinCompanyPopover";
 import CompanyCreationDialog from "@/components/custom/Dialog/Company/CompanyCreationDialog";
+import { Metadata } from "next";
+import { getUserData } from "@/app/(server)/actions/getUserData";
 
 enum ProfileStep {
   ROLE = 1,
@@ -63,6 +65,13 @@ function getProfileCompletion(user: IUser) {
   }
 
   return status;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const user = await getUserData();
+  return {
+    title: `Artemis | ${user ? getFullNameOfUser(user) : "User Profile"}`,
+  };
 }
 
 export default async function ProfilePage() {

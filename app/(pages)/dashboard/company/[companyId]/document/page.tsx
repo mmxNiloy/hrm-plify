@@ -8,6 +8,20 @@ import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
 import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyDocumentsTab";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Document Management`,
+  };
+}
 
 export default async function DocumentsPage({ params }: CompanyByIDPageProps) {
   const mCookies = await cookies();

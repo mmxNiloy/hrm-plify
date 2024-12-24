@@ -13,10 +13,25 @@ import { StaticDataTable } from "@/components/ui/data-table";
 import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyUserDataTableColumns";
 import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface MigrantEmployeePageProps
   extends ISearchParamsProps,
     CompanyByIDPageProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Migrant Employees`,
+  };
+}
 
 export default async function MigrantEmployeePage({
   params,

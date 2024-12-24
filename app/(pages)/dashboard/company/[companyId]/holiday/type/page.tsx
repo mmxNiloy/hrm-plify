@@ -1,10 +1,9 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { IHolidayType } from "@/schema/HolidaySchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { getHolidayTypes } from "@/app/(server)/actions/getHolidayTypes";
 import HolidayTypeEditPopover from "@/components/custom/Popover/HolidayTypeEditPopover";
@@ -15,8 +14,23 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Holiday Types`,
+  };
+}
 
 export default async function HolidayTypesPage({
   params,

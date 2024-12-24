@@ -17,6 +17,8 @@ import { getAbsentReports } from "@/app/(server)/actions/getAbsentReport";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AbsentReportGenerator from "@/components/custom/PDF/AbsentReportGenerator";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -29,6 +31,19 @@ function getFilters(searchParams: ISearchParams) {
     from_date: searchParams.datepicker_from_date as string | undefined,
     end_date: searchParams.datepicker_to_date as string | undefined,
     sort: (searchParams.sort as string | undefined) ?? "DESC",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Absent Report`,
   };
 }
 

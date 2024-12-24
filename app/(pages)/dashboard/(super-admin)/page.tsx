@@ -1,7 +1,15 @@
 "use server";
 import CompanySearchCommand from "@/components/custom/Dashboard/Company/CompanySearchCommand";
 import { Label } from "@/components/ui/label";
+import { Metadata } from "next";
 import React from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  // const user = await getUserData();
+  return {
+    title: `Artemis | Dashboard | Super Admin`,
+  };
+}
 
 export default async function DashboardPage() {
   return (
