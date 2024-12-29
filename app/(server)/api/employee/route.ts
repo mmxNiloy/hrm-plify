@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
   const company_id = Number.parseInt(fd.get("company_id") as string);
   const department_id = Number.parseInt(fd.get("department_id") as string);
   const designation_id = Number.parseInt(fd.get("designation_id") as string);
+  const is_foreign = fd.get("is_foreign") ?? "0";
 
   const reqBody = {
     email,
@@ -21,6 +22,7 @@ export async function POST(req: NextRequest) {
     department_id,
     designation_id,
     employment_type: 1,
+    is_foreign,
   };
 
   // Check if the user is logged in

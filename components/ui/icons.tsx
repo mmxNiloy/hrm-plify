@@ -139,6 +139,7 @@ import {
   RotateCcw,
   ExternalLink,
   Copy,
+  Save,
 } from "lucide-react";
 import React from "react";
 
@@ -802,6 +803,7 @@ const UserEditIcon = React.forwardRef<SVGElement, SVGAttributes>(
 UserEditIcon.displayName = "UserEditIcon";
 
 const Icons = {
+  save: Save,
   userEdit: UserEditIcon,
   copy: Copy,
   brokenImage: BrokenImage,

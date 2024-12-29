@@ -31,12 +31,14 @@ export default function EmployeeOnboardingDialog({
   designations,
   data,
   asIcon,
+  asMigrant,
 }: {
   company_id: number;
   departments: IDepartment[];
   designations: IDesignation[];
   data?: IJobApplicant;
   asIcon?: boolean;
+  asMigrant?: boolean;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -51,6 +53,10 @@ export default function EmployeeOnboardingDialog({
 
       const fd = new FormData(e.currentTarget);
       fd.append("company_id", `${company_id}`);
+
+      if (asMigrant) {
+        fd.set("is_foreign", "1");
+      }
 
       setLoading(true);
 

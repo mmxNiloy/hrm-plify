@@ -21,6 +21,7 @@ export default function CanvasControls({
   designations,
   canvasRef,
   company,
+  chartVersion,
 }: OrgChartProps) {
   const { zoomIn, zoomOut, resetTransform, zoomToElement } = useControls();
 
@@ -29,8 +30,13 @@ export default function CanvasControls({
     const g = buildGraph(tree);
     console.log("Graph after", tree);
 
-    localStorage.setItem("organogram", JSON.stringify(Array.from(g.entries())));
-  }, [tree]);
+    localStorage.setItem(
+      `organogram${
+        chartVersion && chartVersion !== "default" ? `_${chartVersion}` : ""
+      }`,
+      JSON.stringify(g)
+    );
+  }, [chartVersion, tree]);
 
   return (
     <div className="z-10 absolute right-0 top-0 flex flex-col gap-2">
@@ -85,6 +91,10 @@ export default function CanvasControls({
       <OrgChartReportGenerator canvasRef={canvasRef} company={company} />
 
       <OrgChartWordGenerator canvasRef={canvasRef} company={company} />
+
+      <Button onClick={saveGraph} variant={"outline"} size="icon">
+        <Icons.save />
+      </Button>
     </div>
   );
 }

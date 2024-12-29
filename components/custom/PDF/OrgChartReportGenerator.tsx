@@ -169,6 +169,8 @@ export default function OrgChartReportGenerator({
           canvasHeight: 1024,
           canvasWidth: 1024,
           backgroundColor: "#ffffff", // Set background to white
+          skipFonts: true,
+          preferredFontFormat: "woff2",
         });
 
         generatePdf(dataUrl);

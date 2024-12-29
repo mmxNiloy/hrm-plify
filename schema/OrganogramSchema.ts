@@ -32,4 +32,10 @@ export interface ITreeNode extends TreeNode {
   type?: string;
   children?: ITreeNode[];
   data: IEmployeeWithUserMetadata;
+  is_vacant?: boolean;
+}
+
+export interface IChartVersion {
+  name: string;
+  lastModified: string;
 }

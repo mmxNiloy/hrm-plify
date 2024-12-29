@@ -54,7 +54,7 @@ export default function CompanyCountText() {
           snap: { textContent: 1 }, // Ensures the number snaps to whole values
           scrollTrigger: {
             trigger: ref.current,
-            start: "top 80%", // Animation starts when the element enters the viewport
+            start: "top 100%", // Animation starts when the element enters the viewport
           },
           onUpdate: function () {
             if (ref.current) {

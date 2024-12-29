@@ -33,6 +33,7 @@ import { Select } from "@/components/ui/select";
 import { LabelledComboBox } from "@/components/ui/combobox";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function NodeEditDialog({
   asIcon = false,
@@ -264,6 +265,13 @@ export default function NodeEditDialog({
                   }))}
                 />
               </div>
+
+              {/* <div className="flex gap-2">
+                <Checkbox name="is_vacant" id="is-vacant-checkbox" />
+                <Label htmlFor="is-vacant-checkbox">
+                  Is the position vacant?
+                </Label>
+              </div> */}
             </div>
           </ScrollArea>
 

@@ -79,6 +79,7 @@ export default async function GenerateAttendancePage({
       </div>
       <div className="flex flex-col gap-4">
         <AttendanceGenerationTable
+          company={company.data}
           employees={companyExtraData.data.employees}
           companyId={companyId}
         />

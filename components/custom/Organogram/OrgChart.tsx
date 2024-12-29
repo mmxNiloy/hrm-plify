@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import { ITreeNode } from "@/schema/OrganogramSchema";
 import { PrimeReactProvider } from "primereact/api";
@@ -16,7 +16,8 @@ import { OrgChartProps } from "./OrgChartProps";
 import addNode from "./util/addNode";
 import CanvasControls from "./CanvasControls";
 import nodeTemplate from "./util/nodeTemplate";
-import { buildGraph } from "./util/buildGraph";
+import { buildGraph, rebuildGraph } from "./util/buildGraph";
+import { useSearchParams } from "next/navigation";
 
 export default function OrgChart({
   employees,
@@ -24,6 +25,14 @@ export default function OrgChart({
   designations,
   company,
 }: Omit<OrgChartProps, "tree">) {
+  const sParams = useSearchParams();
+
+  const [chartVersion, setChartVersion] = useState<string>("");
+
+  useEffect(() => {
+    setChartVersion(decodeURIComponent(sParams.get("version") ?? "default"));
+  }, [sParams]);
+
   const [emp, setEmp] = useState<IEmployeeWithUserMetadata[]>([...employees]);
 
   const findChildren = useCallback(
@@ -50,35 +59,36 @@ export default function OrgChart({
   );
 
   const restoreTree = useCallback(() => {
-    const treeMap = JSON.parse(
-      localStorage.getItem("organogram") ?? "[]"
-    ) as Number[][];
+    var storedTree: ITreeNode | undefined = undefined;
+    try {
+      const savedTreeData = localStorage.getItem(
+        `organogram${
+          chartVersion && chartVersion !== "default" ? `_${chartVersion}` : ""
+        }`
+      );
+      if (savedTreeData) {
+        storedTree = JSON.parse(savedTreeData) as ITreeNode;
+      } else {
+        storedTree = undefined;
+      }
+    } catch (err) {
+      storedTree = undefined;
+    }
 
-    const root = treeMap.find((r) => r[1] == -1);
-    if (!root) return { tree: [], employees: [...employees] };
-    const rootData = employees.find((item) => item.employee_id == root[0]);
-    if (!rootData) return { tree: [], employees: [...employees] };
+    if (storedTree === undefined) {
+      return { tree: [] as ITreeNode[], employees };
+    }
 
-    const rootNode = {
-      data: rootData,
-      children: findChildren(treeMap, root[0]),
-      expanded: true,
-    };
-
-    rootNode.children.forEach((item) => {
-      item.data.parent = rootNode;
-    });
-
-    const tree: ITreeNode[] = [rootNode];
+    const { graph: newTree, nodes } = rebuildGraph(storedTree);
 
     return {
-      tree,
+      tree: newTree,
       employees: employees.map((e) => ({
         ...e,
-        is_node: treeMap.find((item) => item[0] == e.employee_id) !== undefined,
+        is_node: nodes.find((item) => item == e.employee_id) !== undefined,
       })),
     };
-  }, [employees, findChildren]);
+  }, [chartVersion, employees]);
 
   const [orgTree, setOrgTree] = useState<ITreeNode[]>([]);
 
@@ -87,14 +97,14 @@ export default function OrgChart({
   const saveGraph = useCallback(async () => {
     const g = buildGraph(orgTree);
 
-    localStorage.setItem("organogram", JSON.stringify(Array.from(g.entries())));
+    localStorage.setItem("organogram", JSON.stringify(g));
   }, [orgTree]);
 
-  // useEffect(() => {
-  //   const { tree, employees } = restoreTree();
-  //   setOrgTree(tree);
-  //   setEmp(employees);
-  // }, [restoreTree]);
+  useEffect(() => {
+    const { tree, employees } = restoreTree();
+    setOrgTree(tree);
+    setEmp(employees);
+  }, [restoreTree]);
 
   if (orgTree.length < 1) {
     return (
@@ -147,6 +157,7 @@ export default function OrgChart({
                   designations,
                   canvasRef,
                   company,
+                  chartVersion,
                 }}
               />
 

@@ -15,6 +15,7 @@ import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees"
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
+import EmployeeMigrationPopover from "@/components/custom/Popover/Company/EmployeeMigrationPopover";
 
 interface MigrantEmployeePageProps
   extends ISearchParamsProps,
@@ -79,6 +80,17 @@ export default async function MigrantEmployeePage({
           parent={"Company Management"}
           title={"Migrant Employees"}
         />
+
+        <div className="flex gap-4 items-center">
+          <EmployeeMigrationPopover
+            employees={companyExtraData.data.employees}
+          />
+          <EmployeeOnboardingDialog
+            company_id={companyId}
+            {...companyExtraData.data}
+            asMigrant
+          />
+        </div>
       </div>
 
       <StaticDataTable

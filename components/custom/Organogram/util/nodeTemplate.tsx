@@ -28,30 +28,29 @@ export default function nodeTemplate(
     company,
   }: OrgChartProps
 ) {
-  const saveGraph = async () => {
-    const g = buildGraph(tree);
-
-    localStorage.setItem("organogram", JSON.stringify(Array.from(g.entries())));
-  };
-
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div className="min-w-40 max-w-72 break-words flex flex-col items-center p-4">
-          <AvatarPicker
-            readOnly
-            alt={getFullNameOfEmployee(node.data)}
-            src={node.data.image}
-            height={48}
-            width={48}
-            className="p-0 size-12 rounded-full bg-muted object-contain object-center"
-          />
-          <span className="font-bold text-sm">
-            {getFullNameOfEmployee(node.data)}
-          </span>
+          {!node.is_vacant && (
+            <>
+              <AvatarPicker
+                readOnly
+                alt={getFullNameOfEmployee(node.data)}
+                src={node.data.image}
+                height={48}
+                width={48}
+                className="p-0 size-12 rounded-full bg-muted object-contain object-center"
+              />
+              <span className="font-bold text-sm">
+                {getFullNameOfEmployee(node.data)}
+              </span>
+            </>
+          )}
           {node.data.designations && (
             <TextCapsule className="bg-blue-500 text-xs">
               {node.data.designations.designation_name}
+              {node.is_vacant && " (Vacant)"}
             </TextCapsule>
           )}
         </div>

@@ -10,6 +10,8 @@ import OrgChart from "@/components/custom/Organogram/OrgChart";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
+import OrgChartVersionSelect from "@/components/custom/Organogram/OrgChartVersionSelect";
+import OrgChartVersionCreationPopover from "@/components/custom/Popover/Organogram/OrgChartVersionCreationPopover";
 
 export async function generateMetadata({
   params,
@@ -47,7 +49,14 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Organogram Chart</p>
-      <MyBreadcrumbs company={company.data} user={user} title="Organogram" />
+      <div className="flex items-center justify-between">
+        <MyBreadcrumbs company={company.data} user={user} title="Organogram" />
+
+        <div className="flex gap-4 items-center">
+          <OrgChartVersionSelect />
+          <OrgChartVersionCreationPopover />
+        </div>
+      </div>
 
       <OrgChart
         company={company.data}

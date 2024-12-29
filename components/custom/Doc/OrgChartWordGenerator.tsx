@@ -159,6 +159,8 @@ export default function OrgChartWordGenerator({
           canvasHeight: 1024,
           canvasWidth: 1024,
           backgroundColor: "#ffffff", // White background
+          skipFonts: true,
+          preferredFontFormat: "woff2",
         });
 
         generateDocx(dataUrl);

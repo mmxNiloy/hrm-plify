@@ -16,4 +16,5 @@ export interface OrgChartProps {
 
   designations: IDesignation[];
   canvasRef?: React.RefObject<OrganizationChart | null>;
+  chartVersion?: string;
 }

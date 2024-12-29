@@ -243,6 +243,9 @@ export interface IEmployeeWithUserMetadata extends IEmployee {
   emp_passport?: IEmployeePassportDetail;
   visa_brp?: IEmployeeVisaBrp;
 
+  is_foreign?: boolean;
+  nationality?: string;
+
   is_node?: boolean;
   parent?: ITreeNode;
   selfRef?: ITreeNode; // Reference to self in the tree
