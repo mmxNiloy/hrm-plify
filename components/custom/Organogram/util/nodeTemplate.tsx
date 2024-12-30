@@ -37,7 +37,7 @@ export default function nodeTemplate(
               <AvatarPicker
                 readOnly
                 alt={getFullNameOfEmployee(node.data)}
-                src={node.data.image}
+                src={node.data.image?.replace("http", "https")}
                 height={48}
                 width={48}
                 className="p-0 size-12 rounded-full bg-muted object-contain object-center"
