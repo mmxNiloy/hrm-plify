@@ -156,12 +156,12 @@ export default function OrgChartReportGenerator({
 
       try {
         // Convert the element to an image
-        wrapperEl.style.paddingTop = "1.5rem";
-        wrapperEl.style.minWidth = "16rem";
-        wrapperEl.style.minHeight = "16rem";
-        wrapperEl.style.display = "flex";
-        wrapperEl.style.alignItems = "center";
-        wrapperEl.style.justifyContent = "center";
+        // wrapperEl.style.paddingTop = "1.5rem";
+        // wrapperEl.style.minWidth = "16rem";
+        // wrapperEl.style.minHeight = "16rem";
+        // wrapperEl.style.display = "flex";
+        // wrapperEl.style.alignItems = "center";
+        // wrapperEl.style.justifyContent = "center";
 
         const dataUrl = await toPng(wrapperEl, {
           cacheBust: true,
@@ -176,14 +176,34 @@ export default function OrgChartReportGenerator({
         generatePdf(dataUrl);
       } catch (error) {
         console.error("Error capturing element:", error);
+        console.warn("Trying to capture with element id");
+
+        try {
+          const chartEl = document.getElementById("organogram-chart");
+          if (!chartEl) throw new Error("Chart element not found");
+
+          const dataUrl = await toPng(chartEl, {
+            cacheBust: true,
+            quality: 1,
+            canvasHeight: 1024,
+            canvasWidth: 1024,
+            backgroundColor: "#ffffff", // Set background to white
+            skipFonts: true,
+            preferredFontFormat: "woff2",
+          });
+
+          generatePdf(dataUrl);
+        } catch (error) {
+          console.error("Error capturing element:", error);
+        }
       }
 
-      wrapperEl.style.paddingTop = oldStyles.paddingTop;
-      wrapperEl.style.minWidth = oldStyles.minWidth;
-      wrapperEl.style.minHeight = oldStyles.minHeight;
-      wrapperEl.style.display = oldStyles.display;
-      wrapperEl.style.alignItems = oldStyles.alignItems;
-      wrapperEl.style.justifyContent = oldStyles.justifyContent;
+      // wrapperEl.style.paddingTop = oldStyles.paddingTop;
+      // wrapperEl.style.minWidth = oldStyles.minWidth;
+      // wrapperEl.style.minHeight = oldStyles.minHeight;
+      // wrapperEl.style.display = oldStyles.display;
+      // wrapperEl.style.alignItems = oldStyles.alignItems;
+      // wrapperEl.style.justifyContent = oldStyles.justifyContent;
 
       setLoading(false);
     }

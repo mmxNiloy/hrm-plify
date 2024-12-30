@@ -163,6 +163,7 @@ export default function OrgChart({
 
               <TransformComponent wrapperClass="min-w-full max-w-full min-h-[calc(100vh-12rem)] max-h-[calc(100vh-12rem)] items-center justify-center">
                 <OrganizationChart
+                  id="organogram-chart"
                   ref={canvasRef}
                   value={orgTree}
                   nodeTemplate={(n) =>
