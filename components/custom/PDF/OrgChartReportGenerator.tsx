@@ -173,6 +173,8 @@ export default function OrgChartReportGenerator({
           preferredFontFormat: "woff2",
         });
 
+        console.log("Generating PDF...");
+
         generatePdf(dataUrl);
       } catch (error) {
         console.error("Error capturing element:", error);
@@ -192,6 +194,7 @@ export default function OrgChartReportGenerator({
             preferredFontFormat: "woff2",
           });
 
+          console.log("Generating PDF...");
           generatePdf(dataUrl);
         } catch (error) {
           console.error("Error capturing element:", error);
