@@ -106,7 +106,7 @@ export default function StaffReportGenerator({
         },
       });
 
-      doc.save("Staff_Report.pdf");
+      doc.save(`Staff_Report_${Date.now()}.pdf`);
 
       toast({
         title: "Download Complete",

@@ -248,7 +248,7 @@ export default function CompanyDashboardSidebar({
               <div className="flex gap-2 items-center">
                 <Icons.operations />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-                  Operaitions
+                  Operations
                 </span>
               </div>
             </AccordionTrigger>

@@ -136,7 +136,7 @@ export default function AttendanceReportGenerator({
         },
       });
 
-      doc.save("Attendance_Report.pdf");
+      doc.save(`Attendance_Report_${Date.now()}.pdf`);
 
       toast({
         title: "Download Complete",

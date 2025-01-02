@@ -46,6 +46,13 @@ import {
 import { IPaginatedResponse } from "@/schema/PaginatedResponse";
 import { Skeleton } from "./skeleton";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./accordion";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -153,6 +160,7 @@ export function DataTable<TData, TValue>({
                           key={column.id}
                           className="capitalize"
                           checked={column.getIsVisible()}
+                          onSelect={(e) => e.preventDefault()}
                           onCheckedChange={(value) =>
                             column.toggleVisibility(!!value)
                           }
@@ -165,13 +173,104 @@ export function DataTable<TData, TValue>({
               </DropdownMenu>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="search-input">Search</Label>
-            <Input
-              type="search"
-              placeholder="Search..."
-              onChange={handleFilterChange}
-            />
+
+          {/* Filters */}
+          <div className="flex gap-4 items-center">
+            {/* Column Filter */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="col-filter-input">Column Filter</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className="justify-start gap-2 w-48"
+                  >
+                    <Icons.filter className="size-4" /> Filters
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent asChild>
+                  <Accordion
+                    className="max-h-96 overflow-scroll"
+                    type="multiple"
+                    defaultValue={columnFilters.map((item) => item.id)}
+                  >
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((item) => {
+                        return (
+                          <AccordionItem
+                            value={item.id}
+                            key={`accordion-${item.id}`}
+                          >
+                            <AccordionTrigger className="capitalize text-xs">
+                              {item.id}
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                              <Input
+                                placeholder={`Filter ${item.id}`}
+                                value={
+                                  (columnFilters.find((f) => f.id === item.id)
+                                    ?.value as string) ?? undefined
+                                }
+                                onChange={(e) => {
+                                  const text = e.target.value;
+                                  if (text.length < 1) {
+                                    setColumnFilters((oldVal) =>
+                                      oldVal.filter((f) => f.id !== item.id)
+                                    );
+                                    return;
+                                  }
+                                  // .trim();
+                                  // Check if this filter exists
+                                  const allColumnFilters = [...columnFilters];
+                                  const filterRef = allColumnFilters.find(
+                                    (f) => f.id === item.id
+                                  );
+                                  if (filterRef) {
+                                    filterRef.value = text;
+                                  } else {
+                                    allColumnFilters.push({
+                                      id: item.id,
+                                      value: text,
+                                    });
+                                  }
+
+                                  setColumnFilters(allColumnFilters);
+                                }}
+                              />
+
+                              {columnFilters.find((f) => f.id === item.id) && (
+                                <Button
+                                  size={"sm"}
+                                  variant={"destructive"}
+                                  onClick={() => {
+                                    setColumnFilters((oldVal) => [
+                                      ...oldVal.filter((f) => f.id !== item.id),
+                                    ]);
+                                  }}
+                                >
+                                  <Icons.trash /> Remove Filter
+                                </Button>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                  </Accordion>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="search-input">Global Filter</Label>
+              <Input
+                type="search"
+                placeholder="Global Filter..."
+                onChange={handleFilterChange}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -446,6 +545,7 @@ export function NetworkedDataTable<TData, TValue>({
                           key={column.id}
                           className="capitalize"
                           checked={column.getIsVisible()}
+                          onSelect={(e) => e.preventDefault()}
                           onCheckedChange={(value) =>
                             column.toggleVisibility(!!value)
                           }
@@ -458,14 +558,103 @@ export function NetworkedDataTable<TData, TValue>({
               </DropdownMenu>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="search-input">Search</Label>
-            <Input
-              disabled={loading}
-              type="search"
-              placeholder="Search..."
-              onChange={handleFilterChange}
-            />
+          {/* Filters */}
+          <div className="flex gap-4 items-center">
+            {/* Column Filter */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="col-filter-input">Column Filter</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className="justify-start gap-2 w-48"
+                  >
+                    <Icons.filter className="size-4" /> Filters
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent asChild>
+                  <Accordion
+                    className="max-h-96 overflow-scroll"
+                    type="multiple"
+                    defaultValue={columnFilters.map((item) => item.id)}
+                  >
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((item) => {
+                        return (
+                          <AccordionItem
+                            value={item.id}
+                            key={`accordion-${item.id}`}
+                          >
+                            <AccordionTrigger className="capitalize text-xs">
+                              {item.id}
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                              <Input
+                                placeholder={`Filter ${item.id}`}
+                                value={
+                                  (columnFilters.find((f) => f.id === item.id)
+                                    ?.value as string) ?? undefined
+                                }
+                                onChange={(e) => {
+                                  const text = e.target.value;
+                                  if (text.length < 1) {
+                                    setColumnFilters((oldVal) =>
+                                      oldVal.filter((f) => f.id !== item.id)
+                                    );
+                                    return;
+                                  }
+                                  // .trim();
+                                  // Check if this filter exists
+                                  const allColumnFilters = [...columnFilters];
+                                  const filterRef = allColumnFilters.find(
+                                    (f) => f.id === item.id
+                                  );
+                                  if (filterRef) {
+                                    filterRef.value = text;
+                                  } else {
+                                    allColumnFilters.push({
+                                      id: item.id,
+                                      value: text,
+                                    });
+                                  }
+
+                                  setColumnFilters(allColumnFilters);
+                                }}
+                              />
+
+                              {columnFilters.find((f) => f.id === item.id) && (
+                                <Button
+                                  size={"sm"}
+                                  variant={"destructive"}
+                                  onClick={() => {
+                                    setColumnFilters((oldVal) => [
+                                      ...oldVal.filter((f) => f.id !== item.id),
+                                    ]);
+                                  }}
+                                >
+                                  <Icons.trash /> Remove Filter
+                                </Button>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                  </Accordion>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="search-input">Global Filter</Label>
+              <Input
+                type="search"
+                placeholder="Global Filter..."
+                onChange={handleFilterChange}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -629,9 +818,103 @@ export function DataTableSkeleton<TValue>({
               </Button>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="search-input">Search</Label>
-            <Input type="search" placeholder="Search..." disabled />
+          {/* Filters */}
+          <div className="flex gap-4 items-center">
+            {/* Column Filter */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="col-filter-input">Column Filter</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className="justify-start gap-2 w-48"
+                  >
+                    <Icons.filter className="size-4" /> Filters
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent asChild>
+                  <Accordion
+                    className="max-h-96 overflow-scroll"
+                    type="multiple"
+                    defaultValue={columnFilters.map((item) => item.id)}
+                  >
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((item) => {
+                        return (
+                          <AccordionItem
+                            value={item.id}
+                            key={`accordion-${item.id}`}
+                          >
+                            <AccordionTrigger className="capitalize text-xs">
+                              {item.id}
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                              <Input
+                                placeholder={`Filter ${item.id}`}
+                                value={
+                                  (columnFilters.find((f) => f.id === item.id)
+                                    ?.value as string) ?? undefined
+                                }
+                                onChange={(e) => {
+                                  const text = e.target.value;
+                                  if (text.length < 1) {
+                                    setColumnFilters((oldVal) =>
+                                      oldVal.filter((f) => f.id !== item.id)
+                                    );
+                                    return;
+                                  }
+                                  // .trim();
+                                  // Check if this filter exists
+                                  const allColumnFilters = [...columnFilters];
+                                  const filterRef = allColumnFilters.find(
+                                    (f) => f.id === item.id
+                                  );
+                                  if (filterRef) {
+                                    filterRef.value = text;
+                                  } else {
+                                    allColumnFilters.push({
+                                      id: item.id,
+                                      value: text,
+                                    });
+                                  }
+
+                                  setColumnFilters(allColumnFilters);
+                                }}
+                              />
+
+                              {columnFilters.find((f) => f.id === item.id) && (
+                                <Button
+                                  size={"sm"}
+                                  variant={"destructive"}
+                                  onClick={() => {
+                                    setColumnFilters((oldVal) => [
+                                      ...oldVal.filter((f) => f.id !== item.id),
+                                    ]);
+                                  }}
+                                >
+                                  <Icons.trash /> Remove Filter
+                                </Button>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                  </Accordion>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="search-input">Global Filter</Label>
+              <Input
+                type="search"
+                placeholder="Global Filter..."
+                // onChange={handleFilterChange}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -843,6 +1126,7 @@ export function StaticDataTable<TData, TValue>({
                           key={column.id}
                           className="capitalize"
                           checked={column.getIsVisible()}
+                          onSelect={(e) => e.preventDefault()}
                           onCheckedChange={(value) =>
                             column.toggleVisibility(!!value)
                           }
@@ -855,14 +1139,103 @@ export function StaticDataTable<TData, TValue>({
               </DropdownMenu>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="search-input">Search</Label>
-            <Input
-              disabled={loading}
-              type="search"
-              placeholder="Search..."
-              onChange={handleFilterChange}
-            />
+          {/* Filters */}
+          <div className="flex gap-4 items-center">
+            {/* Column Filter */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="col-filter-input">Column Filter</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className="justify-start gap-2 w-48"
+                  >
+                    <Icons.filter className="size-4" /> Filters
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent asChild>
+                  <Accordion
+                    className="max-h-96 overflow-scroll"
+                    type="multiple"
+                    defaultValue={columnFilters.map((item) => item.id)}
+                  >
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((item) => {
+                        return (
+                          <AccordionItem
+                            value={item.id}
+                            key={`accordion-${item.id}`}
+                          >
+                            <AccordionTrigger className="capitalize text-xs">
+                              {item.id}
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                              <Input
+                                placeholder={`Filter ${item.id}`}
+                                value={
+                                  (columnFilters.find((f) => f.id === item.id)
+                                    ?.value as string) ?? undefined
+                                }
+                                onChange={(e) => {
+                                  const text = e.target.value;
+                                  if (text.length < 1) {
+                                    setColumnFilters((oldVal) =>
+                                      oldVal.filter((f) => f.id !== item.id)
+                                    );
+                                    return;
+                                  }
+                                  // .trim();
+                                  // Check if this filter exists
+                                  const allColumnFilters = [...columnFilters];
+                                  const filterRef = allColumnFilters.find(
+                                    (f) => f.id === item.id
+                                  );
+                                  if (filterRef) {
+                                    filterRef.value = text;
+                                  } else {
+                                    allColumnFilters.push({
+                                      id: item.id,
+                                      value: text,
+                                    });
+                                  }
+
+                                  setColumnFilters(allColumnFilters);
+                                }}
+                              />
+
+                              {columnFilters.find((f) => f.id === item.id) && (
+                                <Button
+                                  size={"sm"}
+                                  variant={"destructive"}
+                                  onClick={() => {
+                                    setColumnFilters((oldVal) => [
+                                      ...oldVal.filter((f) => f.id !== item.id),
+                                    ]);
+                                  }}
+                                >
+                                  <Icons.trash /> Remove Filter
+                                </Button>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                  </Accordion>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="search-input">Global Filter</Label>
+              <Input
+                type="search"
+                placeholder="Global Filter..."
+                onChange={handleFilterChange}
+              />
+            </div>
           </div>
         </div>
       )}

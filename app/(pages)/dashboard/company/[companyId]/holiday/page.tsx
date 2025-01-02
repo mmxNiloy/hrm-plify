@@ -88,7 +88,7 @@ export default async function HolidayDashboardPage({
         </CardContent>
 
         <CardFooter>
-          <Link href="all" passHref>
+          <Link href="./holiday/all" passHref>
             <Button className={ButtonBlue}>
               <Icons.visible />
               View all
@@ -110,7 +110,7 @@ export default async function HolidayDashboardPage({
         </CardContent>
 
         <CardFooter>
-          <Link href="type" passHref>
+          <Link href="./holiday/type" passHref>
             <Button className={ButtonBlue}>
               <Icons.visible />
               View all

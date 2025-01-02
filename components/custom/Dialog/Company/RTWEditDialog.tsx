@@ -103,7 +103,7 @@ export default function RTWEditDialog({
         list_b_group_1_options,
         list_b_group_2_options,
       ] = [
-        data?.employee_id ??
+        data?.employee?.employee_id ??
           Number.parseInt((fd.get("employee_id") as string | undefined) ?? "0"),
         fd.get("date_of_check") as string | undefined,
         fd.get("type_of_check") as CheckType | undefined,
@@ -183,7 +183,7 @@ export default function RTWEditDialog({
 
       setCurrentTabIndex((oldVal) => oldVal + 1);
     }
-  }, [currentTabIndex, data?.employee_id, readOnly, toast]);
+  }, [currentTabIndex, data?.employee?.employee_id, readOnly, toast]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {

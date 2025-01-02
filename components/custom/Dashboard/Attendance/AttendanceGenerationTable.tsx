@@ -211,7 +211,7 @@ export default function AttendanceGenerationTable({
         },
       });
 
-      doc.save("Attendance_Report.pdf");
+      doc.save(`Attendance_Report_${Date.now()}.pdf`);
 
       toast({
         title: "Download Complete",

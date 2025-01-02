@@ -16,7 +16,7 @@ import {
   getFullNameOfUser,
   toYYYYMMDD,
 } from "@/utils/Misc";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DatePicker } from "../../DatePicker/DatePicker";
 import { ICompanyUser } from "@/schema/UserSchema";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,15 @@ export default function RTWEmployeeSelectionTab({
   data,
 }: Props) {
   const { setSelectedEmployee, setDateOfCheck } = useContext(RTWFormContext);
-  const [selectedEmp, setSelectedEmp] = useState<string | undefined>(undefined);
+  const [selectedEmp, setSelectedEmp] = useState<string | undefined>(
+    data?.employee?.employee_id.toString()
+  );
+
+  useEffect(() => {
+    if (data?.employee) {
+      setSelectedEmployee(data.employee);
+    }
+  }, [data, setSelectedEmployee]);
 
   const getSelectedEmployeesDateOfJoining = useCallback(() => {
     const emp = employees.find((emp) => `${emp.employee_id}` === selectedEmp);
@@ -53,7 +61,9 @@ export default function RTWEmployeeSelectionTab({
           required
           name="employee_id"
           disabled={readOnly || Boolean(data)}
-          defaultValue={data ? `${data.employee_id}` : undefined}
+          defaultValue={
+            data?.employee ? `${data.employee.employee_id}` : undefined
+          }
           onValueChange={(e) => {
             setSelectedEmp(e);
             setSelectedEmployee(

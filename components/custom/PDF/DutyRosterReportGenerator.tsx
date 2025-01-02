@@ -122,7 +122,7 @@ export default function DutyRosterReportGenerator({
         alternateRowStyles: { fillColor: "#F2F2F2" },
       });
 
-      doc.save("Duty_Roster_Report.pdf");
+      doc.save(`Duty_Roster_Report_${Date.now()}.pdf`);
 
       toast({
         title: "Download Complete",
