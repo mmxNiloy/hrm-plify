@@ -17,7 +17,7 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   name?: string;
   required?: boolean;
   requireRangeEnd?: boolean;
-  onValueChange: (dateRange?: DateRange) => void;
+  onValueChange?: (dateRange?: DateRange) => void;
 }
 
 const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
