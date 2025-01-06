@@ -249,4 +249,9 @@ export interface IEmployeeWithUserMetadata extends IEmployee {
   is_node?: boolean;
   parent?: ITreeNode;
   selfRef?: ITreeNode; // Reference to self in the tree
+
+  is_vacant?: boolean;
+  is_root?: boolean;
+
+  num_vacant?: number;
 }

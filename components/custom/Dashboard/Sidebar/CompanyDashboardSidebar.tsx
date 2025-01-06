@@ -45,7 +45,7 @@ export default function CompanyDashboardSidebar({
 
         <Accordion
           type="multiple"
-          defaultValue={["org"]}
+          defaultValue={["org", "hr", "ops", "fin"]}
           onValueChange={(e) => {
             if (e.length > 0) {
               setIsAccordionOpen(true);

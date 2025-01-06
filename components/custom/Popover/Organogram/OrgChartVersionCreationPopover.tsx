@@ -21,6 +21,7 @@ export default function OrgChartVersionCreationPopover() {
   const [versions, setVersions] = useState<IChartVersion[]>([]);
   const [isValidVersion, setIsValidVersion] = useState<boolean>(false);
   const [newVersion, setNewVersion] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
   const checkValidityOfNewVersion = useCallback(
     (ver: string) => {
       if (ver.length > 0) {
@@ -51,6 +52,7 @@ export default function OrgChartVersionCreationPopover() {
     );
 
     router.push(`${pathname}?version=${newVersion}`);
+    setOpen(false);
   }, [newVersion, pathname, router, versions]);
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export default function OrgChartVersionCreationPopover() {
   }, [sParams]);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <AnimatedTrigger label="New Version" />
       </PopoverTrigger>

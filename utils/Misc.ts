@@ -512,7 +512,7 @@ export function getFullNameOfEmployee(employee: IEmployeeWithUserMetadata) {
 export function getFullNameOfUser(user: IUserBase) {
   return `${user.first_name}${
     (user.middle_name?.length ?? 0) > 0 ? ` ${user.middle_name}` : ""
-  } ${user.last_name}`;
+  } ${user.last_name}`.trim();
 }
 
 export function timeDifference(startTime: string, endTime: string): string {

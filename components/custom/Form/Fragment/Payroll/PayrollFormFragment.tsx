@@ -22,6 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { IDepartment } from "@/schema/CompanySchema";
+import { IDesignation } from "@/schema/DesignationSchema";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
 import { IPayroll, ISalaryStructure } from "@/schema/Payroll";
@@ -33,7 +35,7 @@ import {
   weekDays,
 } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 interface Props extends IFormFragmentProps<IPayroll> {
   asEditable?: boolean;
@@ -42,6 +44,8 @@ interface Props extends IFormFragmentProps<IPayroll> {
   onEmployeeSelect?: (e: string) => void;
   salaryStruct?: ISalaryStructure;
   loading?: boolean;
+  departments: IDepartment[];
+  designations: IDesignation[];
 }
 
 export default function PayrollFormFragment({
@@ -54,6 +58,8 @@ export default function PayrollFormFragment({
   onEmployeeSelect,
   salaryStruct,
   loading,
+  departments,
+  designations,
 }: Props) {
   const [selectedEmployee, setSelectedEmployee] = useState<string | undefined>(
     selectedEmp
@@ -101,8 +107,92 @@ export default function PayrollFormFragment({
       (bdFlags.find((x) => x === "deduction") ? deduction : 0)
     );
   }, [bdFlags, bonus, data, deduction, getNetSalary, overtimePay]);
+
+  const [selectedDesignation, setSelectedDesignation] = useState<string>();
+  const [selectedDepartment, setSelectedDepartment] = useState<string>();
+  const [filteredEmployees, setFilteredEmployees] =
+    useState<IEmployeeWithUserMetadata[]>(employees);
+
+  const getFilteredEmployees = useCallback(() => {
+    if (selectedDepartment && selectedDesignation) {
+      return employees.filter(
+        (item) =>
+          (item.designation_id ?? "0").toString() === selectedDesignation &&
+          (item.department_id ?? "0").toString() === selectedDepartment
+      );
+    } else if (selectedDesignation)
+      return employees.filter(
+        (item) =>
+          (item.designation_id ?? "0").toString() === selectedDesignation
+      );
+    else if (selectedDepartment) {
+      return employees.filter(
+        (item) => (item.department_id ?? "0").toString() === selectedDepartment
+      );
+    }
+
+    return employees;
+  }, [employees, selectedDesignation, selectedDepartment]);
+
+  useEffect(() => {
+    setFilteredEmployees(getFilteredEmployees);
+  }, [getFilteredEmployees]);
+
   return (
     <>
+      {/* Designation/Department filter */}
+      <div className="flex flex-col gap-2 w-full">
+        <Label>Filter By Designation</Label>
+        <Select
+          value={selectedDesignation}
+          onValueChange={(v) => setSelectedDesignation(v)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a designation" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select a designation</SelectLabel>
+              {designations.map((desig) => (
+                <SelectItem
+                  value={`${desig.designation_id}`}
+                  key={`designation-${desig.designation_id}`}
+                >
+                  {desig.designation_name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex flex-col gap-2 w-full">
+        <Label>Filter By Department</Label>
+        <Select
+          value={selectedDepartment}
+          onValueChange={(v) => setSelectedDepartment(v)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a department" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select a department</SelectLabel>
+              {departments.map((dept) => (
+                <SelectItem
+                  value={`${dept.department_id}`}
+                  key={`designation-${dept.department_id}`}
+                >
+                  {dept.dpt_name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="flex flex-col gap-2 w-full">
         <Label className={RequiredAsterisk}>Employee</Label>
         <Select
@@ -119,7 +209,7 @@ export default function PayrollFormFragment({
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Select an employee</SelectLabel>
-              {employees.map((item) => (
+              {filteredEmployees.map((item) => (
                 <SelectItem
                   key={`employee-select-option-${item.employee_id}`}
                   value={`${item.employee_id}`}

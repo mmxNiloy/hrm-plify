@@ -65,10 +65,10 @@ export default function AttendanceGenerationTable({
         to_date: fd.get("datepicker_to_date") as string,
       };
 
-      setDate({
-        from: new Date(data.from_date),
-        to: new Date(data.to_date),
-      });
+      // setDate({
+      //   from: new Date(data.from_date),
+      //   to: new Date(data.to_date),
+      // });
 
       if (!date || !date.from || !date.to) {
         toast({
@@ -263,7 +263,12 @@ export default function AttendanceGenerationTable({
 
         <div className="flex flex-col gap-2">
           <Label className={RequiredAsterisk}>Select a Date Range</Label>
-          <RangedDatePicker name="generation_range" required requireRangeEnd />
+          <RangedDatePicker
+            name="generation_range"
+            required
+            requireRangeEnd
+            onValueChange={(range) => setDate(range)}
+          />
         </div>
 
         <div className="flex flex-col gap-2">

@@ -71,7 +71,7 @@ export default async function AttendanceReportPage({
   if (company.error || companyExtraData.error || reports.error) {
     return (
       <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Attendance Report</p>
+        <p className="text-xl font-semibold">Attendance Records</p>
         <ErrorFallbackCard
           error={company.error ?? companyExtraData.error ?? reports.error}
         />

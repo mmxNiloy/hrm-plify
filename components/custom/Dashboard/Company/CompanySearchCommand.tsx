@@ -20,6 +20,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import TextCapsule from "../../TextCapsule";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -83,79 +84,84 @@ export default function CompanySearchCommand() {
           </CommandGroup>
         ) : (
           <CommandGroup heading="Companies">
-            {companies.map((comp) => (
-              <CommandItem key={`company-id-${comp.company_id}`}>
-                <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-                  <div className="flex gap-4">
-                    <AvatarPicker
-                      readOnly
-                      src={comp.logo}
-                      skeleton={
-                        <span
-                          style={{
-                            backgroundColor: stringToColor(comp.company_name),
-                          }}
-                          className={
-                            "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
-                          }
-                        >
-                          {comp.company_name.charAt(0).toUpperCase()}
-                        </span>
-                      }
-                      className="size-10 p-0"
-                    />
-                    <div className="flex flex-col gap-2">
-                      <p className="font-semibold text-xl">
-                        {comp.company_name}
-                      </p>
+            <div className="grid grid-cols-2 2xl:grid-cols-3 gap-4">
+              {companies.map((comp) => (
+                <Link
+                  className="cursor-pointer col-span-1"
+                  href={`/dashboard/company/${comp.company_id}/`}
+                  passHref
+                  key={`company-id-${comp.company_id}`}
+                >
+                  <CommandItem className="cursor-pointer">
+                    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
+                      <div className="flex gap-4">
+                        <div className="flex flex-col gap-4 items-center justify-center">
+                          <AvatarPicker
+                            readOnly
+                            src={comp.logo}
+                            skeleton={
+                              <span
+                                style={{
+                                  backgroundColor: stringToColor(
+                                    comp.company_name
+                                  ),
+                                }}
+                                className={
+                                  "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
+                                }
+                              >
+                                {comp.company_name.charAt(0).toUpperCase()}
+                              </span>
+                            }
+                            className="size-16 p-0"
+                          />
 
-                      <Link
-                        href={`${
-                          comp.website
-                        }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
-                        passHref
-                        className="hover:underline"
-                      >
-                        <p className="text-sm italic flex gap-2 items-center">
-                          <Icons.link className="size-3" />
-                          {comp.website}
-                        </p>
-                      </Link>
-                      <div className="flex gap-2 *:flex *:px-2 *:py-1 *:rounded-full *:text-white *:w-fit *:items-center *:gap-1">
-                        <p className="bg-blue-500">
-                          <Icons.building className="size-3" />
-                          {comp.headquarters}
-                        </p>
+                          <Link
+                            href={`${
+                              comp.website
+                            }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
+                            passHref
+                            className="hover:underline"
+                          >
+                            <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
+                              <Icons.externalLink />
+                              Visit
+                            </TextCapsule>
+                          </Link>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <p className="font-semibold text-xl">
+                            {comp.company_name}
+                          </p>
 
-                        <p className="bg-orange-500">
-                          <Icons.factory className="size-3" />
-                          {comp.industry}
-                        </p>
-                        <p
-                          className={
-                            comp.is_active
-                              ? "bg-green-500"
-                              : "bg-muted-foreground text-muted-foreground"
-                          }
-                        >
-                          {comp.is_active ? "Active" : "Inactive"}
-                        </p>
+                          <div className="flex flex-col gap-2 *:text-xs">
+                            <TextCapsule className="bg-blue-500">
+                              <Icons.building className="size-3" />
+                              {comp.headquarters}
+                            </TextCapsule>
+
+                            <TextCapsule className="bg-orange-500">
+                              <Icons.factory className="size-3" />
+                              {comp.industry}
+                            </TextCapsule>
+                            <TextCapsule
+                              className={comp.is_active ? "bg-green-500" : ""}
+                            >
+                              {comp.is_active ? "Active" : "Inactive"}
+                            </TextCapsule>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <Link
-                    href={`/dashboard/company/${comp.company_id}/`}
-                    passHref
-                  >
-                    <Button className={ButtonBlue}>
+                      {/* <Button className={ButtonBlue}>
                       Select
                       <Icons.chevronRight />
-                    </Button>
-                  </Link>
-                </div>
-              </CommandItem>
-            ))}
+                    </Button> */}
+                    </div>
+                  </CommandItem>
+                </Link>
+              ))}
+            </div>
           </CommandGroup>
         )}
       </CommandList>

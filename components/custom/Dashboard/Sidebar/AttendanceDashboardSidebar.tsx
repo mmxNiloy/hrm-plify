@@ -36,7 +36,7 @@ export default function AttendanceDashboardSidebar({
         >
           <Icons.note />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Attendance Report
+            Attendance Records
           </span>
         </SidebarLink>
 

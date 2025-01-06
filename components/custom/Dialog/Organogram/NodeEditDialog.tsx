@@ -34,6 +34,37 @@ import { LabelledComboBox } from "@/components/ui/combobox";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { Checkbox } from "@/components/ui/checkbox";
+import { MultiSelect } from "../../Multiselect";
+import { Input } from "@/components/ui/input";
+
+interface Props {
+  asIcon?: boolean;
+  companyId: number;
+  employees: IEmployeeWithUserMetadata[];
+  tree: ITreeNode[];
+  parentNode?: ITreeNode;
+  node?: ITreeNode;
+  asMenuItem?: boolean;
+  menuItemLabel?: string;
+  menuItemIcon?: React.ReactNode;
+  onSubmit?: ({
+    parent,
+    children,
+  }: {
+    parent?: ITreeNode;
+    children: IEmployeeWithUserMetadata[];
+  }) => void;
+  designations: IDesignation[];
+  onUpdate?: ({
+    parent,
+    designation,
+    num_vacant,
+  }: {
+    parent: ITreeNode;
+    designation: IDesignation;
+    num_vacant: number;
+  }) => void;
+}
 
 export default function NodeEditDialog({
   asIcon = false,
@@ -46,26 +77,11 @@ export default function NodeEditDialog({
   menuItemLabel,
   menuItemIcon,
   node,
+  onUpdate,
   designations,
-}: {
-  asIcon?: boolean;
-  companyId: number;
-  employees: IEmployeeWithUserMetadata[];
-  tree: ITreeNode[];
-  parentNode?: ITreeNode;
-  node?: ITreeNode;
-  asMenuItem?: boolean;
-  menuItemLabel?: string;
-  menuItemIcon?: React.ReactNode;
-  onSubmit?: ({
-    parent,
-    child,
-  }: {
-    parent?: ITreeNode;
-    child: IEmployeeWithUserMetadata;
-  }) => void;
-  designations: IDesignation[];
-}) {
+}: Props) {
+  const [isVacantCheck, setIsVacantCheck] = useState<boolean>(false);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -87,6 +103,10 @@ export default function NodeEditDialog({
     IEmployeeWithUserMetadata[]
   >([]);
 
+  // Selected children
+  const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
+  const [childDesignation, setChildDesignation] = useState<string>();
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -94,22 +114,100 @@ export default function NodeEditDialog({
 
       const fd = new FormData(e.currentTarget);
 
-      const { parent, child } = {
+      const { parent, num_vacant, child_designation } = {
         parent:
           Number.parseInt((fd.get("parent") as string | undefined) ?? "0") || 0,
-        child:
-          Number.parseInt((fd.get("child") as string | undefined) ?? "0") || 0,
+        num_vacant: (fd.get("num_vacant") as string | undefined) ?? "1",
+        child_designation:
+          (fd.get("child_designation") as string | undefined) ?? "0",
       };
+
+      const desig = designations.find(
+        (item) => item.designation_id.toString() === child_designation
+      );
+      if (!desig) {
+        toast({
+          title: "Node Creation Failed",
+          description: "No designation selected.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       const parNode =
         treeNodes.find((e) => e.employee_id == parent)?.selfRef ?? tree[0];
-      const chNode = availableNodes.find((e) => e.employee_id == child);
+      var chNode = selectedChildren
+        .map((ch) =>
+          availableNodes.find((item) => item.employee_id.toString() === ch)
+        )
+        .filter((item) => item !== undefined);
+
+      const nVac = Number.parseInt(num_vacant);
+      if (Number.isNaN(nVac) || nVac < 1) {
+        toast({
+          title: "Node Creation Failed",
+          description: "Vacant positions cannot be less than 1",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (isVacantCheck || asMenuItem) {
+        // Check for an existing vacant node w\ same designation and parent
+        const oldNode = parentNode?.children?.find(
+          (item) =>
+            item.data.is_vacant == true &&
+            item.data.designation_id == desig.designation_id
+        );
+
+        if (oldNode) {
+          setLoading(true);
+          oldNode.data.num_vacant = nVac;
+          if (onUpdate)
+            onUpdate({
+              parent: parentNode ?? tree[0],
+              designation: desig,
+              num_vacant: nVac,
+            });
+          setLoading(false);
+          setOpen(false);
+          return;
+        }
+
+        const newVacantNode: IEmployeeWithUserMetadata = {
+          designations: desig,
+          user: {
+            access_permissions: [],
+            user_id: -1,
+            email: "",
+            password_hash: "",
+            first_name: "Vacant",
+            last_name: `(${num_vacant})`,
+            status: "",
+            created_at: "",
+            updated_at: "",
+            middle_name: "",
+          },
+          image: "/broken-image.svg",
+          employee_id: -1,
+          user_id: -1,
+          employee_code: "vacant",
+          company_id: 0,
+          ni_num: "",
+          department_id: 0,
+          designation_id: desig.designation_id,
+          is_vacant: true,
+          num_vacant: nVac,
+        };
+
+        chNode = [newVacantNode];
+      }
 
       // No child selected
-      if (!chNode) {
+      if (chNode.length < 1) {
         toast({
           title: "Node creation failed",
-          description: "Select an employee/node to be added into the chart",
+          description: "Select at least one employee/node",
           variant: "destructive",
         });
 
@@ -119,13 +217,25 @@ export default function NodeEditDialog({
       setLoading(true);
 
       if (onSubmit) {
-        onSubmit({ parent: parNode, child: chNode });
+        onSubmit({ parent: parNode, children: [...chNode] });
       }
 
       setLoading(false);
       setOpen(false);
     },
-    [availableNodes, onSubmit, toast, tree, treeNodes]
+    [
+      asMenuItem,
+      availableNodes,
+      designations,
+      isVacantCheck,
+      onSubmit,
+      onUpdate,
+      parentNode,
+      selectedChildren,
+      toast,
+      tree,
+      treeNodes,
+    ]
   );
 
   const handleParentDesignationChange = useCallback(
@@ -139,6 +249,7 @@ export default function NodeEditDialog({
 
   const handleChildDesingationChange = useCallback(
     (val: string) => {
+      setChildDesignation(val);
       setFilteredChildren(
         availableNodes.filter((item) => val === `${item.designation_id}`)
       );
@@ -151,6 +262,9 @@ export default function NodeEditDialog({
       // Reset the states
       setFilteredChildren([]);
       setFilteredParents([]);
+      setSelectedChildren([]);
+      setIsVacantCheck(false);
+      setChildDesignation(undefined);
     }
   }, [open]);
 
@@ -191,7 +305,9 @@ export default function NodeEditDialog({
           </DialogDescription>
           <DialogDescription>
             Fields marked by asterisks (<span className="text-red-500">*</span>)
-            are required.
+            are required. <br />
+            If no parent is selected, the node will be treated as a descendant
+            of the root node; the company.
           </DialogDescription>
         </DialogHeader>
 
@@ -201,7 +317,7 @@ export default function NodeEditDialog({
               <p className="col-span-full font-semibold">Parent Node</p>
 
               <div className="flex flex-col gap-2">
-                <Label className={RequiredAsterisk}>Select Designation</Label>
+                <Label>Select Designation</Label>
                 <LabelledComboBox
                   name="parent_designation"
                   required
@@ -218,7 +334,7 @@ export default function NodeEditDialog({
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label className={RequiredAsterisk}>Select a Parent Node</Label>
+                <Label>Select a Parent Node</Label>
                 <LabelledComboBox
                   name="parent"
                   required
@@ -234,6 +350,15 @@ export default function NodeEditDialog({
               </div>
 
               <p className="col-span-full font-semibold">Child Node</p>
+
+              <div className="flex gap-2 items-center col-span-full">
+                <Checkbox
+                  id="is-vacant-check"
+                  onCheckedChange={(chk) => setIsVacantCheck(chk === true)}
+                  defaultChecked={asMenuItem}
+                />
+                <Label htmlFor="is-vacant-check">Is the position vacant?</Label>
+              </div>
 
               <div className="flex flex-col gap-2">
                 <Label className={RequiredAsterisk}>Select Designation</Label>
@@ -252,26 +377,43 @@ export default function NodeEditDialog({
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <Label className={RequiredAsterisk}>Select a Child Node</Label>
-                <LabelledComboBox
-                  name="child"
-                  required
-                  defaultValue={node ? `${node.data.employee_id}` : undefined}
-                  disabled={filteredChildren.length < 1}
-                  items={filteredChildren.map((emp) => ({
-                    label: getFullNameOfEmployee(emp),
-                    value: `${emp.employee_id}`,
-                  }))}
-                />
-              </div>
-
-              {/* <div className="flex gap-2">
-                <Checkbox name="is_vacant" id="is-vacant-checkbox" />
-                <Label htmlFor="is-vacant-checkbox">
-                  Is the position vacant?
-                </Label>
-              </div> */}
+              {isVacantCheck || asMenuItem ? (
+                <div className="flex flex-col gap-2">
+                  <Label className={RequiredAsterisk}>
+                    Number of vacant positions
+                  </Label>
+                  <Input
+                    required
+                    name="num_vacant"
+                    placeholder="Number of vacant positions"
+                    min={1}
+                    type="number"
+                    defaultValue={node?.data.num_vacant ?? 1}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <Label className={RequiredAsterisk}>
+                    Select a Child Node
+                  </Label>
+                  <MultiSelect
+                    maxCount={1}
+                    onValueChange={(mChildren) =>
+                      setSelectedChildren(mChildren)
+                    }
+                    options={filteredChildren.map((emp) => ({
+                      label: `${emp.employee_code} - `.concat(
+                        getFullNameOfEmployee(emp)
+                      ),
+                      value: `${emp.employee_id}`,
+                    }))}
+                    disabled={filteredChildren.length < 1}
+                    defaultValue={
+                      node ? [`${node.data.employee_id}`] : undefined
+                    }
+                  />
+                </div>
+              )}
             </div>
           </ScrollArea>
 

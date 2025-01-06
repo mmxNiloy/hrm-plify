@@ -12,6 +12,7 @@ import Link from "next/link";
 import PassportDetailsEditDialog from "../../../../Dialog/Employee/PassportDetailsEditDialog";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import { addDays } from "date-fns";
+import VisaNotificationReportGenerator from "@/components/custom/PDF/VisaNotificationReportGenerator";
 
 export const VisaNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] =
   [
@@ -108,9 +109,10 @@ export const VisaNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] =
       id: "action-view",
       header: "View",
       cell: ({ row }) => (
-        <Button variant={"ghost"} size="icon">
-          <Icons.visible />
-        </Button>
+        <VisaNotificationReportGenerator
+          data={row.original}
+          company={row.original.user.usercompany?.companies!}
+        />
       ),
     },
     {

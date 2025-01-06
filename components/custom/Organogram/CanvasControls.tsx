@@ -11,6 +11,8 @@ import jsPDF from "jspdf";
 import { buildGraph } from "./util/buildGraph";
 import OrgChartReportGenerator from "../PDF/OrgChartReportGenerator";
 import OrgChartWordGenerator from "../Doc/OrgChartWordGenerator";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastSuccess } from "@/styles/toast.tailwind";
 
 export default function CanvasControls({
   employees,
@@ -25,6 +27,8 @@ export default function CanvasControls({
 }: OrgChartProps) {
   const { zoomIn, zoomOut, resetTransform, zoomToElement } = useControls();
 
+  const { toast } = useToast();
+
   const saveGraph = useCallback(async () => {
     console.log("Graph before", tree);
     const g = buildGraph(tree);
@@ -36,7 +40,12 @@ export default function CanvasControls({
       }`,
       JSON.stringify(g)
     );
-  }, [chartVersion, tree]);
+
+    toast({
+      title: "Progress Saved!",
+      className: ToastSuccess,
+    });
+  }, [chartVersion, toast, tree]);
 
   return (
     <div className="z-10 absolute right-0 top-0 flex flex-col gap-2">
@@ -79,9 +88,9 @@ export default function CanvasControls({
         companyId={companyId}
         employees={employees}
         asIcon
-        onSubmit={({ parent, child }) => {
+        onSubmit={({ parent, children }) => {
           if (setOrgTree && setEmployees) {
-            addNode({ parent, child }, setOrgTree, setEmployees);
+            addNode({ parent, children }, setOrgTree, setEmployees);
 
             // saveGraph();
           }

@@ -106,6 +106,8 @@ export default async function PayRollManagementPage({
         <PayrollEditDialog
           company_id={companyId}
           employees={companyExtra.data.employees}
+          departments={companyExtra.data.departments}
+          designations={companyExtra.data.designations}
         />
       </div>
 

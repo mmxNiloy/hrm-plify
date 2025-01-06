@@ -27,6 +27,8 @@ import {
 import SalaryStructureFormFragment from "../../Form/Fragment/Payroll/SalaryStructureFormFragment";
 import PayrollFormFragment from "../../Form/Fragment/Payroll/PayrollFormFragment";
 import { getEmployeeSalaryStructure } from "@/app/(server)/actions/getEmployeeSalaryStructure";
+import { IDepartment } from "@/schema/CompanySchema";
+import { IDesignation } from "@/schema/DesignationSchema";
 
 interface Props {
   company_id: number;
@@ -34,6 +36,8 @@ interface Props {
   asIcon?: boolean;
   asEditable?: boolean;
   employees?: IEmployeeWithUserMetadata[];
+  departments: IDepartment[];
+  designations: IDesignation[];
 }
 
 export default function PayrollEditDialog({
@@ -42,6 +46,8 @@ export default function PayrollEditDialog({
   employees = [],
   company_id,
   asEditable = false,
+  departments,
+  designations,
 }: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -216,6 +222,8 @@ export default function PayrollEditDialog({
                 asEditable={asEditable}
                 salaryStruct={salaryStruct}
                 loading={loading}
+                departments={departments}
+                designations={designations}
               />
             </div>
           </ScrollArea>

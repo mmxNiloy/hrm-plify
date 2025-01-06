@@ -76,7 +76,37 @@ export default function OrgChart({
     }
 
     if (storedTree === undefined) {
-      return { tree: [] as ITreeNode[], employees };
+      const companyRoot: ITreeNode = {
+        id: `company-${company.company_id}`,
+        key: `company-key-${company.company_id}`,
+        children: [],
+        expanded: true,
+        data: {
+          user: {
+            access_permissions: [],
+            user_id: 0,
+            email: company.website ?? "",
+            password_hash: "",
+            first_name: company.company_name,
+            last_name: "",
+            status: "",
+            created_at: "",
+            updated_at: "",
+            middle_name: "",
+          },
+          image: company.logo,
+          employee_id: 0,
+          user_id: 0,
+          employee_code: "",
+          company_id: 0,
+          ni_num: "",
+          department_id: 0,
+          designation_id: 0,
+          is_vacant: false,
+          is_root: true,
+        },
+      };
+      return { tree: [companyRoot] as ITreeNode[], employees };
     }
 
     const { graph: newTree, nodes } = rebuildGraph(storedTree);
@@ -88,7 +118,14 @@ export default function OrgChart({
         is_node: nodes.find((item) => item == e.employee_id) !== undefined,
       })),
     };
-  }, [chartVersion, employees]);
+  }, [
+    chartVersion,
+    company.company_id,
+    company.company_name,
+    company.logo,
+    company.website,
+    employees,
+  ]);
 
   const [orgTree, setOrgTree] = useState<ITreeNode[]>([]);
 
@@ -113,8 +150,8 @@ export default function OrgChart({
         <p>Add nodes to create an Organogram Chart</p>
         <NodeEditDialog
           designations={designations}
-          onSubmit={({ parent, child }) => {
-            addNode({ parent, child }, setOrgTree, setEmp);
+          onSubmit={({ parent, children }) => {
+            addNode({ parent, children }, setOrgTree, setEmp);
 
             // saveGraph();
           }}
@@ -180,7 +217,7 @@ export default function OrgChart({
                   pt={{
                     node: {
                       className: "rounded-md p-0",
-                      onClick: (e) => {
+                      onDoubleClick: (e) => {
                         zoomToElement(e.currentTarget);
                       },
                     },

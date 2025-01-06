@@ -17,10 +17,14 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   name?: string;
   required?: boolean;
   requireRangeEnd?: boolean;
+  onValueChange: (dateRange?: DateRange) => void;
 }
 
 const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, name, required, requireRangeEnd, ...props }, ref) => {
+  (
+    { className, name, required, requireRangeEnd, onValueChange, ...props },
+    ref
+  ) => {
     const [date, setDate] = useState<DateRange | undefined>();
 
     const getRangeString = useCallback(() => {
@@ -75,7 +79,12 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
               captionLayout="dropdown-buttons"
               defaultMonth={date?.from}
               selected={date}
-              onSelect={setDate}
+              onSelect={(mDate) => {
+                if (onValueChange) {
+                  onValueChange(mDate);
+                }
+                setDate(mDate);
+              }}
               numberOfMonths={1}
             />
           </PopoverContent>

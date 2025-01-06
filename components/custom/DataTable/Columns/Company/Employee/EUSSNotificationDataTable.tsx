@@ -12,6 +12,7 @@ import Link from "next/link";
 import PassportDetailsEditDialog from "../../../../Dialog/Employee/PassportDetailsEditDialog";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import { addDays } from "date-fns";
+import EussNotificationReportGenerator from "@/components/custom/PDF/EussNotificationReportGenerator";
 
 export const EUSSNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] =
   [
@@ -104,9 +105,10 @@ export const EUSSNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] =
       id: "action-view",
       header: "View",
       cell: ({ row }) => (
-        <Button variant={"ghost"} size="icon">
-          <Icons.visible />
-        </Button>
+        <EussNotificationReportGenerator
+          data={row.original}
+          company={row.original.user.usercompany?.companies!}
+        />
       ),
     },
     {
