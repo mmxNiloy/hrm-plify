@@ -67,14 +67,14 @@ export default function EmployeeHomeSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/my-change-of-circumstances`}
         >
           <Icons.userCog />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Change of Circumstances
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
 
         <BackLinkButton />
       </SidebarContent>

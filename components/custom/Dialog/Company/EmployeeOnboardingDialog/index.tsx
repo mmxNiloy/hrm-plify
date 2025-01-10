@@ -24,6 +24,25 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import EmployeeOnboardingFormFragment from "../../../Form/Fragment/Company/EmployeeOnboardingFormFragment";
 import { IJobApplicant } from "@/schema/JobSchema";
+import { IUser } from "@/schema/UserSchema";
+import { IEmployee } from "@/schema/EmployeeSchema";
+
+interface EmployeeCreationResponse {
+  message: string;
+  user: IUser;
+  employee: IEmployee;
+  password: string;
+}
+
+interface Props {
+  company_id: number;
+  departments: IDepartment[];
+  designations: IDesignation[];
+  data?: IJobApplicant;
+  asIcon?: boolean;
+  asMigrant?: boolean;
+  onSuccess?: (employeeData: EmployeeCreationResponse) => void;
+}
 
 export default function EmployeeOnboardingDialog({
   company_id,
@@ -32,14 +51,8 @@ export default function EmployeeOnboardingDialog({
   data,
   asIcon,
   asMigrant,
-}: {
-  company_id: number;
-  departments: IDepartment[];
-  designations: IDesignation[];
-  data?: IJobApplicant;
-  asIcon?: boolean;
-  asMigrant?: boolean;
-}) {
+  onSuccess,
+}: Props) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -69,6 +82,11 @@ export default function EmployeeOnboardingDialog({
         const res = await apiRes.json();
 
         if (apiRes.ok) {
+          // Show an alert dialog to remind the user that this password is one-time use only
+          if (onSuccess) {
+            onSuccess(res as EmployeeCreationResponse);
+          }
+
           // Close dialog, show toast, refresh parent ssc
           toast({
             title: "Creation Successful",
@@ -76,7 +94,7 @@ export default function EmployeeOnboardingDialog({
           });
           // if (onSuccess) onSuccess(data.data.department_id);
 
-          router.refresh();
+          // router.refresh();
           setOpen(false);
         } else {
           // show a failure dialog
@@ -96,7 +114,7 @@ export default function EmployeeOnboardingDialog({
 
       setLoading(false);
     },
-    [company_id, router, toast]
+    [asMigrant, company_id, onSuccess, toast]
   );
 
   return (

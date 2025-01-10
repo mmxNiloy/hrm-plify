@@ -16,6 +16,7 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
+import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/wrapper";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
@@ -80,7 +81,7 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
 
         {/* <EmployeeCreationDialog /> */}
         {writeAccess && (
-          <EmployeeOnboardingDialog
+          <EmployeeOnboardingDialogWrapper
             company_id={companyId}
             {...companyExtraData.data}
           />

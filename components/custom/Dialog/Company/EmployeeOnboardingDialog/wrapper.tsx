@@ -1,57 +1,131 @@
-"use server";
+"use client";
 import { IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import EmployeeOnboardingDialog from ".";
+import { IUser } from "@/schema/UserSchema";
+import { IEmployee } from "@/schema/EmployeeSchema";
+import { IJobApplicant } from "@/schema/JobSchema";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
+import { useRouter } from "next/navigation";
+
+interface EmployeeCreationResponse {
+  message: string;
+  user: IUser;
+  employee: IEmployee;
+  password: string;
+}
 
 interface Props {
   company_id: number;
-  session: string;
+  departments: IDepartment[];
+  designations: IDesignation[];
+  data?: IJobApplicant;
+  asIcon?: boolean;
+  asMigrant?: boolean;
+  onSuccess?: (employeeData: EmployeeCreationResponse) => void;
 }
 
-export default async function EmployeeOnboardingDialogWrapper({
-  session,
+export default function EmployeeOnboardingDialogWrapper({
   company_id,
+  departments,
+  designations,
+  data,
+  asIcon,
+  asMigrant,
+  onSuccess,
 }: Props) {
-  // Get departments
-  var departments: IDepartment[] = [];
-  var designations: IDesignation[] = [];
-  try {
-    const dptRes = await fetch(
-      `${process.env.API_BASE_URL}/company/operation/get-all-departments/${company_id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
+  const router = useRouter();
 
-    const dptData = (await dptRes.json()) as IDepartment[];
-    departments = dptData;
+  const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
+  const [empData, setEmpData] = useState<EmployeeCreationResponse | undefined>(
+    undefined
+  );
 
-    const dsgRes = await fetch(
-      `${process.env.API_BASE_URL}/company/operation/get-designation/${company_id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    const dsgData = (await dsgRes.json()) as { data: IDesignation[] };
-    designations = dsgData.data;
-  } catch (err) {
-    console.error("Failed to get departments", err);
-    departments = [];
-    designations = [];
-  }
   return (
-    <EmployeeOnboardingDialog
-      departments={departments}
-      designations={designations}
-      company_id={company_id}
-    />
+    <>
+      <EmployeeOnboardingDialog
+        onSuccess={(emp) => {
+          setEmpData(emp);
+          setOpenAlertDialog(true);
+        }}
+        data={data}
+        asIcon={asIcon}
+        asMigrant={asMigrant}
+        departments={departments}
+        designations={designations}
+        company_id={company_id}
+      />
+
+      <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
+        <AlertDialogTrigger asChild>
+          <Button className="hidden">
+            <Icons.externalLink /> Open Alert Dialog
+          </Button>
+        </AlertDialogTrigger>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Employee Created Successfully!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Employee created successfully. Please <b>note down</b> the given
+              information. The password will{" "}
+              <b>not be disclosed once this dialog is dismissed</b>.{" "}
+              <b>
+                Please make sure to make a copy of the password before
+                dismissing this dialog.
+              </b>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div className="flex flex-col gap-4">
+            <p>Employee Login Credentials</p>
+
+            <div className="flex flex-col gap-2">
+              <Label>Email</Label>
+              <Input readOnly value={empData?.user.email} placeholder="Email" />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>Password</Label>
+              <PasswordInput
+                readOnly
+                defaultValue={empData?.password}
+                asVisible
+              />
+            </div>
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogAction asChild>
+              <Button
+                onClick={() => {
+                  router.refresh();
+                  setOpenAlertDialog(false);
+                }}
+                variant={"destructive"}
+                className="bg-red-500 hover:bg-red-400"
+              >
+                <Icons.cross /> Close
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
