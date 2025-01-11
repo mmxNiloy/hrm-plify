@@ -134,8 +134,9 @@ export default function NodeEditDialog({
         return;
       }
 
-      const parNode =
-        treeNodes.find((e) => e.employee_id == parent)?.selfRef ?? tree[0];
+      const parNode = findParent(tree[0], parent) ?? tree[0];
+
+      // console.log("Tree Nodes", treeNodes);
       var chNode = selectedChildren
         .map((ch) =>
           availableNodes.find((item) => item.employee_id.toString() === ch)
@@ -447,4 +448,21 @@ export default function NodeEditDialog({
       </DialogContent>
     </Dialog>
   );
+}
+
+function findParent(
+  node: ITreeNode,
+  parentEmpId: number
+): ITreeNode | undefined {
+  if (node.data.employee_id == parentEmpId) {
+    return node;
+  }
+
+  if (node.children) {
+    for (let i = 0; i < node.children.length; i++) {
+      const mParent = findParent(node.children[i], parentEmpId);
+      if (mParent) return mParent;
+    }
+  }
+  return undefined;
 }

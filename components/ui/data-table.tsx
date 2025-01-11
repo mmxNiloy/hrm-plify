@@ -1311,7 +1311,7 @@ export function StaticDataTable<TData, TValue>({
         <div className="flex items-center justify-between space-x-2 py-4">
           <p className="text-sm">
             Showing page: {table.getState().pagination.pageIndex + 1} of{" "}
-            {pageCount}
+            {Math.max(1, pageCount)}
           </p>
           <div className="flex flex-row gap-2">
             <Button

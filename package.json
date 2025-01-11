@@ -51,6 +51,7 @@
     "embla-carousel-react": "^8.1.8",
     "gsap": "^3.12.5",
     "html-to-image": "^1.11.11",
+    "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",

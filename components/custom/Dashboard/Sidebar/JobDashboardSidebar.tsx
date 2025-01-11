@@ -53,11 +53,7 @@ export default function JobDashboardSidebar({
         <Accordion
           type="single"
           collapsible
-          defaultValue={
-            path.search(`/dashboard/company/${company.company_id}/job/`) >= 0
-              ? "job"
-              : ""
-          }
+          defaultValue={"job"}
           onValueChange={(e) => {
             if (e.length > 0) {
               setIsAccordionOpen((oldValue) => oldValue | 1);
@@ -96,22 +92,23 @@ export default function JobDashboardSidebar({
                 <Icons.userSearch />
                 Shortlisted Applicants
               </SidebarLink>
-              {/* 
-              <SidebarLink
+
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/interview`}
               >
                 Interview
-              </SidebarLink>
+              </SidebarLink> */}
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/hired`}
               >
-                Hired
+                <Icons.handshake /> Hired
               </SidebarLink>
+
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job/rejected`}
               >
-                Rejected
-              </SidebarLink> */}
+                <Icons.userX /> Rejected
+              </SidebarLink>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

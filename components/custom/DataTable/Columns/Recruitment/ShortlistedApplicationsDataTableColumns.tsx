@@ -4,13 +4,14 @@ import ShortlistingAlertDialog from "@/components/custom/AlertDialog/Shortlistin
 import EmployeeOnboardingDialog from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog";
 import JobListingEditDialog from "@/components/custom/Dialog/Recruitment/JobListingEditDialog";
 import ApplicantOnboardingDialog from "@/components/custom/Dialog/Recruitment/OnboardApplicantDialog";
+import ShortListedApplicantActionDropdownMenu from "@/components/custom/Menu/ShortListedApplicantActionDropdownMenu";
 import TextCapsule from "@/components/custom/TextCapsule";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { ICompanyExtraData } from "@/schema/CompanySchema";
+import { ICompany, ICompanyExtraData } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { IJobApplicant, IJobListing } from "@/schema/JobSchema";
 import { ToastSuccess } from "@/styles/toast.tailwind";
@@ -22,6 +23,7 @@ import { useCallback } from "react";
 
 interface Props extends IJobApplicant {
   updateAccess?: boolean;
+  company: ICompany;
 }
 
 export const ShortlistedJobApplicationsDataTableColumns: ColumnDef<Props>[] = [
@@ -118,21 +120,13 @@ export const ShortlistedJobApplicationsDataTableColumns: ColumnDef<Props>[] = [
     ),
   },
   {
-    id: "action-onboard",
-    header: ({ column }) => <SortableHeader column={column} name="Onboard?" />,
-    cell: ({ row }) =>
-      !row.original.updateAccess ? null : (
-        <ApplicantOnboardingDialog
-          asIcon
-          departments={
-            row.original.job?.department ? [row.original.job.department] : []
-          }
-          company_id={row.original.company_id}
-          designations={
-            row.original.job?.designation ? [row.original.job.designation] : []
-          }
-          data={row.original}
-        />
-      ),
+    id: "actions",
+    header: ({ column }) => <SortableHeader column={column} name="Actions" />,
+    cell: ({ row }) => (
+      <ShortListedApplicantActionDropdownMenu
+        data={row.original}
+        company={row.original.company}
+      />
+    ),
   },
 ];

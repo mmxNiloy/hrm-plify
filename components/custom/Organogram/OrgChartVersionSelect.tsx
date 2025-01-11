@@ -13,12 +13,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IChartVersion } from "@/schema/OrganogramSchema";
+import { IChartVersion, IOrganogramDB } from "@/schema/OrganogramSchema";
 import { ButtonSuccess } from "@/styles/button.tailwind";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
-export default function OrgChartVersionSelect() {
+interface Props {
+  charts: IOrganogramDB[];
+}
+
+export default function OrgChartVersionSelect({ charts }: Props) {
   const sParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -62,10 +66,16 @@ export default function OrgChartVersionSelect() {
           <SelectGroup>
             <SelectLabel>Select a version</SelectLabel>
             <SelectItem value="default">Default</SelectItem>
-            {versions.map((item, index) => (
-              <SelectItem key={`org-chart-version-${index}`} value={item.name}>
+            {charts.map((item, index) => (
+              <SelectItem
+                key={`org-chart-version-${index}`}
+                value={item.id.toString()}
+              >
                 {item.name} (
-                {new Date(item.lastModified).toLocaleDateString("en-GB")})
+                {new Date(item.updated_at ?? new Date()).toLocaleDateString(
+                  "en-GB"
+                )}
+                )
               </SelectItem>
             ))}
           </SelectGroup>

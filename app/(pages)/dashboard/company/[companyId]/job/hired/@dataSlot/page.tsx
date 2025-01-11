@@ -1,22 +1,22 @@
 "use server";
 import { AllJobApplicationsDataTableColumns } from "@/components/custom/DataTable/Columns/Recruitment/AllJobApplicationsDataTableColumns";
+import { JobListingDataTableColumns } from "@/components/custom/DataTable/Columns/Recruitment/JobListingDataTableColumns";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
 import React from "react";
 import { CompanyByIDPageProps } from "../../../PageProps";
+import { getCompanyJobApplicants } from "@/app/(server)/actions/getCompanyJobApplicants";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { getCompanyShortlistedApplicants } from "@/app/(server)/actions/getCompanyShortlistedApplicants";
-import { getCompanyShortlistedApplicantsByJobId } from "@/app/(server)/actions/getCompanyShortlistedApplicantsByJobId";
-import { ShortlistedJobApplicationsDataTableColumns } from "@/components/custom/DataTable/Columns/Recruitment/ShortlistedApplicationsDataTableColumns";
+import { getCompanyJobApplicantsByJobId } from "@/app/(server)/actions/getCompanyJobApplicantsByJobId";
+import { getJobListing } from "@/app/(server)/actions/getJobListing";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
 import { cookies } from "next/headers";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
-export default async function JobShortlistPageDataSlot({
+export default async function JobAppliedPageDataSlot({
   searchParams,
   params,
 }: Props) {
@@ -40,38 +40,43 @@ export default async function JobShortlistPageDataSlot({
   const { page, limit } = getPaginationParams(sParams);
   const job_id = Number.parseInt((sParams.job_id as string | undefined) ?? "0");
 
-  const [company, applicants] = await Promise.all([
-    getCompanyData(companyId),
-    job_id == 0 || Number.isNaN(job_id)
-      ? getCompanyShortlistedApplicants({
-          companyId,
-          page,
-          limit,
-        })
-      : getCompanyShortlistedApplicantsByJobId({
-          jobId: job_id,
-          page,
-          limit,
-        }),
-  ]);
+  var applicants = undefined;
 
-  if (applicants.error || company.error) {
+  if (job_id == 0 || Number.isNaN(job_id)) {
+    // Get all applicant data here
+    applicants = await getCompanyJobApplicants({
+      companyId,
+      page,
+      limit,
+      category: "hired",
+    });
+  } else {
+    // Get all applicant data here
+    applicants = await getCompanyJobApplicantsByJobId({
+      jobId: job_id,
+      page,
+      limit,
+      category: "hired",
+    });
+  }
+
+  if (applicants.error) {
     return (
       <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Shortlisted Applicants</p>
-        <ErrorFallbackCard error={applicants.error ?? company.error} />
+        <p className="text-xl font-semibold">Job Applicants</p>
+        <ErrorFallbackCard error={applicants.error} />
       </main>
     );
   }
+
   return (
     <StaticDataTable
       data={applicants.data.data.map((item) => ({
         ...item,
         updateAccess: updateAccess || writeAccess ? true : false,
-        company: company.data,
       }))}
       pageCount={applicants.data.total_page}
-      columns={ShortlistedJobApplicationsDataTableColumns}
+      columns={AllJobApplicationsDataTableColumns}
     />
   );
 }

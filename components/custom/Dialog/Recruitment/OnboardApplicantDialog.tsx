@@ -25,20 +25,35 @@ import React, { useCallback, useState } from "react";
 import EmployeeOnboardingFormFragment from "../../Form/Fragment/Company/EmployeeOnboardingFormFragment";
 import { IJobApplicant } from "@/schema/JobSchema";
 import ApplicantOnboardingFormFragment from "../../Form/Fragment/Recruitment/ApplicantOnboardingFormFragment";
+import { IUser } from "@/schema/UserSchema";
+import { IEmployee } from "@/schema/EmployeeSchema";
+
+interface EmployeeCreationResponse {
+  message: string;
+  user: IUser;
+  employee: IEmployee;
+  password: string;
+}
+
+interface Props {
+  company_id: number;
+  departments: IDepartment[];
+  designations: IDesignation[];
+  data: IJobApplicant;
+  asMenuItem?: boolean;
+  disabled?: boolean;
+  onSuccess?: (data: any) => void;
+}
 
 export default function ApplicantOnboardingDialog({
   company_id,
   departments,
   designations,
   data,
-  asIcon,
-}: {
-  company_id: number;
-  departments: IDepartment[];
-  designations: IDesignation[];
-  data: IJobApplicant;
-  asIcon?: boolean;
-}) {
+  asMenuItem: asIcon,
+  disabled,
+  onSuccess,
+}: Props) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -71,7 +86,11 @@ export default function ApplicantOnboardingDialog({
           });
           // if (onSuccess) onSuccess(data.data.department_id);
 
-          router.refresh();
+          if (onSuccess) {
+            onSuccess(res);
+          }
+
+          // router.refresh();
           setOpen(false);
         } else {
           // show a failure dialog
@@ -91,18 +110,23 @@ export default function ApplicantOnboardingDialog({
 
       setLoading(false);
     },
-    [data.id, data.job_id, router, toast]
+    [data.id, data.job_id, onSuccess, toast]
   );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {asIcon ? (
-          <Button size="icon" variant={"ghost"}>
-            <Icons.userPlus />
+          <Button
+            disabled={disabled}
+            size="sm"
+            variant={"ghost"}
+            className="w-full justify-start gap-1"
+          >
+            <Icons.userPlus /> Hire Applicant
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button disabled={disabled} className={ButtonBlue}>
             <Icons.plus /> Onboard an Applicant
           </Button>
         )}

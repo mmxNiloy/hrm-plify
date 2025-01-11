@@ -11,10 +11,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { IChartVersion } from "@/schema/OrganogramSchema";
+import { IChartVersion, IOrganogramDB } from "@/schema/OrganogramSchema";
 import { ButtonSuccess } from "@/styles/button.tailwind";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastSuccess } from "@/styles/toast.tailwind";
 
-export default function OrgChartVersionCreationPopover() {
+interface Props {
+  charts: IOrganogramDB[];
+  companyId: number;
+}
+
+export default function OrgChartVersionCreationPopover({
+  charts,
+  companyId,
+}: Props) {
   const sParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -42,18 +52,42 @@ export default function OrgChartVersionCreationPopover() {
     [checkValidityOfNewVersion]
   );
 
-  const createVersion = useCallback(() => {
-    localStorage.setItem(
-      "organogram-versions",
-      JSON.stringify([
-        { name: newVersion, lastModified: new Date().toUTCString() },
-        ...versions,
-      ])
-    );
+  const [loading, setLoading] = useState<boolean>(false);
+  const { toast } = useToast();
 
-    router.push(`${pathname}?version=${newVersion}`);
+  const createVersion = useCallback(async () => {
+    setLoading(true);
+
+    const nVersion = {
+      company_id: companyId,
+      name: newVersion,
+      data: "{}",
+    };
+
+    const res = await fetch("/api/organogram", {
+      method: "POST",
+      body: JSON.stringify(nVersion),
+    });
+
+    if (res.ok) {
+      toast({
+        title: "Update successful",
+        className: ToastSuccess,
+      });
+
+      const data = await res.json();
+
+      setOpen(false);
+      router.push(`${pathname}?version=${data.data.id}`);
+    } else {
+      toast({
+        title: "Creation Failed",
+        variant: "destructive",
+      });
+    }
+    setLoading(false);
     setOpen(false);
-  }, [newVersion, pathname, router, versions]);
+  }, [companyId, newVersion, pathname, router, toast]);
 
   useEffect(() => {
     const storedVersions = localStorage.getItem("organogram-versions");
@@ -83,7 +117,7 @@ export default function OrgChartVersionCreationPopover() {
         />
         <Button
           onClick={createVersion}
-          disabled={!isValidVersion}
+          disabled={!isValidVersion || loading}
           className={ButtonSuccess}
         >
           <Icons.check /> Submit

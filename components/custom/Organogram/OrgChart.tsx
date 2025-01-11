@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
-import { ITreeNode } from "@/schema/OrganogramSchema";
+import { IOrganogramDB, ITreeNode } from "@/schema/OrganogramSchema";
 import { PrimeReactProvider } from "primereact/api";
 import Tailwind from "primereact/passthrough/tailwind";
 import { twMerge } from "tailwind-merge";
@@ -18,16 +18,23 @@ import CanvasControls from "./CanvasControls";
 import nodeTemplate from "./util/nodeTemplate";
 import { buildGraph, rebuildGraph } from "./util/buildGraph";
 import { useSearchParams } from "next/navigation";
+import SiteLoading from "@/app/loading";
+
+interface Props extends Omit<OrgChartProps, "tree"> {
+  charts: IOrganogramDB[];
+}
 
 export default function OrgChart({
   employees,
   companyId,
   designations,
   company,
-}: Omit<OrgChartProps, "tree">) {
+  charts,
+}: Props) {
   const sParams = useSearchParams();
 
   const [chartVersion, setChartVersion] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setChartVersion(decodeURIComponent(sParams.get("version") ?? "default"));
@@ -58,16 +65,25 @@ export default function OrgChart({
     [employees]
   );
 
-  const restoreTree = useCallback(() => {
+  const restoreTree = useCallback(async () => {
+    setLoading(true);
+
     var storedTree: ITreeNode | undefined = undefined;
     try {
-      const savedTreeData = localStorage.getItem(
-        `organogram${
-          chartVersion && chartVersion !== "default" ? `_${chartVersion}` : ""
-        }`
-      );
-      if (savedTreeData) {
-        storedTree = JSON.parse(savedTreeData) as ITreeNode;
+      var savedTreeData = undefined;
+      const chartId = Number.parseInt(chartVersion);
+      const mChart = charts.find((item) => item.id === chartId);
+      if (charts.length < 1) savedTreeData = undefined;
+      else if (!mChart) savedTreeData = charts[0];
+      else savedTreeData = mChart;
+
+      // Read the file from the internet
+
+      if (savedTreeData && savedTreeData.file_url) {
+        const file = await fetch(savedTreeData.file_url);
+        const fileText = await file.text();
+        console.log("File found >", fileText);
+        storedTree = JSON.parse(fileText) as ITreeNode;
       } else {
         storedTree = undefined;
       }
@@ -75,7 +91,11 @@ export default function OrgChart({
       storedTree = undefined;
     }
 
-    if (storedTree === undefined) {
+    if (
+      storedTree === undefined ||
+      (Object.keys(storedTree).length === 0 &&
+        storedTree.constructor === Object)
+    ) {
       const companyRoot: ITreeNode = {
         id: `company-${company.company_id}`,
         key: `company-key-${company.company_id}`,
@@ -106,20 +126,30 @@ export default function OrgChart({
           is_root: true,
         },
       };
+      setLoading(false);
+      setOrgTree([companyRoot]);
       return { tree: [companyRoot] as ITreeNode[], employees };
     }
 
     const { graph: newTree, nodes } = rebuildGraph(storedTree);
 
+    setLoading(false);
+
+    const newEmps = employees.map((e) => ({
+      ...e,
+      is_node: nodes.find((item) => item == e.employee_id) !== undefined,
+    }));
+
+    setOrgTree(newTree);
+    setEmp(newEmps);
+
     return {
       tree: newTree,
-      employees: employees.map((e) => ({
-        ...e,
-        is_node: nodes.find((item) => item == e.employee_id) !== undefined,
-      })),
+      employees: newEmps,
     };
   }, [
     chartVersion,
+    charts,
     company.company_id,
     company.company_name,
     company.logo,
@@ -131,17 +161,13 @@ export default function OrgChart({
 
   const canvasRef = useRef<OrganizationChart>(null);
 
-  const saveGraph = useCallback(async () => {
-    const g = buildGraph(orgTree);
-
-    localStorage.setItem("organogram", JSON.stringify(g));
-  }, [orgTree]);
-
   useEffect(() => {
-    const { tree, employees } = restoreTree();
-    setOrgTree(tree);
-    setEmp(employees);
+    restoreTree();
   }, [restoreTree]);
+
+  if (loading) {
+    return <SiteLoading />;
+  }
 
   if (orgTree.length < 1) {
     return (
@@ -195,6 +221,7 @@ export default function OrgChart({
                   canvasRef,
                   company,
                   chartVersion,
+                  charts,
                 }}
               />
 

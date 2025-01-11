@@ -11,16 +11,18 @@ export async function getCompanyJobApplicantsByJobId({
   jobId,
   page,
   limit,
+  category = "pending",
 }: {
   page: number;
   limit: number;
   jobId: number;
+  category?: "pending" | "hired" | "rejected";
 }) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
   const req = fetch(
-    `${process.env.API_BASE_URL}/recruitment/job/${jobId}/aplicants?page=${page}&limit=${limit}`,
+    `${process.env.API_BASE_URL}/recruitment/job/${jobId}/aplicants?page=${page}&limit=${limit}&category=${category}`,
     {
       headers: {
         Authorization: `Bearer ${session}`,

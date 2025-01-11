@@ -39,3 +39,12 @@ export interface IChartVersion {
   name: string;
   lastModified: string;
 }
+
+export interface IOrganogramDB {
+  id: number;
+  company_id: number;
+  file_url?: string;
+  name: string;
+  created_at?: string;
+  updated_at?: string;
+}

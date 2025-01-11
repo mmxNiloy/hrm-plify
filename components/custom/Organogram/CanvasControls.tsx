@@ -13,6 +13,12 @@ import OrgChartReportGenerator from "../PDF/OrgChartReportGenerator";
 import OrgChartWordGenerator from "../Doc/OrgChartWordGenerator";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { IOrganogramDB } from "@/schema/OrganogramSchema";
+import { usePathname, useRouter } from "next/navigation";
+
+interface Props extends OrgChartProps {
+  charts: IOrganogramDB[];
+}
 
 export default function CanvasControls({
   employees,
@@ -24,28 +30,52 @@ export default function CanvasControls({
   canvasRef,
   company,
   chartVersion,
-}: OrgChartProps) {
+  charts,
+}: Props) {
   const { zoomIn, zoomOut, resetTransform, zoomToElement } = useControls();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { toast } = useToast();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const saveGraph = useCallback(async () => {
+    setLoading(true);
+
+    var savedTreeData = undefined;
+    const chartId = Number.parseInt(chartVersion ?? "default");
+    const mChart = charts.find((item) => item.id === chartId);
+    if (charts.length < 1) savedTreeData = undefined;
+    else if (!mChart) savedTreeData = charts[0];
+    else savedTreeData = mChart;
+
     console.log("Graph before", tree);
     const g = buildGraph(tree);
     console.log("Graph after", tree);
 
-    localStorage.setItem(
-      `organogram${
-        chartVersion && chartVersion !== "default" ? `_${chartVersion}` : ""
-      }`,
-      JSON.stringify(g)
-    );
-
-    toast({
-      title: "Progress Saved!",
-      className: ToastSuccess,
+    const res = await fetch("/api/organogram", {
+      method: savedTreeData ? "PATCH" : "POST",
+      body: JSON.stringify({ ...savedTreeData, data: JSON.stringify(g) }),
     });
-  }, [chartVersion, toast, tree]);
+
+    if (res.ok) {
+      // alert("Saved");
+      const data = await res.json();
+      // router.push(`${pathname}?version=${data.data.id}`);
+
+      setLoading(false);
+      toast({
+        title: "Progress Saved!",
+        className: ToastSuccess,
+      });
+    } else {
+      toast({
+        title: "Failed to save progress",
+        variant: "destructive",
+      });
+    }
+    setLoading(false);
+  }, [chartVersion, charts, pathname, router, toast, tree]);
 
   return (
     <div className="z-10 absolute right-0 top-0 flex flex-col gap-2">
@@ -101,8 +131,13 @@ export default function CanvasControls({
 
       <OrgChartWordGenerator canvasRef={canvasRef} company={company} />
 
-      <Button onClick={saveGraph} variant={"outline"} size="icon">
-        <Icons.save />
+      <Button
+        onClick={saveGraph}
+        variant={"outline"}
+        size="icon"
+        disabled={loading}
+      >
+        {loading ? <Icons.spinner className="animate-spin" /> : <Icons.save />}
       </Button>
     </div>
   );
