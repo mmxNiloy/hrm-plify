@@ -17,8 +17,9 @@ import { TPermission } from "@/schema/Permissions";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/wrapper";
-
-interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
+import Icons from "@/components/ui/icons";
+import Link from "next/link";
+import Counter from "@/components/custom/Counter";
 
 export async function generateMetadata({
   params,
@@ -29,11 +30,13 @@ export async function generateMetadata({
   return {
     title: `Artemis | ${
       company.data?.company_name ?? "Company Dashboard"
-    } | Employees`,
+    } | Employee Dashboard`,
   };
 }
 
-export default async function AllEmployeePage({ params, searchParams }: Props) {
+export default async function EmployeeDashboardPage({
+  params,
+}: CompanyByIDPageProps) {
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
     mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
@@ -45,57 +48,74 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
   // Get company information
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
-  const sParams = await searchParams;
-  const { limit, page } = getPaginationParams(sParams);
 
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const [company, companyExtraData, employees] = await Promise.all([
+  const [company, companyExtraData] = await Promise.all([
     getCompanyData(companyId),
     getCompanyExtraData(companyId),
-    getCompanyEmployees({ companyId, page, limit }),
   ]);
 
-  if (company.error || companyExtraData.error || employees.error) {
+  if (company.error || companyExtraData.error) {
     return (
       <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">All Employees</p>
-        <ErrorFallbackCard
-          error={company.error ?? companyExtraData.error ?? employees.error}
-        />
+        <p className="text-xl font-semibold">Employee Dashboard</p>
+        <ErrorFallbackCard error={company.error ?? companyExtraData.error} />
       </main>
     );
   }
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
+      <p className="text-xl font-semibold">Employee Dashboard</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          title={"All Employees"}
+          title={"Employee Dashboard"}
         />
-
-        {/* <EmployeeCreationDialog /> */}
-        {writeAccess && (
-          <EmployeeOnboardingDialogWrapper
-            company_id={companyId}
-            {...companyExtraData.data}
-          />
-        )}
       </div>
 
-      <StaticDataTable
-        data={employees.data.data.map((item) => ({
-          ...item,
-          readOnly: !updateAccess,
-        }))}
-        columns={CompanyUserDataTableColumns}
-        pageCount={employees.data.total_page}
-      />
+      <div className="grid grid-cols-3 gap-4 justify-items-center *:min-w-64">
+        <Link href={"./employee/all"}>
+          <div className="flex flex-col gap-2 p-4 rounded-md from-teal-500/80 to-indigo-600 hover:from-sky-400/80 hover:to-indigo-500 bg-gradient-to-br text-white">
+            <div className="flex gap-2 text-xl font-semibold">
+              <Icons.employees />
+              Active Employees
+            </div>
+            <Counter
+              value={companyExtraData.data.employees.length}
+              className="text-end"
+            />
+          </div>
+        </Link>
+        <Link href={"./employee/migrant"}>
+          <div className="flex flex-col gap-2 p-4 rounded-md from-lime-500/80 to-emerald-600 hover:from-lime-400/80 hover:to-emerald-500 bg-gradient-to-br text-white">
+            <div className="flex gap-2 text-xl font-semibold">
+              <Icons.users />
+              Migrant Employees
+            </div>
+            <Counter
+              value={
+                companyExtraData.data.employees.filter(
+                  (item) => item.is_foreign
+                ).length
+              }
+              className="text-end"
+            />
+          </div>
+        </Link>
+        <Link href={"./employee/staff-report"}>
+          <div className="flex flex-col h-full gap-2 p-4 rounded-md from-rose-500/80 to-amber-600 hover:rose-lime-400/80 hover:to-amber-500 bg-gradient-to-br text-white">
+            <div className="flex gap-2 text-xl font-semibold">
+              <Icons.files />
+              Staff Report
+            </div>
+          </div>
+        </Link>
+      </div>
     </main>
   );
 }

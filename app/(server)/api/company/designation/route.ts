@@ -63,11 +63,13 @@ export async function POST(req: NextRequest) {
 
   const company_id = fd.get("company_id") as string;
   const designation_name = fd.get("designation_name") as string;
+  const dept_id = fd.get("department_id") as string;
 
   try {
     const reqBody = {
       company_id: Number.parseInt(company_id),
       designation_name,
+      dept_id: Number.parseInt(dept_id),
     };
 
     const apiRes = await fetch(
@@ -108,11 +110,13 @@ export async function PUT(req: NextRequest) {
 
   const designation_id = fd.get("designation_id") as string;
   const designation_name = fd.get("designation_name") as string;
+  const dept_id = fd.get("department_id") as string;
 
   try {
     const reqBody = {
       designation_id: Number.parseInt(designation_id),
       designation_name,
+      dept_id: Number.parseInt(dept_id),
     };
 
     const apiRes = await fetch(

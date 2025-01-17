@@ -52,7 +52,7 @@ export default function SponsorComplianceDashboardSidebar({
 
         <SidebarLink
           target="_blank"
-          href={`/dashboard/company/${company.company_id}/employee`}
+          href={`/dashboard/company/${company.company_id}/employee/all`}
         >
           <Icons.employees />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">

@@ -44,6 +44,7 @@ interface Props {
   tree: ITreeNode[];
   parentNode?: ITreeNode;
   node?: ITreeNode;
+  asEditable?: boolean;
   asMenuItem?: boolean;
   menuItemLabel?: string;
   menuItemIcon?: React.ReactNode;
@@ -73,6 +74,7 @@ export default function NodeEditDialog({
   tree,
   onSubmit,
   parentNode,
+  asEditable,
   asMenuItem,
   menuItemLabel,
   menuItemIcon,
@@ -153,7 +155,7 @@ export default function NodeEditDialog({
         return;
       }
 
-      if (isVacantCheck || asMenuItem) {
+      if (isVacantCheck || asEditable) {
         // Check for an existing vacant node w\ same designation and parent
         const oldNode = parentNode?.children?.find(
           (item) =>
@@ -225,7 +227,7 @@ export default function NodeEditDialog({
       setOpen(false);
     },
     [
-      asMenuItem,
+      asEditable,
       availableNodes,
       designations,
       isVacantCheck,
@@ -235,7 +237,6 @@ export default function NodeEditDialog({
       selectedChildren,
       toast,
       tree,
-      treeNodes,
     ]
   );
 
@@ -356,7 +357,7 @@ export default function NodeEditDialog({
                 <Checkbox
                   id="is-vacant-check"
                   onCheckedChange={(chk) => setIsVacantCheck(chk === true)}
-                  defaultChecked={asMenuItem}
+                  defaultChecked={asEditable}
                 />
                 <Label htmlFor="is-vacant-check">Is the position vacant?</Label>
               </div>
@@ -378,7 +379,7 @@ export default function NodeEditDialog({
                 />
               </div>
 
-              {isVacantCheck || asMenuItem ? (
+              {isVacantCheck || asEditable ? (
                 <div className="flex flex-col gap-2">
                   <Label className={RequiredAsterisk}>
                     Number of vacant positions

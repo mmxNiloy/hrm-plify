@@ -802,7 +802,24 @@ const UserEditIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 UserEditIcon.displayName = "UserEditIcon";
 
+const RecoverIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("stroke-current", className)}
+    >
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path d="M19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm-1 2H6v16h12zm-6 3a5 5 0 0 1 2.628 9.254L12.5 12H15a3 3 0 1 0-3 3l.955 1.909A5 5 0 1 1 12 7" />
+    </svg>
+  )
+);
+RecoverIcon.displayName = "RecoverIcon";
+
 const Icons = {
+  recover: RecoverIcon,
   save: Save,
   userEdit: UserEditIcon,
   copy: Copy,

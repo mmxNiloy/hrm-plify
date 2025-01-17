@@ -5,6 +5,7 @@ import { ILeaveApprover } from "@/schema/LeaveSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import LeaveApproverEditDialog from "../../../Dialog/Leave/LeaveApproverEditDialog";
+import LeaveApproverToggleAlertDialog from "@/components/custom/AlertDialog/LeaveApproverToggleAlertDialog";
 
 interface Props extends ILeaveApprover {
   updateAccess?: boolean;
@@ -43,16 +44,9 @@ export const LeaveApproverDataTableColumns: ColumnDef<Props>[] = [
     id: "edit-action",
     cell: ({ row }) =>
       !row.original.updateAccess ? null : (
-        <LeaveApproverEditDialog
+        <LeaveApproverToggleAlertDialog
           data={row.original}
-          employees={[
-            {
-              ...row.original.employees!,
-              employee_id: row.original.employee_id,
-            },
-          ]}
           company_id={row.original.company_id}
-          asIcon
         />
       ),
   },

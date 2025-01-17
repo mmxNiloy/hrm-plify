@@ -144,11 +144,15 @@ export default function EmployeeOnboardingDialog({
           <DialogDescription>
             Fill out the form with appropriate information.
           </DialogDescription>
+          <DialogDescription>
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
           {/* Form body */}
-          <div className="flex flex-col gap-4 h-[70vh]">
+          <div className="grid grid-cols-3 gap-4 py-4">
             <EmployeeOnboardingFormFragment
               data={data}
               departments={departments}

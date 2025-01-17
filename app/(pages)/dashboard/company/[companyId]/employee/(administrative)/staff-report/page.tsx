@@ -81,7 +81,7 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent="Employee Management"
+          parent="Employee Dashboard"
           title="Staff Report"
         />
 

@@ -77,7 +77,7 @@ export default async function MigrantEmployeePage({
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent={"Company Management"}
+          parent={"Employee Dashboard"}
           title={"Migrant Employees"}
         />
 

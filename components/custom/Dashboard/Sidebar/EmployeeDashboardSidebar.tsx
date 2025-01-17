@@ -35,6 +35,15 @@ export default function EmployeeDashboardSidebar({
         />
 
         <SidebarLink href={`/dashboard/company/${company.company_id}/employee`}>
+          <Icons.home />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Employee Dashboard
+          </span>
+        </SidebarLink>
+
+        <SidebarLink
+          href={`/dashboard/company/${company.company_id}/employee/all`}
+        >
           <Icons.employees />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             All Employees

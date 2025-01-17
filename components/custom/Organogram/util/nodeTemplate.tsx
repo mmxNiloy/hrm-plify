@@ -84,6 +84,7 @@ export default function nodeTemplate(
               companyId={companyId}
               employees={employees}
               asMenuItem
+              asEditable
               menuItemLabel="Edit"
               menuItemIcon={<Icons.edit />}
               parentNode={node.data.parent}

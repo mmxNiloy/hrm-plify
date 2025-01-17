@@ -34,5 +34,7 @@ export async function getDesignations({
     return { error };
   }
 
+  console.log("Designations Data", data);
+
   return { data: data.data };
 }
