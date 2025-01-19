@@ -10,6 +10,7 @@ import VisaBackSkeleton from "../../../Employee/visa-back-skeleton";
 import { ComboBox } from "@/components/ui/combobox";
 import { Textarea } from "@/components/ui/textarea";
 import { IFormFragmentProps } from "@/utils/Types";
+import { AvatarPicker } from "@/components/ui/avatar-picker";
 
 export default function VisaBrpFormFragment({
   data,
@@ -129,7 +130,7 @@ export default function VisaBrpFormFragment({
       {/* Visa/BRP Photo (Front) */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="visa-brp-photo-front">Visa/BRP Photo (Front)</Label>
-        <ImagePicker
+        <AvatarPicker
           key={`visa-brp-photo-front-${data?.visa_brp_photo_front}`}
           className="size-full max-h-64"
           readOnly={readOnly}
@@ -138,6 +139,7 @@ export default function VisaBrpFormFragment({
           id="visa-brp-photo-front"
           name="visa_brp_photo_front_image"
           skeleton={<VisaFrontSkeleton />}
+          variant="video"
         />
       </div>
 
@@ -145,15 +147,16 @@ export default function VisaBrpFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="visa-brp-photo-back">Visa/BRP Photo (Back)</Label>
 
-        <ImagePicker
+        <AvatarPicker
           key={`visa-brp-photo-back-${data?.visa_brp_photo_back}`}
           className="size-full max-h-64"
           readOnly={readOnly}
           disabled={disabled}
           id="visa-brp-photo-back"
-          src={data?.visa_brp_photo_back ?? ""}
+          src={data?.visa_brp_photo_back}
           name="visa_brp_photo_back_image"
           skeleton={<VisaBackSkeleton />}
+          variant="video"
         />
       </div>
 

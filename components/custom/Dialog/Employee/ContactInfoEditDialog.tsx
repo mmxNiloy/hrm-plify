@@ -20,6 +20,7 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import ContactInfoFormFragment from "../../Form/Fragment/Employee/ContactInfoFormFragment";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function ContactInfoEditDialog({
   data,
@@ -32,6 +33,7 @@ export default function ContactInfoEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,6 +41,26 @@ export default function ContactInfoEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const doc = fd.get("proof_of_address_doc") as File | null;
+
+      setLoading(true);
+
+      var document_link = data?.proof_address_doc_link ?? "";
+      if (doc && !docError) {
+        const docUpload = await upload(doc);
+        if (docUpload.error) {
+          toast({
+            title: "Upload Failed",
+            description: `Failed to upload contact info. Please try again later. Errors encountered: ${docUpload.error.message}`,
+            variant: "destructive",
+          });
+
+          setLoading(false);
+          return;
+        }
+
+        document_link = docUpload.data.fileUrl;
+      }
 
       const contactInfo = {
         postcode: fd.get("postcode") as string,
@@ -46,7 +68,7 @@ export default function ContactInfoEditDialog({
         additional_address_1: fd.get("additional_address_1") as string,
         additional_address_2: fd.get("additional_address_2") as string,
         country: fd.get("country") as string,
-        proof_of_address_doc: fd.get("proof_of_address_doc") as File | null, // File input will return a file object
+        proof_address_doc_link: document_link,
       };
 
       const reqBod = data
@@ -54,7 +76,6 @@ export default function ContactInfoEditDialog({
         : { employee_id: employeeId, ...contactInfo };
       console.log("Request body", reqBod);
 
-      setLoading(true);
       // Request api here
       try {
         const apiRes = await fetch(`/api/employee/contact-info`, {
@@ -91,7 +112,7 @@ export default function ContactInfoEditDialog({
       }
       setLoading(false);
     },
-    [data, employeeId, router, toast]
+    [data, docError, employeeId, router, toast]
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -117,7 +138,7 @@ export default function ContactInfoEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <ContactInfoFormFragment data={data} />
+              <ContactInfoFormFragment setDocError={setDocError} data={data} />
             </div>
           </ScrollArea>
 

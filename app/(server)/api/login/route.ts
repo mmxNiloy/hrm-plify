@@ -1,5 +1,5 @@
 import { ILoginResponse } from "@/schema/UserSchema";
-import { encrypt } from "@/utils/Security";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,48 +8,57 @@ export async function POST(req: NextRequest) {
   const email = fd.get("email");
   const password = fd.get("password");
   const rememberMe = fd.get("remember-me");
+  const request = fetch(`${process.env.API_BASE_URL}/login`, {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-  try {
-    const apiRes = await fetch(`${process.env.API_BASE_URL}/login`, {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const { data, error } = await withError<ILoginResponse>(request);
 
-    if (apiRes.ok) {
-      const data = (await apiRes.json()) as ILoginResponse;
-      // Send a cookie w\ user data
-      cookies().set(process.env.COOKIE_SESSION_KEY!, data.token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        expires: Date.now() + 43200000, // 12hrs
-      });
-      cookies().set(process.env.COOKIE_USER_KEY!, JSON.stringify(data.user), {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        expires: Date.now() + 43200000, // 12hrs
-      });
-
-      return NextResponse.json(
-        { message: "Login successful" },
-        { status: 200 }
-      );
-    }
-
+  if (error) {
     return NextResponse.json(
       { message: "Invalid credentials" },
-      { status: apiRes.status }
-    );
-  } catch (_) {
-    return NextResponse.json(
-      {
-        message: "Failed to make request (or server responded with an error).",
-      },
-      { status: 500 }
+      { status: 400 }
     );
   }
+
+  console.log("POST > Login > Login response", data);
+  // Access Permissions is too large to store
+  // Store in a separate cookie
+  // ISSUE: Data too large, do not store this cookie.
+  const { access_permissions, ...userData } = data.user;
+  const expires = Date.now() + 43200000; // 12hrs
+
+  // Send a cookie w\ user data
+  const cks = await cookies();
+  cks.set(process.env.COOKIE_SESSION_KEY!, data.token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    expires,
+  });
+
+  cks.set(process.env.NEXT_PUBLIC_COOKIE_USER_KEY!, JSON.stringify(userData), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    expires,
+  });
+
+  // [!] Set user access cookie here
+  cks.set(
+    process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!,
+    JSON.stringify(data.permissions),
+    {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      expires,
+    }
+  );
+
+  return NextResponse.json(data, { status: 200 });
 }

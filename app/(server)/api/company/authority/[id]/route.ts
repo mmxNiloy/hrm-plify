@@ -1,27 +1,38 @@
+import { upload } from "@/app/(server)/actions/upload";
 import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
 interface IReqBody extends ICompanyAuthorizedDetailsBase {
   endpoint: string;
+  document?: File;
   type: "Authorised Personnel" | "Key Contact" | "Level 1 User";
+  is_same_as_key_contact: boolean;
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
 
-  const reqBod = makeRequestBody(fd, Number.parseInt(params.id), "POST");
+  const reqBod = makeRequestBody(
+    fd,
+    Number.parseInt((await params).id),
+    "POST"
+  );
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
       { status: 401 }
     );
+  }
+
+  // try to upload the document here
+  var uploadRes = undefined;
+  if (reqBod.document) {
+    uploadRes = await upload(reqBod.document);
   }
 
   try {
@@ -33,7 +44,9 @@ export async function POST(
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.value}`,
         },
-        body: JSON.stringify(reqBod),
+        body: JSON.stringify(
+          Object.assign(reqBod, { doc_link: uploadRes?.data?.fileUrl ?? "" })
+        ),
       }
     );
 
@@ -50,16 +63,19 @@ export async function POST(
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
 
-  const reqBod = makeRequestBody(fd, Number.parseInt(params.id), "PUT");
+  const reqBod = makeRequestBody(fd, Number.parseInt((await params).id), "PUT");
+
+  // try to upload the document here
+  var uploadRes = undefined;
+  if (reqBod.document) {
+    uploadRes = await upload(reqBod.document);
+  }
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -69,14 +85,16 @@ export async function PUT(
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/${reqBod.endpoint}/${params.id}`,
+      `${process.env.API_BASE_URL}/${reqBod.endpoint}/${(await params).id}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.value}`,
         },
-        body: JSON.stringify(reqBod),
+        body: JSON.stringify(
+          Object.assign(reqBod, { doc_link: uploadRes?.data?.fileUrl ?? "" })
+        ),
       }
     );
 
@@ -103,8 +121,11 @@ function makeRequestBody(
   const designation = fd.get("designation") as string; // string
   const phone_no = fd.get("phone_no") as string; // string
   const email = fd.get("email") as string; // string
-  const document = fd.get("document") as File; // file
+  const document = fd.get("document") as File | undefined; // file
   const offence_history = fd.get("offence_history") as string; // string
+  const is_same_as_key_contact = Boolean(
+    fd.get("is_same_as_key_contact") as string
+  );
   const type = fd.get("type") as
     | "Authorised Personnel"
     | "Key Contact"
@@ -132,9 +153,11 @@ function makeRequestBody(
     designation,
     phone_no,
     email,
-    doc_link: `https://hrmplify.com/files/unimplemented/${document.name}`,
+    document,
+    doc_link: "",
     offence_history,
     endpoint,
     type,
+    is_same_as_key_contact,
   };
 }

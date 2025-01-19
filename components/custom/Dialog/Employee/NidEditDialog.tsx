@@ -20,6 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import NidFormFragment from "../../Form/Fragment/Employee/NidFormFragment";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function NidEditDialog({
   employee_id,
@@ -34,6 +35,7 @@ export default function NidEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,13 +43,34 @@ export default function NidEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const doc = fd.get("document") as File | undefined;
+
+      setLoading(true);
+
+      var document_link = data?.document ?? "";
+      if (doc && !docError) {
+        const docUpload = await upload(doc);
+        if (docUpload.error) {
+          toast({
+            title: "Upload Failed",
+            description: `Failed to upload NID document. Please try again later. Errors encountered: ${docUpload.error.message}`,
+            variant: "destructive",
+          });
+
+          setLoading(false);
+          return;
+        }
+
+        document_link = docUpload.data.fileUrl;
+      }
+
       const nidDetails = {
         employee_id: Number.parseInt(`${employee_id}`),
         nid_number: fd.get("nid_number") as string,
         issue_date: new Date(fd.get("issue_date") as string),
         expiry_date: new Date(fd.get("expiry_date") as string),
         nationality: fd.get("nationality") as string,
-        document: "", // TODO: Handle file upload here,
+        document: document_link,
         country_of_residence: fd.get("country_of_residence") as string,
         remark: (fd.get("remark") as string | null) ?? "",
         isCurrent: (fd.get("isCurrent") as "yes" | "no") === "yes" ? 1 : 0,
@@ -55,7 +78,6 @@ export default function NidEditDialog({
 
       const reqBod = data ? Object.assign(data, nidDetails) : nidDetails;
 
-      setLoading(true);
       // Request api here
       try {
         const apiRes = await fetch(`/api/employee/nid-info`, {
@@ -88,7 +110,7 @@ export default function NidEditDialog({
       }
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [data, docError, employee_id, router, toast]
   );
 
   return (
@@ -117,15 +139,15 @@ export default function NidEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <NidFormFragment data={data} />
+              <NidFormFragment setDocError={setDocError} data={data} />
             </div>
           </ScrollArea>
 

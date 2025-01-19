@@ -6,7 +6,11 @@ import { getFullNameOfUser } from "@/utils/Misc";
 import { ColumnDef } from "@tanstack/react-table";
 import CompanyAdminEditDialog from "../../../Dialog/Company/CompanyAdminEditDialog";
 
-export const CompanyAdminListDataTableColumns: ColumnDef<ICompanyUser>[] = [
+interface Props extends ICompanyUser {
+  updateAccess?: boolean;
+}
+
+export const CompanyAdminListDataTableColumns: ColumnDef<Props>[] = [
   {
     accessorKey: "user_id",
     header: ({ column }) => <SortableHeader column={column} name="ID" />,
@@ -23,12 +27,13 @@ export const CompanyAdminListDataTableColumns: ColumnDef<ICompanyUser>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => (
-      <CompanyAdminEditDialog
-        data={row.original}
-        companyId={row.original.company_id}
-        asIcon
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <CompanyAdminEditDialog
+          data={row.original}
+          companyId={row.original.company_id}
+          asIcon
+        />
+      ),
   },
 ];

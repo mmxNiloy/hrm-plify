@@ -12,20 +12,41 @@ import {
 } from "@/components/ui/select";
 import { IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+import { IJobApplicant } from "@/schema/JobSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { IFormFragmentProps } from "@/utils/Types";
-import React from "react";
+import React, { useCallback, useState } from "react";
+
+interface Props {
+  departments: IDepartment[];
+  designations: IDesignation[];
+  data?: IJobApplicant;
+  employmentTypes: IEmploymentType[];
+}
 
 export default function EmployeeOnboardingFormFragment({
   departments,
   designations,
-}: {
-  departments: IDepartment[];
-  designations: IDesignation[];
-}) {
+  data,
+  employmentTypes,
+}: Props) {
+  const [filteredDesignations, setFilteredDesignations] =
+    useState<IDesignation[]>(designations);
+
+  const onDepartmentChange = useCallback(
+    (dept_id: string) => {
+      if (dept_id.length < 1) setFilteredDesignations(designations);
+      else {
+        setFilteredDesignations(
+          designations.filter((item) => `${item.dept_id}` === dept_id)
+        );
+      }
+    },
+    [designations]
+  );
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 col-span-full">
         <Label className={RequiredAsterisk} htmlFor="email-input">
           Email
         </Label>
@@ -35,6 +56,7 @@ export default function EmployeeOnboardingFormFragment({
           name="email"
           type="email"
           placeholder="Email"
+          defaultValue={data?.email}
         />
       </div>
 
@@ -47,6 +69,7 @@ export default function EmployeeOnboardingFormFragment({
           id="first-name-input"
           name="fname"
           placeholder="First Name"
+          defaultValue={data?.first_name}
         />
       </div>
 
@@ -59,6 +82,7 @@ export default function EmployeeOnboardingFormFragment({
           id="middle-name-input"
           name="middleName"
           placeholder="Middle Name"
+          defaultValue={data?.middle_name}
         />
       </div>
 
@@ -71,12 +95,46 @@ export default function EmployeeOnboardingFormFragment({
           id="last-name-input"
           name="lname"
           placeholder="Last Name"
+          defaultValue={data?.last_name}
         />
       </div>
 
       <div className="flex flex-col gap-2">
+        <Label>Employment Type</Label>
+        <Select name="emp_type_id">
+          <SelectTrigger>
+            <SelectValue placeholder="Select an Employment Type" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select an employment type</SelectLabel>
+              {/* Employment type items go here */}
+              {employmentTypes.map((item) => (
+                <SelectItem
+                  value={`${item.emp_type_id}`}
+                  key={`emp-type-option-${item.emp_type_id}`}
+                >
+                  {item.employment_type}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Department</Label>
-        <Select required name="department_id">
+        <Select
+          required
+          defaultValue={
+            data?.job?.department?.department_id
+              ? `${data.job.department.department_id}`
+              : undefined
+          }
+          onValueChange={onDepartmentChange}
+          name="department_id"
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select a Department" />
           </SelectTrigger>
@@ -99,7 +157,15 @@ export default function EmployeeOnboardingFormFragment({
       </div>
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Designation</Label>
-        <Select required name="designation_id">
+        <Select
+          required
+          defaultValue={
+            data?.job?.designation?.designation_id
+              ? `${data.job.designation.designation_id}`
+              : undefined
+          }
+          name="designation_id"
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select a Designation" />
           </SelectTrigger>
@@ -108,7 +174,7 @@ export default function EmployeeOnboardingFormFragment({
             <SelectGroup>
               <SelectLabel>Select a designation</SelectLabel>
 
-              {designations.map((dsg) => (
+              {filteredDesignations.map((dsg) => (
                 <SelectItem
                   value={`${dsg.designation_id}`}
                   key={`${dsg.designation_id}`}

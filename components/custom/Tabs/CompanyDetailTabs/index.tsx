@@ -27,15 +27,17 @@ interface TabItem {
 
 export default function CompanyDetailTabs({
   company,
+  readOnly,
 }: {
   company: ICompanyDetails;
+  readOnly?: boolean;
 }) {
   const tabList: TabItem[] = useMemo(
     () => [
       {
         value: "profile",
         title: "Profile",
-        content: <CompanyProfileTab data={company} />,
+        content: <CompanyProfileTab readOnly={readOnly} data={company} />,
       },
       {
         value: "auth",
@@ -44,34 +46,12 @@ export default function CompanyDetailTabs({
           <CompanyAuthorityTab
             id={company.company_authorised_details?.authorised_id}
             company_id={company.company_id}
-            data={company.company_authorised_details}
+            data={company}
+            readOnly={readOnly}
           />
         ),
       },
-      {
-        value: "key-contact",
-        title: "Key Contact",
-        content: (
-          <CompanyAuthorityTab
-            id={company.company_key_contact?.key_contact_id}
-            company_id={company.company_id}
-            title="Key Contact"
-            data={company.company_key_contact}
-          />
-        ),
-      },
-      {
-        value: "l1-user",
-        title: "Level 1 User",
-        content: (
-          <CompanyAuthorityTab
-            id={company.company_l1_user?.l1_user_id}
-            company_id={company.company_id}
-            title="Level 1 User"
-            data={company.company_l1_user}
-          />
-        ),
-      },
+
       {
         value: "address",
         title: "Address",
@@ -79,6 +59,7 @@ export default function CompanyDetailTabs({
           <CompanyAddressTab
             company_id={company.company_id}
             data={company.company_address}
+            readOnly={readOnly}
           />
         ),
       },
@@ -92,6 +73,7 @@ export default function CompanyDetailTabs({
               company_trade_details: company.company_trade_details,
               company_trading_hour: company.company_trading_hour,
             }}
+            readOnly={readOnly}
           />
         ),
       },
@@ -101,12 +83,13 @@ export default function CompanyDetailTabs({
         content: (
           <CompanyDocumentsTab
             company_id={company.company_id}
-            data={company.company_doc_db}
+            data={company.company_docs_db}
+            readOnly={readOnly}
           />
         ),
       },
     ],
-    [company]
+    [company, readOnly]
   );
 
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);

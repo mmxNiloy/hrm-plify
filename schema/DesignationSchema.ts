@@ -4,4 +4,5 @@ export interface IDesignation {
   designation_name: string;
   company_id: number;
   designation_id: number;
+  dept_id?: number;
 }

@@ -8,6 +8,10 @@ import { cookies } from "next/headers";
 import { LayoutProps } from "@/utils/Types";
 import HolidayDashboardSidebar from "@/components/custom/Dashboard/Sidebar/HolidayDashboardSidebar";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {}
 
@@ -15,32 +19,38 @@ export default async function HolidayDashboardPageLayout({
   children,
   params,
 }: Props) {
-  // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-  const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var company: ICompany;
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${params.companyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
+  const readAccess = mPermissions.find((item) => item === "cmp_hol_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_hol_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_hol_update");
 
-    if (!apiRes.ok) redirect("/not-found");
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
+  if (!readAccess) {
+    return <AccessDenied />;
   }
+  // Get company information
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const user = JSON.parse(
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+  const company = await getCompanyData(companyId);
+
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Holiday Management</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
+  }
+
   return (
     <div>
-      <HolidayDashboardSidebar company={company} />
+      <HolidayDashboardSidebar company={company.data} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

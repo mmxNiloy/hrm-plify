@@ -25,12 +25,22 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfileFormFragment";
+import { cn } from "@/lib/utils";
+import refreshUserCookie from "@/app/(server)/actions/refreshUserCookie";
+import { upload } from "@/app/(server)/actions/upload";
 
-export default function CompanyCreationDialog() {
+export default function CompanyCreationDialog({
+  asClient = false,
+  Icon,
+}: {
+  asClient?: boolean;
+  Icon?: React.ReactNode;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
+  const [imageFileError, setImageFileError] = useState<Boolean>(false);
 
   const handleCreateCompany = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,8 +49,30 @@ export default function CompanyCreationDialog() {
 
       setLoading(true);
       const fd = new FormData(e.currentTarget);
+      fd.append("is_current_user_owner", asClient ? "true" : "false");
+
+      // Try to upload the logo (if attached)
+      const logoFile = fd.get("logo") as File | undefined;
+      var logoUrl = "";
+      if (logoFile && !imageFileError) {
+        // Upload the logo
+        const logoUpload = await upload(logoFile);
+        if (logoUpload.error) {
+          if (logoFile.size > 0) {
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+              variant: "destructive",
+            });
+          }
+        } else {
+          logoUrl = logoUpload.data.fileUrl;
+        }
+      }
 
       try {
+        fd.delete("logo");
+        fd.append("logo", logoUrl);
         const apiRes = await fetch("/api/company", {
           method: "POST",
           body: fd,
@@ -52,6 +84,10 @@ export default function CompanyCreationDialog() {
             className: "bg-green-500 text-white",
           });
 
+          if (asClient) {
+            await refreshUserCookie();
+          }
+
           // Refresh the parent server component
           router.refresh();
 
@@ -60,6 +96,7 @@ export default function CompanyCreationDialog() {
         } else {
           toast({
             title: "Failed to Create a Company!",
+            description: JSON.stringify(await apiRes.json()),
             variant: "destructive",
           });
         }
@@ -72,13 +109,16 @@ export default function CompanyCreationDialog() {
 
       setLoading(false);
     },
-    [router, toast]
+    [asClient, imageFileError, router, toast]
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size={"sm"} className={ButtonBlue}>
-          <Icons.plus /> Create a Company
+        <Button
+          size={asClient ? "default" : "sm"}
+          className={cn(ButtonBlue, asClient ? "w-full" : "")}
+        >
+          {Icon ? <>{Icon}</> : <Icons.plus />} Create a Company
         </Button>
       </DialogTrigger>
 
@@ -101,7 +141,11 @@ export default function CompanyCreationDialog() {
           {/* Company Creation form */}
           <ScrollArea className="h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
-              <CompanyProfileFormFragment disabled={loading} />
+              <CompanyProfileFormFragment
+                onSizeExceeded={() => setImageFileError(false)}
+                asClient={asClient}
+                disabled={loading}
+              />
             </div>
           </ScrollArea>
 

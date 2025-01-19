@@ -16,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { IHoliday } from "@/schema/HolidaySchema";
 
 interface Event {
   title: string;
@@ -29,14 +30,22 @@ interface IEventResponse {
   name: string;
 }
 
-export default function HolidaysCard() {
-  const [events, setEvets] = useState<Event[]>([]);
-  const getEvents = useCallback(async () => {
+export default function HolidaysCard({ holidays }: { holidays?: IHoliday[] }) {
+  const getEvents = useCallback((): Event[] => {
+    if (holidays) {
+      return holidays.map((item) => ({
+        title: item.holiday_name,
+        start: new Date(item.start_time),
+        end: new Date(item.end_time),
+      }));
+    }
     return [];
-  }, []);
+  }, [holidays]);
+
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    getEvents();
+    setEvents(getEvents());
   }, [getEvents]);
 
   return (

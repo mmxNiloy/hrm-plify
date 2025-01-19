@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { ComboBox } from "@/components/ui/combobox";
+import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -129,7 +130,11 @@ export default function NIDAndOtherDetailForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="upload-document-input">Upload Document</Label>
-          <Input type="file" id="upload-document-input" name="nid_document" />
+          <FilePicker
+            className="data-[error=true]:border-red-500"
+            id="upload-document-input"
+            name="nid_document"
+          />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -381,7 +386,11 @@ function OtherDocumentForm({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="upload-document-input">Upload Document</Label>
-        <Input type="file" id="upload-document-input" name="other_document" />
+        <FilePicker
+          className="data-[error=true]:border-red-500"
+          id="upload-document-input"
+          name="other_document"
+        />
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="current-passport-radio">

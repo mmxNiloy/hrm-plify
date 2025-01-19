@@ -6,13 +6,25 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/schema/UserSchema";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  // const user = await getUserData();
+  return {
+    title: `Artemis | Welcome`,
+  };
+}
 
 export default async function GuestDashboard() {
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+
+  redirect("/dashboard/profile");
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-2xl font-semibold">

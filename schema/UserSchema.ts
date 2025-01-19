@@ -1,9 +1,11 @@
 import { ICompany } from "./CompanySchema";
 import { IEmployee, IEmployeeWithUserMetadata } from "./EmployeeSchema";
+import { IPaginatedResponse } from "./PaginatedResponse";
 
 export interface ILoginResponse {
   token: string;
   user: IUser;
+  permissions: string[];
 }
 
 export interface IUserBase {
@@ -16,15 +18,31 @@ export interface IUserBase {
   created_at: string;
   updated_at: string;
   middle_name: string;
+
+  password?: string;
 }
 
 export interface IUserWithEmployeeData extends IUserBase {
   employee_data?: IEmployee;
 }
 
+export interface IPermission {
+  // Code
+  permission_id: number;
+  permission_name: string;
+  description: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface IUser extends IUserBase {
   user_roles?: IUserRoles;
   usercompany?: ICompanyUser;
+  access_permissions: {
+    permission: IPermission;
+    permission_id: number;
+  }[];
+  userAccess?: number[];
 }
 
 export interface IUserRoles {
@@ -42,6 +60,10 @@ export interface IRoles {
   role_name: TRole;
 }
 
+export interface IPaginatedCompanyUser extends IPaginatedResponse {
+  data: ICompanyUser[];
+}
+
 export interface ICompanyUser {
   user_company_id: number;
   user_id: number;
@@ -53,6 +75,8 @@ export interface ICompanyUser {
   users: IUserWithEmployeeData;
   roles: ICompanyUserRoles;
   companies?: ICompany;
+
+  readOnly?: boolean;
 }
 
 export interface ICompanyUserRoles {

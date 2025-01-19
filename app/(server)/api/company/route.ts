@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   const limit = Number.parseInt(req.nextUrl.searchParams.get("limit") ?? "10");
 
   // Check session
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY);
   if (!session) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -48,6 +48,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
+interface IPostBody extends ICompanyCreationBody {
+  is_current_user_owner?: boolean;
+  is_active: 0 | 1;
+}
+
 export async function POST(req: NextRequest) {
   if (!process.env.COOKIE_SESSION_KEY || !process.env.API_BASE_URL) {
     return NextResponse.json(
@@ -57,7 +62,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Check session
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY);
   if (!session) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -67,7 +72,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const fd = await req.formData();
-    const data: ICompanyCreationBody = {
+    const data: IPostBody = {
       company_name: (fd.get("company_name") ?? "") as string,
       industry: (fd.get("industry") ?? "") as string,
       headquarters: (fd.get("headquarters") ?? "") as string,
@@ -75,7 +80,15 @@ export async function POST(req: NextRequest) {
       website: (fd.get("website") ?? "") as string,
       logo: (fd.get("logo") ?? "") as string,
       contact_number: (fd.get("contact_number") ?? "") as string,
+      is_current_user_owner:
+        ((fd.get("is_current_user_owner") as string | undefined) ?? "false") ===
+        "false"
+          ? false
+          : true,
+      is_active: (fd.get("is_active") as string | undefined) === "yes" ? 1 : 0,
     };
+
+    console.log("POST > Create company > Request Body >", data);
 
     const apiRes = await fetch(`${process.env.API_BASE_URL}/companies/create`, {
       method: "POST",

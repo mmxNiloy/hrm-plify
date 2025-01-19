@@ -73,6 +73,7 @@ export interface ICompanyAuthorizedDetailsBase {
   offence_history?: string;
   created_at?: Date;
   updated_at?: Date;
+  is_same_as_key_contact?: boolean;
 }
 
 export interface ICompanyAuthorisedDetails
@@ -83,11 +84,11 @@ export interface ICompanyAuthorisedDetails
 export interface ICompanyDoc {
   doc_id: number;
   company_id: number;
-  doc_type_id?: number;
-  doc_name?: string;
+  doc_type: string;
+  doc_name: string;
   doc_link?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface ICompanyKeyContact extends ICompanyAuthorizedDetailsBase {
@@ -152,7 +153,7 @@ export interface ICompanyTradeData {
 export interface ICompanyDetails extends ICompany, ICompanyTradeData {
   company_address?: ICompanyAddress;
   company_authorised_details?: ICompanyAuthorisedDetails;
-  company_doc_db?: ICompanyDoc[];
+  company_docs_db?: ICompanyDoc[];
   company_key_contact?: ICompanyKeyContact;
   company_l1_user?: ICompanyL1User;
   leave_approvers?: ICompanyLeaveApprover[];

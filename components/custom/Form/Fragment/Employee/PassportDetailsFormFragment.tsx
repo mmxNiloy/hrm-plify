@@ -10,12 +10,19 @@ import React from "react";
 import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { toYYYYMMDD } from "@/utils/Misc";
 import { ButtonBlue } from "@/styles/button.tailwind";
+import { Textarea } from "@/components/ui/textarea";
+import { FilePicker } from "@/components/ui/file-picker";
+
+interface Props extends IFormFragmentProps<IEmployeePassportDetail> {
+  setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
 
 export default function PassportDetailsFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<IEmployeePassportDetail>) {
+  setDocError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -111,33 +118,44 @@ export default function PassportDetailsFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="document-input">Document</Label>
         {!readOnly ? (
-          <Input
+          <FilePicker
             disabled={disabled}
             id="document-input"
-            type="file"
+            onError={() => {
+              if (setDocError) setDocError(true);
+            }}
+            onSuccess={() => {
+              if (setDocError) setDocError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             name="document"
           />
-        ) : (
+        ) : data?.document ? (
           <Link
             className="w-full"
-            href={data?.document ?? "#document-download"}
+            href={data.document}
+            target="_blank"
             passHref
           >
-            <Button
-              id="document-download"
-              disabled={!data || !data.document}
-              className={cn(ButtonBlue, "w-full")}
-            >
-              <Icons.download /> View Document
+            <Button className={cn(ButtonBlue, "w-full")}>
+              <Icons.externalLink />
+              View Document
             </Button>
           </Link>
+        ) : (
+          <Button disabled className={cn(ButtonBlue, "w-full")}>
+            <Icons.externalLink />
+            View Document
+          </Button>
         )}
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="col-span-full flex flex-col gap-2">
         <Label htmlFor="remark-input">Remark</Label>
-        <Input
+        <Textarea
           id="remark-input"
+          className="resize-none"
+          rows={5}
           key={`remark-${data?.remark}`}
           name="remark"
           defaultValue={data?.remark ?? ""}

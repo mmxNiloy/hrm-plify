@@ -1,12 +1,4 @@
 import EmployeesDataTableSkeleton from "@/components/custom/DataTable/Company/Employee/EmployeesDataTableSkeleton";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 

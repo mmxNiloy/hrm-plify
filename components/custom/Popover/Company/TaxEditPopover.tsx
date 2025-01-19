@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
 import { ITax } from "@/schema/TaxSchema";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function TaxEditPopover({
   company_id,
@@ -154,7 +155,9 @@ export default function TaxEditPopover({
               className={cn(ButtonBlue, "w-full")}
               size={"icon"}
               type="submit"
-              disabled={loading}
+              disabled={
+                loading || SiteConfig.featureFlags.disableExperimentalUI
+              }
               title="Submit"
             >
               <Icons.check /> Submit

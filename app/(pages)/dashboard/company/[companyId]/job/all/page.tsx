@@ -1,56 +1,108 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import CreateJobPopover from "@/components/custom/Popover/Job/CreateJobPopover";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { getDesignations } from "@/app/(server)/actions/getDesignations";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { DataTable } from "@/components/ui/data-table";
-import { JobsDataTableColumns } from "@/components/custom/DataTable/Columns/JobsDataTableColumns";
+import { StaticDataTable } from "@/components/ui/data-table";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import AnimatedTrigger from "@/components/custom/Popover/AnimatedTrigger";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyJobListings } from "@/app/(server)/actions/getCompanyJobListings";
+import { JobListingDataTableColumns } from "@/components/custom/DataTable/Columns/Recruitment/JobListingDataTableColumns";
+import JobListingEditDialog from "@/components/custom/Dialog/Recruitment/JobListingEditDialog";
+import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
-export default async function AllJobsPage({ params, searchParams }: Props) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | All Jobs`,
+  };
+}
+
+export default async function JobListingsPage({ params, searchParams }: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_job_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_job_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_job_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const { limit, page } = getPaginationParams(searchParams);
-  const company = await getCompanyData(params.companyId);
-  const designations = await getDesignations({
-    company_id: company.company_id,
-    page,
-    limit,
-  });
+  const { limit, page } = getPaginationParams(await searchParams);
+
+  const [company, jobs, employee, companyExtra] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyJobListings({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+    getEmployeeData(),
+    getCompanyExtraData(companyId),
+  ]);
+
+  if (company.error || jobs.error || companyExtra.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">All Jobs</p>
+        <ErrorFallbackCard error={company.error ?? jobs.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">All Jobs</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Job & Recruitment"
           title="All Jobs"
         />
-        <AnimatedTrigger disabled label="Create a Job (WIP)" />
-        {/* <CreateJobPopover company_id={params.companyId} /> */}
+        {writeAccess && (
+          <JobListingEditDialog
+            company_id={companyId}
+            companyData={companyExtra.data}
+            employeeId={employee.data?.data?.employee_id ?? 0}
+          />
+        )}
       </div>
 
-      <DataTable data={designations} columns={JobsDataTableColumns} />
+      <StaticDataTable
+        pageCount={jobs.data.total_page}
+        data={jobs.data.data.map((item) => ({
+          ...item,
+          companyData: companyExtra.data,
+          updateAccess: updateAccess ? true : false,
+        }))}
+        columns={JobListingDataTableColumns}
+      />
     </main>
   );
 }

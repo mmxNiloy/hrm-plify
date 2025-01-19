@@ -1,4 +1,5 @@
 "use client";
+import { FilePicker } from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { ICompanyDoc } from "@/schema/CompanySchema";
 import { IFormFragmentProps } from "@/utils/Types";
-import React from "react";
+import React, { useState } from "react";
 
 const docTypes = [
   "PAYEE And Account Reference Letter From HMRC",
@@ -35,11 +36,16 @@ const docTypes = [
   "Others Document",
 ];
 
+interface Props extends IFormFragmentProps<ICompanyDoc> {
+  setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
+
 export default function CompanyDocumentFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<ICompanyDoc>) {
+  setDocError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -71,7 +77,7 @@ export default function CompanyDocumentFormFragment({
         <Select
           required
           name="doc_type"
-          defaultValue={data?.doc_name ?? ""}
+          defaultValue={data?.doc_type ?? undefined}
           disabled={readOnly || disabled}
         >
           <SelectTrigger className="rounded-full" id="doc-type-select">
@@ -98,12 +104,17 @@ export default function CompanyDocumentFormFragment({
         >
           Document File
         </Label>
-        <Input
+        <FilePicker
           required
-          className="rounded-full"
           id="doc-file-input"
           name="doc_file"
-          type="file"
+          onError={() => {
+            if (setDocError) setDocError(true);
+          }}
+          onSuccess={() => {
+            if (setDocError) setDocError(false);
+          }}
+          className="data-[error=true]:border-red-500"
           placeholder="Document File"
           readOnly={readOnly}
           disabled={disabled}

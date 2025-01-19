@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const limit = req.nextUrl.searchParams.get("limit") ?? "10";
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -63,11 +63,13 @@ export async function POST(req: NextRequest) {
 
   const company_id = fd.get("company_id") as string;
   const designation_name = fd.get("designation_name") as string;
+  const dept_id = fd.get("department_id") as string;
 
   try {
     const reqBody = {
       company_id: Number.parseInt(company_id),
       designation_name,
+      dept_id: Number.parseInt(dept_id),
     };
 
     const apiRes = await fetch(
@@ -96,7 +98,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -108,11 +110,13 @@ export async function PUT(req: NextRequest) {
 
   const designation_id = fd.get("designation_id") as string;
   const designation_name = fd.get("designation_name") as string;
+  const dept_id = fd.get("department_id") as string;
 
   try {
     const reqBody = {
       designation_id: Number.parseInt(designation_id),
       designation_name,
+      dept_id: Number.parseInt(dept_id),
     };
 
     const apiRes = await fetch(

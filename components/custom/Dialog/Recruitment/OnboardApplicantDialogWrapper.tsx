@@ -1,0 +1,129 @@
+"use client";
+import { IDepartment } from "@/schema/CompanySchema";
+import { IDesignation } from "@/schema/DesignationSchema";
+import React, { useCallback, useState } from "react";
+import { IUser } from "@/schema/UserSchema";
+import { IEmployee } from "@/schema/EmployeeSchema";
+import { IJobApplicant } from "@/schema/JobSchema";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
+import { useRouter } from "next/navigation";
+import ApplicantOnboardingDialog from "./OnboardApplicantDialog";
+
+interface EmployeeCreationResponse {
+  message: string;
+  user: IUser;
+  employee: IEmployee;
+  password: string;
+}
+
+interface Props {
+  company_id: number;
+  departments: IDepartment[];
+  designations: IDesignation[];
+  data: IJobApplicant;
+  asMenuItem?: boolean;
+  disabled?: boolean;
+  onSuccess?: (data: EmployeeCreationResponse) => void;
+}
+
+export default function ApplicantOnboardingDialogWrapper({
+  company_id,
+  departments,
+  designations,
+  data,
+  asMenuItem,
+  onSuccess,
+}: Props) {
+  const router = useRouter();
+
+  const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
+  const [empData, setEmpData] = useState<EmployeeCreationResponse | undefined>(
+    undefined
+  );
+
+  return (
+    <>
+      <ApplicantOnboardingDialog
+        onSuccess={(emp) => {
+          setEmpData(emp);
+          setOpenAlertDialog(true);
+        }}
+        data={data}
+        asMenuItem={asMenuItem}
+        departments={departments}
+        designations={designations}
+        company_id={company_id}
+      />
+
+      <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
+        <AlertDialogTrigger asChild>
+          <Button className="hidden">
+            <Icons.externalLink /> Open Alert Dialog
+          </Button>
+        </AlertDialogTrigger>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Employee Created Successfully!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Employee created successfully. Please <b>note down</b> the given
+              information. The password will{" "}
+              <b>not be disclosed once this dialog is dismissed</b>.{" "}
+              <b>
+                Please make sure to make a copy of the password before
+                dismissing this dialog.
+              </b>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div className="flex flex-col gap-4">
+            <p>Employee Login Credentials</p>
+
+            <div className="flex flex-col gap-2">
+              <Label>Email</Label>
+              <Input readOnly value={empData?.user.email} placeholder="Email" />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>Password</Label>
+              <PasswordInput
+                readOnly
+                defaultValue={empData?.password}
+                asVisible
+              />
+            </div>
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogAction asChild>
+              <Button
+                onClick={() => {
+                  router.refresh();
+                  setOpenAlertDialog(false);
+                }}
+                variant={"destructive"}
+                className="bg-red-500 hover:bg-red-400"
+              >
+                <Icons.cross /> Close
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}

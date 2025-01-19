@@ -1,12 +1,4 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { ICompanyDetails } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -15,61 +7,94 @@ import { CompanyByIDPageProps } from "../PageProps";
 import { redirect } from "next/navigation";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
+import { Metadata } from "next";
+
+interface Props extends CompanyByIDPageProps {
+  readOnly?: boolean;
+  parent?: string;
+  title?: string;
+}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${company.data?.company_name ?? "Company Dashboard"}`,
+  };
+}
 
 export default async function CompanyByIDPage({
   params,
-}: CompanyByIDPageProps) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  readOnly,
+  parent,
+  title,
+}: Props) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_mgmt_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_mgmt_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_mgmt_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var company: ICompanyDetails = await getCompanyDetails(params.companyId);
+  var company = await getCompanyDetails(companyId);
 
   // Guard unauthorized access
   if (
     user.user_roles?.roles.role_name !== "Super Admin" &&
     user.user_roles?.roles.role_name !== "Admin" &&
-    user.usercompany?.company_id != Number.parseInt(`${params.companyId}`)
+    user.usercompany?.company_id != Number.parseInt(`${companyId}`)
   ) {
     redirect(
       `/dashboard/company/${user.usercompany?.company_id}/?_ref=unauthorized-access`
     );
   }
 
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Company Details</p>
+
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
+  }
+
+  // console.log("Company Details > Company Doc Db", company.data.company_docs_db);
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Details</p>
-      <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard/company/">
-                Company Management
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="truncate w-64">
-                {company.company_name}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
 
-        {/* {user.user_roles.roles.role_name !== "Employee" && (
-          <CompanyEditDialog data={company} />
-        )} */}
-      </div>
+      <MyBreadcrumbs
+        company={company.data}
+        user={user}
+        parent={parent}
+        title={title}
+      />
 
-      <CompanyDetailTabs company={company} />
-
-      {/* Empty space at the bottom */}
-      <span className="h-1" />
+      <CompanyDetailTabs
+        readOnly={readOnly || !updateAccess}
+        company={company.data}
+      />
     </main>
   );
 }

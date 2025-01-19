@@ -4,6 +4,11 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
+import MySidebarHeader from "./MySidebarHeader";
+import { BackLinkButton } from "./BackLinkButton";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function EmployeeDashboardSidebar({
   company,
@@ -11,45 +16,23 @@ export default function EmployeeDashboardSidebar({
   company: ICompany;
 }) {
   const [open, setOpen] = useState<boolean>(true);
-  const [hovered, setHovered] = useState<boolean>(false);
+  const pathname = usePathname();
 
   return (
     <Sidebar
-      open={open || hovered}
-      onMouseEnter={(e) => setHovered(true)}
-      onMouseLeave={(e) => setHovered(false)}
+      open={
+        open
+        //  || hovered
+      }
+      // onMouseEnter={(e) => setHovered(true)}
+      // onMouseLeave={(e) => setHovered(false)}
     >
       <SidebarContent>
-        <SidebarHeader
-          onClick={(e) => setOpen(!open)}
-          title={company.company_name}
-          className={
-            "bg-accent space-y-0 cursor-pointer flex flex-row gap-2 items-center justify-center rounded-md mb-4"
-          }
-        >
-          <p
-            className={cn(
-              "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
-              open || hovered ? "" : "hidden"
-            )}
-          >
-            {company.company_name}
-          </p>
-          <span className="size-10 flex relative rounded-full items-center justify-center">
-            <Icons.chevronLeft
-              className={cn(
-                "absolute transition-all",
-                open ? "rotate-0 scale-100" : "rotate-180 scale-0"
-              )}
-            />
-            <Icons.chevronRight
-              className={cn(
-                "transition-all",
-                open ? "rotate-180 scale-0" : "rotate-0 scale-100"
-              )}
-            />
-          </span>
-        </SidebarHeader>
+        <MySidebarHeader
+          open={open}
+          onClick={() => setOpen((old) => !old)}
+          company={company}
+        />
 
         <SidebarLink href={`/dashboard/company/${company.company_id}/employee`}>
           <Icons.home />
@@ -75,12 +58,36 @@ export default function EmployeeDashboardSidebar({
             Migrant Employees
           </span>
         </SidebarLink>
+
         <SidebarLink
+          href={`/dashboard/company/${company.company_id}/employee/staff-report`}
+        >
+          <Icons.files />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Staff Report
+          </span>
+        </SidebarLink>
+
+        {pathname.includes("edit") && (
+          <Button
+            variant={"ghost"}
+            className={
+              "w-full gap-4 hover:underline justify-center transition-all group-data-[state=open]/sidebar:justify-start bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
+            }
+          >
+            <Icons.userEdit />
+            <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+              Edit Employee
+            </span>
+          </Button>
+        )}
+
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/change-of-circumstances`}
         >
           <Icons.files />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Change of Circumstnces
+            Change of Circumstances
           </span>
         </SidebarLink>
         <SidebarLink
@@ -90,7 +97,20 @@ export default function EmployeeDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Contract Agreement
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
+
+        {pathname.includes("edit") ? (
+          <Link passHref href={pathname.split("edit")[0]} title="Go Back">
+            <Button variant={"link"} size={"sm"} className="gap-2 w-full">
+              <Icons.chevronLeft />
+              <span className="group-data-[state=closed]/sidebar:hidden">
+                Back
+              </span>
+            </Button>
+          </Link>
+        ) : (
+          <BackLinkButton />
+        )}
       </SidebarContent>
     </Sidebar>
   );

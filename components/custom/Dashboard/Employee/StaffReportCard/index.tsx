@@ -11,8 +11,17 @@ import Icons from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import StaffReportDataTable from "../../../DataTable/Company/StaffReportDataTable";
+import { DataTable } from "@/components/ui/data-table";
+import { StaffReportDataTableColumns } from "@/components/custom/DataTable/Columns/Company/StaffReportDataTableColumns";
+import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
+import { IDesignation } from "@/schema/DesignationSchema";
 
-export default function StaffReportCard({ companyId }: { companyId: number }) {
+interface Props {
+  employees: IEmployeeWithUserMetadata[];
+  designations: IDesignation[];
+}
+
+export default function StaffReportCard({ employees, designations }: Props) {
   return (
     <Card>
       <CardHeader>
@@ -21,7 +30,7 @@ export default function StaffReportCard({ companyId }: { companyId: number }) {
         <CardDescription className="sr-only">Staff Report Card</CardDescription>
       </CardHeader>
       <CardContent>
-        <StaffReportDataTable companyId={companyId} />
+        <DataTable columns={StaffReportDataTableColumns} data={employees} />
       </CardContent>
 
       <CardFooter className="justify-between">

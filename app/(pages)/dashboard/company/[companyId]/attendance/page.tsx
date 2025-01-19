@@ -1,5 +1,4 @@
 "use server";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -12,18 +11,32 @@ import { getPaginationParams } from "@/utils/Misc";
 import { getAttendanceReports } from "@/app/(server)/actions/getAttendanceReports";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { AttendanceReportDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceReportDataTableColumns";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AttendanceReportGenerator from "@/components/custom/PDF/AttendanceReportGenerator";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Attendance Report`,
+  };
+}
 
 function getFilters(searchParams: ISearchParams) {
   return {
     employee_id: Math.max(
       0,
-      Number.parseInt((searchParams.employee_id as string | undefined) ?? "0")
+      Number.parseInt((searchParams.employee as string | undefined) ?? "0")
     ),
     from_date: searchParams.datepicker_from_date as string | undefined,
     end_date: searchParams.datepicker_to_date as string | undefined,
@@ -35,73 +48,60 @@ export default async function AttendanceReportPage({
   params,
   searchParams,
 }: Props) {
+  const sParams = await searchParams;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const company = await getCompanyDetails(params.companyId);
+  const filters = getFilters(sParams);
+  const { limit, page } = getPaginationParams(sParams);
 
-  const companyExtraData = await getCompanyExtraData(params.companyId);
-  const filters = getFilters(searchParams);
-  const { limit, page } = getPaginationParams(searchParams);
+  const [company, companyExtraData, reports] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getAttendanceReports({
+      company_id: companyId,
+      limit,
+      page,
+      filters,
+    }),
+  ]);
 
-  // Get report data from the server
-  const reports = await getAttendanceReports({
-    company_id: company.company_id,
-    limit,
-    page,
-    filters,
-  });
+  if (company.error || companyExtraData.error || reports.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Attendance Records</p>
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? reports.error}
+        />
+      </main>
+    );
+  }
 
   return (
-    <main className="container flex flex-col gap-2">
+    <main id="pdf-view" className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Attendance Report</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           {...{
             user,
-            company,
+            company: company.data,
             title: "Attendance Report",
           }}
         />
 
         <div className="flex gap-4">
-          <form action={"/api/attendance/pdf"} method="POST" target="_blank">
-            <div className="sr-only">
-              <Input
-                readOnly
-                defaultValue={company.company_id}
-                name="company_id"
-              />
-              <Input
-                readOnly
-                defaultValue={filters.employee_id}
-                name="employee_id"
-              />
-              <Input
-                readOnly
-                defaultValue={filters.from_date}
-                name="from_date"
-              />
-              <Input readOnly defaultValue={filters.end_date} name="end_date" />
-              <Input readOnly defaultValue={filters.sort} name="sort" />
-            </div>
-            <Button
-              disabled
-              variant={"destructive"}
-              className="gap-2 rounded-full"
-            >
-              <Icons.pdf />
-              Download PDF (WIP)
-            </Button>
-          </form>
-          <AttendanceReportFilterPopover {...companyExtraData} />
+          <AttendanceReportGenerator company={company.data} filters={filters} />
+
+          <AttendanceReportFilterPopover {...companyExtraData.data} />
         </div>
       </div>
 
       <StaticDataTable
-        data={reports}
+        data={reports.data.data}
+        pageCount={reports.data.total_page}
         columns={AttendanceReportDataTableColumns}
-        // pageCount={paginatedAttendance.total_page}
       />
     </main>
   );

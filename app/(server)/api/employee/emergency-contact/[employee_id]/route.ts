@@ -4,10 +4,11 @@ import { IEmployeeEmergencyContact } from "@/schema/EmployeeSchema";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { employee_id: string } }
+  { params }: { params: Promise<{ employee_id: string }> }
 ) {
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
   if (!session) {
     return NextResponse.json(
@@ -18,7 +19,11 @@ export async function GET(
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/get-next-kin-data/${params.employee_id}`,
+      `${process.env.API_BASE_URL}/employee/get-next-kin-data/${
+        (
+          await params
+        ).employee_id
+      }`,
       {
         headers: {
           Authorization: `Bearer ${session}`,

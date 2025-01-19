@@ -25,6 +25,7 @@ import { getFullNameOfEmployee } from "@/utils/Misc";
 import React, { useState } from "react";
 import { RangedDatePicker } from "../../DatePicker/RangedDatePicker";
 import AnimatedTrigger from "../AnimatedTrigger";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   departments?: IDepartment[];
@@ -34,13 +35,9 @@ interface Props {
 }
 
 export default function AttendanceReportFilterPopover({
-  departments = [],
-  designations = [],
   employees = [],
   asEmployee = false,
 }: Props) {
-  const [department, setDepartment] = useState<string>("");
-  const [designation, setDesignation] = useState<string>("");
   const [employee, setEmployee] = useState<string>("");
 
   return (
@@ -54,6 +51,8 @@ export default function AttendanceReportFilterPopover({
       </PopoverTrigger>
       <PopoverContent className="w-96" align="end">
         <form className="flex flex-col gap-4 w-full">
+          <Input className="sr-only" readOnly name="page" value={1} />
+          <Input className="sr-only" readOnly name="limit" value={5} />
           <div className={"col-span-full flex flex-col gap-2"}>
             <Label>Employee</Label>
             <Select

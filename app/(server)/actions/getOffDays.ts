@@ -1,6 +1,7 @@
 "use server";
 
 import { IPaginatedOffDays } from "@/schema/RotaSchema";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
 export async function getOffDays({
@@ -12,38 +13,27 @@ export async function getOffDays({
   page: number;
   limit: number;
 }) {
-  const fallback: IPaginatedOffDays = {
-    message: "No data found",
-    data: [],
-    total_page: 1,
-    data_count: 0,
-  };
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/rota/day-off/${company_id}?page=${page}&limit=${limit}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-        method: "GET",
-      }
-    );
-
-    if (apiRes.ok) {
-      const result = (await apiRes.json()) as IPaginatedOffDays;
-      return result;
+  const req = fetch(
+    `${process.env.API_BASE_URL}/rota/day-off/${company_id}?page=${page}&limit=${limit}`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+      method: "GET",
     }
+  );
 
-    console.error("Get company shifts > Failed to get company shifts", {
-      status: apiRes.status,
-    });
-
-    return fallback;
-  } catch (err) {
-    console.error("Get Company Shifts > Failed to get shifts >", err);
-    return fallback;
+  const { data, error } = await withError<IPaginatedOffDays>(req);
+  if (error) {
+    console.error(
+      "Actions > Get Company Off Days > Failed to get off days >",
+      error
+    );
+    return { error };
   }
+
+  return { data };
 }

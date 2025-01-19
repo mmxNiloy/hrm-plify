@@ -4,6 +4,8 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
+import MySidebarHeader from "./MySidebarHeader";
+import { BackLinkButton } from "./BackLinkButton";
 
 export default function LeaveDashboardSidebar({
   company,
@@ -16,41 +18,19 @@ export default function LeaveDashboardSidebar({
   return (
     <Sidebar
       className="overflow-auto"
-      open={open || hovered}
-      onMouseEnter={(e) => setHovered(true)}
-      onMouseLeave={(e) => setHovered(false)}
+      open={
+        open
+        // || hovered
+      }
+      // onMouseEnter={(e) => setHovered(true)}
+      // onMouseLeave={(e) => setHovered(false)}
     >
       <SidebarContent>
-        <SidebarHeader
-          onClick={(e) => setOpen(!open)}
-          title={company.company_name}
-          className={
-            "bg-accent space-y-0 cursor-pointer flex flex-row gap-2 items-center justify-center rounded-md mb-4"
-          }
-        >
-          <p
-            className={cn(
-              "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
-              open || hovered ? "" : "hidden"
-            )}
-          >
-            {company.company_name}
-          </p>
-          <span className="size-10 flex relative rounded-full items-center justify-center">
-            <Icons.chevronLeft
-              className={cn(
-                "absolute transition-all",
-                open ? "rotate-0 scale-100" : "rotate-180 scale-0"
-              )}
-            />
-            <Icons.chevronRight
-              className={cn(
-                "transition-all",
-                open ? "rotate-180 scale-0" : "rotate-0 scale-100"
-              )}
-            />
-          </span>
-        </SidebarHeader>
+        <MySidebarHeader
+          open={open}
+          onClick={() => setOpen((old) => !old)}
+          company={company}
+        />
 
         <SidebarLink href={`/dashboard/company/${company.company_id}/leave`}>
           <Icons.home />
@@ -86,7 +66,8 @@ export default function LeaveDashboardSidebar({
           </span>
         </SidebarLink>
 
-        <SidebarLink
+        {/* TODO: Future Features */}
+        {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/leave/rules`}
         >
           <Icons.lawBuilding />
@@ -120,7 +101,9 @@ export default function LeaveDashboardSidebar({
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Leave Report
           </span>
-        </SidebarLink>
+        </SidebarLink> */}
+
+        <BackLinkButton />
       </SidebarContent>
     </Sidebar>
   );

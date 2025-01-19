@@ -21,6 +21,7 @@ import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function PassportDetailsEditDialog({
   employee_id,
@@ -35,6 +36,7 @@ export default function PassportDetailsEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [docError, setDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,22 +44,39 @@ export default function PassportDetailsEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const doc = fd.get("document") as File | undefined;
+
+      setLoading(true);
+      // Request API here
+      var document_link = data?.document ?? "";
+      if (doc && !docError) {
+        const uploadRes = await upload(doc);
+        if (uploadRes.error) {
+          toast({
+            title: "Failed to upload",
+            description: `Failed to upload the document. Please try again later. Error encountered: ${uploadRes.error.message}`,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        document_link = uploadRes.data.fileUrl;
+      }
+
       const passportDetails = {
         employee_id: Number.parseInt(`${employee_id}`),
         passport_number: fd.get("passport_number") as string,
         issue_date: fd.get("issue_date") as string,
         expiry_date: fd.get("expiry_date") as string,
         place_of_birth: fd.get("place_of_birth") as string,
-        document: "", // It's a file, upload the file and process the document accordingly
+        document: document_link,
         remark: fd.get("remark") as string,
       };
 
       const reqBod = data
         ? Object.assign(data, passportDetails)
         : passportDetails;
-
-      setLoading(true);
-      // Request API here
       try {
         const apiRes = await fetch(`/api/employee/passport-info`, {
           method: data ? "PATCH" : "POST",
@@ -89,7 +108,7 @@ export default function PassportDetailsEditDialog({
       }
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [data, docError, employee_id, router, toast]
   );
 
   return (
@@ -118,15 +137,18 @@ export default function PassportDetailsEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <PassportDetailsFormFragment data={data} />
+              <PassportDetailsFormFragment
+                setDocError={setDocError}
+                data={data}
+              />
             </div>
           </ScrollArea>
 

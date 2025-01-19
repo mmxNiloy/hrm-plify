@@ -1,4 +1,7 @@
 "use client";
+import { upload } from "@/app/(server)/actions/upload";
+import { AvatarPicker } from "@/components/ui/avatar-picker";
+import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,16 +13,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 import { IFormFragmentProps } from "@/utils/Types";
-import React from "react";
+import React, { useCallback, useState } from "react";
+
+interface Props extends IFormFragmentProps<ICompany> {
+  asClient?: boolean;
+  onSizeExceeded?: () => void;
+}
 
 export default function CompanyProfileFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<ICompany>) {
+  asClient = false,
+  onSizeExceeded,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -46,7 +57,9 @@ export default function CompanyProfileFormFragment({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-2">
+        <div
+          className={cn("flex flex-col gap-2", asClient ? "col-span-full" : "")}
+        >
           <Label
             htmlFor="industry-input"
             className={cn(
@@ -70,7 +83,7 @@ export default function CompanyProfileFormFragment({
             className="rounded-full"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className={cn("flex flex-col gap-2", asClient ? "hidden" : "")}>
           <Label>Status</Label>
           <Select
             key={`company-status-${data?.is_active ?? 0}`}
@@ -183,19 +196,30 @@ export default function CompanyProfileFormFragment({
         </div>
       </div>
 
-      {/* TODO: Replace logo with a file/image picker here */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="logo-input">Logo</Label>
-        <Input
-          key={`company-logo-${data?.logo ?? ""}`}
-          disabled={disabled}
-          readOnly={readOnly}
-          defaultValue={data?.logo ?? ""}
-          id="logo-input"
-          name="logo"
-          placeholder="Logo"
-          className="rounded-full"
-        />
+        <Input className="hidden" defaultValue={data?.logo} name="logo_url" />
+        <div className="relative">
+          <AvatarPicker
+            key={`company-logo-${data?.logo}`}
+            readOnly={readOnly}
+            disabled={disabled}
+            name="logo"
+            onSizeExceeded={onSizeExceeded}
+            placeholderIcon={
+              <Icons.factory
+                className={cn(
+                  "size-1/2",
+                  disabled || readOnly ? "" : "group-hover:invisible"
+                )}
+              />
+            }
+            className="w-1/2"
+            variant="video"
+            src={data?.logo?.replace("http:", "https:")}
+            alt={`${data?.company_name} Logo`}
+          />
+        </div>
       </div>
     </>
   );

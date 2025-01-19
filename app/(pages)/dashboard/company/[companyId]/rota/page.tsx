@@ -1,44 +1,80 @@
 "use server";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ButtonBlue } from "@/styles/button.tailwind";
 import React from "react";
-import Link from "next/link";
-import ShiftManagementDataTable from "@/components/custom/DataTable/Rota/ShiftManagementDataTable";
-import OffDaysDataTable from "@/components/custom/DataTable/Rota/OffDaysDataTable";
-import DutyRosterDataTable from "@/components/custom/DataTable/Rota/DutyRosterDataTable";
 import { CompanyByIDPageProps } from "../PageProps";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
 import { getShifts } from "@/app/(server)/actions/getShifts";
-import { getOffDays } from "@/app/(server)/actions/getOffDays";
-import { getDutyRosters } from "@/app/(server)/actions/getDutyRosters";
-import WIPPage from "@/components/custom/Placeholder/WIPPage";
+import ShiftManagementEditDialog from "@/components/custom/Dialog/Rota/ShiftManagementEditDialog";
+import ShiftManagementDataTable from "@/components/custom/DataTable/Rota/ShiftManagementDataTable";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
-export default async function RotaDashboardPage({
+interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
   params,
-}: CompanyByIDPageProps) {
-  const company = await getCompanyData(params.companyId);
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Shift Management`,
+  };
+}
+
+export default async function RotaShiftManagementPage({
+  params,
+  searchParams,
+}: Props) {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const sParams = await searchParams;
+  const { limit, page } = getPaginationParams(sParams);
+
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+
+  const [company, paginatedShifts] = await Promise.all([
+    getCompanyData(companyId),
+    getShifts({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+  ]);
+
+  if (company.error || paginatedShifts.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Shift Management</p>
+        <ErrorFallbackCard error={company.error ?? paginatedShifts.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Rota</p>
+      <p className="text-xl font-semibold">Shift Management</p>
+      <div className="flex items-center justify-between">
+        <MyBreadcrumbs
+          company={company.data}
+          user={user}
+          parent="Rota"
+          title="Shift Management"
+        />
 
-      <MyBreadcrumbs company={company} user={user} title="Rota" />
+        <ShiftManagementEditDialog company_id={companyId} />
+      </div>
 
-      <WIPPage />
+      <ShiftManagementDataTable data={paginatedShifts.data.data} />
     </main>
   );
 }

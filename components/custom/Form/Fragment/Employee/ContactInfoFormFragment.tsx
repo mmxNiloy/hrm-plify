@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ComboBox } from "@/components/ui/combobox";
+import { FilePicker } from "@/components/ui/file-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,11 +13,16 @@ import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
 import React from "react";
 
+interface Props extends IFormFragmentProps<IEmployeeContactInfo> {
+  setDocError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
+
 export default function ContactInfoFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<IEmployeeContactInfo>) {
+  setDocError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -81,26 +87,28 @@ export default function ContactInfoFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="proof-of-address-input">Proof of Address</Label>
         {!readOnly ? (
-          <Input
+          <FilePicker
             disabled={disabled}
             id="proof-of-address-input"
-            type="file"
+            onError={() => {
+              if (setDocError) setDocError(true);
+            }}
+            onSuccess={() => {
+              if (setDocError) setDocError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             name="proof_of_address_doc"
           />
-        ) : (
-          <Link
-            className="w-full"
-            href={data?.proof_address_doc_link ?? "#proof-of-address-download"}
-            passHref
-          >
-            <Button
-              id="proof-of-address-download"
-              disabled={!data || !data.proof_address_doc_link}
-              className={cn(ButtonBlue, "w-full")}
-            >
-              <Icons.download /> View Document
+        ) : data?.proof_address_doc_link ? (
+          <Link passHref href={data.proof_address_doc_link} target="_blank">
+            <Button className={cn(ButtonBlue, "w-full")}>
+              <Icons.externalLink /> View Document
             </Button>
           </Link>
+        ) : (
+          <Button className={ButtonBlue} disabled>
+            <Icons.externalLink /> View Document
+          </Button>
         )}
       </div>
     </>

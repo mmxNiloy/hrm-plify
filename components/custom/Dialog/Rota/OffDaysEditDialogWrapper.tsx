@@ -20,7 +20,7 @@ export default async function OffDaysEditDialogWrapper({
     <OffDaysEditDialog
       data={data}
       asIcon={asIcon}
-      shifts={paginatedShifts.data}
+      shifts={paginatedShifts.data?.data}
       company_id={company_id}
     />
   );

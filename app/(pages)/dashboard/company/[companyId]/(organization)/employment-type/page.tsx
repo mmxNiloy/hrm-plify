@@ -14,49 +14,48 @@ import { DataTable } from "@/components/ui/data-table";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import EmploymentTypeEditPopover from "@/components/custom/Popover/Company/EmploymentTypeEditPopover";
 import { CompanyEmploymentTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyEmploymentTypeDataTableColumns";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { cookies } from "next/headers";
+import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 export default async function EmploymentTypePage({
   params,
 }: CompanyByIDPageProps) {
-  const company = await getCompanyData(params.companyId);
+  const user = JSON.parse(
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const [company, employments] = await Promise.all([
+    getCompanyData(companyId),
+    getAllEmploymentTypes(),
+  ]);
 
-  // TODO: Hit the api and get actual employment types
-  const employments: IEmploymentType[] = [];
+  if (company.error || employments.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Company Employment Types</p>
+
+        <ErrorFallbackCard error={company.error ?? employments.error} />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Employment Types</p>
       <div className="flex items-center justify-between">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`..`}>Company Management</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`.`}
-                className="line-clamp-1 text-ellipsis max-w-32"
-              >
-                {company.company_name}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Employment Type</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        <EmploymentTypeEditPopover company_id={params.companyId} />
+        <MyBreadcrumbs
+          title="Employment Type"
+          company={company.data}
+          user={user}
+        />
       </div>
 
       <DataTable
-        data={employments}
+        data={employments.data.filter((item) => item.isActive)}
         columns={CompanyEmploymentTypeDataTableColumns}
       />
     </main>

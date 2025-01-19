@@ -1,14 +1,6 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { StaticDataTable } from "@/components/ui/data-table";
@@ -20,6 +12,7 @@ import Icons from "@/components/ui/icons";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { LeaveBalanceDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveBalanceDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -27,13 +20,15 @@ export default async function CompanyLeaveBalancePage({
   params,
   searchParams,
 }: Props) {
-  const { page, limit } = getPaginationParams(searchParams);
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const { page, limit } = getPaginationParams(await searchParams);
 
-  const company = await getCompanyData(params.companyId);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
+  const company = await getCompanyData(companyId);
   var balance: ILeaveBalance[] = [];
   var total_page: number = 1;
 
@@ -44,12 +39,21 @@ export default async function CompanyLeaveBalancePage({
     total_page = 1;
   }
 
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Leave Balance</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
+  }
+
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Leave Type</p>
+      <p className="text-xl font-semibold">Leave Balance</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Leave"
           title="Leave Balance"

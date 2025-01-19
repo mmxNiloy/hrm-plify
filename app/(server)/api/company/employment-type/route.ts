@@ -1,8 +1,77 @@
+import { ICompanyWithDesignationMeta } from "@/schema/CompanySchema";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  return NextResponse.json(
-    { message: "Work In progress. This feature is not ready yet." },
-    { status: 501 }
-  );
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
+  if (!session || session.value.length < 1) {
+    return NextResponse.json(
+      { message: "Session expired. Login again." },
+      { status: 401 }
+    );
+  }
+
+  const reqBody = await req.json();
+
+  try {
+    const apiRes = await fetch(
+      `${process.env.API_BASE_URL}/company/operation/create-employment-types`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.value}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
+      }
+    );
+
+    return NextResponse.json(await apiRes.json(), { status: apiRes.status });
+  } catch (err) {
+    console.error(
+      "POST > Create Employment Type > Failed to create employment type\n",
+      err
+    );
+    return NextResponse.json(
+      { message: "Failed to create employment type!" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
+  if (!session || session.value.length < 1) {
+    return NextResponse.json(
+      { message: "Session expired. Login again." },
+      { status: 401 }
+    );
+  }
+
+  const reqBody = await req.json();
+
+  try {
+    const apiRes = await fetch(
+      `${process.env.API_BASE_URL}/company/operation/update-employment-types`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${session.value}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
+      }
+    );
+
+    return NextResponse.json(await apiRes.json(), { status: apiRes.status });
+  } catch (err) {
+    console.error(
+      "POST > Create Employment Type > Failed to create employment type\n",
+      err
+    );
+    return NextResponse.json(
+      { message: "Failed to create employment type!" },
+      { status: 500 }
+    );
+  }
 }

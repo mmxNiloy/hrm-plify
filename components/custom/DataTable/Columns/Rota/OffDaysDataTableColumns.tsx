@@ -6,7 +6,11 @@ import { IOffDaysWithShifts } from "@/schema/RotaSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import OffDaysEditDialog from "../../../Dialog/Rota/OffDaysEditDialog";
 
-export const OffDaysDataTableColumns: ColumnDef<IOffDaysWithShifts>[] = [
+interface Props extends IOffDaysWithShifts {
+  updateAccess?: boolean;
+}
+
+export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <SortableHeader name="ID" column={column} />,
@@ -90,13 +94,14 @@ export const OffDaysDataTableColumns: ColumnDef<IOffDaysWithShifts>[] = [
   },
   {
     id: "edit-action",
-    cell: ({ row }) => (
-      <OffDaysEditDialog
-        shifts={row.original.shifts}
-        company_id={row.original.company_id}
-        asIcon
-        data={row.original}
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <OffDaysEditDialog
+          shifts={row.original.shifts}
+          company_id={row.original.company_id}
+          asIcon
+          data={row.original}
+        />
+      ),
   },
 ];

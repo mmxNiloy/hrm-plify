@@ -9,12 +9,19 @@ import Link from "next/link";
 import React from "react";
 import Icons from "@/components/ui/icons";
 import { ButtonBlue } from "@/styles/button.tailwind";
+import { FilePicker } from "@/components/ui/file-picker";
 
+interface Props extends IFormFragmentProps<IEmployeeEducationalDetail> {
+  setCertError?: React.Dispatch<React.SetStateAction<Boolean>>;
+  setTranscriptError?: React.Dispatch<React.SetStateAction<Boolean>>;
+}
 export default function EducationDetailsFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<IEmployeeEducationalDetail>) {
+  setCertError,
+  setTranscriptError,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -96,16 +103,23 @@ export default function EducationDetailsFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="transcript-link-input">Transcript</Label>
         {!readOnly ? (
-          <Input
+          <FilePicker
             disabled={disabled}
             id="transcript-link-input"
-            type="file"
+            onError={() => {
+              if (setTranscriptError) setTranscriptError(true);
+            }}
+            onSuccess={() => {
+              if (setTranscriptError) setTranscriptError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             name="transcript"
           />
-        ) : (
+        ) : data?.transcript_link ? (
           <Link
+            target="_blank"
             className="w-full"
-            href={data?.transcript_link ?? "#transcript-download"}
+            href={data.transcript_link}
             passHref
           >
             <Button
@@ -116,22 +130,33 @@ export default function EducationDetailsFormFragment({
               <Icons.download /> View Transcript
             </Button>
           </Link>
+        ) : (
+          <Button disabled className={cn(ButtonBlue, "w-full")}>
+            <Icons.info /> No file attached
+          </Button>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="certificate-link-input">Certificate</Label>
         {!readOnly ? (
-          <Input
+          <FilePicker
             disabled={disabled}
             id="certificate-link-input"
-            type="file"
+            onError={() => {
+              if (setCertError) setCertError(true);
+            }}
+            onSuccess={() => {
+              if (setCertError) setCertError(false);
+            }}
+            className="data-[error=true]:border-red-500"
             name="certificate"
           />
-        ) : (
+        ) : data?.certificate_link ? (
           <Link
+            target="_blank"
             className="w-full"
-            href={data?.certificate_link ?? "#certificate-download"}
+            href={data?.certificate_link}
             passHref
           >
             <Button
@@ -142,6 +167,10 @@ export default function EducationDetailsFormFragment({
               <Icons.download /> View Certificate
             </Button>
           </Link>
+        ) : (
+          <Button disabled className={cn(ButtonBlue, "w-full")}>
+            <Icons.info /> No file attached
+          </Button>
         )}
       </div>
     </>

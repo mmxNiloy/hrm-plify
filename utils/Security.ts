@@ -1,67 +1,18 @@
-import * as crypto from "crypto";
-
-function splitEncryptedText(encryptedText: string) {
-  return {
-    encryptedDataString: encryptedText.slice(56, -32),
-    ivString: encryptedText.slice(0, 24),
-    assocDataString: encryptedText.slice(24, 56),
-    tagString: encryptedText.slice(-32),
-  };
+export function generateHash(seed: number | string) {
+  const time = Date.now().toString();
+  const n = time.length;
+  const n_half = n >> 1;
+  const seedStr = time
+    .substring(0, n_half)
+    .concat(`-${seed}-`)
+    .concat(time.substring(n_half));
+  return encodeURIComponent(btoa(seedStr));
 }
 
-export function encrypt(plaintext: string) {
-  const encoding: BufferEncoding = "hex";
-  const key: string = process.env.ENCRYPTION_KEY ?? "";
+export function decodeHash(hash: string) {
+  const b64 = decodeURIComponent(hash);
+  const seedStr = atob(b64);
+  const nums = seedStr.split("-");
 
-  try {
-    const iv = crypto.randomBytes(12);
-    const assocData = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv("chacha20-poly1305", key, iv, {
-      authTagLength: 16,
-    });
-
-    cipher.setAAD(assocData, { plaintextLength: Buffer.byteLength(plaintext) });
-
-    const encrypted = Buffer.concat([
-      cipher.update(plaintext, "utf-8"),
-      cipher.final(),
-    ]);
-    const tag = cipher.getAuthTag();
-
-    return (
-      iv.toString(encoding) +
-      assocData.toString(encoding) +
-      encrypted.toString(encoding) +
-      tag.toString(encoding)
-    );
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-export function decrypt(cipherText: string) {
-  const encoding: BufferEncoding = "hex";
-  const key: string = process.env.ENCRYPTION_KEY!;
-
-  const { encryptedDataString, ivString, assocDataString, tagString } =
-    splitEncryptedText(cipherText);
-
-  try {
-    const iv = Buffer.from(ivString, encoding);
-    const encryptedText = Buffer.from(encryptedDataString, encoding);
-    const tag = Buffer.from(tagString, encoding);
-
-    const decipher = crypto.createDecipheriv("chacha20-poly1305", key, iv, {
-      authTagLength: 16,
-    });
-    decipher.setAAD(Buffer.from(assocDataString, encoding), {
-      plaintextLength: encryptedDataString.length,
-    });
-    decipher.setAuthTag(Buffer.from(tag));
-
-    const decrypted = decipher.update(encryptedText);
-    return Buffer.concat([decrypted, decipher.final()]).toString();
-  } catch (e) {
-    console.error(e);
-  }
+  return nums[1];
 }

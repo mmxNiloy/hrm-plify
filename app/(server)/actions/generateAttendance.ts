@@ -1,6 +1,7 @@
 "use server";
 
 import { IAttendanceGenerationResponse } from "@/schema/AttendanceSchema";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
 interface Props {
@@ -22,34 +23,31 @@ export async function generateAttendance({
     from_date,
     to_date,
   });
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/attendance/admin/generate`,
-      {
-        method: "POST",
-        body: JSON.stringify({ company_id, employee_id, from_date, to_date }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const req = fetch(`${process.env.API_BASE_URL}/attendance/admin/generate`, {
+    method: "POST",
+    body: JSON.stringify({
+      company_id: Number.parseInt(`${company_id}`),
+      employee_id,
+      from_date,
+      to_date,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session}`,
+    },
+  });
 
-    if (apiRes.ok) {
-      return (await apiRes.json()) as IAttendanceGenerationResponse;
-    }
-
+  const { data, error } = await withError<IAttendanceGenerationResponse>(req);
+  if (error) {
     console.error(
       "Actions > Generate Attendance > Failed to generate attendance",
-      { error: await apiRes.json(), status: apiRes.status }
+      error
     );
-  } catch (err) {
-    console.error(
-      "Actions > Generate Attendance > Failed to generate attendance",
-      err
-    );
+
+    return { error };
   }
 
-  return undefined;
+  return { data };
 }

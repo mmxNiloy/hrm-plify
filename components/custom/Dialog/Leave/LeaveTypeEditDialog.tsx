@@ -42,7 +42,7 @@ export default function LeaveTypeEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const leaveType: ILeaveType = {
-        company_id: company_id,
+        company_id: Number.parseInt(`${company_id}`),
         description: fd.get("description") as string,
         leave_short_code: fd.get("leave_short_code") as string,
         leave_type_name: fd.get("leave_type_name") as string,
@@ -111,8 +111,8 @@ export default function LeaveTypeEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

@@ -1,14 +1,6 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { DataTable } from "@/components/ui/data-table";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
@@ -19,35 +11,98 @@ import { CompanyDesignationDataTableColumns } from "@/components/custom/DataTabl
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Designation`,
+  };
+}
 
 export default async function DesignationsPage({
   params,
   searchParams,
 }: Props) {
-  const { limit, page } = getPaginationParams(searchParams);
-  const company = await getCompanyData(params.companyId);
-  const designations = await getDesignations({
-    company_id: params.companyId,
-    page,
-    limit,
-  });
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_desg_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_desg_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_desg_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const { limit, page } = getPaginationParams(await searchParams);
+  const [company, designations, companyExtra] = await Promise.all([
+    getCompanyData(companyId),
+    getDesignations({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+    getCompanyExtraData(companyId),
+  ]);
+
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+
+  if (company.error || designations.error || companyExtra.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Company Designations</p>
+
+        <ErrorFallbackCard
+          error={company.error || designations.error || companyExtra.error}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Company Designations</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs company={company} user={user} title="Designations" />
+        <MyBreadcrumbs
+          company={company.data}
+          user={user}
+          title="Designations"
+        />
 
-        <DesignationEditPopover company_id={params.companyId} />
+        {writeAccess && (
+          <DesignationEditPopover
+            company_id={companyId}
+            departments={companyExtra.data.departments}
+          />
+        )}
       </div>
 
       <DataTable
-        data={designations}
+        data={designations.data.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+          departments: companyExtra.data.departments,
+        }))}
         columns={CompanyDesignationDataTableColumns}
       />
     </main>

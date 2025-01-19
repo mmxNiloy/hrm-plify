@@ -1,12 +1,6 @@
+import { CompanyContractAgreementDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyContractAgreementDataTableColumns";
 import ContractAgreementDataTableSkeleton from "@/components/custom/DataTable/Company/Employee/ContractAgreementDataTableSkeleton";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { DataTableSkeleton } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
@@ -20,8 +14,10 @@ export default function EmployeeContractAgreementPageLoading() {
         {/* <EmployeeCreationDialog /> */}
       </div>
 
-      {/* Main content, a table of employees */}
-      <ContractAgreementDataTableSkeleton />
+      <DataTableSkeleton
+        columns={CompanyContractAgreementDataTableColumns}
+        showOptions
+      />
     </main>
   );
 }

@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
-  params: {
+  params: Promise<{
     employee_id: string;
-  };
+  }>;
 }
 
 interface IUpdateBod extends IEmployeeWithPersonalInfo {
@@ -16,7 +16,7 @@ interface IUpdateBod extends IEmployeeWithPersonalInfo {
 
 export async function PATCH(req: NextRequest, { params }: Props) {
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -26,9 +26,15 @@ export async function PATCH(req: NextRequest, { params }: Props) {
 
   const bod = (await req.json()) as IUpdateBod;
 
+  console.log("PATCH > Update Employee Personal Data >", bod);
+
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/update-personal-data/${params.employee_id}`,
+      `${process.env.API_BASE_URL}/employee/update-personal-data/${
+        (
+          await params
+        ).employee_id
+      }`,
       {
         method: "PATCH",
         headers: {

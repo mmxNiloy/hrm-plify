@@ -8,19 +8,50 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Job & Recruitment`,
+  };
+}
 
 export default async function JobDashboardPage({
   params,
 }: CompanyByIDPageProps) {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const company = await getCompanyData(params.companyId);
+  const company = await getCompanyData(companyId);
+
+  if (company.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
+        <ErrorFallbackCard error={company.error} />
+      </main>
+    );
+  }
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
 
-      <MyBreadcrumbs company={company} user={user} title="Job & Recruitment" />
+      <MyBreadcrumbs
+        company={company.data}
+        user={user}
+        title="Job & Recruitment"
+      />
 
       <div className="grid lg:grid-cols-2 gap-2">
         <JobDashboardStatisticsCard />

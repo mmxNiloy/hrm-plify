@@ -17,12 +17,18 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
+import { FilePicker } from "@/components/ui/file-picker";
+import { useContext } from "react";
+import EussDbsDialogContext from "@/context/EussDbsDialogContext";
 
 export default function DbsFormFragment({
   data,
   readOnly,
   disabled,
 }: IFormFragmentProps<IEmployeeEussDbsData>) {
+  const { setDbsDocError } = useContext(EussDbsDialogContext);
+
   return (
     <>
       {/* Reference No. (DBS) */}
@@ -89,17 +95,25 @@ export default function DbsFormFragment({
       <div className="flex flex-col gap-2">
         <Label htmlFor="dbs-doc">DBS Document</Label>
         {readOnly ? (
-          <Button disabled className={ButtonBlue}>
-            <Icons.download /> View Document
-          </Button>
+          data?.dbs_doc ? (
+            <Link passHref href={data.dbs_doc} target="_blank">
+              <Button className={cn(ButtonBlue, "w-full")}>
+                <Icons.externalLink /> View Document
+              </Button>
+            </Link>
+          ) : (
+            <Button className={ButtonBlue} disabled>
+              <Icons.externalLink /> View Document
+            </Button>
+          )
         ) : (
-          <Input
-            type="file"
+          <FilePicker
+            onError={() => setDbsDocError(true)}
+            onSuccess={() => setDbsDocError(false)}
+            className="data-[error=true]:border-red-500"
             key={`dbs-doc-${data?.dbs_doc}`}
-            readOnly={readOnly}
             disabled={disabled}
             id="dbs-doc"
-            defaultValue={data?.dbs_doc ?? ""}
             placeholder="DBS Document Link"
             name="dbs_doc"
           />

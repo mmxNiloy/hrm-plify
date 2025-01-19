@@ -6,43 +6,53 @@ import React from "react";
 import { EditEmployeeByIdProps } from "../PageProps";
 import EmergencyContactEditDialog from "@/components/custom/Dialog/Employee/EmergencyContactEditDialog";
 import EmergencyContactFormFragment from "@/components/custom/Form/Fragment/Employee/EmergencyContactFormFragment";
+import { getEmergencyContactInfo } from "@/app/(server)/actions/employee/getEmergencyContactInfo";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
 
 export default async function EmergencyContactInfoSlot({
   params,
 }: EditEmployeeByIdProps) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
 
-  let emergencyContact: IEmployeeEmergencyContact | undefined = undefined;
+  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/get-next-kin-data/${params.employeeId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
+  const { employeeId, companyId } = await params;
+  const { data: emergencyContact, error } = await getEmergencyContactInfo(
+    employeeId
+  );
+
+  if (error) {
+    return (
+      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-row items-center justify-between">
+          <p className="text-lg font-semibold">Emergency Contact Information</p>
+        </div>
+        <ErrorFallbackCard error={error} />
+      </div>
     );
-
-    if (!apiRes.ok) {
-      console.error("Get Emergency Contact > Data not found");
-      redirect("/not-found");
-    } else {
-      emergencyContact = (await apiRes.json()) as IEmployeeEmergencyContact;
-    }
-  } catch (err) {
-    console.error("Get Emergency Contact > Data retrieval failed", err);
-    redirect("/not-found");
   }
 
   return (
     <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Emergency Contact Information</p>
-        <EmergencyContactEditDialog
-          data={emergencyContact}
-          employee_id={params.employeeId}
-        />
+        {updateAccess && (
+          <EmergencyContactEditDialog
+            data={emergencyContact}
+            employee_id={employeeId}
+          />
+        )}
       </div>
       <EmergencyContactFormFragment data={emergencyContact} readOnly />
     </div>

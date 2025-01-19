@@ -11,6 +11,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import MySidebarHeader from "./MySidebarHeader";
+import { BackLinkButton } from "./BackLinkButton";
+import { Button } from "@/components/ui/button";
 
 export default function CompanyDashboardSidebar({
   company,
@@ -25,46 +28,24 @@ export default function CompanyDashboardSidebar({
 
   return (
     <Sidebar
-      open={open || hovered}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      open={
+        open
+        // || hovered
+      }
+      // onMouseEnter={() => setHovered(true)}
+      // onMouseLeave={() => setHovered(false)}
       className="overflow-auto"
     >
       <SidebarContent>
-        <SidebarHeader
-          onClick={() => setOpen(!open)}
-          title={company.company_name}
-          className={
-            "bg-accent space-y-0 cursor-pointer flex flex-row gap-2 items-center justify-center rounded-md mb-4"
-          }
-        >
-          <p
-            className={cn(
-              "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
-              open || hovered ? "" : "hidden"
-            )}
-          >
-            {company.company_name}
-          </p>
-          <span className="size-10 flex relative rounded-full items-center justify-center">
-            <Icons.chevronLeft
-              className={cn(
-                "absolute transition-all",
-                open ? "rotate-0 scale-100" : "rotate-180 scale-0"
-              )}
-            />
-            <Icons.chevronRight
-              className={cn(
-                "transition-all",
-                open ? "rotate-180 scale-0" : "rotate-0 scale-100"
-              )}
-            />
-          </span>
-        </SidebarHeader>
+        <MySidebarHeader
+          open={open}
+          onClick={() => setOpen((old) => !old)}
+          company={company}
+        />
 
         <Accordion
           type="multiple"
-          defaultValue={["org"]}
+          defaultValue={["org", "hr", "ops", "fin"]}
           onValueChange={(e) => {
             if (e.length > 0) {
               setIsAccordionOpen(true);
@@ -129,6 +110,7 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
+              {/* 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/pay-group`}
               >
@@ -172,16 +154,26 @@ export default function CompanyDashboardSidebar({
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Payment Type
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
 
-              <SidebarLink
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/wage-pay-mode`}
               >
                 <Icons.pay />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Wages Pay Mode
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
+              {/* <Button
+                variant={"ghost"}
+                className="justify-start gap-2"
+                disabled
+              >
+                <Icons.pay />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Wages Pay Mode
+                </span>
+              </Button> */}
             </AccordionContent>
           </AccordionItem>
 
@@ -205,6 +197,15 @@ export default function CompanyDashboardSidebar({
               </SidebarLink>
 
               <SidebarLink
+                href={`/dashboard/company/${company.company_id}/organogram`}
+              >
+                <Icons.chart />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Organogram Chart
+                </span>
+              </SidebarLink>
+
+              <SidebarLink
                 href={`/dashboard/company/${company.company_id}/job`}
               >
                 <Icons.briefcase />
@@ -213,14 +214,24 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              <SidebarLink
+              <Button
+                disabled
+                className="justify-start gap-2"
+                variant={"ghost"}
+              >
+                <Icons.userKey />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  User Access Management
+                </span>
+              </Button>
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/user-access`}
               >
                 <Icons.userKey />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   User Access Management
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/leave`}
@@ -238,7 +249,7 @@ export default function CompanyDashboardSidebar({
               <div className="flex gap-2 items-center">
                 <Icons.operations />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-                  Operaitions
+                  Operations
                 </span>
               </div>
             </AccordionTrigger>
@@ -261,14 +272,14 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              <SidebarLink
+              {/* <SidebarLink
                 href={`/dashboard/company/${company.company_id}/task`}
               >
                 <Icons.todo />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Task Management
                 </span>
-              </SidebarLink>
+              </SidebarLink> */}
 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/holiday`}
@@ -301,15 +312,6 @@ export default function CompanyDashboardSidebar({
               </SidebarLink>
 
               <SidebarLink
-                href={`/dashboard/company/${company.company_id}/organogram`}
-              >
-                <Icons.chart />
-                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-                  Organogram Chart
-                </span>
-              </SidebarLink>
-
-              <SidebarLink
                 href={`/dashboard/company/${company.company_id}/sponsor-compliance`}
               >
                 <Icons.pay />
@@ -329,7 +331,9 @@ export default function CompanyDashboardSidebar({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        {isAccordionOpen && <span className="h-8"></span>}
+
+        <BackLinkButton />
+        <span className="h-8"></span>
       </SidebarContent>
     </Sidebar>
   );

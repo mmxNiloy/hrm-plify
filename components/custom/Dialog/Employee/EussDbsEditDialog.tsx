@@ -21,7 +21,9 @@ import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
 import { IEmployeeEussDbsData } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ToastSuccess } from "@/styles/toast.tailwind";
+import { ToastSuccess, ToastWarn } from "@/styles/toast.tailwind";
+import { IUploadResponse, upload } from "@/app/(server)/actions/upload";
+import EussDbsDialogContext from "@/context/EussDbsDialogContext";
 
 export default function EussDbsEditDialog({
   employee_id,
@@ -36,6 +38,8 @@ export default function EussDbsEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [eussDocError, setEussDocError] = useState<Boolean>(false);
+  const [dbsDocError, setDbsDocError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,6 +47,42 @@ export default function EussDbsEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const euss_doc = fd.get("euss_doc") as File | undefined;
+      const dbs_doc = fd.get("dbs_doc") as File | undefined;
+
+      setLoading(true);
+
+      if (eussDocError || dbsDocError) {
+        toast({
+          title: "File too large",
+          description:
+            "Attached document exceeds file limit. File(s) will not be uploaded.",
+          className: ToastWarn,
+        });
+      }
+
+      const [eussDocUpload, dbsDocUpload] = await Promise.all([
+        euss_doc && !eussDocError
+          ? upload(euss_doc)
+          : new Promise<IUploadResponse>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default EUSS doc link",
+                  fileUrl: data?.euss_doc ?? "",
+                },
+              });
+            }),
+        dbs_doc && !dbsDocError
+          ? upload(dbs_doc)
+          : new Promise<IUploadResponse>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default DBS doc link",
+                  fileUrl: data?.dbs_doc ?? "",
+                },
+              });
+            }),
+      ]);
 
       const combinedDetails = {
         id: 0,
@@ -55,7 +95,7 @@ export default function EussDbsEditDialog({
         euss_expiry_date: fd.get("euss_expiry_date")
           ? new Date(fd.get("euss_expiry_date") as string)
           : null,
-        euss_doc: "", // TODO: File upload handling here?
+        euss_doc: eussDocUpload.data?.fileUrl ?? data?.euss_doc ?? "",
         euss_remarks: (fd.get("euss_remarks") as string | null) ?? "",
         euss_is_current: fd.get("euss_is_current")
           ? fd.get("euss_is_current") === "yes"
@@ -71,7 +111,7 @@ export default function EussDbsEditDialog({
         dbs_expiry_date: fd.get("dbs_expiry_date")
           ? new Date(fd.get("dbs_expiry_date") as string)
           : null,
-        dbs_doc: "", // TODO: Upload file handling here?
+        dbs_doc: dbsDocUpload.data?.fileUrl ?? data?.dbs_doc ?? "",
         dbs_type: (fd.get("dbs_type") as string | null) ?? "",
         dbs_is_current: fd.get("dbs_is_current")
           ? fd.get("dbs_is_current") === "yes"
@@ -83,8 +123,6 @@ export default function EussDbsEditDialog({
       const reqBod = data
         ? Object.assign(data, combinedDetails)
         : combinedDetails;
-
-      setLoading(true);
 
       try {
         const apiRes = await fetch(`/api/employee/euss-dbs-info`, {
@@ -117,7 +155,7 @@ export default function EussDbsEditDialog({
 
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [data, dbsDocError, employee_id, eussDocError, router, toast]
   );
 
   return (
@@ -146,8 +184,8 @@ export default function EussDbsEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 
@@ -157,12 +195,21 @@ export default function EussDbsEditDialog({
               <p className="text-lg font-semibold col-span-full">
                 EUSS/Time Limit Information
               </p>
-              <EussFormFragment data={data} />
+              <EussDbsDialogContext.Provider
+                value={{
+                  eussDocError,
+                  setEussDocError,
+                  dbsDocError,
+                  setDbsDocError,
+                }}
+              >
+                <EussFormFragment data={data} />
 
-              <p className="text-lg font-semibold col-span-full">
-                Disclosure and Barring Service (DBS) Details
-              </p>
-              <DbsFormFragment data={data} />
+                <p className="text-lg font-semibold col-span-full">
+                  Disclosure and Barring Service (DBS) Details
+                </p>
+                <DbsFormFragment data={data} />
+              </EussDbsDialogContext.Provider>
             </div>
           </ScrollArea>
 

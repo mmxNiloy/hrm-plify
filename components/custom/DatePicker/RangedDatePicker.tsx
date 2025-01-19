@@ -15,10 +15,16 @@ import { DateRange } from "react-day-picker";
 
 interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   name?: string;
+  required?: boolean;
+  requireRangeEnd?: boolean;
+  onValueChange?: (dateRange?: DateRange) => void;
 }
 
 const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, name, ...props }, ref) => {
+  (
+    { className, name, required, requireRangeEnd, onValueChange, ...props },
+    ref
+  ) => {
     const [date, setDate] = useState<DateRange | undefined>();
 
     const getRangeString = useCallback(() => {
@@ -70,9 +76,15 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
             <Calendar
               initialFocus
               mode="range"
+              captionLayout="dropdown-buttons"
               defaultMonth={date?.from}
               selected={date}
-              onSelect={setDate}
+              onSelect={(mDate) => {
+                if (onValueChange) {
+                  onValueChange(mDate);
+                }
+                setDate(mDate);
+              }}
               numberOfMonths={1}
             />
           </PopoverContent>
@@ -84,6 +96,7 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
             readOnly
             type={"text"}
             defaultValue={getRangeString()}
+            required={required}
             {...props}
           />
           <Input
@@ -101,6 +114,7 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
               date && date.to ? format(date.to, "yyyy-MM-dd") : undefined
             }
             name="datepicker_to_date"
+            required={requireRangeEnd}
           />
         </div>
       </>

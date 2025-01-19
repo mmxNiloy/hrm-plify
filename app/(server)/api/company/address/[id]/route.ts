@@ -1,11 +1,9 @@
 import { ICompanyAddressBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const postcode = fd.get("postcode") as string; // stirng
   const address_line_1 = fd.get("address_line_1") as string; // string
@@ -24,7 +22,7 @@ export async function POST(
   };
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -42,7 +40,7 @@ export async function POST(
           Authorization: `Bearer ${session.value}`,
         },
         body: JSON.stringify({
-          company_id: Number.parseInt(params.id),
+          company_id: Number.parseInt((await params).id),
           ...reqBod,
         }),
       }
@@ -66,10 +64,7 @@ export async function POST(
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const postcode = fd.get("postcode") as string; // stirng
   const address_line_1 = fd.get("address_line_1") as string; // string
@@ -88,7 +83,7 @@ export async function PUT(
   };
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -98,7 +93,11 @@ export async function PUT(
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/my-company/company-addresses/${params.id}`,
+      `${process.env.API_BASE_URL}/my-company/company-addresses/${
+        (
+          await params
+        ).id
+      }`,
       {
         method: "PUT",
         headers: {

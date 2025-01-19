@@ -3,14 +3,6 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { DataTable } from "@/components/ui/data-table";
 import { ILeaveRule, ILeaveType } from "@/schema/LeaveSchema";
 import { ISearchParamsProps } from "@/utils/Types";
@@ -19,6 +11,8 @@ import { getCompanyLeaveTypes } from "@/app/(server)/actions/getCompanyLeaveType
 import LeaveRuleEditDialog from "@/components/custom/Dialog/Leave/LeaveRuleEditDialog";
 import { LeaveRulesDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveRulesDataTableColumns";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getPaginationParams } from "@/utils/Misc";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -26,15 +20,31 @@ export default async function CompanyLeaveRulesPage({
   params,
   searchParams,
 }: Props) {
-  const company = await getCompanyData(params.companyId);
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var leaveTypes: ILeaveType[] = await getCompanyLeaveTypes({
-    company_id: company.company_id,
-    searchParams,
-  });
+  const sParams = await searchParams;
+  const { page, limit } = getPaginationParams(sParams);
+  const [company, leaveTypes] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyLeaveTypes({
+      company_id: companyId,
+      page,
+      limit,
+    }),
+  ]);
+
+  if (company.error || leaveTypes.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Leave Rules</p>
+        <ErrorFallbackCard error={company.error ?? leaveTypes.error} />
+      </main>
+    );
+  }
 
   //? Maybe GET Employee types as well?
   // TODO: Get Leave Rules here
@@ -45,15 +55,15 @@ export default async function CompanyLeaveRulesPage({
       <p className="text-xl font-semibold">Leave Rules</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Leave"
           title="Leave Balance"
         />
 
         <LeaveRuleEditDialog
-          leaveTypes={leaveTypes}
-          company_id={company.company_id}
+          leaveTypes={leaveTypes.data}
+          company_id={companyId}
         />
       </div>
 

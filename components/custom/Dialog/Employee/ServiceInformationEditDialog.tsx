@@ -22,18 +22,23 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { ICompany, IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import ServiceDetailsFormFragmentClient from "../../Form/Fragment/Employee/ServiceDetailsFormFragmentClient";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+
+interface Props {
+  data: IEmployeeWithPersonalInfo;
+  departments: IDepartment[];
+  designations: IDesignation[];
+  company?: ICompany;
+  employmentTypes: IEmploymentType[];
+}
 
 export default function ServiceInformationEditDialog({
   data,
   designations,
   departments,
+  employmentTypes,
   company,
-}: {
-  data: IEmployeeWithPersonalInfo;
-  departments: IDepartment[];
-  designations: IDesignation[];
-  company?: ICompany;
-}) {
+}: Props) {
   const { toast } = useToast();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -45,6 +50,10 @@ export default function ServiceInformationEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+
+      var emp_type_id = fd.get("emp_type_id") as string | undefined;
+      var etid = undefined;
+      if (emp_type_id) etid = Number.parseInt(emp_type_id);
 
       const serviceDetails = {
         first_name: data.users.first_name,
@@ -58,9 +67,10 @@ export default function ServiceInformationEditDialog({
         date_of_confirmaton: fd.get("date_of_confirmaton") as string, // Can be converted to Date if necessary
         contract_start_date: fd.get("contract_start_date") as string, // Can be converted to Date if necessary
         contract_end_date: fd.get("contract_end_date") as string, // Can be converted to Date if necessary
+        emp_type_id: etid,
       };
 
-      const reqBod = Object.assign(data, serviceDetails);
+      const reqBod = Object.assign({ ...data }, serviceDetails);
 
       console.log("Request body", reqBod);
 
@@ -127,8 +137,8 @@ export default function ServiceInformationEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 
@@ -140,6 +150,7 @@ export default function ServiceInformationEditDialog({
                 company={company}
                 designations={designations}
                 departments={departments}
+                employmentTypes={employmentTypes}
               />
             </div>
           </ScrollArea>

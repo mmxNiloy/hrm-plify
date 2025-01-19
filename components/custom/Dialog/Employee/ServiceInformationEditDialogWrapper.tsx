@@ -6,6 +6,10 @@ import { cookies } from "next/headers";
 import React from "react";
 import ServiceInformationEditDialog from "./ServiceInformationEditDialog";
 import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
+import ErrorFallbackCard from "../../ErrorFallbackCard";
 
 export default async function ServiceInformationEditDialogWrapper({
   data,
@@ -15,64 +19,36 @@ export default async function ServiceInformationEditDialogWrapper({
   const company_id = data.company_id;
 
   // Get company information
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  // Find department here
-  var departments: IDepartment[] = [];
-  var designations: IDesignation[] = [];
-  var company: ICompany | undefined = undefined;
-  try {
-    const dptRes = await fetch(
-      `${process.env.API_BASE_URL}/company/operation/get-all-departments/${company_id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
+  const [company, companyExtraData, empTypes] = await Promise.all([
+    getCompanyData(company_id),
+    getCompanyExtraData(company_id),
+    getAllEmploymentTypes(),
+  ]);
+
+  if (empTypes.error || companyExtraData.error) {
+    return (
+      <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-row items-center justify-between">
+          <p className="text-lg font-semibold">Personal Information</p>
+        </div>
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? empTypes.error}
+        />
+      </div>
     );
-
-    const dptData = (await dptRes.json()) as IDepartment[];
-    departments = dptData;
-
-    const dsgRes = await fetch(
-      `${process.env.API_BASE_URL}/company/operation/get-designation/${company_id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    const dsgData = (await dsgRes.json()) as { data: IDesignation[] };
-    designations = dsgData.data;
-
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/${company_id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-
-    company = (await apiRes.json()) as ICompany;
-  } catch (err) {
-    console.error("Failed to get designations", err);
-    departments = [];
-    designations = [];
   }
 
   return (
     <ServiceInformationEditDialog
-      company={company}
+      company={company.data}
       data={data}
-      departments={departments}
-      designations={designations}
+      departments={companyExtraData.data.departments}
+      designations={companyExtraData.data.designations}
+      employmentTypes={empTypes.data.filter((item) => item.isActive)}
     />
   );
 }

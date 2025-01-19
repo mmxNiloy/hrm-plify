@@ -21,6 +21,8 @@ import { IEmployeeVisaBrp } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function VisaBrpEditDialog({
   employee_id,
@@ -42,6 +44,66 @@ export default function VisaBrpEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const fImg = fd.get("visa_brp_photo_front_image") as File | undefined;
+      const bImg = fd.get("visa_brp_photo_back_image") as File | undefined;
+
+      setLoading(true);
+
+      const { visa_brp_photo_front, visa_brp_photo_back } = data ?? {
+        visa_brp_photo_front: "",
+        visa_brp_photo_back: "",
+      };
+
+      const [fImgUpload, bImgUpload] = await Promise.all([
+        fImg && fImg.size <= SiteConfig.maxFileSize
+          ? upload(fImg)
+          : new Promise<{
+              data: {
+                message: string;
+                fileUrl: string;
+              };
+              error: undefined;
+            }>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default Front Image Link",
+                  fileUrl: visa_brp_photo_front ?? "",
+                },
+                error: undefined,
+              });
+            }),
+        bImg && bImg.size <= SiteConfig.maxFileSize
+          ? upload(bImg)
+          : new Promise<{
+              data: {
+                message: string;
+                fileUrl: string;
+              };
+              error?: Error;
+            }>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default Back Image Link",
+                  fileUrl: visa_brp_photo_back ?? "",
+                },
+                error: undefined,
+              });
+            }),
+      ]);
+
+      if (fImgUpload.error || bImgUpload.error) {
+        toast({
+          title: "Upload failed",
+          description: `Failed to upload image. Error encountered: ${
+            fImgUpload.error?.message ?? bImgUpload.error?.message
+          }`,
+          variant: "destructive",
+        });
+
+        setLoading(false);
+        return;
+      }
+
       const visaBrpDetails = {
         employee_id: Number.parseInt(`${employee_id}`),
         visa_brp_number: fd.get("visa_brp_number") as string,
@@ -54,8 +116,8 @@ export default function VisaBrpEditDialog({
         issued_by: fd.get("issued_by") as string | null,
         country_of_residence: fd.get("country_of_residence") as string | null,
         nationality: fd.get("nationality") as string,
-        visa_brp_photo_back: fd.get("visa_brp_photo_back") as string | null,
-        visa_brp_photo_front: fd.get("visa_brp_photo_front") as string | null,
+        visa_brp_photo_front: fImgUpload.data.fileUrl,
+        visa_brp_photo_back: bImgUpload.data.fileUrl,
         remarks: fd.get("remarks") as string | null,
         iscurrent: fd.get("iscurrent") ? Number(fd.get("iscurrent")) : 0,
       };
@@ -63,8 +125,6 @@ export default function VisaBrpEditDialog({
       const reqBod = data
         ? Object.assign(data, visaBrpDetails)
         : visaBrpDetails;
-
-      setLoading(true);
 
       try {
         const apiRes = await fetch(`/api/employee/visa-brp-info`, {
@@ -126,8 +186,8 @@ export default function VisaBrpEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

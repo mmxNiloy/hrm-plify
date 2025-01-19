@@ -9,7 +9,7 @@ export interface IFormFragmentProps<T> {
 }
 
 export interface ISearchParamsProps {
-  searchParams: ISearchParams;
+  searchParams: Promise<ISearchParams>;
 }
 
 export interface ISearchParams {

@@ -1,71 +1,100 @@
 "use server";
-import React, { Suspense } from "react";
+import React from "react";
 import { EditEmployeeByIdProps } from "../PageProps";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
-import { IEmployee, IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
-import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
-import { ButtonWarn } from "@/styles/button.tailwind";
 import EmployeeDetailsEditDialog from "@/components/custom/Dialog/Employee/EmployeeDetailsEditDialog";
 import EmployeeDetailsFormFragment from "@/components/custom/Form/Fragment/Employee/EmployeeDetailsFormFragment";
-import ServiceInformationEditDialogWrapper from "@/components/custom/Dialog/Employee/ServiceInformationEditDialogWrapper";
 import ServiceDetailsFormFragment from "@/components/custom/Form/Fragment/Employee/ServiceDetailsFormFragment";
+import { getPersonalInfo } from "@/app/(server)/actions/employee/getPersonalInfo";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import ServiceInformationEditDialog from "@/components/custom/Dialog/Employee/ServiceInformationEditDialog";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 export default async function PersonalInfoSlot({
   params,
 }: EditEmployeeByIdProps) {
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
+  const { employeeId, companyId } = await params;
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var personalInfo: IEmployeeWithPersonalInfo | undefined = undefined;
+  const [company, companyExtraData, personalInfo, employmentTypes] =
+    await Promise.all([
+      getCompanyData(companyId),
+      getCompanyExtraData(companyId),
+      getPersonalInfo(employeeId),
+      getAllEmploymentTypes(),
+    ]);
 
-  try {
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/employee/get-personal-data/${params.employeeId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
+  if (
+    company.error ||
+    companyExtraData.error ||
+    personalInfo.error ||
+    employmentTypes.error
+  ) {
+    return (
+      <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-row items-center justify-between">
+          <p className="text-lg font-semibold">Personal Information</p>
+        </div>
+        <ErrorFallbackCard
+          error={
+            company.error ??
+            companyExtraData.error ??
+            personalInfo.error ??
+            employmentTypes.error
+          }
+        />
+      </div>
     );
-
-    if (!apiRes.ok) {
-      console.error("Edit Employee > Personal Info > Data not found");
-      redirect("/not-found");
-    } else {
-      personalInfo = (await apiRes.json()) as IEmployeeWithPersonalInfo;
-    }
-  } catch (err) {
-    console.error("Failed to fetch company information", err);
-    redirect("/not-found");
   }
+
+  const empTypes = employmentTypes.data.filter((item) => item.isActive);
 
   return (
     <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Personal Information</p>
-        <EmployeeDetailsEditDialog data={personalInfo} />
+        {updateAccess && <EmployeeDetailsEditDialog data={personalInfo.data} />}
       </div>
-      <EmployeeDetailsFormFragment data={personalInfo} readOnly />
+      <EmployeeDetailsFormFragment data={personalInfo.data} readOnly />
 
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Service Information</p>
         {/* <CompanyProfileEditDialog data={data} /> */}
-        <Suspense
-          fallback={
-            <Button disabled className={ButtonWarn}>
-              <Icons.edit /> Edit Service Details
-            </Button>
-          }
-        >
-          <ServiceInformationEditDialogWrapper data={personalInfo} />
-        </Suspense>
+        {updateAccess && (
+          <ServiceInformationEditDialog
+            company={company.data}
+            data={personalInfo.data}
+            departments={companyExtraData.data.departments}
+            designations={companyExtraData.data.designations}
+            employmentTypes={empTypes}
+          />
+        )}
       </div>
-      <ServiceDetailsFormFragment data={personalInfo} readOnly />
+      <ServiceDetailsFormFragment
+        data={personalInfo.data}
+        employmentTypes={empTypes}
+        readOnly
+      />
     </div>
   );
 }

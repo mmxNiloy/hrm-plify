@@ -2,6 +2,7 @@
 
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { IUser, TRole } from "@/schema/UserSchema";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,40 +11,38 @@ interface IEmployeeData {
   data?: IEmployeeWithUserMetadata;
 }
 
-export async function getEmployeeData(): Promise<IEmployeeData> {
+export async function getEmployeeData() {
+  const mCookies = await cookies();
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
   if (
     user.user_roles?.roles.role_name === "Admin" ||
     user.user_roles?.roles.role_name === "Super Admin"
   ) {
-    return { role_name: user.user_roles.roles.role_name };
+    return { data: { role_name: user.user_roles.roles.role_name } };
   }
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-    const apiRes = await fetch(`${process.env.API_BASE_URL}/profile`, {
-      headers: {
-        Authorization: `Bearer ${session}`,
-      },
-    });
+  const session = mCookies.get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
+  const req = fetch(`${process.env.API_BASE_URL}/profile`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
 
-    const res = await apiRes.json();
-
-    console.log("Actions > getEmployeeData > Data found", res);
-
-    if (apiRes.ok) {
-      return {
-        data: res as IEmployeeWithUserMetadata,
-        role_name: user.user_roles?.roles.role_name ?? "Guest",
-      };
-    } else redirect("/api/logout?_ref=data-not-found");
-  } catch (err) {
+  const { data, error } = await withError<IEmployeeWithUserMetadata>(req);
+  if (error) {
     console.error(
       "Actions > Get Employee Data > Failed to get employee data",
-      err
+      error
     );
-    redirect("/api/logout?_ref=data-not-found");
+    return { error };
   }
+
+  return {
+    data: {
+      data: data,
+      role_name: user.user_roles?.roles.role_name ?? "Guest",
+    },
+  };
 }

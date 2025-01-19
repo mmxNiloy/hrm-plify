@@ -132,6 +132,14 @@ import {
   UserX,
   FileCog,
   Factory,
+  SquareCheck,
+  SquareX,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  ExternalLink,
+  Copy,
+  Save,
 } from "lucide-react";
 import React from "react";
 
@@ -349,35 +357,35 @@ const CategoryIcon = React.forwardRef<SVGElement, SVGAttributes>(
         opacity=".34"
         d="M5 10h2q3 0 3-3V5q0-3-3-3H5Q2 2 2 5v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M17 10h2q3 0 3-3V5q0-3-3-3h-2q-3 0-3 3v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         opacity=".34"
         d="M17 22h2q3 0 3-3v-2q0-3-3-3h-2q-3 0-3 3v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M5 22h2q3 0 3-3v-2q0-3-3-3H5q-3 0-3 3v2q0 3 3 3"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -455,9 +463,9 @@ const CalendarAlert = React.forwardRef<SVGElement, SVGAttributes>(
     >
       <path
         d="M3 9h18m-9 3v3m0 3h.01M7 3v2m10-2v2M6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8V8.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 5 18.92 5 17.8 5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.52 3 7.08 3 8.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -473,7 +481,7 @@ const DepartmentIcon = React.forwardRef<SVGElement, SVGAttributes>(
       className={cn("lucide", className)}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g fill="none" fill-rule="evenodd">
+      <g fill="none" fillRule="evenodd">
         <path d="M24 0v24H0V0zM12.593 23.258l-.011.002-.071.035-.02.004-.014-.004-.071-.035q-.016-.005-.024.005l-.004.01-.017.428.005.02.01.013.104.074.015.004.012-.004.104-.074.012-.016.004-.017-.017-.427q-.004-.016-.017-.018m.265-.113-.013.002-.185.093-.01.01-.003.011.018.43.005.012.008.007.201.093q.019.005.029-.008l.004-.014-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014-.034.614q.001.018.017.024l.015-.002.201-.093.01-.008.004-.011.017-.43-.003-.012-.01-.01z" />
         <path
           d="M15 6a3 3 0 0 1-2 2.83V11h3a3 3 0 0 1 3 3v1.17a3.001 3.001 0 1 1-2 0V14a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1.17a3.001 3.001 0 1 1-2 0V14a3 3 0 0 1 3-3h3V8.83A3.001 3.001 0 1 1 15 6m-3-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2M6 17a1 1 0 1 0 0 2 1 1 0 0 0 0-2m12 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"
@@ -527,9 +535,9 @@ const CalendarMoney = React.forwardRef<SVGElement, SVGAttributes>(
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className="lucide lucide-calendar"
     >
       <path d="M8 2v4m8-4v4" />
@@ -644,9 +652,9 @@ const UsersCheck = React.forwardRef<SVGElement, SVGAttributes>(
       <path
         d="m16 18 2 2 4-4m-10-1H8c-1.864 0-2.796 0-3.53.305a4 4 0 0 0-2.166 2.164C2 18.204 2 19.136 2 21M15.5 3.29a4.001 4.001 0 0 1 0 7.42M13.5 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
         className={cn("stroke-current", className)}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
@@ -747,15 +755,84 @@ const VersionIcon = React.forwardRef<SVGElement, SVGAttributes>(
       <path
         d="m2.5 10.5 8 4 8.017-4M2.5 14.5l8 4 8.017-4M2.5 6.657l8.008 3.843 8.009-3.843L10.508 2.5z"
         fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
 );
 VersionIcon.displayName = "VersionIcon";
 
+const BrokenImage = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      className={cn("fill-current", className)}
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        d="M13 1a2 2 0 0 1 1.995 1.85L15 3v3.172l-2 2V3H3v10h5.172l-2 2H3a2 2 0 0 1-1.995-1.85L1 13V3a2 2 0 0 1 1.85-1.995L3 1zm2 8v4a2 2 0 0 1-1.85 1.995L13 15H9l2-2h2v-2zM9.5 8l1.713 1.958L9.173 12H4v-1.2L5.5 9l1.524 1.83zm-3-3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3"
+      />
+    </svg>
+  )
+);
+BrokenImage.displayName = "BrokenImage";
+
+const UserEditIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      className={cn("stroke-current", className)}
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9 15.5H7.5c-1.396 0-2.093 0-2.661.172a4 4 0 0 0-2.667 2.667C2 18.907 2 19.604 2 21M14.5 7.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0M11 21l3.101-.886c.149-.043.223-.064.292-.096a1 1 0 0 0 .175-.102c.061-.045.116-.1.225-.21l6.457-6.456a1.768 1.768 0 1 0-2.5-2.5l-6.457 6.457a2 2 0 0 0-.209.225 1 1 0 0 0-.102.175 2 2 0 0 0-.096.292z"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )
+);
+UserEditIcon.displayName = "UserEditIcon";
+
+const RecoverIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 48 48"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <g data-name="Layer 2">
+        <path fill="none" data-name="invisible box" d="M0 0h48v48H0z" />
+        <path d="M24 2A21.8 21.8 0 0 0 8 8.9V7a2 2 0 0 0-2.3-2A2.1 2.1 0 0 0 4 7.1V14a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2.3 2.1 2.1 0 0 0-2.1-1.7h-2.3a18 18 0 0 1 31.3 10.2 2 2 0 0 0 2 1.8 2 2 0 0 0 2-2.2A22 22 0 0 0 24 2m18 30h-7a2 2 0 0 0-2 2.3 2.1 2.1 0 0 0 2.1 1.7h2.3A18 18 0 0 1 6.1 25.8a2 2 0 0 0-2-1.8 2 2 0 0 0-2 2.2A22 22 0 0 0 40 39.1V41a2 2 0 0 0 2.3 2 2.1 2.1 0 0 0 1.7-2.1V34a2 2 0 0 0-2-2" />
+        <path d="M18.1 33a37.6 37.6 0 0 0 5.4 3.8l.5.2.5-.2c1.9-1.1 9.5-5.5 9.5-10.5v-8.9l-10-4.2-10 4.2v8.9c0 2.5 1.9 4.8 4 6.6h.1ZM24 17.5l6 2.6v6.2c0 .2-.2 2.4-6 6.1Z" />
+      </g>
+    </svg>
+  )
+);
+RecoverIcon.displayName = "RecoverIcon";
+
 const Icons = {
+  recover: RecoverIcon,
+  save: Save,
+  userEdit: UserEditIcon,
+  copy: Copy,
+  brokenImage: BrokenImage,
+  externalLink: ExternalLink,
+  reset: RotateCcw,
+  zoomIn: ZoomIn,
+  zoomOut: ZoomOut,
+  boxChecked: SquareCheck,
+  boxCrossed: SquareX,
   version: VersionIcon,
   factory: Factory,
   heirarchy: HeirarchyIcon,

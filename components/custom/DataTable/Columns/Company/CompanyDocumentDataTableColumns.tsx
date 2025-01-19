@@ -22,9 +22,9 @@ export const CompanyDocumentDataTableColumns: ColumnDef<ICompanyDoc>[] = [
     ),
   },
   {
-    accessorKey: "doc_type_id",
+    accessorKey: "doc_type",
     header: ({ column }) => (
-      <SortableHeader column={column} name={"Document Type ID"} />
+      <SortableHeader column={column} name={"Document Type"} />
     ),
   },
   {
@@ -33,17 +33,25 @@ export const CompanyDocumentDataTableColumns: ColumnDef<ICompanyDoc>[] = [
       <SortableHeader column={column} name={"Date Modified"} />
     ),
     cell: ({ row }) =>
-      new Date(row.original.updated_at).toLocaleDateString("en-GB"),
+      row.original.updated_at
+        ? new Date(row.original.updated_at).toLocaleDateString("en-GB")
+        : "-",
   },
   {
-    id: "action",
-    cell: ({ row }) => (
-      <Link passHref href={row.original.doc_link ?? "#"}>
-        <Button variant={"ghost"} className={ButtonBase} size={"icon"}>
+    id: "action-view",
+    header: ({ column }) => "View",
+    cell: ({ row }) =>
+      row.original.doc_link ? (
+        <Link passHref href={row.original.doc_link} target="_blank">
+          <Button variant={"ghost"} className={ButtonBase} size={"icon"}>
+            <Icons.visible />
+          </Button>
+        </Link>
+      ) : (
+        <Button variant={"ghost"} className={ButtonBase} size={"icon"} disabled>
           <Icons.visible />
         </Button>
-      </Link>
-    ),
+      ),
   },
   {
     id: "edit",

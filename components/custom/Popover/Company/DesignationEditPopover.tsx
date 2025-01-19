@@ -17,14 +17,27 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
+import SiteConfig from "@/utils/SiteConfig";
+import { IDepartment } from "@/schema/CompanySchema";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function DesignationEditPopover({
   company_id,
   data,
+  departments,
   asIcon,
 }: {
   company_id: number;
   data?: IDesignation;
+  departments: IDepartment[];
   asIcon?: boolean;
 }) {
   const { toast } = useToast();
@@ -117,12 +130,45 @@ export default function DesignationEditPopover({
                 className={RequiredAsterisk}
                 htmlFor="department-name-input"
               >
+                Department
+              </Label>
+              <Select
+                name="department_id"
+                defaultValue={
+                  data?.dept_id ? data.dept_id.toString() : undefined
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a Department" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Select a department</SelectLabel>
+                    {departments.map((item) => (
+                      <SelectItem
+                        value={`${item.department_id}`}
+                        key={`department-id-${item.department_id}`}
+                      >
+                        {item.dpt_name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full flex-grow flex flex-col gap-2">
+              <Label
+                className={RequiredAsterisk}
+                htmlFor="designation-name-input"
+              >
                 Designation
               </Label>
               <Input
                 className="rounded-full"
                 name="designation_name"
-                id="department-name-input"
+                id="designation-name-input"
                 placeholder="Designation"
                 required
               />

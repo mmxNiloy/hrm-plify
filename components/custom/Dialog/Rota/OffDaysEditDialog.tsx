@@ -45,7 +45,7 @@ export default function OffDaysEditDialog({
       const fd = new FormData(e.currentTarget);
       const offDays: IOffDaysBase = {
         id: data?.id ?? 1,
-        company_id,
+        company_id: Number.parseInt(`${company_id}`),
         shift_id: Number.parseInt((fd.get("shift_id") as string) ?? "0"),
         sunday:
           (fd.get("sunday") as string | null | undefined) === "on" ? 1 : 0,
@@ -137,8 +137,8 @@ export default function OffDaysEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

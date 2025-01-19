@@ -17,20 +17,16 @@ export default async function DashboardNavbar() {
   var user: IUser | undefined;
   try {
     user = JSON.parse(
-      cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+      (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
     ) as IUser;
   } catch (err) {
     console.error("DashboardNavbar > User Cookie not found", err);
     return null;
   }
 
-  var company: ICompany | undefined;
-  if (
-    user.user_roles?.roles.role_name === "Company Admin" ||
-    user.user_roles?.roles.role_name === "Employee"
-  )
-    company = await getCompanyData(user.usercompany?.company_id ?? 0);
-  else company = undefined;
+  const { data: company, error } = await getCompanyData(
+    user.usercompany?.company_id ?? 0
+  );
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

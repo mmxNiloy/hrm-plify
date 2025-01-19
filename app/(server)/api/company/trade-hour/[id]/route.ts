@@ -1,14 +1,9 @@
 import { ICompanyTradingHourBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
-export async function POST(req: NextRequest, { params }: Props) {
+export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const day_name = fd.getAll("day_name") as (
     | "Sunday"
@@ -23,8 +18,10 @@ export async function POST(req: NextRequest, { params }: Props) {
   const opening_time = fd.getAll("opening_time") as string[];
   const closing_time = fd.getAll("closing_time") as string[];
 
+  const company_id = (await params).id;
+
   const reqBod: ICompanyTradingHourBase[] = day_name.map((day, index) => ({
-    company_id: Number.parseInt(params.id),
+    company_id: Number.parseInt(company_id),
     day_name: day,
     trade_status: trade_status[index] == "open" ? 1 : 0,
     opening_time: opening_time[index] ?? "00:00",
@@ -34,7 +31,7 @@ export async function POST(req: NextRequest, { params }: Props) {
   console.log("POST > Trade Hours > Request Body >", reqBod);
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -69,7 +66,7 @@ export async function POST(req: NextRequest, { params }: Props) {
   }
 }
 
-export async function PUT(req: NextRequest, { params }: Props) {
+export async function PUT(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
   const day_name = fd.getAll("day_name") as (
     | "Sunday"
@@ -84,8 +81,10 @@ export async function PUT(req: NextRequest, { params }: Props) {
   const opening_time = fd.getAll("opening_time") as string[];
   const closing_time = fd.getAll("closing_time") as string[];
 
+  const company_id = (await params).id;
+
   const reqBod: ICompanyTradingHourBase[] = day_name.map((day, index) => ({
-    company_id: Number.parseInt(params.id),
+    company_id: Number.parseInt(company_id),
     day_name: day,
     trade_status: trade_status[index] == "open" ? 1 : 0,
     opening_time: opening_time[index] ?? "00:00",
@@ -95,7 +94,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
   console.log("PUT > Trade Hours > Request Body >", reqBod);
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },

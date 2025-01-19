@@ -1,17 +1,6 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { Button } from "@/components/ui/button";
-import { ButtonSuccess } from "@/styles/button.tailwind";
-import Icons from "@/components/ui/icons";
 import { ISearchParams, ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
@@ -19,12 +8,32 @@ import { getDutyRosters } from "@/app/(server)/actions/getDutyRosters";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import DutyRosterFilterDialog from "@/components/custom/Dialog/Rota/DutyRosterFilterDialog";
 import DutyRosterEditDialog from "@/components/custom/Dialog/Rota/DutyRosterEditDialog";
-import DutyRosterDataTable from "@/components/custom/DataTable/Rota/DutyRosterDataTable";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { TPermission } from "@/schema/Permissions";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { DataTable } from "@/components/ui/data-table";
+import { DutyRosterDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/DutyRosterDataTableColumns";
+import DutyRosterReportGenerator from "@/components/custom/PDF/DutyRosterReportGenerator";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | Duty Roster`,
+  };
+}
 
 function getFilters(searchParams: ISearchParams) {
   const { department_id, shift_id, employee_id, from_date, end_date } =
@@ -46,110 +55,92 @@ export default async function RotaDutyRosterPage({
   params,
   searchParams,
 }: Props) {
-  const company = await getCompanyData(params.companyId);
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_rota_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_rota_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_rota_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+  const sParams = await searchParams;
+  const filters = getFilters(sParams);
+  const { page, limit } = getPaginationParams(sParams);
 
-  const { page, limit } = getPaginationParams(searchParams);
-  const filters = getFilters(searchParams);
+  const [company, companyExtraData, paginatedDutyRoster] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getDutyRosters({
+      company_id: companyId,
+      page,
+      limit,
+      filters,
+    }),
+  ]);
 
-  const paginatedDutyRoster = await getDutyRosters({
-    company_id: company.company_id,
-    page,
-    limit,
-    filters,
-  });
-
-  const companyExtraData = await getCompanyExtraData(params.companyId);
+  if (company.error || companyExtraData.error || paginatedDutyRoster.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Duty Roster</p>
+        <ErrorFallbackCard
+          error={
+            company.error ?? companyExtraData.error ?? paginatedDutyRoster.error
+          }
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Duty Roster</p>
       <div className="flex items-center justify-between gap-2">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Rota"
           title="Duty Roster"
         />
 
         <span className="flex-grow" />
-        <form
-          method="POST"
-          action={`/api/rota/duty-roster/report/pdf`}
-          target="_blank"
-        >
-          <input
-            className="hidden"
-            readOnly
-            value={params.companyId}
-            name="company_id"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.employee_id}
-            name="employee_id"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.from_date}
-            name="from_date"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.end_date}
-            name="end_date"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.department_id}
-            name="department_id"
-          />
-          <input
-            className="hidden"
-            readOnly
-            value={filters.shift_id}
-            name="shift_id"
-          />
 
-          <Button
-            disabled
-            className="bg-rose-500 hover:bg-rose-400 text-white rounded-full gap-2"
-            size="sm"
-          >
-            <Icons.pdf className="stroke-white fill-white" /> Download as PDF
-            File (WIP)
-          </Button>
-        </form>
-        <Button className={ButtonSuccess} size="sm" disabled>
-          <Icons.excel className="stroke-white fill-white" /> Download as Excel
-          File (WIP)
-        </Button>
+        <DutyRosterReportGenerator
+          company={company.data}
+          reports={paginatedDutyRoster.data.data}
+        />
       </div>
       <div className="flex items-center justify-end gap-2 mt-2 mb-2">
         {/* Duty Roster Filter */}
-        <DutyRosterFilterDialog {...companyExtraData} />
+        <DutyRosterFilterDialog {...companyExtraData.data} />
 
         <span className="flex-grow"></span>
-        <DutyRosterEditDialog
-          company_id={params.companyId}
-          {...companyExtraData}
-          type="employee"
-        />
+        {writeAccess && (
+          <DutyRosterEditDialog
+            company_id={companyId}
+            {...companyExtraData.data}
+            type="employee"
+          />
+        )}
         {/* <DutyRosterEditDialog type="designation" /> */}
       </div>
 
-      <DutyRosterDataTable
-        data={paginatedDutyRoster.data.map((item) => ({
+      <DataTable
+        columns={DutyRosterDataTableColumns}
+        data={paginatedDutyRoster.data.data.map((item) => ({
           ...item,
-          company_shifts: companyExtraData.shifts,
-          company_departments: companyExtraData.departments,
-          company_employees: companyExtraData.employees,
+          company_shifts: companyExtraData.data.shifts,
+          company_departments: companyExtraData.data.departments,
+          company_employees: companyExtraData.data.employees,
+          updateAccess: updateAccess ? true : false,
         }))}
       />
     </main>

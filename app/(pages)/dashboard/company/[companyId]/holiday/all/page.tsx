@@ -1,20 +1,10 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { IHoliday, IHolidayType } from "@/schema/HolidaySchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { getHolidayTypes } from "@/app/(server)/actions/getHolidayTypes";
 import { getHolidays } from "@/app/(server)/actions/getHolidays";
 import HolidayEditDialog from "@/components/custom/Dialog/HolidayEditDialog";
@@ -22,46 +12,92 @@ import { HolidayListDataTableColumns } from "@/components/custom/DataTable/Colum
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { Metadata } from "next";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
+export async function generateMetadata({
+  params,
+}: CompanyByIDPageProps): Promise<Metadata> {
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const company = await getCompanyDetails(companyId);
+  return {
+    title: `Artemis | ${
+      company.data?.company_name ?? "Company Dashboard"
+    } | All Holidays`,
+  };
+}
+
 export default async function HolidayListPage({ params, searchParams }: Props) {
-  const { limit, page } = getPaginationParams(searchParams);
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
 
-  const company = await getCompanyData(params.companyId);
+  const readAccess = mPermissions.find((item) => item === "cmp_hol_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_hol_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_hol_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+  var companyId = (await params).companyId;
+  companyId = Number.parseInt(`${companyId}`);
+  const { limit, page } = getPaginationParams(await searchParams);
   const user = JSON.parse(
-    cookies().get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const companyExtraData = await getCompanyExtraData(params.companyId);
 
-  const holidayTypes: IHolidayType[] = await getHolidayTypes({
-    company_id: params.companyId,
-  });
-  const holidays: IHoliday[] = await getHolidays({
-    company_id: params.companyId,
-  });
+  const [company, holidayTypes, holidays] = await Promise.all([
+    getCompanyData(companyId),
+    getHolidayTypes({
+      company_id: companyId,
+    }),
+    getHolidays({
+      company_id: companyId,
+    }),
+  ]);
+
+  if (company.error || holidayTypes.error || holidays.error) {
+    return (
+      <main className="container flex flex-col gap-2">
+        <p className="text-xl font-semibold">Holiday List</p>
+        <ErrorFallbackCard
+          error={company.error ?? holidayTypes.error ?? holidays.error}
+        />
+      </main>
+    );
+  }
 
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Holiday List</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company}
+          company={company.data}
           user={user}
           parent="Holiday"
           title="Holiday List"
         />
 
-        <HolidayEditDialog
-          holidayTypes={holidayTypes}
-          company_id={company.company_id}
-        />
+        {writeAccess && (
+          <HolidayEditDialog
+            holidayTypes={holidayTypes.data}
+            company_id={companyId}
+          />
+        )}
       </div>
 
-      <StaticDataTable
-        data={holidays.map((item) => ({
+      <DataTable
+        data={holidays.data.map((item) => ({
           ...item,
-          company_holiday_types: holidayTypes,
+          company_holiday_types: holidayTypes.data,
+          updateAccess: updateAccess ? true : false,
         }))}
         columns={HolidayListDataTableColumns}
       />

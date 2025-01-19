@@ -44,7 +44,7 @@ export default function LeaveRuleEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const leaveType: ILeaveRule = {
-        company_id: company_id,
+        company_id: Number.parseInt(`${company_id}`),
         effective_from: new Date(
           (fd.get("effective_from") as string | undefined) ?? new Date()
         ),
@@ -123,8 +123,8 @@ export default function LeaveRuleEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

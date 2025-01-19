@@ -20,6 +20,7 @@ import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
 
 export default function EducationalInfoEditDialog({
   employee_id,
@@ -34,6 +35,8 @@ export default function EducationalInfoEditDialog({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [certError, setCertError] = useState<Boolean>(false);
+  const [transcriptError, setTranscriptError] = useState<Boolean>(false);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +44,79 @@ export default function EducationalInfoEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const transcript = fd.get("transcript") as File | undefined;
+      const certificate = fd.get("certificate") as File | undefined;
+
+      setLoading(true);
+      // Request api here
+
+      var transcript_link = data?.transcript_link ?? "";
+      var certificate_link = data?.certificate_link ?? "";
+
+      const uploadTasks = [];
+      if (transcript && transcript.size > 0 && !transcriptError)
+        uploadTasks.push(upload(transcript));
+      else {
+        uploadTasks.push(
+          new Promise<{
+            data: {
+              message: string;
+              fileUrl: string;
+            };
+            error?: undefined;
+          }>((resolve, reject) => {
+            resolve({
+              data: {
+                message: "Default Transcript",
+                fileUrl: transcript_link,
+              },
+            });
+          })
+        );
+      }
+      if (certificate && certificate.size > 0 && !certError)
+        uploadTasks.push(upload(certificate));
+      else {
+        uploadTasks.push(
+          new Promise<{
+            data: {
+              message: string;
+              fileUrl: string;
+            };
+            error?: undefined;
+          }>((resolve, reject) => {
+            resolve({
+              data: {
+                message: "Default Certificate",
+                fileUrl: certificate_link,
+              },
+            });
+          })
+        );
+      }
+
+      const [trnsc, cert] = await Promise.all(uploadTasks);
+      if (trnsc.data) transcript_link = trnsc.data.fileUrl;
+      else {
+        toast({
+          title: "Failed to upload",
+          description: `Failed to upload the transcript file, please try again later. Max file size 1.5MB. Error encountered: ${trnsc.error.message}`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+      if (cert.data) certificate_link = cert.data.fileUrl;
+      else {
+        toast({
+          title: "Failed to upload",
+          description: `Failed to upload the certificate file, please try again later. Max file size 1.5MB. Error encountered: ${cert.error.message}`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const educationalDetails = {
         employee_id: Number.parseInt(`${employee_id}`),
         institution_name: fd.get("institution_name") as string,
@@ -48,16 +124,14 @@ export default function EducationalInfoEditDialog({
         subject: fd.get("subject") as string | null,
         passing_year: fd.get("passing_year") as string | null,
         grade: fd.get("grade") as string | null,
-        transcript_link: fd.get("transcript_link") as string | null,
-        certificate_link: fd.get("certificate_link") as string | null,
+        transcript_link,
+        certificate_link,
       };
 
       const reqBod = data
         ? Object.assign(data, educationalDetails)
         : educationalDetails;
 
-      setLoading(true);
-      // Request api here
       try {
         const apiRes = await fetch(`/api/employee/educational-info`, {
           method: data ? "PATCH" : "POST",
@@ -93,7 +167,7 @@ export default function EducationalInfoEditDialog({
       }
       setLoading(false);
     },
-    [data, employee_id, router, toast]
+    [certError, data, employee_id, router, toast, transcriptError]
   );
 
   return (
@@ -122,15 +196,17 @@ export default function EducationalInfoEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <EducationDetailsFormFragment data={data} />
+              <EducationDetailsFormFragment
+                {...{ data, setTranscriptError, setCertError }}
+              />
             </div>
           </ScrollArea>
 

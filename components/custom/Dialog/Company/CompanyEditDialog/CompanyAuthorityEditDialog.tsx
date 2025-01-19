@@ -38,11 +38,16 @@ export default function CompanyAuthorityEditDialog({
   const [open, setOpen] = useState<boolean>(false);
   const [updating, setUpdating] = useState<boolean>(false);
 
+  const [docError, setDocError] = useState<Boolean>(false);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
+      if (docError) {
+        fd.delete("document");
+      }
 
       setUpdating(true);
 
@@ -83,7 +88,7 @@ export default function CompanyAuthorityEditDialog({
 
       setUpdating(false);
     },
-    [company_id, data, id, router, toast]
+    [company_id, data, docError, id, router, toast]
   );
 
   return (
@@ -112,7 +117,12 @@ export default function CompanyAuthorityEditDialog({
           <input className="hidden" name="type" defaultValue={title} />
           <ScrollArea className="h-[70vh]">
             <div className="p-1 grid grid-cols-2 gap-4">
-              <CompanyAuthorityFormFragment disabled={updating} data={data} />
+              <CompanyAuthorityFormFragment
+                setDocError={setDocError}
+                title={title}
+                disabled={updating}
+                data={data}
+              />
             </div>
           </ScrollArea>
 

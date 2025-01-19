@@ -55,7 +55,7 @@ export default function HeirarchyEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const leaveType: IOrganogramHeirarchyRecord = {
-        company_id: company_id,
+        company_id: Number.parseInt(`${company_id}`),
         heirarchy_record_id: data?.heirarchy_record_id ?? 1,
         designation_id: Number.parseInt(
           (fd.get("designation_id") as string | undefined) ?? "0"
@@ -143,8 +143,8 @@ export default function HeirarchyEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

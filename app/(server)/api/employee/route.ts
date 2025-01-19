@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
   const company_id = Number.parseInt(fd.get("company_id") as string);
   const department_id = Number.parseInt(fd.get("department_id") as string);
   const designation_id = Number.parseInt(fd.get("designation_id") as string);
+  const is_foreign = fd.get("is_foreign") ?? "0";
+  const emp_type_id = fd.get("emp_type_id") as string;
 
   const reqBody = {
     email,
@@ -21,10 +23,12 @@ export async function POST(req: NextRequest) {
     department_id,
     designation_id,
     employment_type: 1,
+    is_foreign,
+    emp_type_id: emp_type_id ? Number.parseInt(emp_type_id) : undefined,
   };
 
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },

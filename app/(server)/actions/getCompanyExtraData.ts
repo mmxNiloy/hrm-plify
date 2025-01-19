@@ -1,40 +1,28 @@
 "use server";
 import { ICompanyExtraData } from "@/schema/CompanySchema";
+import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
 export async function getCompanyExtraData(company_id: number) {
-  const fallback: ICompanyExtraData = {
-    shifts: [],
-    designations: [],
-    departments: [],
-    employees: [],
-  };
+  const session =
+    (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
-  try {
-    const session = cookies().get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-
-    const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/rota/data-company-wise/${company_id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-        method: "GET",
-      }
-    );
-
-    if (apiRes.ok) {
-      const result = (await apiRes.json()) as ICompanyExtraData;
-      return result;
+  const req = fetch(
+    `${process.env.API_BASE_URL}/rota/data-company-wise/${company_id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+      method: "GET",
     }
-
-    console.error("Get company shifts > Failed to get company shifts", {
-      status: apiRes.status,
-    });
-
-    return fallback;
-  } catch (err) {
-    console.error("Get Company Shifts > Failed to get shifts >", err);
-    return fallback;
+  );
+  const { data, error } = await withError<ICompanyExtraData>(req);
+  if (error) {
+    console.error(
+      "Actions > Get Company Extra Data > Failed to get company extra data >",
+      error
+    );
+    return { error };
   }
+  return { data };
 }

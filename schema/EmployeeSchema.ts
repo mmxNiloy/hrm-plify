@@ -1,6 +1,9 @@
 import { IDepartment } from "./CompanySchema";
 import { IDesignation } from "./DesignationSchema";
+import { IEmploymentType } from "./EmploymentTypeSchema";
 import { ILeaveApprover } from "./LeaveSchema";
+import { ITreeNode } from "./OrganogramSchema";
+import { IPaginatedResponse } from "./PaginatedResponse";
 import { IUser, IUserBase } from "./UserSchema";
 
 export interface IEmployee {
@@ -14,6 +17,7 @@ export interface IEmployee {
   company_id: number;
   image?: string;
   gender?: string;
+  is_foreign?: boolean;
   ni_num: string;
   date_of_birth?: Date;
   marital_status?: string;
@@ -21,7 +25,7 @@ export interface IEmployee {
   alternative_number?: string;
   contact_number?: string;
   contract_start_date?: Date;
-  employment_type?: number;
+  employment_type?: IEmploymentType;
   is_verified?: number;
   department_id: number;
   designation_id: number;
@@ -43,8 +47,8 @@ export interface IEmployeeContactInfo {
   additional_address_2?: string;
   country?: string;
   proof_address_doc_link?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface IChangeOfCircumstances {
@@ -154,6 +158,20 @@ export interface IEmployeePassportDetail {
   updated_at?: Date; // Auto-generated
 }
 
+export interface IEmployeeWithVisaDetails extends IEmployeeVisaBrp {
+  employee: IEmployeeWithUserMetadata;
+}
+
+export interface IEmployeeDocument extends IEmployeeWithUserMetadata {
+  visa_brp?: IEmployeeVisaBrp;
+  emp_passport?: IEmployeePassportDetail;
+  emp_euss_dbss_data?: IEmployeeEussDbsData;
+}
+
+export interface IPaginatedEmployeeDocument extends IPaginatedResponse {
+  data: IEmployeeDocument[];
+}
+
 export interface IEmployeeEmergencyContact {
   contact_id: number; // Auto generated
   employee_id: number; // Immutable
@@ -222,4 +240,19 @@ export interface IEmployeeWithUserMetadata extends IEmployee {
   designations?: IDesignation;
   departments?: IDepartment;
   leave_approvers?: ILeaveApprover;
+  contact_information?: IEmployeeContactInfo;
+  emp_passport?: IEmployeePassportDetail;
+  visa_brp?: IEmployeeVisaBrp;
+
+  is_foreign?: boolean;
+  nationality?: string;
+
+  is_node?: boolean;
+  parent?: ITreeNode;
+  selfRef?: ITreeNode; // Reference to self in the tree
+
+  is_vacant?: boolean;
+  is_root?: boolean;
+
+  num_vacant?: number;
 }

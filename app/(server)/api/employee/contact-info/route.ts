@@ -12,7 +12,7 @@ interface IContactInfoReqBody {
 
 export async function POST(req: NextRequest) {
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IContactInfoReqBody;
+  const data = await req.json();
 
   try {
     const apiRes = await fetch(
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   // Check if the user is logged in
-  const session = cookies().get(process.env.COOKIE_SESSION_KEY!);
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -59,7 +59,12 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const data = (await req.json()) as IContactInfoReqBody;
+  const data = await req.json();
+
+  console.log(
+    "PATCH > Update Contact Information of Employee > Request Body",
+    data
+  );
 
   try {
     const apiRes = await fetch(

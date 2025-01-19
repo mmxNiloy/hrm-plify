@@ -1,6 +1,7 @@
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { ISearchParams } from "./Types";
-import { IUser } from "@/schema/UserSchema";
+import { IUser, IUserBase } from "@/schema/UserSchema";
+import { IJobApplicant } from "@/schema/JobSchema";
 
 export const nationalities: string[] = [
   "Afghan",
@@ -463,7 +464,10 @@ export function toYYYYMMDD(date?: Date) {
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
 
-export function getPaginationParams(searchParams: ISearchParams): {
+export function getPaginationParams(
+  searchParams: ISearchParams,
+  prefix?: string
+): {
   page: number;
   limit: number;
 } {
@@ -472,11 +476,19 @@ export function getPaginationParams(searchParams: ISearchParams): {
   try {
     page = Math.max(
       1,
-      Number.parseInt((searchParams.page as string | undefined) ?? "1") || 0
+      Number.parseInt(
+        (searchParams[`${prefix ? `${prefix}_` : ""}page`] as
+          | string
+          | undefined) ?? "1"
+      ) || 0
     );
     limit = Math.max(
       5,
-      Number.parseInt((searchParams.limit as string | undefined) ?? "5") || 0
+      Number.parseInt(
+        (searchParams[`${prefix ? `${prefix}_` : ""}limit`] as
+          | string
+          | undefined) ?? "5"
+      ) || 0
     );
   } catch (_) {
     page = 1;
@@ -492,16 +504,22 @@ export function dateDiffInDays(a: Date, b: Date) {
   const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
   const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-  return Math.floor(Math.abs(utc2 - utc1) / _MS_PER_DAY);
+  return Math.floor(Math.abs(utc2 - utc1) / _MS_PER_DAY) + 1;
 }
 
 export function getFullNameOfEmployee(employee: IEmployeeWithUserMetadata) {
   return getFullNameOfUser(employee.user);
 }
-export function getFullNameOfUser(user: IUser) {
+export function getFullNameOfUser(user: IUserBase) {
   return `${user.first_name}${
-    user.middle_name.length > 0 ? ` ${user.middle_name}` : ""
-  } ${user.last_name}`;
+    (user.middle_name?.length ?? 0) > 0 ? ` ${user.middle_name}` : ""
+  } ${user.last_name}`.trim();
+}
+
+export function getFullNameOfApplicant(user: IJobApplicant) {
+  return `${user.first_name}${
+    (user.middle_name?.length ?? 0) > 0 ? ` ${user.middle_name}` : ""
+  } ${user.last_name}`.trim();
 }
 
 export function timeDifference(startTime: string, endTime: string): string {
@@ -572,3 +590,61 @@ export const WIPToastOptions = {
     "This feature is currently unavailable. It will be available soon. Please try again later.",
   className: "bg-amber-500 text-white",
 };
+export function bitCount32(n: number) {
+  n = n - ((n >> 1) & 0x55555555);
+  n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+  return (((n + (n >> 4)) & 0xf0f0f0f) * 0x1010101) >> 24;
+}
+
+export const RTWListAOptions: string[] = [
+  "A passport (current or expired) showing the holder, or a person named in the passport as the child of the holder, is a British citizen or a citizen of the UK and Colonies having the right of abode in the UK.",
+  "A passport or passport card (current or expired) showing that the holder is a national of the Republic of Ireland.",
+  "A current document issued by the Home Office to a family member of an EEA or Swiss citizen, and which indicates that the holder is permitted to stay in the United Kingdom indefinitely.",
+  "A document issued by the Bailiwick of Jersey, the Bailiwick of Guernsey or the Isle of Man, which has been verified as valid by the Home Office Employer Checking Service, showing that the holder has been granted unlimited leave to enter or remain under Appendix EU to the Jersey Immigration Rules, Appendix EU to the Immigration (Bailiwick of Guernsey) Rules 2008 or Appendix EU to the Isle of Man Immigration Rules.",
+  "A current Biometric Immigration Document (biometric residence permit) issued by the Home Office to the holder indicating that the person named is allowed to stay indefinitely in the UK, or has no time limit on their stay in the UK.",
+  "A current passport endorsed to show that the holder is exempt from immigration control, is allowed to stay indefinitely in the UK, has the right of abode in the UK, or has no time limit on their stay in the UK.",
+  "A current Immigration Status Document issued by the Home Office to the holder with an endorsement indicating that the named person is allowed to stay indefinitely in the UK or has no time limit on their stay in the UK, together with an official document giving the person's permanent National Insurance number and their name issued by a government agency or a previous employer.",
+  "A birth or adoption certificate issued in the UK, together with an official document giving the person's permanent National Insurance number and their name issued by a government agency or a previous employer.",
+  "A birth or adoption certificate issued in the Channel Islands, the Isle of Man or Ireland, together with an official document giving the person's permanent National Insurance number and their name issued by a government agency or a previous employer.",
+  "A certificate of registration or naturalisation as a British citizen, together with an official document giving the person's permanent National Insurance number and their name issued by a government agency or a previous employer.",
+];
+
+export const RTWListBGroup1Options: string[] = [
+  "A current passport endorsed to show that the holder is allowed to stay in the UK and is currently allowed to do the type of work in question.",
+  "A current Biometric Immigration Document (biometric residence permit) issued by the Home Office to the holder which indicates that the named person can currently stay in the UK and is allowed to do the work in question.",
+  "A current document issued by the Home Office to a family member of an EEA or Swiss citizen, and which indicates that the holder is permitted to stay in the United Kingdom for a time-limited period and to do the type of work in question.",
+  "A document issued by the Bailiwick of Jersey, the Bailiwick of Guernsey or the Isle of Man, which has been verified as valid by the Home Office Employer Checking Service, showing that the holder has been granted limited leave to enter or remain under Appendix EU to the Jersey Immigration Rules, Appendix EU to the Immigration (Bailiwick of Guernsey) Rules 2008 or Appendix EU to the Isle of Man Immigration Rules.",
+  "A document issued by the Bailiwick of Jersey or the Bailiwick of Guernsey, which has been verified as valid by the Home Office Employer Checking Service, showing that the holder has made an application for leave to enter or remain under Appendix EU to the Jersey Immigration Rules or Appendix EU to the Immigration (Bailiwick of Guernsey) Rules 2008, on or before 30 June 2021.",
+  "A frontier worker permit issued under regulation 8 of the Citizens' Rights (Frontier Workers) (EU Exit) Regulations 2020.",
+  "A current immigration status document containing a photograph issued by the Home Office to the holder with a valid endorsement indicating that the named person may stay in the UK, and is allowed to do the type of work in question, together with an official document giving the person’s permanent National Insurance number and their name issued by a government agency or a previous employer.",
+];
+
+export const RTWListBGroup2Options: string[] = [
+  "A document issued by the Home Office showing that the holder has made an application for leave to enter or remain under Appendix EU to the immigration rules on or before 30 June 2021 together with a Positive Verification Notice from the Home Office Employer Checking Service.",
+  "A document issued by the Bailiwick of Jersey or the Bailiwick of Guernsey, showing that the holder has made an application for leave to enter or remain under Appendix EU to the Jersey Immigration Rules or Appendix EU to the Immigration (Bailiwick of Guernsey) Rules 2008 on or before 30 June 2021 together with a Positive Verification Notice from the Home Office Employer Checking Service.",
+  "An application registration card issued by the Home Office stating that the holder is permitted to take the employment in question, together with a Positive Verification Notice from the Home Office Employer Checking Service.",
+  "A Positive Verification Notice issued by the Home Office Employer Checking Service to the employer or prospective employer, which indicates that the named person may stay in the UK and is permitted to do the work in question.",
+];
+
+export function withPrecision({
+  num,
+  precision = 2,
+}: {
+  num: number;
+  precision?: number;
+}) {
+  if (precision < 1) precision = 1;
+  const shift = Math.pow(10, precision);
+
+  return (Math.round(num * shift) / shift).toFixed(precision);
+}
+
+export function toCapCase(str: string) {
+  const words = str.trim().split(" ");
+  const capitalizedWords = words.map((item) => {
+    if (item.length < 1) return item;
+    return item.charAt(0).toUpperCase().concat(item.substring(1));
+  });
+
+  return capitalizedWords.join(" ");
+}

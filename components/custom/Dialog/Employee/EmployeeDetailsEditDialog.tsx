@@ -20,6 +20,8 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import EmployeeDetailsFormFragment from "../../Form/Fragment/Employee/EmployeeDetailsFormFragment";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function EmployeeDetailsEditDialog({
   data,
@@ -37,6 +39,8 @@ export default function EmployeeDetailsEditDialog({
       e.stopPropagation();
 
       const fd = new FormData(e.currentTarget);
+      const profile_pic = fd.get("profile_pic") as File | undefined;
+
       const employeeData = {
         first_name: fd.get("first_name") as string,
         middle_name: fd.get("middle_name") as string,
@@ -49,12 +53,39 @@ export default function EmployeeDetailsEditDialog({
         email: fd.get("email") as string,
         contact_number: fd.get("contact_number") as string,
         alternative_number: fd.get("alternative_number") as string,
+        is_foreign: Boolean(fd.get("is_foreign") as string),
       };
-
-      const reqBod = Object.assign(data, employeeData);
 
       setLoading(true);
       // Request api here
+
+      // If an image is selected, upload the image and set the new image source
+      var image = data?.image ?? "";
+
+      if (
+        profile_pic &&
+        profile_pic.size > 0 &&
+        profile_pic.size <= SiteConfig.maxFileSize
+      ) {
+        const uploadRes = await upload(profile_pic);
+        if (uploadRes.error) {
+          toast({
+            title: "Upload Failed",
+            description:
+              "Failed to upload the profile picture. Please try again. Max image size is 1.5MB",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        image = uploadRes.data.fileUrl;
+      }
+
+      const reqBod = Object.assign(
+        data,
+        Object.assign(employeeData, { image })
+      );
       try {
         const apiRes = await fetch(
           `/api/employee/update-personal-info/${data.employee_id}`,
@@ -116,8 +147,8 @@ export default function EmployeeDetailsEditDialog({
             Fill out the form appropriately.
           </DialogDescription>
           <DialogDescription>
-            Fields marked by an asterisk (
-            <span className="text-red-500">*</span>) are required.
+            Fields marked by asterisks (<span className="text-red-500">*</span>)
+            are required.
           </DialogDescription>
         </DialogHeader>
 

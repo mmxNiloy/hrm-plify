@@ -1,15 +1,11 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { IDProps } from "../../../apiParams";
 
-interface Props {
-  params: {
-    id: number;
-  };
-}
-export async function GET(req: NextRequest, { params }: Props) {
+export async function GET(req: NextRequest, { params }: IDProps) {
   try {
     // Check token
-    const sessionId = cookies().get(process.env.COOKIE_SESSION_KEY!);
+    const sessionId = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
     // Invalid token/error encountered
     if (!sessionId || sessionId.value.length < 1)
       return NextResponse.json(
@@ -24,7 +20,11 @@ export async function GET(req: NextRequest, { params }: Props) {
 
     // Make api call
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/companies/my/get-employee/${params.id}?page=${page}&limit=${limit}`,
+      `${process.env.API_BASE_URL}/companies/my/get-employee/${
+        (
+          await params
+        ).id
+      }?page=${page}&limit=${limit}`,
       {
         headers: {
           Authorization: `Bearer ${sessionId.value}`,

@@ -7,6 +7,7 @@ import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { useTheme } from "next-themes";
 import React from "react";
+import TextCapsule from "../../TextCapsule";
 
 export default function NavProfile({
   user,
@@ -27,16 +28,19 @@ export default function NavProfile({
             <div className="flex flex-col gap-1">
               <p className="text-start font-semibold text-sm">{`${
                 user.first_name
-              }${user.middle_name.length > 0 ? ` ${user.middle_name}` : ""} ${
-                user.last_name
-              }`}</p>
+              }${
+                (user.middle_name?.length ?? 0) > 0
+                  ? ` ${user.middle_name}`
+                  : ""
+              } ${user.last_name}`}</p>
               <p className="text-start text-xs">{user.email}</p>
               {company && (
                 <p className="text-start text-xs">{company.company_name}</p>
               )}
-              <p className="text-start text-xs rounded-full w-fit px-2 py-1 bg-green-500 text-white">
-                {user.user_roles?.roles.role_name}
-              </p>
+
+              <TextCapsule className="bg-green-500 text-xs">
+                {user.user_roles?.roles.role_name ?? "Guest"}
+              </TextCapsule>
             </div>
           </div>
         </div>

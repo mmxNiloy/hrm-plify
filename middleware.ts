@@ -3,9 +3,12 @@ import { validateSession } from "@/middlewares/validateSession";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const session = validateSession(req);
   const userRole = checkRole(req);
+  const cks = await cookies();
+
+  // console.log("Middleware > User Role", userRole);
 
   // redirect unauthorized users
   if (req.nextUrl.pathname.startsWith("/dashboard") && !session) {
@@ -20,17 +23,15 @@ export function middleware(req: NextRequest) {
   // Default dashboard of each user
   if (req.nextUrl.pathname.endsWith("/dashboard")) {
     if (!userRole) {
-      cookies().delete(
-        process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY ?? "hrmplify_session_token"
-      );
-      cookies().delete(
-        process.env.NEXT_PUBLIC_COOKIE_USER_KEY ?? "hrmplify_user_data"
-      );
+      cks.delete(process.env.NEXT_PUBLIC_COOKIE_SESSION_KEY!);
+      cks.delete(process.env.NEXT_PUBLIC_COOKIE_USER_KEY!);
       return NextResponse.redirect(
         new URL("/?_ref=permission-denied", req.url)
       );
     } else if (userRole.role.role_name === "Guest") {
-      return NextResponse.rewrite(new URL("/dashboard/guest", req.url));
+      return NextResponse.rewrite(
+        new URL("/dashboard/profile?_ref=guest", req.url)
+      );
     } else if (userRole.role.role_name === "Employee") {
       return NextResponse.redirect(
         new URL(
