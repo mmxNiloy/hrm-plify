@@ -4,6 +4,7 @@ import { SortableHeader } from "@/components/ui/data-table";
 import { IHolidayType } from "@/schema/HolidaySchema";
 import { ColumnDef } from "@tanstack/react-table";
 import HolidayTypeEditPopover from "../../../Popover/HolidayTypeEditPopover";
+import HolidayTypeToggleEditDialog from "@/components/custom/AlertDialog/HolidayTypeToggleAlertDialog";
 
 interface Props extends IHolidayType {
   updateAccess?: boolean;
@@ -22,6 +23,7 @@ export const HolidayTypeDataTableColumns: ColumnDef<Props>[] = [
   },
   {
     id: "edit-action",
+    header: "Edit Action",
     cell: ({ row }) =>
       !row.original.updateAccess ? null : (
         <HolidayTypeEditPopover
@@ -29,6 +31,14 @@ export const HolidayTypeDataTableColumns: ColumnDef<Props>[] = [
           data={row.original}
           company_id={row.original.company_id}
         />
+      ),
+  },
+  {
+    id: "toggle-action",
+    header: "Toggle Action",
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <HolidayTypeToggleEditDialog data={row.original} />
       ),
   },
 ];

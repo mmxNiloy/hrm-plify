@@ -18,6 +18,7 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 export default async function EmploymentTypePage({
   params,
@@ -27,17 +28,17 @@ export default async function EmploymentTypePage({
   ) as IUser;
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyData(companyId);
+  const [company, employments] = await Promise.all([
+    getCompanyData(companyId),
+    getAllEmploymentTypes(),
+  ]);
 
-  // TODO: Hit the api and get actual employment types
-  const employments: IEmploymentType[] = [];
-
-  if (company.error) {
+  if (company.error || employments.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Company Employment Types</p>
 
-        <ErrorFallbackCard error={company.error} />
+        <ErrorFallbackCard error={company.error ?? employments.error} />
       </main>
     );
   }
@@ -51,12 +52,10 @@ export default async function EmploymentTypePage({
           company={company.data}
           user={user}
         />
-
-        <EmploymentTypeEditPopover company_id={companyId} />
       </div>
 
       <DataTable
-        data={employments}
+        data={employments.data.filter((item) => item.isActive)}
         columns={CompanyEmploymentTypeDataTableColumns}
       />
     </main>

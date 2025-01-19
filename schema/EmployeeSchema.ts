@@ -1,5 +1,6 @@
 import { IDepartment } from "./CompanySchema";
 import { IDesignation } from "./DesignationSchema";
+import { IEmploymentType } from "./EmploymentTypeSchema";
 import { ILeaveApprover } from "./LeaveSchema";
 import { ITreeNode } from "./OrganogramSchema";
 import { IPaginatedResponse } from "./PaginatedResponse";
@@ -24,7 +25,7 @@ export interface IEmployee {
   alternative_number?: string;
   contact_number?: string;
   contract_start_date?: Date;
-  employment_type?: number;
+  employment_type?: IEmploymentType;
   is_verified?: number;
   department_id: number;
   designation_id: number;

@@ -12,20 +12,24 @@ import {
 } from "@/components/ui/select";
 import { IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
 import { IJobApplicant } from "@/schema/JobSchema";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import { IFormFragmentProps } from "@/utils/Types";
 import React, { useCallback, useState } from "react";
+
+interface Props {
+  departments: IDepartment[];
+  designations: IDesignation[];
+  data?: IJobApplicant;
+  employmentTypes: IEmploymentType[];
+}
 
 export default function EmployeeOnboardingFormFragment({
   departments,
   designations,
   data,
-}: {
-  departments: IDepartment[];
-  designations: IDesignation[];
-  data?: IJobApplicant;
-}) {
+  employmentTypes,
+}: Props) {
   const [filteredDesignations, setFilteredDesignations] =
     useState<IDesignation[]>(designations);
 
@@ -97,7 +101,7 @@ export default function EmployeeOnboardingFormFragment({
 
       <div className="flex flex-col gap-2">
         <Label>Employment Type</Label>
-        <Select name="employment_type">
+        <Select name="emp_type_id">
           <SelectTrigger>
             <SelectValue placeholder="Select an Employment Type" />
           </SelectTrigger>
@@ -106,6 +110,14 @@ export default function EmployeeOnboardingFormFragment({
             <SelectGroup>
               <SelectLabel>Select an employment type</SelectLabel>
               {/* Employment type items go here */}
+              {employmentTypes.map((item) => (
+                <SelectItem
+                  value={`${item.emp_type_id}`}
+                  key={`emp-type-option-${item.emp_type_id}`}
+                >
+                  {item.employment_type}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>

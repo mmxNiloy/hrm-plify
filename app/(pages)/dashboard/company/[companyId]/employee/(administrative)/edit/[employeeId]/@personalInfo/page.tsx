@@ -13,6 +13,7 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 export default async function PersonalInfoSlot({
   params,
@@ -35,24 +36,38 @@ export default async function PersonalInfoSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const [company, companyExtraData, personalInfo] = await Promise.all([
-    getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getPersonalInfo(employeeId),
-  ]);
+  const [company, companyExtraData, personalInfo, employmentTypes] =
+    await Promise.all([
+      getCompanyData(companyId),
+      getCompanyExtraData(companyId),
+      getPersonalInfo(employeeId),
+      getAllEmploymentTypes(),
+    ]);
 
-  if (company.error || companyExtraData.error || personalInfo.error) {
+  if (
+    company.error ||
+    companyExtraData.error ||
+    personalInfo.error ||
+    employmentTypes.error
+  ) {
     return (
       <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
         <div className="col-span-full w-full flex flex-row items-center justify-between">
           <p className="text-lg font-semibold">Personal Information</p>
         </div>
         <ErrorFallbackCard
-          error={company.error ?? companyExtraData.error ?? personalInfo.error}
+          error={
+            company.error ??
+            companyExtraData.error ??
+            personalInfo.error ??
+            employmentTypes.error
+          }
         />
       </div>
     );
   }
+
+  const empTypes = employmentTypes.data.filter((item) => item.isActive);
 
   return (
     <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
@@ -71,10 +86,15 @@ export default async function PersonalInfoSlot({
             data={personalInfo.data}
             departments={companyExtraData.data.departments}
             designations={companyExtraData.data.designations}
+            employmentTypes={empTypes}
           />
         )}
       </div>
-      <ServiceDetailsFormFragment data={personalInfo.data} readOnly />
+      <ServiceDetailsFormFragment
+        data={personalInfo.data}
+        employmentTypes={empTypes}
+        readOnly
+      />
     </div>
   );
 }

@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useRouter } from "next/navigation";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
 
 interface EmployeeCreationResponse {
   message: string;
@@ -34,6 +35,7 @@ interface Props {
   company_id: number;
   departments: IDepartment[];
   designations: IDesignation[];
+  employmentType: IEmploymentType[];
   data?: IJobApplicant;
   asIcon?: boolean;
   asMigrant?: boolean;
@@ -44,6 +46,7 @@ export default function EmployeeOnboardingDialogWrapper({
   company_id,
   departments,
   designations,
+  employmentType,
   data,
   asIcon,
   asMigrant,
@@ -69,6 +72,7 @@ export default function EmployeeOnboardingDialogWrapper({
         departments={departments}
         designations={designations}
         company_id={company_id}
+        employmentTypes={employmentType}
       />
 
       <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>

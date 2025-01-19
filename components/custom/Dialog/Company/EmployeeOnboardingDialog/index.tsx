@@ -26,6 +26,7 @@ import EmployeeOnboardingFormFragment from "../../../Form/Fragment/Company/Emplo
 import { IJobApplicant } from "@/schema/JobSchema";
 import { IUser } from "@/schema/UserSchema";
 import { IEmployee } from "@/schema/EmployeeSchema";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
 
 interface EmployeeCreationResponse {
   message: string;
@@ -38,6 +39,7 @@ interface Props {
   company_id: number;
   departments: IDepartment[];
   designations: IDesignation[];
+  employmentTypes: IEmploymentType[];
   data?: IJobApplicant;
   asIcon?: boolean;
   asMigrant?: boolean;
@@ -48,6 +50,7 @@ export default function EmployeeOnboardingDialog({
   company_id,
   departments,
   designations,
+  employmentTypes,
   data,
   asIcon,
   asMigrant,
@@ -157,6 +160,7 @@ export default function EmployeeOnboardingDialog({
               data={data}
               departments={departments}
               designations={designations}
+              employmentTypes={employmentTypes}
             />
           </div>
 

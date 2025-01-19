@@ -807,12 +807,15 @@ const RecoverIcon = React.forwardRef<SVGElement, SVGAttributes>(
     <svg
       width="24"
       height="24"
-      viewBox="0 0 24 24"
+      viewBox="0 0 48 48"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("stroke-current", className)}
+      className={cn("fill-current", className)}
     >
-      <path fill="none" d="M0 0h24v24H0z" />
-      <path d="M19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm-1 2H6v16h12zm-6 3a5 5 0 0 1 2.628 9.254L12.5 12H15a3 3 0 1 0-3 3l.955 1.909A5 5 0 1 1 12 7" />
+      <g data-name="Layer 2">
+        <path fill="none" data-name="invisible box" d="M0 0h48v48H0z" />
+        <path d="M24 2A21.8 21.8 0 0 0 8 8.9V7a2 2 0 0 0-2.3-2A2.1 2.1 0 0 0 4 7.1V14a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2.3 2.1 2.1 0 0 0-2.1-1.7h-2.3a18 18 0 0 1 31.3 10.2 2 2 0 0 0 2 1.8 2 2 0 0 0 2-2.2A22 22 0 0 0 24 2m18 30h-7a2 2 0 0 0-2 2.3 2.1 2.1 0 0 0 2.1 1.7h2.3A18 18 0 0 1 6.1 25.8a2 2 0 0 0-2-1.8 2 2 0 0 0-2 2.2A22 22 0 0 0 40 39.1V41a2 2 0 0 0 2.3 2 2.1 2.1 0 0 0 1.7-2.1V34a2 2 0 0 0-2-2" />
+        <path d="M18.1 33a37.6 37.6 0 0 0 5.4 3.8l.5.2.5-.2c1.9-1.1 9.5-5.5 9.5-10.5v-8.9l-10-4.2-10 4.2v8.9c0 2.5 1.9 4.8 4 6.6h.1ZM24 17.5l6 2.6v6.2c0 .2-.2 2.4-6 6.1Z" />
+      </g>
     </svg>
   )
 );

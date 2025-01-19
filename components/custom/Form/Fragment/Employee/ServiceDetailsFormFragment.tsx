@@ -1,6 +1,14 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { IEmployeeWithPersonalInfo } from "@/schema/EmployeeSchema";
 import { toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
@@ -10,12 +18,18 @@ import CompanyNameSkeleton from "../../../Input/CompanyNameSkeleton";
 import { SelectSkeleton } from "@/components/custom/Select/SelectSkeleton";
 import DepartmentSelect from "@/components/custom/Select/DepartmentSelect";
 import DesignationSelect from "@/components/custom/Select/DesignationSelect";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+
+interface Props extends IFormFragmentProps<IEmployeeWithPersonalInfo> {
+  employmentTypes: IEmploymentType[];
+}
 
 export default function ServiceDetailsFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<IEmployeeWithPersonalInfo>) {
+  employmentTypes,
+}: Props) {
   return (
     <>
       <Suspense fallback={<CompanyNameSkeleton />}>
@@ -77,14 +91,27 @@ export default function ServiceDetailsFormFragment({
         <Label>Employment Type</Label>
         <Select
           disabled={disabled || readOnly}
-          defaultValue={`${data?.employment_type ?? ""}`}
-          name="employment_type"
+          defaultValue={`${data?.employment_type?.emp_type_id ?? ""}`}
+          name="emp_type_id"
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select Employment Type" />
+            <SelectValue placeholder="Select an Employment Type" />
           </SelectTrigger>
 
-          {/* TODO: Add support for employment type here */}
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select an employment type</SelectLabel>
+
+              {employmentTypes.map((item) => (
+                <SelectItem
+                  value={`${item.emp_type_id}`}
+                  key={`emp-type-option-${item.emp_type_id}`}
+                >
+                  {item.employment_type}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
         </Select>
       </div>
 

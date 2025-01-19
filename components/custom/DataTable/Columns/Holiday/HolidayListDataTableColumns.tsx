@@ -5,6 +5,7 @@ import { IHolidayWithHolidayTypes } from "@/schema/HolidaySchema";
 import { ColumnDef } from "@tanstack/react-table";
 import { dateDiffInDays, weekDays } from "@/utils/Misc";
 import HolidayEditDialog from "../../../Dialog/HolidayEditDialog";
+import HolidayToggleEditDialog from "@/components/custom/AlertDialog/HolidayToggleAlertDialog";
 
 interface Props extends IHolidayWithHolidayTypes {
   updateAccess?: boolean;
@@ -80,6 +81,7 @@ export const HolidayListDataTableColumns: ColumnDef<Props>[] = [
   },
   {
     id: "edit-action",
+    header: "Edit Action",
     cell: ({ row }) =>
       !row.original.updateAccess ? null : (
         <HolidayEditDialog
@@ -88,6 +90,14 @@ export const HolidayListDataTableColumns: ColumnDef<Props>[] = [
           company_id={row.original.company_id}
           holidayTypes={row.original.company_holiday_types}
         />
+      ),
+  },
+  {
+    id: "toggle-action",
+    header: "Toggle Action",
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <HolidayToggleEditDialog data={row.original} />
       ),
   },
 ];

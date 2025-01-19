@@ -19,15 +19,12 @@ import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
 import SiteConfig from "@/utils/SiteConfig";
 
-export default function EmploymentTypeEditPopover({
-  company_id,
-  data,
-  asIcon,
-}: {
-  company_id: number;
+interface Props {
   data?: IEmploymentType;
   asIcon?: boolean;
-}) {
+}
+
+export default function EmploymentTypeEditPopover({ data, asIcon }: Props) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -44,13 +41,17 @@ export default function EmploymentTypeEditPopover({
 
       try {
         const etData: IEmploymentType = {
-          company_id,
-          employment_type_id: data?.employment_type_id ?? 1,
-          employment_type_name:
-            (fd.get("employment_type_name") as string | undefined) ?? "",
+          company_id: 0,
+          emp_type_id: data?.emp_type_id ?? 1,
+          isActive: data?.isActive ?? true,
+          employment_type:
+            (fd.get("employment_type") as string | undefined) ?? "",
         };
         const apiRes = await fetch(`/api/company/employment-type`, {
           method: data ? "PATCH" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(etData),
         });
 
@@ -84,7 +85,7 @@ export default function EmploymentTypeEditPopover({
 
       setLoading(false);
     },
-    [company_id, data, router, toast]
+    [data, router, toast]
   );
 
   return (
@@ -108,16 +109,6 @@ export default function EmploymentTypeEditPopover({
         }}
       >
         <form onSubmit={handleSubmit}>
-          <div className="hidden">
-            <Input
-              readOnly
-              name="company_id"
-              id="company-id-input"
-              placeholder="Company ID"
-              defaultValue={company_id}
-            />
-          </div>
-
           <div className="flex flex-col gap-4 items-center justify-center">
             <div className="w-full flex-grow flex flex-col gap-2">
               <Label
@@ -128,9 +119,10 @@ export default function EmploymentTypeEditPopover({
               </Label>
               <Input
                 className="rounded-full"
-                name="employment_type_name"
+                name="employment_type"
                 id="employment-type-name-input"
                 placeholder="Employment Type"
+                defaultValue={data?.employment_type}
                 required
               />
             </div>
@@ -139,9 +131,7 @@ export default function EmploymentTypeEditPopover({
               className={cn(ButtonBlue, "w-full")}
               size={"icon"}
               type="submit"
-              disabled={
-                loading || SiteConfig.featureFlags.disableExperimentalUI
-              }
+              disabled={loading}
               title="Submit"
             >
               <Icons.check /> Submit

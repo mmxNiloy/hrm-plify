@@ -3,28 +3,32 @@
 import { SortableHeader } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
-import EmploymentTypeEditPopover from "../../../Popover/Company/EmploymentTypeEditPopover";
+import TextCapsule from "@/components/custom/TextCapsule";
+import { cn } from "@/lib/utils";
 
 export const CompanyEmploymentTypeDataTableColumns: ColumnDef<IEmploymentType>[] =
   [
     {
-      accessorKey: "employment_type_id",
-      header: ({ column }) => <SortableHeader column={column} name="ID" />,
+      accessorKey: "emp_type_id",
+      header: ({ column }) => <SortableHeader name="ID" column={column} />,
     },
     {
-      accessorKey: "employment_type_name",
+      accessorKey: "employment_type",
       header: ({ column }) => (
-        <SortableHeader column={column} name="Employment Type" />
+        <SortableHeader name="Employment Type" column={column} />
       ),
     },
     {
-      id: "action-edit",
+      accessorKey: "isActive",
+      header: ({ column }) => <SortableHeader name="Status" column={column} />,
       cell: ({ row }) => (
-        <EmploymentTypeEditPopover
-          data={row.original}
-          company_id={row.original.company_id}
-          asIcon
-        />
-      ),
+        <TextCapsule
+          className={cn(
+            row.original.isActive ? "bg-green-500" : "bg-muted-foreground"
+          )}
+        >
+          {row.original.isActive ? "Active" : "Inactive"}
+        </TextCapsule>
+      ), // Formatting the date
     },
   ];

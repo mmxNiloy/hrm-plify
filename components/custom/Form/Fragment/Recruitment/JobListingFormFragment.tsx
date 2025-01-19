@@ -16,13 +16,14 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { ICompanyExtraData } from "@/schema/CompanySchema";
+import { ICompanyExtraData, IDepartment } from "@/schema/CompanySchema";
 import { IJobListing } from "@/schema/JobSchema";
 import Markdown from "react-markdown";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React, { useCallback, useState } from "react";
+import { IDesignation } from "@/schema/DesignationSchema";
 
 interface Props extends IFormFragmentProps<IJobListing> {
   companyId: number;
@@ -86,6 +87,25 @@ export default function JobListingFormFragment({
     setLoadingJobDesc(false);
   }, [deadline, department, designation, title, toast]);
 
+  const [filteredDesignations, setFilteredDesingations] = useState<
+    IDesignation[]
+  >(companyData.designations);
+
+  const handleDepartmentChange = useCallback(
+    (e: string) => {
+      const dpt = companyData.departments.find(
+        (item) => `${item.department_id}` === e
+      );
+
+      setDepartment(dpt?.dpt_name ?? "");
+
+      setFilteredDesingations((oldValue) =>
+        oldValue.filter((item) => item.dept_id == dpt?.department_id)
+      );
+    },
+    [companyData.departments]
+  );
+
   return (
     <>
       <div className="flex flex-col gap-2 w-full col-span-full">
@@ -109,13 +129,7 @@ export default function JobListingFormFragment({
           disabled={disabled || readOnly}
           defaultValue={data ? `${data.dept_id}` : undefined}
           key={`dept-select-${data?.dept_id}`}
-          onValueChange={(e) =>
-            setDepartment(
-              companyData.departments.find(
-                (item) => `${item.department_id}` === e
-              )?.dpt_name ?? ""
-            )
-          }
+          onValueChange={handleDepartmentChange}
           required
         >
           <SelectTrigger>

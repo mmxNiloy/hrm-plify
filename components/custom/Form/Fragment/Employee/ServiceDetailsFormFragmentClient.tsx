@@ -17,11 +17,13 @@ import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 import { ICompany, IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
 
 interface Props extends IFormFragmentProps<IEmployeeWithPersonalInfo> {
   departments: IDepartment[];
   designations: IDesignation[];
   company?: ICompany;
+  employmentTypes: IEmploymentType[];
 }
 
 export default function ServiceDetailsFormFragmentClient({
@@ -30,6 +32,7 @@ export default function ServiceDetailsFormFragmentClient({
   disabled,
   designations,
   departments,
+  employmentTypes,
   company,
 }: Props) {
   return (
@@ -145,14 +148,27 @@ export default function ServiceDetailsFormFragmentClient({
         <Label>Employment Type</Label>
         <Select
           disabled={disabled || readOnly}
-          defaultValue={`${data?.employment_type ?? ""}`}
-          name="employment_type"
+          defaultValue={`${data?.employment_type?.emp_type_id ?? ""}`}
+          name="emp_type_id"
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select Employment Type" />
+            <SelectValue placeholder="Select an Employment Type" />
           </SelectTrigger>
 
-          {/* TODO: Add support for employment type here */}
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select an employment type</SelectLabel>
+
+              {employmentTypes.map((item) => (
+                <SelectItem
+                  value={`${item.emp_type_id}`}
+                  key={`emp-type-option-${item.emp_type_id}`}
+                >
+                  {item.employment_type}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
         </Select>
       </div>
 

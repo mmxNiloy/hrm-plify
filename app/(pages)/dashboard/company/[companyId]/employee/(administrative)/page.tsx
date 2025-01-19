@@ -9,7 +9,7 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import EmployeeOnboardingDialog from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable, StaticDataTable } from "@/components/ui/data-table";
 import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyUserDataTableColumns";
 import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
@@ -20,6 +20,8 @@ import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/
 import Icons from "@/components/ui/icons";
 import Link from "next/link";
 import Counter from "@/components/custom/Counter";
+import { getCompanyEmployeeStats } from "@/app/(server)/actions/getCompanyEmployeeStats";
+import { EmploymentTypeStatDataTableColumns } from "@/components/custom/DataTable/Columns/EmployeeTypeStatDataTableColumns";
 
 export async function generateMetadata({
   params,
@@ -53,22 +55,25 @@ export default async function EmployeeDashboardPage({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const [company, companyExtraData] = await Promise.all([
+  const [company, companyExtraData, stats] = await Promise.all([
     getCompanyData(companyId),
     getCompanyExtraData(companyId),
+    getCompanyEmployeeStats(companyId),
   ]);
 
-  if (company.error || companyExtraData.error) {
+  if (company.error || companyExtraData.error || stats.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Employee Dashboard</p>
-        <ErrorFallbackCard error={company.error ?? companyExtraData.error} />
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? stats.error}
+        />
       </main>
     );
   }
 
   return (
-    <main className="container flex flex-col gap-2">
+    <main className="container flex flex-col gap-4">
       <p className="text-xl font-semibold">Employee Dashboard</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
@@ -78,6 +83,8 @@ export default async function EmployeeDashboardPage({
         />
       </div>
 
+      <p className="text-xl font-semibold">Statistics</p>
+
       <div className="grid grid-cols-3 gap-4 justify-items-center *:min-w-64">
         <Link href={"./employee/all"}>
           <div className="flex flex-col gap-2 p-4 rounded-md from-teal-500/80 to-indigo-600 hover:from-sky-400/80 hover:to-indigo-500 bg-gradient-to-br text-white">
@@ -85,10 +92,7 @@ export default async function EmployeeDashboardPage({
               <Icons.employees />
               Active Employees
             </div>
-            <Counter
-              value={companyExtraData.data.employees.length}
-              className="text-end"
-            />
+            <Counter value={stats.data.totalEmployees} className="text-end" />
           </div>
         </Link>
         <Link href={"./employee/migrant"}>
@@ -97,14 +101,7 @@ export default async function EmployeeDashboardPage({
               <Icons.users />
               Migrant Employees
             </div>
-            <Counter
-              value={
-                companyExtraData.data.employees.filter(
-                  (item) => item.is_foreign
-                ).length
-              }
-              className="text-end"
-            />
+            <Counter value={stats.data.foreignEmployees} className="text-end" />
           </div>
         </Link>
         <Link href={"./employee/staff-report"}>
@@ -116,6 +113,11 @@ export default async function EmployeeDashboardPage({
           </div>
         </Link>
       </div>
+
+      <DataTable
+        data={stats.data.empTypeCounts}
+        columns={EmploymentTypeStatDataTableColumns}
+      />
     </main>
   );
 }

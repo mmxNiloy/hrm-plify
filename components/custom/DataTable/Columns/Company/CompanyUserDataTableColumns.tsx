@@ -15,6 +15,15 @@ export const CompanyUserDataTableColumns: ColumnDef<ICompanyUser>[] = [
     cell: ({ row }) => row.original.users.employee_data?.employee_code ?? "N/A",
   },
   {
+    id: "employment_type",
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Employment Type" />
+    ),
+    cell: ({ row }) =>
+      row.original.users.employee_data?.employment_type?.employment_type ??
+      "N/A",
+  },
+  {
     id: "first_name",
     header: ({ column }) => (
       <SortableHeader column={column} name="First name" />

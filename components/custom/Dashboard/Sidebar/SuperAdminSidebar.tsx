@@ -65,12 +65,12 @@ export default function SuperAdminSidebar({
           </SidebarLink>
         )}
 
-        {/* <SidebarLink href={"/dashboard/analytics"}>
-          <Icons.analytics />
+        <SidebarLink href={"/dashboard/employment-type"}>
+          <Icons.list />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Analytics
+            Employment Type
           </span>
-        </SidebarLink> */}
+        </SidebarLink>
 
         {/* <Button variant={"ghost"} className="justify-start gap-2" disabled>
           <Icons.users />

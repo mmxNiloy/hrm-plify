@@ -1,29 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { ILeaveApprover } from "@/schema/LeaveSchema";
-import {
-  ButtonBlue,
-  ButtonSuccess,
-  ButtonWarn,
-} from "@/styles/button.tailwind";
+import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
 import React, { useCallback, useState } from "react";
-import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -35,14 +17,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+import { IHoliday } from "@/schema/HolidaySchema";
 
-export default function LeaveApproverToggleEditDialog({
-  data,
-  company_id,
-}: {
-  data: ILeaveApprover;
-  company_id: number;
-}) {
+interface Props {
+  data: IHoliday;
+}
+
+export default function HolidayToggleEditDialog({ data }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -53,23 +35,18 @@ export default function LeaveApproverToggleEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      var status = (data.is_active + 1) % 2;
-
-      //   alert("New status: " + status);
-
-      const approver: ILeaveApprover = {
-        company_id,
-        employee_id: data.employee_id,
-        approver_id: data.approver_id,
-        is_active: status,
-      };
-
       setLoading(true);
 
+      const newData = { ...data };
+
       try {
-        const apiRes = await fetch(`/api/leave-management/leave-approver`, {
+        const apiRes = await fetch(`/api/holiday`, {
           method: "PATCH",
-          body: JSON.stringify(approver),
+          body: JSON.stringify(
+            Object.assign(newData, {
+              is_active: ((data.is_active ?? 0) + 1) % 2,
+            })
+          ),
         });
 
         if (apiRes.ok) {
@@ -102,7 +79,7 @@ export default function LeaveApproverToggleEditDialog({
 
       setLoading(false);
     },
-    [company_id, data, router, toast]
+    [data, router, toast]
   );
 
   return (
@@ -124,11 +101,11 @@ export default function LeaveApproverToggleEditDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {data.is_active ? "Delete" : "Recover"} this Leave Approver?
+            {data.is_active ? "Delete" : "Recover"} this Holiday?
           </AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to {data.is_active ? "delete" : "recover"}{" "}
-            this leave approver?
+            this Holiday?
           </AlertDialogDescription>
         </AlertDialogHeader>
 

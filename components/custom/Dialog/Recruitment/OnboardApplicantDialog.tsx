@@ -22,7 +22,6 @@ import {
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
-import EmployeeOnboardingFormFragment from "../../Form/Fragment/Company/EmployeeOnboardingFormFragment";
 import { IJobApplicant } from "@/schema/JobSchema";
 import ApplicantOnboardingFormFragment from "../../Form/Fragment/Recruitment/ApplicantOnboardingFormFragment";
 import { IUser } from "@/schema/UserSchema";

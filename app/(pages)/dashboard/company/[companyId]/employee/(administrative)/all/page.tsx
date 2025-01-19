@@ -17,6 +17,7 @@ import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/wrapper";
 import { CompanyByIDPageProps } from "../../../PageProps";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
@@ -52,18 +53,30 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const [company, companyExtraData, employees] = await Promise.all([
-    getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getCompanyEmployees({ companyId, page, limit }),
-  ]);
+  const [company, companyExtraData, employees, employmentTypes] =
+    await Promise.all([
+      getCompanyData(companyId),
+      getCompanyExtraData(companyId),
+      getCompanyEmployees({ companyId, page, limit }),
+      getAllEmploymentTypes(),
+    ]);
 
-  if (company.error || companyExtraData.error || employees.error) {
+  if (
+    company.error ||
+    companyExtraData.error ||
+    employees.error ||
+    employmentTypes.error
+  ) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">All Employees</p>
         <ErrorFallbackCard
-          error={company.error ?? companyExtraData.error ?? employees.error}
+          error={
+            company.error ??
+            companyExtraData.error ??
+            employees.error ??
+            employmentTypes.error
+          }
         />
       </main>
     );
@@ -83,6 +96,9 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
         {/* <EmployeeCreationDialog /> */}
         {writeAccess && (
           <EmployeeOnboardingDialogWrapper
+            employmentType={employmentTypes.data.filter(
+              (item) => item.isActive
+            )}
             company_id={companyId}
             {...companyExtraData.data}
           />

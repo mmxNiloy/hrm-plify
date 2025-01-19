@@ -101,7 +101,7 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
-              {/* <SidebarLink
+              <SidebarLink
                 href={`/dashboard/company/${company.company_id}/employment-type`}
               >
                 <Icons.userCog />
@@ -110,6 +110,7 @@ export default function CompanyDashboardSidebar({
                 </span>
               </SidebarLink>
 
+              {/* 
               <SidebarLink
                 href={`/dashboard/company/${company.company_id}/pay-group`}
               >

@@ -14,6 +14,7 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
 import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 export default async function PersonalInfoSlot({
   params,
@@ -39,20 +40,33 @@ export default async function PersonalInfoSlot({
   const emp = await getEmployeeData();
   const empId = emp.data?.data?.employee_id ?? 0;
 
-  const [company, companyExtraData, personalInfo] = await Promise.all([
-    getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getPersonalInfo(empId),
-  ]);
+  const [company, companyExtraData, personalInfo, empTypes] = await Promise.all(
+    [
+      getCompanyData(companyId),
+      getCompanyExtraData(companyId),
+      getPersonalInfo(empId),
+      getAllEmploymentTypes(),
+    ]
+  );
 
-  if (company.error || companyExtraData.error || personalInfo.error) {
+  if (
+    company.error ||
+    companyExtraData.error ||
+    personalInfo.error ||
+    empTypes.error
+  ) {
     return (
       <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
         <div className="col-span-full w-full flex flex-row items-center justify-between">
           <p className="text-lg font-semibold">Personal Information</p>
         </div>
         <ErrorFallbackCard
-          error={company.error ?? companyExtraData.error ?? personalInfo.error}
+          error={
+            company.error ??
+            companyExtraData.error ??
+            personalInfo.error ??
+            empTypes.error
+          }
         />
       </div>
     );
@@ -74,13 +88,18 @@ export default async function PersonalInfoSlot({
         {/* {updateAccess && (
         )} */}
         <ServiceInformationEditDialog
+          employmentTypes={empTypes.data.filter((item) => item.isActive)}
           company={company.data}
           data={personalInfo.data}
           departments={companyExtraData.data.departments}
           designations={companyExtraData.data.designations}
         />
       </div>
-      <ServiceDetailsFormFragment data={personalInfo.data} readOnly />
+      <ServiceDetailsFormFragment
+        employmentTypes={empTypes.data.filter((item) => item.isActive)}
+        data={personalInfo.data}
+        readOnly
+      />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import EmployeeMigrationPopover from "@/components/custom/Popover/Company/EmployeeMigrationPopover";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 
 interface MigrantEmployeePageProps
   extends ISearchParamsProps,
@@ -48,23 +49,35 @@ export default async function MigrantEmployeePage({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const [company, companyExtraData, employees] = await Promise.all([
-    getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getCompanyEmployees({
-      companyId,
-      page,
-      limit,
-      showMigrantEmployeesOnly: true,
-    }),
-  ]);
+  const [company, companyExtraData, employees, employmentTypes] =
+    await Promise.all([
+      getCompanyData(companyId),
+      getCompanyExtraData(companyId),
+      getCompanyEmployees({
+        companyId,
+        page,
+        limit,
+        showMigrantEmployeesOnly: true,
+      }),
+      getAllEmploymentTypes(),
+    ]);
 
-  if (company.error || companyExtraData.error || employees.error) {
+  if (
+    company.error ||
+    companyExtraData.error ||
+    employees.error ||
+    employmentTypes.error
+  ) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Migrant Employees</p>
         <ErrorFallbackCard
-          error={company.error ?? companyExtraData.error ?? employees.error}
+          error={
+            company.error ??
+            companyExtraData.error ??
+            employees.error ??
+            employmentTypes.error
+          }
         />
       </main>
     );
@@ -86,6 +99,9 @@ export default async function MigrantEmployeePage({
             employees={companyExtraData.data.employees}
           />
           <EmployeeOnboardingDialog
+            employmentTypes={employmentTypes.data.filter(
+              (item) => item.isActive
+            )}
             company_id={companyId}
             {...companyExtraData.data}
             asMigrant
