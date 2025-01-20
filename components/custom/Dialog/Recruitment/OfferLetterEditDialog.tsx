@@ -322,7 +322,7 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
         `${getFullNameOfApplicant(data)}_offer_letter_${Date.now()}.pdf`
       );
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      // console.error("Error generating PDF:", error);
       toast({
         title: "Failed to download PDF",
         variant: "destructive",
@@ -357,7 +357,15 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
         </Button>
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>Offer Letter Viewer</DialogTitle>
           <DialogDescription>
@@ -370,6 +378,7 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
             <div className="flex flex-col gap-2 flex-grow">
               <Label>Offered Salary</Label>
               <Input
+                disabled={loading}
                 placeholder="Offered Salary"
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
@@ -379,6 +388,7 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
             <div className="flex flex-col gap-2 flex-grow">
               <Label>Date of Joining</Label>
               <Input
+                disabled={loading}
                 placeholder="Date of Joining"
                 type="date"
                 value={startingDate}

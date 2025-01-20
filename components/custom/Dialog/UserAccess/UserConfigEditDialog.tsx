@@ -110,7 +110,15 @@ export default function UserConfigEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>
             {data ? "Update" : "Add"} User Configuration

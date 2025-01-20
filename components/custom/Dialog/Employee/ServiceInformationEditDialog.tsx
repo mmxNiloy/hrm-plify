@@ -72,7 +72,7 @@ export default function ServiceInformationEditDialog({
 
       const reqBod = Object.assign({ ...data }, serviceDetails);
 
-      console.log("Request body", reqBod);
+      // console.log("Request body", reqBod);
 
       setLoading(true);
       // Request api here
@@ -106,7 +106,7 @@ export default function ServiceInformationEditDialog({
           });
         }
       } catch (err) {
-        // console.error("Failed to update employee personal information.", err);
+        // console.error("Failed to update employee service details.", err);
         toast({
           title: "Update Failed",
           variant: "destructive",

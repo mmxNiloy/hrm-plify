@@ -82,7 +82,7 @@ export default function CompanyAdminEditDialog({
           });
         }
       } catch (err) {
-        console.error("Failed to update leave type");
+        // console.error("Failed to update leave type");
         toast({
           title: "Update Failed",
           variant: "destructive",
@@ -108,7 +108,15 @@ export default function CompanyAdminEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Assign"} Company Admin</DialogTitle>
           <DialogDescription>

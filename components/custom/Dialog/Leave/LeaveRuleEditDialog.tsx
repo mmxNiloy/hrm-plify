@@ -90,7 +90,7 @@ export default function LeaveRuleEditDialog({
           });
         }
       } catch (err) {
-        console.error("Failed to update leave type");
+        // console.error("Failed to update leave type");
         toast({
           title: "Update Failed",
           variant: "destructive",
@@ -116,7 +116,15 @@ export default function LeaveRuleEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Create"} a Leave Rule</DialogTitle>
           <DialogDescription>

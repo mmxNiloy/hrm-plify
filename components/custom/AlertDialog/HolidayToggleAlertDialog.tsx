@@ -70,7 +70,7 @@ export default function HolidayToggleEditDialog({ data }: Props) {
           });
         }
       } catch (err) {
-        console.error("Failed to update leave approver");
+        // console.error("Failed to update leave approver");
         toast({
           title: "Update Failed",
           variant: "destructive",

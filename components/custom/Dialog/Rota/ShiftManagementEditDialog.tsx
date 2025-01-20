@@ -105,7 +105,15 @@ export default function ShiftManagementEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>Create a Shift</DialogTitle>
           <DialogDescription>
@@ -120,7 +128,7 @@ export default function ShiftManagementEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <ShiftManagementFormFragment data={data} />
+              <ShiftManagementFormFragment data={data} disabled={loading} />
             </div>
           </ScrollArea>
 

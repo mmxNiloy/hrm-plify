@@ -112,7 +112,15 @@ export default function CompanyDocumentEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        className={DialogContentWidth}
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle>
             {type === "edit" ? "Edit" : "Create a"} Company Document
@@ -135,6 +143,7 @@ export default function CompanyDocumentEditDialog({
           <DialogFooter>
             <DialogClose asChild>
               <Button
+                disabled={loading}
                 variant={"destructive"}
                 className="rounded-full gap-1"
                 size={"sm"}
@@ -143,7 +152,11 @@ export default function CompanyDocumentEditDialog({
               </Button>
             </DialogClose>
 
-            <Button className={data ? ButtonWarn : ButtonSuccess} size={"sm"}>
+            <Button
+              disabled={loading}
+              className={data ? ButtonWarn : ButtonSuccess}
+              size={"sm"}
+            >
               {loading ? (
                 <>
                   <Icons.spinner className="animate-spin ease-in-out" />

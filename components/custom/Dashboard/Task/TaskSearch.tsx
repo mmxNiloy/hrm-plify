@@ -24,6 +24,7 @@ export default function TaskSearch() {
   const [open, setOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [employees, setEmployees] = useState<IEmployeeWithPersonalInfo[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSearchChange = useCallback((e: string) => {
     setSearchTerm(e);
@@ -42,7 +43,15 @@ export default function TaskSearch() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px] md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className="sm:max-w-[425px] md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl"
+      >
         <DialogHeader>
           <DialogTitle>Search Tasks by Employee</DialogTitle>
         </DialogHeader>

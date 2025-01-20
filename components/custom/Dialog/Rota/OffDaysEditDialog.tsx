@@ -130,7 +130,15 @@ export default function OffDaysEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>Create an Off Days&apos; Schedule</DialogTitle>
           <DialogDescription>
@@ -145,7 +153,11 @@ export default function OffDaysEditDialog({
         <form onSubmit={handleSubmit}>
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
-              <OffDaysFormFragment shifts={shifts} data={data} />
+              <OffDaysFormFragment
+                disabled={loading}
+                shifts={shifts}
+                data={data}
+              />
             </div>
           </ScrollArea>
 

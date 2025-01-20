@@ -61,7 +61,7 @@ export default function AbsentReportGenerator({
             doc.addImage(base64Image, "PNG", 90, 10, 30, 30);
           }
         } catch (error) {
-          console.error("Failed to load the company logo:", error);
+          // console.error("Failed to load the company logo:", error);
         }
       }
 

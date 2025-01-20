@@ -121,7 +121,15 @@ export default function JobListingEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Create"} Job Listing</DialogTitle>
           <DialogDescription>
@@ -137,6 +145,7 @@ export default function JobListingEditDialog({
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
               <JobListingFormFragment
+                disabled={loading}
                 companyData={companyData}
                 companyId={company_id}
                 data={data}

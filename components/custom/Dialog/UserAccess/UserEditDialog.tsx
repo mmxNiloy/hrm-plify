@@ -61,7 +61,7 @@ export default function UserEditDialog({
         updated_at: "",
       };
 
-      console.log("System User Request Body >", user);
+      // console.log("System User Request Body >", user);
 
       setLoading(true);
 
@@ -118,7 +118,15 @@ export default function UserEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Add"} System User</DialogTitle>
           <DialogDescription>
