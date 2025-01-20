@@ -75,7 +75,7 @@ export default function LevelEditPopover({
           });
         }
       } catch (err) {
-        console.error("Failed to create department.", err);
+        // console.error("Failed to create department.", err);
         toast({
           title: "Update Failed",
           variant: "destructive",

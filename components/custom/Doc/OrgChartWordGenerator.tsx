@@ -126,7 +126,7 @@ export default function OrgChartWordGenerator({
         // Cleanup
         URL.revokeObjectURL(url);
       } catch (error) {
-        console.error("Error generating Word file:", error);
+        // console.error("Error generating Word file:", error);
         alert("Failed to generate the Word document.");
       } finally {
         setLoading(false);
@@ -165,7 +165,7 @@ export default function OrgChartWordGenerator({
 
         generateDocx(dataUrl);
       } catch (error) {
-        console.error("Error capturing element:", error);
+        // console.error("Error capturing element:", error);
       }
 
       // Restore original styles

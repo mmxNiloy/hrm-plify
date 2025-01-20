@@ -73,7 +73,7 @@ export default function HolidayTypeEditPopover({
           });
         }
       } catch (err) {
-        console.error("Failed to update leave type");
+        // console.error("Failed to update leave type");
         toast({
           title: "Update Failed",
           variant: "destructive",

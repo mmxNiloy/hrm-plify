@@ -32,7 +32,7 @@ export default function UserContextProvider({
   const refreshToken = useCallback(() => {
     getSession().then((token) => {
       setUser(token);
-      console.log("Auth token", token);
+      // console.log("Auth token", token);
     });
   }, [getSession]);
 

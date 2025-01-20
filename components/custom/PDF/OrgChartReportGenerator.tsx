@@ -130,7 +130,7 @@ export default function OrgChartReportGenerator({
         // Save the PDF with the timestamped file name
         doc.save(`organogram_${Date.now()}.pdf`);
       } catch (error) {
-        console.error("Error loading image:", error);
+        // console.error("Error loading image:", error);
         alert("Failed to load the company logo image.");
       } finally {
         setLoading(false);
@@ -173,12 +173,12 @@ export default function OrgChartReportGenerator({
           preferredFontFormat: "woff2",
         });
 
-        console.log("Generating PDF...");
+        // console.log("Generating PDF...");
 
         generatePdf(dataUrl);
       } catch (error) {
-        console.error("Error capturing element:", error);
-        console.warn("Trying to capture with element id");
+        // console.error("Error capturing element:", error);
+        // console.warn("Trying to capture with element id");
 
         try {
           const chartEl = document.getElementById("organogram-chart");
@@ -194,10 +194,10 @@ export default function OrgChartReportGenerator({
             preferredFontFormat: "woff2",
           });
 
-          console.log("Generating PDF...");
+          // console.log("Generating PDF...");
           generatePdf(dataUrl);
         } catch (error) {
-          console.error("Error capturing element:", error);
+          // console.error("Error capturing element:", error);
         }
       }
 

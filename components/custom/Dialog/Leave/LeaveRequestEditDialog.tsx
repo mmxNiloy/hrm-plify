@@ -45,7 +45,7 @@ export default function LeaveRequestEditDialog({
       e.stopPropagation();
 
       if (!data?.employee_id && !employee_id) {
-        console.error("Leave Request Edit Dialog >", data);
+        // console.error("Leave Request Edit Dialog >", data);
         alert(
           "Data integrity failed. Employee ID does not exist for this entry. Cannot edit this item. Please check data integrity."
         );
@@ -101,7 +101,7 @@ export default function LeaveRequestEditDialog({
           });
         }
       } catch (err) {
-        console.error("Failed to update leave type");
+        // console.error("Failed to update leave type");
         toast({
           title: "Update Failed",
           variant: "destructive",
@@ -127,7 +127,15 @@ export default function LeaveRequestEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>
             {data ? "Update Leave Request" : "Request a Leave"}

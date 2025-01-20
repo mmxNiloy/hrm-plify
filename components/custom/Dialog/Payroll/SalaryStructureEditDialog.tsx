@@ -145,7 +145,15 @@ export default function SalaryStructureEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>{data ? "Update" : "Add"} Salary Structure</DialogTitle>
           <DialogDescription>

@@ -61,7 +61,7 @@ export default function PayrollEditDialog({
   >(undefined);
 
   const getSalaryStructureData = useCallback(async () => {
-    console.log("Get Employee Salary Structure > BEGIN");
+    // console.log("Get Employee Salary Structure > BEGIN");
     if (!selectedEmployee) return;
     setLoading(true);
 
@@ -125,7 +125,7 @@ export default function PayrollEditDialog({
           (fd.get("deduction_reason") as string | undefined) ?? "",
       };
 
-      console.log("Payroll Edit dialog > Form Data", payroll);
+      // console.log("Payroll Edit dialog > Form Data", payroll);
 
       setLoading(true);
 
@@ -194,7 +194,15 @@ export default function PayrollEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>Generate Payroll</DialogTitle>
           <DialogDescription>

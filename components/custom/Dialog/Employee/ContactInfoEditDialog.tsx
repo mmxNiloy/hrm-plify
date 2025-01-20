@@ -74,7 +74,7 @@ export default function ContactInfoEditDialog({
       const reqBod = data
         ? Object.assign(data, contactInfo)
         : { employee_id: employeeId, ...contactInfo };
-      console.log("Request body", reqBod);
+      // console.log("Request body", reqBod);
 
       // Request api here
       try {

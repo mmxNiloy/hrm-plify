@@ -48,7 +48,7 @@ export default function EmployeeMigrationPopover({
   const handleSubmit = useCallback(async () => {
     setLoading(true);
 
-    console.log("Selected Employees", selectedEmployees);
+    // console.log("Selected Employees", selectedEmployees);
 
     const emps = employees.map((item) => ({
       employee_id: item.employee_id,
@@ -109,7 +109,7 @@ export default function EmployeeMigrationPopover({
           defaultValue={selectedEmployees}
           // value={selectedEmployees}
           onValueChange={(e) => {
-            console.log("Value Changed", e);
+            // console.log("Value Changed", e);
             setSelectedEmployees(e);
           }}
         />

@@ -109,7 +109,7 @@ export default function CompanyTradeFormFragment({
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 col-span-full">
         <Label
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"

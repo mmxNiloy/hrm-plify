@@ -100,7 +100,7 @@ export default function ApplicantOnboardingDialog({
           });
         }
       } catch (err) {
-        console.error("Failed to create employee.", err);
+        // console.error("Failed to create employee.", err);
         toast({
           title: "Creation Failed",
           variant: "destructive",

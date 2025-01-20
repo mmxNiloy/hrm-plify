@@ -351,7 +351,7 @@ export default function RTWEditDialog({
       setLoading(true);
 
       try {
-        console.log("RTW Request Body", rtw);
+        // console.log("RTW Request Body", rtw);
 
         const apiRes = await fetch(`/api/sponsor-compliance/rtw`, {
           method: data ? "PATCH" : "POST",
@@ -421,7 +421,15 @@ export default function RTWEditDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (loading) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={DialogContentWidth}
+      >
         <DialogHeader>
           <DialogTitle>Add a RTW check</DialogTitle>
           <DialogDescription>

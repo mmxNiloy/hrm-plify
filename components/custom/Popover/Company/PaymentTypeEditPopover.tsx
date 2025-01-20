@@ -82,7 +82,7 @@ export default function PaymentTypeEditPopover({
           });
         }
       } catch (err) {
-        console.error("Failed to create department.", err);
+        // console.error("Failed to create department.", err);
         toast({
           title: "Update Failed",
           variant: "destructive",
