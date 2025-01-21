@@ -16,6 +16,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const ImagePicker = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, skeleton, imageClassName, ...props }, ref) => {
     const [selectedImage, setSelectedImage] = useState<File>();
+    const [error, setError] = useState<boolean>(false);
+
     const { toast } = useToast();
 
     const handleImageSelect = useCallback(
@@ -79,17 +81,35 @@ const ImagePicker = React.forwardRef<HTMLInputElement, InputProps>(
             src={URL.createObjectURL(selectedImage)}
           />
         ) : props.src ? (
-          <Image
-            unoptimized
-            height={0}
-            width={0}
-            alt={props.alt ?? "Image Picker preview"}
-            className={cn(
-              imageClassName,
-              "rounded-md size-full bg-slate-500 object-contain object-center"
+          <>
+            {error ? (
+              <Icons.brokenImage
+                className={cn(
+                  "size-1/2",
+                  props.disabled || props.readOnly
+                    ? ""
+                    : "group-hover:invisible"
+                )}
+              />
+            ) : (
+              <Image
+                onError={(e) => setError(true)}
+                unoptimized
+                height={0}
+                width={0}
+                alt={props.alt ?? "Image Picker preview"}
+                className={cn(
+                  imageClassName,
+                  "rounded-md size-full bg-slate-500 object-contain object-center"
+                )}
+                src={
+                  props.src.trim().length < 1
+                    ? "/broken-image.svg"
+                    : props.src.trim()
+                }
+              />
             )}
-            src={props.src.trim()}
-          />
+          </>
         ) : (
           <>
             {skeleton ?? (

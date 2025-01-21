@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -186,30 +187,13 @@ export default function SystemUserFormFragment({
       {!data && (
         <div className="flex flex-col gap-2 col-span-full">
           <Label className={RequiredAsterisk}>Password</Label>
-          <div className="flex relative">
-            <Input
-              className="pr-10"
-              id={"password-input"}
-              required
-              readOnly={readOnly}
-              disabled={disabled}
-              minLength={8}
-              type={showPassword ? "text" : "password"}
-              //   key={`password-${data.password}`}
-              name="password"
-              placeholder="Password"
-              //   defaultValue={data.password ?? ""}
-            />
-
-            <Button
-              onClick={() => setShowPassword((old) => !old)}
-              variant={"ghost"}
-              size={"icon"}
-              className="absolute right-0 top-0"
-            >
-              {showPassword ? <Icons.hidden /> : <Icons.visible />}
-            </Button>
-          </div>
+          <PasswordInput
+            id={"password-input"}
+            required
+            readOnly={readOnly}
+            disabled={disabled}
+            name="password"
+          />
         </div>
       )}
 

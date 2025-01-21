@@ -8,10 +8,25 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   name?: string;
   readOnly?: boolean;
   asVisible?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  minLength?: number;
 }
 
 const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
-  ({ className, name, readOnly, asVisible, ...props }, ref) => {
+  (
+    {
+      className,
+      name,
+      readOnly,
+      asVisible,
+      required,
+      minLength,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     const [isVisible, setIsVisible] = useState(false);
 
     return (
@@ -23,9 +38,12 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           type={isVisible || asVisible ? "text" : "password"}
           ref={ref}
           readOnly={readOnly}
+          disabled={disabled}
+          minLength={minLength ?? 8}
           className={cn(className, "w-full pr-16")}
           name={name}
           placeholder="Password"
+          required={required}
           {...props}
         />
         <Button
