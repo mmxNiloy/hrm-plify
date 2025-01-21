@@ -75,7 +75,7 @@ export default function CanvasControls({
       });
     }
     setLoading(false);
-  }, [chartVersion, charts, pathname, router, toast, tree]);
+  }, [chartVersion, charts, toast, tree]);
 
   return (
     <div className="z-10 absolute right-0 top-0 flex flex-col gap-2">
