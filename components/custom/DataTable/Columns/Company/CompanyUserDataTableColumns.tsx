@@ -20,8 +20,7 @@ export const CompanyUserDataTableColumns: ColumnDef<ICompanyUser>[] = [
       <SortableHeader column={column} name="Employment Type" />
     ),
     cell: ({ row }) =>
-      row.original.users.employee_data?.employment_type?.employment_type ??
-      "N/A",
+      row.original.users.employee_data?.emp_type?.employment_type ?? "N/A",
   },
   {
     id: "first_name",

@@ -25,7 +25,7 @@ export interface IEmployee {
   alternative_number?: string;
   contact_number?: string;
   contract_start_date?: Date;
-  employment_type?: IEmploymentType;
+  emp_type?: IEmploymentType;
   is_verified?: number;
   department_id: number;
   designation_id: number;

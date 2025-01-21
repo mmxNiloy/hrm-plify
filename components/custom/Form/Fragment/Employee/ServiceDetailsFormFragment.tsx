@@ -91,7 +91,7 @@ export default function ServiceDetailsFormFragment({
         <Label>Employment Type</Label>
         <Select
           disabled={disabled || readOnly}
-          defaultValue={`${data?.employment_type?.emp_type_id ?? ""}`}
+          defaultValue={`${data?.emp_type?.emp_type_id ?? ""}`}
           name="emp_type_id"
         >
           <SelectTrigger>
