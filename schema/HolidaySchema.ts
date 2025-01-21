@@ -2,7 +2,7 @@ export interface IHolidayType {
   id: number;
   company_id: number;
   holiday_type_name: string;
-  isActive?: number;
+  isActive?: boolean;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -18,7 +18,7 @@ export interface IHoliday {
   created_at?: Date;
   updated_at?: Date;
   type_data?: IHolidayType;
-  isActive?: number;
+  isActive?: boolean;
 }
 
 export interface IHolidayWithHolidayTypes extends IHoliday {

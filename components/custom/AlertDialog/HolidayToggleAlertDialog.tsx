@@ -44,7 +44,7 @@ export default function HolidayToggleEditDialog({ data }: Props) {
           method: "PATCH",
           body: JSON.stringify(
             Object.assign(newData, {
-              isActive: ((data.isActive ?? 0) + 1) % 2,
+              isActive: !data.isActive,
             })
           ),
         });
