@@ -8,6 +8,7 @@ import { IUser } from "@/schema/UserSchema";
 import { useTheme } from "next-themes";
 import React from "react";
 import TextCapsule from "../../TextCapsule";
+import { logout } from "@/app/(server)/actions/logout";
 
 export default function NavProfile({
   user,
@@ -57,7 +58,7 @@ export default function NavProfile({
         />
       </div>
 
-      <form action={"/api/logout"} method="POST">
+      <form action={logout} method="POST">
         <Button variant={"destructive"} className="gap-2 w-full" size={"sm"}>
           <Icons.logout />
           Logout

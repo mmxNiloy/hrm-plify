@@ -113,7 +113,9 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
               variant === "video" ? "aspect-video" : "aspect-square",
               variant === "circle" ? "rounded-full" : "rounded-md"
             )}
-            src={imageURL.trim()}
+            src={
+              imageURL.trim().length < 1 ? "/broken-image.svg" : imageURL.trim()
+            }
           />
         ) : placeholderIcon ? (
           placeholderIcon
