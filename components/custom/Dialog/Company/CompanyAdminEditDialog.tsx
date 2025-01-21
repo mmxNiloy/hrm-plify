@@ -48,9 +48,7 @@ export default function CompanyAdminEditDialog({
         mname: fd.get("mname"),
         password: fd.get("password"),
         email: fd.get("email"),
-        company_role_id: Number.parseInt(
-          (fd.get("company_role_id") as string | undefined) ?? "0"
-        ),
+        company_role_id: 3,
       };
 
       setLoading(true);

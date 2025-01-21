@@ -84,7 +84,7 @@ export default function CompanyAdminEditDialogFormFragment({
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk}>Role</Label>
         <Select
           defaultValue={data?.company_role_id.toString()}
@@ -99,14 +99,13 @@ export default function CompanyAdminEditDialogFormFragment({
             <SelectGroup>
               <SelectLabel>Select a role</SelectLabel>
 
-              {/* <SelectItem value="4">Employee</SelectItem> */}
               <SelectItem value="3">Company Admin</SelectItem>
               <SelectItem value="2">Admin</SelectItem>
-              {/* <SelectItem value="1">Super Admin</SelectItem> */}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> 
       </div>
+        */}
     </>
   );
 }
