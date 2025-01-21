@@ -44,7 +44,7 @@ export default function HolidayToggleEditDialog({ data }: Props) {
           method: "PATCH",
           body: JSON.stringify(
             Object.assign(newData, {
-              is_active: ((data.is_active ?? 0) + 1) % 2,
+              isActive: ((data.isActive ?? 0) + 1) % 2,
             })
           ),
         });
@@ -85,8 +85,8 @@ export default function HolidayToggleEditDialog({ data }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button className={cn(data.is_active ? ButtonWarn : ButtonSuccess)}>
-          {data.is_active ? (
+        <Button className={cn(data.isActive ? ButtonWarn : ButtonSuccess)}>
+          {data.isActive ? (
             <>
               <Icons.trash /> Delete
             </>
@@ -101,11 +101,11 @@ export default function HolidayToggleEditDialog({ data }: Props) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {data.is_active ? "Delete" : "Recover"} this Holiday?
+            {data.isActive ? "Delete" : "Recover"} this Holiday?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to {data.is_active ? "delete" : "recover"}{" "}
-            this Holiday?
+            Are you sure you want to {data.isActive ? "delete" : "recover"} this
+            Holiday?
           </AlertDialogDescription>
         </AlertDialogHeader>
 

@@ -29,10 +29,10 @@ export const HolidayTypeDataTableColumns: ColumnDef<Props>[] = [
     cell: ({ row }) => (
       <TextCapsule
         className={cn(
-          row.original.is_active ? "bg-green-500" : "bg-muted-foreground"
+          row.original.isActive ? "bg-green-500" : "bg-muted-foreground"
         )}
       >
-        {row.original.is_active ? "Active" : "Inactive"}
+        {row.original.isActive ? "Active" : "Inactive"}
       </TextCapsule>
     ),
   },
