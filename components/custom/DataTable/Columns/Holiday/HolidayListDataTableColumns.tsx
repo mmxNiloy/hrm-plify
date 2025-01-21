@@ -6,6 +6,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { dateDiffInDays, weekDays } from "@/utils/Misc";
 import HolidayEditDialog from "../../../Dialog/HolidayEditDialog";
 import HolidayToggleEditDialog from "@/components/custom/AlertDialog/HolidayToggleAlertDialog";
+import TextCapsule from "@/components/custom/TextCapsule";
+import { cn } from "@/lib/utils";
 
 interface Props extends IHolidayWithHolidayTypes {
   updateAccess?: boolean;
@@ -78,6 +80,19 @@ export const HolidayListDataTableColumns: ColumnDef<Props>[] = [
         new Date(row.original.start_time),
         new Date(row.original.end_time)
       ),
+  },
+  {
+    id: "status",
+    header: ({ column }) => <SortableHeader name={"Status"} column={column} />,
+    cell: ({ row }) => (
+      <TextCapsule
+        className={cn(
+          row.original.is_active ? "bg-green-500" : "bg-muted-foreground"
+        )}
+      >
+        {row.original.is_active ? "Active" : "Inactive"}
+      </TextCapsule>
+    ),
   },
   {
     id: "edit-action",
