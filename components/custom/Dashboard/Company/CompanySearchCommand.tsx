@@ -88,86 +88,80 @@ export default function CompanySearchCommand() {
           <CommandGroup heading="Companies">
             <div className="grid grid-cols-2 2xl:grid-cols-3 gap-4">
               {companies.map((comp) => (
-                // <Link
-                //   className="cursor-pointer col-span-1"
-                //   href={`/dashboard/company/${comp.company_id}/`}
-                //   passHref
-
-                //   >
-                <CommandItem
+                <Link
+                  className="cursor-pointer col-span-1"
+                  href={`/dashboard/company/${comp.company_id}/`}
+                  passHref
                   key={`company-id-${comp.company_id}`}
-                  onClick={() =>
-                    router.push(`/dashboard/company/${comp.company_id}/`)
-                  }
-                  className="cursor-pointer"
                 >
-                  <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-                    <div className="flex gap-4">
-                      <div className="flex flex-col gap-4 items-center justify-center">
-                        <AvatarPicker
-                          readOnly
-                          src={comp.logo}
-                          skeleton={
-                            <span
-                              style={{
-                                backgroundColor: stringToColor(
-                                  comp.company_name
-                                ),
-                              }}
-                              className={
-                                "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
-                              }
-                            >
-                              {comp.company_name.charAt(0).toUpperCase()}
-                            </span>
-                          }
-                          className="size-16 p-0"
-                        />
-                        <Link
-                          href={`${
-                            comp.website
-                          }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
-                          target="_blank"
-                          className="hover:underline"
-                          passHref
-                        >
-                          <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
-                            <Icons.externalLink />
-                            Visit
-                          </TextCapsule>
-                        </Link>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <p className="font-semibold text-xl">
-                          {comp.company_name}
-                        </p>
-
-                        <div className="flex flex-col gap-2 *:text-xs">
-                          <TextCapsule className="bg-blue-500">
-                            <Icons.building className="size-3" />
-                            {comp.headquarters}
-                          </TextCapsule>
-
-                          <TextCapsule className="bg-orange-500">
-                            <Icons.factory className="size-3" />
-                            {comp.industry}
-                          </TextCapsule>
-                          <TextCapsule
-                            className={comp.is_active ? "bg-green-500" : ""}
+                  <CommandItem className="cursor-pointer">
+                    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
+                      <div className="flex gap-4">
+                        <div className="flex flex-col gap-4 items-center justify-center">
+                          <AvatarPicker
+                            readOnly
+                            src={comp.logo}
+                            skeleton={
+                              <span
+                                style={{
+                                  backgroundColor: stringToColor(
+                                    comp.company_name
+                                  ),
+                                }}
+                                className={
+                                  "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
+                                }
+                              >
+                                {comp.company_name.charAt(0).toUpperCase()}
+                              </span>
+                            }
+                            className="size-16 p-0"
+                          />
+                          <Link
+                            href={`${
+                              comp.website
+                            }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
+                            target="_blank"
+                            className="hover:underline"
+                            passHref
                           >
-                            {comp.is_active ? "Active" : "Inactive"}
-                          </TextCapsule>
+                            <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
+                              <Icons.externalLink />
+                              Visit
+                            </TextCapsule>
+                          </Link>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <p className="font-semibold text-xl">
+                            {comp.company_name}
+                          </p>
+
+                          <div className="flex flex-col gap-2 *:text-xs">
+                            <TextCapsule className="bg-blue-500">
+                              <Icons.building className="size-3" />
+                              {comp.headquarters}
+                            </TextCapsule>
+
+                            <TextCapsule className="bg-orange-500">
+                              <Icons.factory className="size-3" />
+                              {comp.industry}
+                            </TextCapsule>
+                            <TextCapsule
+                              className={comp.is_active ? "bg-green-500" : ""}
+                            >
+                              {comp.is_active ? "Active" : "Inactive"}
+                            </TextCapsule>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* <Button className={ButtonBlue}>
+                      {/* <Button className={ButtonBlue}>
                       Select
                       <Icons.chevronRight />
                     </Button> */}
-                  </div>
-                </CommandItem>
-                // </Link>
+                    </div>
+                  </CommandItem>
+                </Link>
               ))}
             </div>
           </CommandGroup>
