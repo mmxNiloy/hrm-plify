@@ -146,6 +146,36 @@ export default function OrgChartReportGenerator({
     ]
   );
 
+  async function downloadHighQualityImage(wrapperEl: HTMLDivElement) {
+    try {
+      // Dynamically calculate the dimensions of the content
+      const boundingBox = wrapperEl.getBoundingClientRect();
+      const scale = 8; // Increase scale for higher resolution (e.g., 2x)
+      const padding = 16;
+      const canvasWidth = (boundingBox.width + 2 * padding) * scale;
+      const canvasHeight = (boundingBox.height + 2 * padding) * scale;
+
+      // Generate the image as a PNG with high quality
+      const dataUrl = await toPng(wrapperEl, {
+        cacheBust: true,
+        quality: 1, // Set quality to maximum
+        canvasWidth,
+        canvasHeight,
+        backgroundColor: "#ffffff", // White background
+        skipFonts: true,
+        preferredFontFormat: "woff2",
+      });
+
+      // Create a download link for the image
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `organogram_${Date.now()}.pdf`;
+      link.click();
+    } catch (error) {
+      console.error("Error generating high-quality image:", error);
+    }
+  }
+
   const downloadItem = useCallback(async () => {
     if (canvasRef && canvasRef.current) {
       const wrapperEl = canvasRef.current.getElement();
@@ -163,19 +193,21 @@ export default function OrgChartReportGenerator({
         // wrapperEl.style.alignItems = "center";
         // wrapperEl.style.justifyContent = "center";
 
-        const dataUrl = await toPng(wrapperEl, {
-          cacheBust: true,
-          quality: 1,
-          canvasHeight: 1024,
-          canvasWidth: 1024,
-          backgroundColor: "#ffffff", // Set background to white
-          skipFonts: true,
-          preferredFontFormat: "woff2",
-        });
+        // const dataUrl = await toPng(wrapperEl, {
+        //   cacheBust: true,
+        //   quality: 1,
+        //   canvasHeight: 1024,
+        //   canvasWidth: 1024,
+        //   backgroundColor: "#ffffff", // Set background to white
+        //   skipFonts: true,
+        //   preferredFontFormat: "woff2",
+        // });
 
         // console.log("Generating PDF...");
 
-        generatePdf(dataUrl);
+        // generatePdf(dataUrl);
+
+        await downloadHighQualityImage(wrapperEl);
       } catch (error) {
         // console.error("Error capturing element:", error);
         // console.warn("Trying to capture with element id");
@@ -223,7 +255,7 @@ export default function OrgChartReportGenerator({
       {loading ? (
         <Icons.spinner className="animate-spin ease-in-out" />
       ) : (
-        <Icons.pdf />
+        <Icons.imageDownload />
       )}
     </Button>
   );

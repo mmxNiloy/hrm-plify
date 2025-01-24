@@ -78,6 +78,13 @@ export default async function JobByIdPage({ params }: Props) {
               </p>
             </Link>
           )}
+          {data.company?.email && (
+            <Link passHref href={`mailto:${data.company.email}`}>
+              <p className="text-lg hover:underline">
+                Email: <b>{data.company?.email}</b>
+              </p>
+            </Link>
+          )}
           {data.company?.website && (
             <Link passHref href={data.company.website}>
               <p className="text-lg hover:underline">

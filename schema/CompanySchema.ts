@@ -14,6 +14,7 @@ export interface ICompany {
   headquarters?: string;
   founded_year?: number;
   website?: string;
+  email?: string;
   logo?: string;
   created_at: Date;
   updated_at: Date;

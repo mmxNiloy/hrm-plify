@@ -15,22 +15,18 @@ import { IChartVersion, IOrganogramDB } from "@/schema/OrganogramSchema";
 import { ButtonSuccess } from "@/styles/button.tailwind";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import { Label } from "@/components/ui/label";
 
 interface Props {
-  charts: IOrganogramDB[];
-  companyId: number;
+  data?: IOrganogramDB;
 }
 
-export default function OrgChartVersionCreationPopover({
-  charts,
-  companyId,
-}: Props) {
-  const sParams = useSearchParams();
+export default function OrgChartNameEditPopover({ data }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const [versions, setVersions] = useState<IChartVersion[]>([]);
   const [isValidVersion, setIsValidVersion] = useState<boolean>(false);
-  const [newVersion, setNewVersion] = useState<string>("");
+  const [newVersion, setNewVersion] = useState<string>(data?.name ?? "");
   const [open, setOpen] = useState<boolean>(false);
   const checkValidityOfNewVersion = useCallback(
     (ver: string) => {
@@ -59,13 +55,12 @@ export default function OrgChartVersionCreationPopover({
     setLoading(true);
 
     const nVersion = {
-      company_id: companyId,
+      id: data?.id,
       name: newVersion,
-      data: "{}",
     };
 
-    const res = await fetch("/api/organogram", {
-      method: "POST",
+    const res = await fetch("/api/organogram/version", {
+      method: "PATCH",
       body: JSON.stringify(nVersion),
     });
 
@@ -78,23 +73,26 @@ export default function OrgChartVersionCreationPopover({
       const data = await res.json();
 
       setOpen(false);
-      router.push(`${pathname}?version=${data.data.id}`);
+      router.refresh();
     } else {
       toast({
-        title: "Creation Failed",
+        title: "Update Failed",
         variant: "destructive",
       });
     }
     setLoading(false);
     setOpen(false);
-  }, [companyId, newVersion, pathname, router, toast]);
+  }, [data?.id, newVersion, router, toast]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <AnimatedTrigger label="New Version" />
+        <Button variant={"outline"} size={"icon"}>
+          <Icons.edit />
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col gap-2">
+        <Label>Version Name</Label>
         <Input
           onChange={handleVersionChange}
           value={newVersion}

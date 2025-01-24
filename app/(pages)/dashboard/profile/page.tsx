@@ -38,6 +38,7 @@ enum ProfileStep {
   COMPANY_INDUSTRY = 128,
   COMPANY_LOGO = 256,
   COMPANY_WEBSITE = 512,
+  COMPANY_EMAIL = 1024,
 }
 
 function getProfileCompletion(user: IUser) {
@@ -62,6 +63,7 @@ function getProfileCompletion(user: IUser) {
     if (user.usercompany.companies?.logo) status |= ProfileStep.COMPANY_LOGO;
     if (user.usercompany.companies?.website)
       status |= ProfileStep.COMPANY_WEBSITE;
+    if (user.usercompany.companies?.email) status |= ProfileStep.COMPANY_EMAIL;
   }
 
   return status;
@@ -87,7 +89,7 @@ export default async function ProfilePage() {
     user.user_roles?.roles.role_name === "Admin";
 
   const profileStatus = getProfileCompletion(user);
-  const isProfileIncomplete = profileStatus ^ 0x01ff; /// 0 -> complete, incomplete otherwise
+  const isProfileIncomplete = profileStatus & 0x07ff; /// 0 -> complete, incomplete otherwise
 
   return (
     <main className="container flex flex-col gap-2">

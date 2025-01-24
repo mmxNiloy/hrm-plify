@@ -143,6 +143,7 @@ export interface IEmployeeEducationalDetail {
   certificate_link?: string;
   created_at?: Date; // auto-generated
   updated_at?: Date; // auto-generated
+  is_active?: boolean;
 }
 
 export interface IEmployeePassportDetail {

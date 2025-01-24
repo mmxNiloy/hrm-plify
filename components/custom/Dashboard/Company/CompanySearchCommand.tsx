@@ -21,11 +21,24 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import TextCapsule from "../../TextCapsule";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const router = useRouter();
+  const [history, setHistory] = useState<string[]>([]); // Max capacity: 10
+  const [searchBarValue, setSearchBarValue] = useState<string>("");
 
   const { toast } = useToast();
 
@@ -52,29 +65,108 @@ export default function CompanySearchCommand() {
   }, [loadInitialData]);
 
   const handleSearchChange = useDebouncedCallback(
-    useCallback(async (query: string) => {
-      if (query.length < 3) return;
-      setLoading(true);
-      const result = await searchCompanies({ companyName: query });
+    useCallback(
+      async (query: string) => {
+        if (query.length < 3) return;
+        // Handle search history here
+        const sHistory = [...history];
+        if (sHistory.find((item) => item === query) === undefined) {
+          if (sHistory.length >= 10) {
+            sHistory.shift();
+          }
+          sHistory.push(query);
+          setHistory(sHistory);
+        }
 
-      if (result.error) {
-        setCompanies([]);
-      } else {
-        setCompanies(result.data);
-      }
+        setLoading(true);
+        const result = await searchCompanies({ companyName: query });
 
-      setLoading(false);
-    }, []),
+        if (result.error) {
+          setCompanies([]);
+        } else {
+          setCompanies(result.data);
+        }
+
+        setLoading(false);
+      },
+      [history]
+    ),
     300
   );
 
   return (
     <Command className="rounded-lg border shadow-md" shouldFilter={false}>
-      <CommandInput
-        placeholder={"Select a company or search..."}
-        onValueChange={handleSearchChange}
-        disabled={loading}
-      />
+      <div className="relative flex">
+        <CommandInput
+          placeholder={"Select a company or search..."}
+          onValueChange={(query) => {
+            handleSearchChange(query);
+            setSearchBarValue(query);
+          }}
+          value={searchBarValue}
+          disabled={loading}
+          wrapperClassName="flex-grow"
+          className="flex-grow pr-10"
+        />
+
+        <Drawer direction="right">
+          <DrawerTrigger asChild>
+            <Button
+              disabled={loading}
+              size={"icon"}
+              variant={"ghost"}
+              className="absolute right-0"
+            >
+              <div className="relative">
+                <Icons.history className="text-muted-foreground" />
+                {history.length > 0 && (
+                  <span className="absolute size-2 bg-red-400 rounded-full top-0 right-0" />
+                )}
+              </div>
+            </Button>
+          </DrawerTrigger>
+
+          <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
+            <div className="flex flex-col gap-2 px-4">
+              <DrawerHeader>
+                <DrawerTitle>Search History</DrawerTitle>
+                <DrawerDescription>
+                  These are the latest 10 searches by you in this session.
+                </DrawerDescription>
+              </DrawerHeader>
+
+              <Separator />
+
+              {history.length > 0 ? (
+                <>
+                  {history.reverse().map((item, index) => (
+                    <DrawerClose asChild key={`search-history-item-${index}`}>
+                      <Button
+                        disabled={loading}
+                        variant={"ghost"}
+                        size={"sm"}
+                        className="gap-2 justify-start"
+                        onClick={() => {
+                          handleSearchChange(item);
+                          setSearchBarValue(item);
+                        }}
+                      >
+                        <Icons.history />
+                        <p>{item}</p>
+                      </Button>
+                    </DrawerClose>
+                  ))}
+                </>
+              ) : (
+                <div className="flex-grow flex flex-col gap-2 w-full items-center justify-center">
+                  <Icons.rabbit className="size-32" />
+                  No search history...
+                </div>
+              )}
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </div>
       <CommandList className="max-h-fit">
         <CommandEmpty>No companies found.</CommandEmpty>
         {loading ? (

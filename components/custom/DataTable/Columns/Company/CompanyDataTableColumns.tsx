@@ -30,6 +30,23 @@ export const CompanyDataTableColumns: ColumnDef<ICompany>[] = [
     header: ({ column }) => <SortableHeader name="ESTD." column={column} />,
   },
   {
+    accessorKey: "email",
+    header: ({ column }) => <SortableHeader name="Email" column={column} />,
+    cell: ({ row }) => {
+      const email = row.original.email;
+
+      if (!email) return <>N/A</>;
+
+      return (
+        <Link href={`mailto:${email}`} target="_blank" passHref>
+          <Button className="text-xs gap-1" variant={"link"} size={"sm"}>
+            <Icons.mail className="size-4" /> {row.original.company_name}
+          </Button>
+        </Link>
+      );
+    },
+  },
+  {
     accessorKey: "website",
     header: ({ column }) => <SortableHeader name="Website" column={column} />,
     cell: ({ row }) => {

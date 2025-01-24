@@ -7,6 +7,7 @@ import { ButtonBase } from "@/styles/button.tailwind";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import CompanyDocumentEditDialog from "../../../Dialog/Company/CompanyEditDialog/CompanyDocumentEditDialog";
+import CompanyDocumentDeleteAlertDialog from "@/components/custom/AlertDialog/CompanyDocumentDeleteAlertDialog";
 
 export const CompanyDocumentDataTableColumns: ColumnDef<ICompanyDoc>[] = [
   {
@@ -61,6 +62,12 @@ export const CompanyDocumentDataTableColumns: ColumnDef<ICompanyDoc>[] = [
         asIcon
         data={row.original}
       />
+    ),
+  },
+  {
+    id: "delete",
+    cell: ({ row }) => (
+      <CompanyDocumentDeleteAlertDialog document_id={row.original.doc_id} />
     ),
   },
 ];

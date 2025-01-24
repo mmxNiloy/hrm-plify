@@ -140,6 +140,7 @@ import {
   ExternalLink,
   Copy,
   Save,
+  ImageDown,
 } from "lucide-react";
 import React from "react";
 
@@ -822,6 +823,7 @@ const RecoverIcon = React.forwardRef<SVGElement, SVGAttributes>(
 RecoverIcon.displayName = "RecoverIcon";
 
 const Icons = {
+  imageDownload: ImageDown,
   recover: RecoverIcon,
   save: Save,
   userEdit: UserEditIcon,
