@@ -6,6 +6,8 @@ import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import EducationalInfoEditDialog from "../../../../Dialog/Employee/EducationalInfoEditDialog";
+import TextCapsule from "@/components/custom/TextCapsule";
+import EmployeeEducationalInfoToggleAlertDialog from "@/components/custom/AlertDialog/EmployeeEducationalInfoToggleAlertDialog";
 
 interface Props extends IEmployeeEducationalDetail {
   updateAccess?: boolean;
@@ -40,6 +42,19 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
     accessorKey: "passing_year",
     header: ({ column }) => (
       <SortableHeader name="Passing Year" column={column} />
+    ),
+  },
+  {
+    accessorKey: "is_active",
+    header: ({ column }) => <SortableHeader name="Status" column={column} />,
+    cell: ({ row }) => (
+      <TextCapsule
+        className={
+          row.original.is_active ? "bg-green-500" : "bg-muted-foreground"
+        }
+      >
+        {row.original.is_active ? "Active" : "Inactive"}
+      </TextCapsule>
     ),
   },
   {
@@ -97,6 +112,13 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
           data={row.original}
           employee_id={row.original.employee_id}
         />
+      ),
+  },
+  {
+    id: "action-delete",
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <EmployeeEducationalInfoToggleAlertDialog data={row.original} />
       ),
   },
 ];

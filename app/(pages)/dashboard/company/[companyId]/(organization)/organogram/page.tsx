@@ -13,6 +13,7 @@ import { Metadata } from "next";
 import OrgChartVersionSelect from "@/components/custom/Organogram/OrgChartVersionSelect";
 import OrgChartVersionCreationPopover from "@/components/custom/Popover/Organogram/OrgChartVersionCreationPopover";
 import { getAllOrganograms } from "@/app/(server)/actions/getAllOrganograms";
+import OrgChartNameEditPopover from "@/components/custom/Popover/Organogram/OrgChartNameEditPopover";
 
 export async function generateMetadata({
   params,
@@ -58,6 +59,7 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
 
         <div className="flex gap-4 items-center">
           <OrgChartVersionSelect charts={charts.data} />
+
           {charts.data.length < 3 && (
             <OrgChartVersionCreationPopover
               charts={charts.data}

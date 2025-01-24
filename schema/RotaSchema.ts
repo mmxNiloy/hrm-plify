@@ -61,6 +61,25 @@ export interface IPaginatedOffDays extends IPaginatedResponse {
   message?: string;
 }
 
+export interface ILatePolicy {
+  id: number;
+  num_day_allow: number;
+  num_day_salary_deduct: number;
+  max_grace_period_min: number;
+  shift_id: number;
+  department_id: number;
+  designation_id: number;
+  company_id: number;
+
+  shift_db?: IShift;
+  departments?: IDepartment;
+  designation?: IDesignation;
+}
+
+export interface IPaginatedLatePolicy extends IPaginatedResponse {
+  data: ILatePolicy[];
+}
+
 export interface IDutyRosterBase {
   roaster_id: number;
   shift_id: number;

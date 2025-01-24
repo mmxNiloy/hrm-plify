@@ -45,14 +45,15 @@ export default function RotaDashboardSidebar({
           </span>
         </SidebarLink>
 
-        {/* <SidebarLink
+        <SidebarLink
           href={`/dashboard/company/${company.company_id}/rota/late-policy`}
         >
           <Icons.late />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Late Policy
           </span>
-        </SidebarLink> */}
+        </SidebarLink>
+
         <SidebarLink
           href={`/dashboard/company/${company.company_id}/rota/off-days`}
         >

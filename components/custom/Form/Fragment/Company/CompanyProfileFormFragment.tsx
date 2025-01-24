@@ -194,6 +194,21 @@ export default function CompanyProfileFormFragment({
             className="rounded-full"
           />
         </div>
+
+        <div className="flex-grow flex flex-col gap-2">
+          <Label htmlFor="email-input">Email</Label>
+          <Input
+            key={`company-email-${data?.email ?? ""}`}
+            disabled={disabled}
+            readOnly={readOnly}
+            defaultValue={data?.email ?? ""}
+            id="email-input"
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="rounded-full"
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
