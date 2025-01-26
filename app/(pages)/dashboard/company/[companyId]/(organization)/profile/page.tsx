@@ -13,12 +13,6 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
 import { Metadata } from "next";
 
-interface Props extends CompanyByIDPageProps {
-  readOnly?: boolean;
-  parent?: string;
-  title?: string;
-}
-
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
@@ -32,10 +26,7 @@ export async function generateMetadata({
 
 export default async function CompanyByIDPage({
   params,
-  readOnly,
-  parent,
-  title,
-}: Props) {
+}: CompanyByIDPageProps) {
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
     mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
@@ -87,14 +78,11 @@ export default async function CompanyByIDPage({
       <MyBreadcrumbs
         company={company.data}
         user={user}
-        parent={parent}
-        title={title}
+        parent={"Company Dashboard"}
+        title={"Organization Profile"}
       />
 
-      <CompanyDetailTabs
-        readOnly={readOnly || !updateAccess}
-        company={company.data}
-      />
+      <CompanyDetailTabs readOnly={!updateAccess} company={company.data} />
     </main>
   );
 }
