@@ -67,6 +67,15 @@ export default function CompanyDashboardSidebar({
               <SidebarLink href={`/dashboard/company/${company.company_id}`}>
                 <Icons.home />
                 <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+                  Company Dashboard
+                </span>
+              </SidebarLink>
+
+              <SidebarLink
+                href={`/dashboard/company/${company.company_id}/profile`}
+              >
+                <Icons.profile />
+                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
                   Organization Profile
                 </span>
               </SidebarLink>

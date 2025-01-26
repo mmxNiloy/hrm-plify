@@ -25,10 +25,12 @@ export default function CompanyAdminEditDialog({
   companyId,
   asIcon,
   data,
+  asEdit,
 }: {
   data?: ICompanyUser;
   companyId: number;
   asIcon?: boolean;
+  asEdit?: boolean;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -49,6 +51,7 @@ export default function CompanyAdminEditDialog({
         password: fd.get("password"),
         email: fd.get("email"),
         company_role_id: 3,
+        user_id: data?.user_id,
       };
 
       setLoading(true);
@@ -130,6 +133,7 @@ export default function CompanyAdminEditDialog({
           <ScrollArea className="h-[70vh]">
             <div className="grid grid-cols-1 p-4 gap-4">
               <CompanyAdminEditDialogFormFragment
+                hidePasswordInput={asEdit}
                 disabled={loading}
                 data={data}
               />

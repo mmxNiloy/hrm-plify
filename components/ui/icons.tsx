@@ -822,7 +822,24 @@ const RecoverIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 RecoverIcon.displayName = "RecoverIcon";
 
+const ProfileIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 36 36"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <path d="m33.53 18.76-6.93-3.19V6.43a1 1 0 0 0-.6-.9l-7.5-3.45a1 1 0 0 0-.84 0l-7.5 3.45a1 1 0 0 0-.58.91v9.14l-6.9 3.18a1 1 0 0 0-.58.91v9.78a1 1 0 0 0 .58.91l7.5 3.45a1 1 0 0 0 .84 0l7.08-3.26 7.08 3.26a1 1 0 0 0 .84 0l7.5-3.45a1 1 0 0 0 .58-.91v-9.78a1 1 0 0 0-.57-.91M25.61 22l-5.11-2.33 5.11-2.35 5.11 2.35Zm-1-6.44-6.44 3v-7.69a1 1 0 0 0 .35-.08L24.6 8v7.58ZM18.1 4.08l5.11 2.35-5.11 2.35L13 6.43Zm-7.5 13.23 5.11 2.35L10.6 22l-5.11-2.33Zm6.5 11.49-6.5 3v-7.69A1 1 0 0 0 11 24l6.08-2.8Zm15 0-6.46 3v-7.69A1 1 0 0 0 26 24l6.08-2.8Z" />
+      <path fill="none" d="M0 0h36v36H0z" />
+    </svg>
+  )
+);
+ProfileIcon.displayName = "ProfileIcon";
+
 const Icons = {
+  profile: ProfileIcon,
   imageDownload: ImageDown,
   recover: RecoverIcon,
   save: Save,

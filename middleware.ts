@@ -48,6 +48,14 @@ export async function middleware(req: NextRequest) {
 
   // Route guards
   if (
+    (userRole?.role.role_name === "Admin" ||
+      userRole?.role.role_name === "Super Admin") &&
+    !req.nextUrl.pathname.startsWith("/dashboard")
+  ) {
+    return NextResponse.redirect(new URL(`/dashboard`, req.url));
+  }
+
+  if (
     userRole?.role.role_name === "Company Admin" &&
     !req.nextUrl.pathname.startsWith(
       `/dashboard/company/${userRole.company_id}`

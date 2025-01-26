@@ -25,15 +25,16 @@ export const CompanyAdminListDataTableColumns: ColumnDef<Props>[] = [
     header: ({ column }) => <SortableHeader column={column} name="Email" />,
     cell: ({ row }) => row.original.users.email,
   },
-  // {
-  //   id: "edit-action",
-  //   cell: ({ row }) =>
-  //     !row.original.updateAccess ? null : (
-  //       <CompanyAdminEditDialog
-  //         data={row.original}
-  //         companyId={row.original.company_id}
-  //         asIcon
-  //       />
-  //     ),
-  // },
+  {
+    id: "edit-action",
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <CompanyAdminEditDialog
+          data={row.original}
+          companyId={row.original.company_id}
+          asIcon
+          asEdit
+        />
+      ),
+  },
 ];

@@ -9,7 +9,11 @@ import Link from "next/link";
 import CompanyDocumentEditDialog from "../../../Dialog/Company/CompanyEditDialog/CompanyDocumentEditDialog";
 import CompanyDocumentDeleteAlertDialog from "@/components/custom/AlertDialog/CompanyDocumentDeleteAlertDialog";
 
-export const CompanyDocumentDataTableColumns: ColumnDef<ICompanyDoc>[] = [
+interface Props extends ICompanyDoc {
+  updateAccess?: boolean;
+}
+
+export const CompanyDocumentDataTableColumns: ColumnDef<Props>[] = [
   {
     accessorKey: "doc_id",
     header: ({ column }) => (
@@ -56,18 +60,20 @@ export const CompanyDocumentDataTableColumns: ColumnDef<ICompanyDoc>[] = [
   },
   {
     id: "edit",
-    cell: ({ row }) => (
-      <CompanyDocumentEditDialog
-        company_id={row.original.company_id}
-        asIcon
-        data={row.original}
-      />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <CompanyDocumentEditDialog
+          company_id={row.original.company_id}
+          asIcon
+          data={row.original}
+        />
+      ),
   },
   {
     id: "delete",
-    cell: ({ row }) => (
-      <CompanyDocumentDeleteAlertDialog document_id={row.original.doc_id} />
-    ),
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <CompanyDocumentDeleteAlertDialog document_id={row.original.doc_id} />
+      ),
   },
 ];

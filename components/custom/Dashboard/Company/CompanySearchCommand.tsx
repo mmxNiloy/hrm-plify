@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import AvatarNamePlaceholder from "../../AvatarNamePlaceholder";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -194,18 +195,7 @@ export default function CompanySearchCommand() {
                             readOnly
                             src={comp.logo}
                             skeleton={
-                              <span
-                                style={{
-                                  backgroundColor: stringToColor(
-                                    comp.company_name
-                                  ),
-                                }}
-                                className={
-                                  "flex items-center justify-center text-xl size-10 bg-muted rounded-full text-white"
-                                }
-                              >
-                                {comp.company_name.charAt(0).toUpperCase()}
-                              </span>
+                              <AvatarNamePlaceholder name={comp.company_name} />
                             }
                             className="size-16 p-0"
                           />
