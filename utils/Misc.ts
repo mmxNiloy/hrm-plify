@@ -648,3 +648,10 @@ export function toCapCase(str: string) {
 
   return capitalizedWords.join(" ");
 }
+
+export function toHTTPSString(link?: string) {
+  if (!link) return "#";
+
+  if (!link.startsWith("http")) return `https://${link}`;
+  return link.replace("http:", "https:");
+}

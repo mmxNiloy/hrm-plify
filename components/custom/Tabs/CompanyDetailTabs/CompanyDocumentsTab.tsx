@@ -22,7 +22,10 @@ export default function CompanyDocumentsTab({
         )}
       </div>
 
-      <DataTable data={data ?? []} columns={CompanyDocumentDataTableColumns} />
+      <DataTable
+        data={data?.map((item) => ({ ...item, updateAccess: !readOnly })) ?? []}
+        columns={CompanyDocumentDataTableColumns}
+      />
     </div>
   );
 }

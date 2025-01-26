@@ -17,11 +17,16 @@ import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
 import React from "react";
 
+interface Props extends IFormFragmentProps<ICompanyUser> {
+  hidePasswordInput?: boolean;
+}
+
 export default function CompanyAdminEditDialogFormFragment({
   data,
   readOnly,
   disabled,
-}: IFormFragmentProps<ICompanyUser>) {
+  hidePasswordInput,
+}: Props) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -38,12 +43,14 @@ export default function CompanyAdminEditDialogFormFragment({
         />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <Label className={RequiredAsterisk} htmlFor="email-input">
-          Password
-        </Label>
-        <PasswordInput name="password" />
-      </div>
+      {!hidePasswordInput && (
+        <div className="flex flex-col gap-2">
+          <Label className={RequiredAsterisk} htmlFor="email-input">
+            Password
+          </Label>
+          <PasswordInput required name="password" />
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         <Label className={RequiredAsterisk} htmlFor="first-name-input">
