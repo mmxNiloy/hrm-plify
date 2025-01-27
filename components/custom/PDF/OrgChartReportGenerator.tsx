@@ -7,6 +7,9 @@ import jsPDF from "jspdf";
 import { toPng } from "html-to-image";
 import { OrganizationChart } from "primereact/organizationchart";
 import { ICompany } from "@/schema/CompanySchema";
+import { PDFDocument, rgb } from "pdf-lib";
+import { toast } from "@/components/ui/use-toast";
+import { ToastSuccess, ToastWarn } from "@/styles/toast.tailwind";
 
 export default function OrgChartReportGenerator({
   canvasRef,
@@ -17,232 +20,124 @@ export default function OrgChartReportGenerator({
 }) {
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Function to load image as Promise
-  const loadImage = useCallback(
-    (src: string): Promise<HTMLImageElement> =>
-      new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = src;
-        img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
-      }),
+  const generatePDFWithPDFLib = useCallback(
+    async (wrapperEl: HTMLDivElement) => {
+      try {
+        // Dynamically calculate content dimensions
+        const boundingBox = wrapperEl.getBoundingClientRect();
+        const padding = 16;
+        const scale = 2; // Adjust scale for resolution
+        const canvasWidth = (boundingBox.width + 2 * padding) * scale;
+        const canvasHeight = (boundingBox.height + 2 * padding) * scale;
+
+        // Generate PNG
+        const pngDataUrl = await toPng(wrapperEl, {
+          cacheBust: true,
+          quality: 1,
+          canvasWidth,
+          canvasHeight,
+          backgroundColor: "#ffffff",
+        });
+
+        // Load the PNG as an array buffer
+        const pngBytes = await fetch(pngDataUrl).then((res) =>
+          res.arrayBuffer()
+        );
+
+        // Create a new PDF document
+        const pdfDoc = await PDFDocument.create();
+
+        // Embed the PNG image into the PDF
+        const pngImage = await pdfDoc.embedPng(pngBytes);
+
+        // Get image dimensions
+        const pngDims = pngImage.scale(1); // 1x scale
+
+        // Add a page to the PDF document
+        const page = pdfDoc.addPage([pngDims.width, pngDims.height]);
+
+        // Draw the PNG on the page
+        page.drawImage(pngImage, {
+          x: 0,
+          y: 0,
+          width: pngDims.width,
+          height: pngDims.height,
+        });
+
+        // Serialize the PDF document to bytes
+        const pdfBytes = await pdfDoc.save();
+
+        // Trigger download
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `organogram_${Date.now()}.pdf`;
+        link.click();
+      } catch (error) {
+        console.error("Error generating PDF with PDF-lib:", error);
+      }
+    },
     []
   );
 
-  const generatePdf = useCallback(
-    async (dataUrl: string) => {
-      setLoading(true);
-
-      const doc = new jsPDF();
-
-      // Header Section Constants
-      const imageSize = 20; // Size for the logo (circular image)
-      const padding = 10; // Padding between the logo and text
-      const gapBetweenLogoAndText = 4; // Increased gap between logo and description
-      const headerWidth = 180; // Total width allocated for header content
-      const centerX = (doc.internal.pageSize.width - headerWidth) / 2; // Center position
-
+  const downloadHighQualityImage = useCallback(
+    async (wrapperEl: HTMLDivElement) => {
       try {
-        // Load the logo image
-        if (company.logo) {
-          const logoImage = await loadImage(company.logo);
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            const size = 256; // Circle size
-            canvas.width = size;
-            canvas.height = size;
+        // Dynamically calculate the dimensions of the content
+        const boundingBox = wrapperEl.getBoundingClientRect();
+        const scale = 8; // Increase scale for higher resolution (e.g., 2x)
+        const padding = 16;
+        const canvasWidth = (boundingBox.width + 2 * padding) * scale;
+        const canvasHeight = (boundingBox.height + 2 * padding) * scale;
 
-            // Draw circular clipped image
-            ctx.beginPath();
-            ctx.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI);
-            ctx.clip();
-            ctx.drawImage(logoImage, 0, 0, size, size);
+        // Generate the image as a PNG with high quality
+        const dataUrl = await toPng(wrapperEl, {
+          cacheBust: true,
+          quality: 1, // Set quality to maximum
+          canvasWidth,
+          canvasHeight,
+          backgroundColor: "#ffffff", // White background
+          skipFonts: true,
+          preferredFontFormat: "woff2",
+        });
 
-            // Add the image to the PDF
-            const base64Image = canvas.toDataURL("image/png");
-            doc.addImage(base64Image, "PNG", 90, 10, 30, 30);
-          }
-
-          // Add company details
-          doc.setFontSize(14);
-          doc.text(company.company_name, 105, 50, { align: "center" });
-          doc.setFontSize(10);
-          doc.text(company.headquarters || "Address Not Available", 105, 55, {
-            align: "center",
-          });
-          doc.text(company.website || "Website Not Available", 105, 60, {
-            align: "center",
-          });
-          doc.text(company.contact_number || "Contact Not Available", 105, 65, {
-            align: "center",
-          });
-
-          // Add dataUrl image at the bottom of the header
-          if (dataUrl) {
-            const image = await loadImage(dataUrl);
-            const imageYPosition = 30 + imageSize + gapBetweenLogoAndText + 20; // Adjust the Y position for the image
-
-            // Calculate the image's natural dimensions and scale it to fit the page width
-            const maxWidth = 180; // Maximum width for the image
-            const aspectRatio = image.width / image.height; // Aspect ratio of the image
-            const imageWidth = Math.min(maxWidth, image.width); // Set max width constraint
-            const imageHeight = imageWidth / aspectRatio; // Calculate height while preserving aspect ratio
-
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            if (ctx) {
-              const size = 1024; // Circle size
-              canvas.width = size;
-              canvas.height = size;
-
-              // Draw circular clipped image
-              ctx.beginPath();
-              //   ctx.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI);
-              //   ctx.clip();
-              ctx.drawImage(image, 0, 0, size, size);
-
-              // Add the image to the PDF
-              const base64Image = canvas.toDataURL("image/png");
-              doc.addImage(
-                base64Image,
-                "PNG",
-                centerX,
-                imageYPosition,
-                imageWidth,
-                imageHeight
-              );
-            }
-
-            // Draw the image with calculated width and height
-            // doc.addImage(
-            //   image,
-            //   "PNG",
-            //   centerX,
-            //   imageYPosition,
-            //   imageWidth,
-            //   imageHeight
-            // );
-          }
-        }
-
-        // Save the PDF with the timestamped file name
-        doc.save(`organogram_${Date.now()}.pdf`);
+        // Create a download link for the image
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `organogram_${Date.now()}.png`;
+        link.click();
       } catch (error) {
-        // console.error("Error loading image:", error);
-        alert("Failed to load the company logo image.");
-      } finally {
-        setLoading(false);
+        console.error("Error generating high-quality image:", error);
       }
     },
-    [
-      company.company_name,
-      company.contact_number,
-      company.headquarters,
-      company.logo,
-      company.website,
-      loadImage,
-    ]
+    []
   );
-
-  async function downloadHighQualityImage(wrapperEl: HTMLDivElement) {
-    try {
-      // Dynamically calculate the dimensions of the content
-      const boundingBox = wrapperEl.getBoundingClientRect();
-      const scale = 8; // Increase scale for higher resolution (e.g., 2x)
-      const padding = 16;
-      const canvasWidth = (boundingBox.width + 2 * padding) * scale;
-      const canvasHeight = (boundingBox.height + 2 * padding) * scale;
-
-      // Generate the image as a PNG with high quality
-      const dataUrl = await toPng(wrapperEl, {
-        cacheBust: true,
-        quality: 1, // Set quality to maximum
-        canvasWidth,
-        canvasHeight,
-        backgroundColor: "#ffffff", // White background
-        skipFonts: true,
-        preferredFontFormat: "woff2",
-      });
-
-      // Create a download link for the image
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = `organogram_${Date.now()}.pdf`;
-      link.click();
-    } catch (error) {
-      console.error("Error generating high-quality image:", error);
-    }
-  }
 
   const downloadItem = useCallback(async () => {
     if (canvasRef && canvasRef.current) {
       const wrapperEl = canvasRef.current.getElement();
 
       setLoading(true);
-
-      const oldStyles = { ...wrapperEl.style };
-
       try {
-        // Convert the element to an image
-        // wrapperEl.style.paddingTop = "1.5rem";
-        // wrapperEl.style.minWidth = "16rem";
-        // wrapperEl.style.minHeight = "16rem";
-        // wrapperEl.style.display = "flex";
-        // wrapperEl.style.alignItems = "center";
-        // wrapperEl.style.justifyContent = "center";
-
-        // const dataUrl = await toPng(wrapperEl, {
-        //   cacheBust: true,
-        //   quality: 1,
-        //   canvasHeight: 1024,
-        //   canvasWidth: 1024,
-        //   backgroundColor: "#ffffff", // Set background to white
-        //   skipFonts: true,
-        //   preferredFontFormat: "woff2",
-        // });
-
-        // console.log("Generating PDF...");
-
-        // generatePdf(dataUrl);
-
-        await downloadHighQualityImage(wrapperEl);
+        await generatePDFWithPDFLib(wrapperEl);
       } catch (error) {
-        // console.error("Error capturing element:", error);
-        // console.warn("Trying to capture with element id");
-
-        try {
-          const chartEl = document.getElementById("organogram-chart");
-          if (!chartEl) throw new Error("Chart element not found");
-
-          const dataUrl = await toPng(chartEl, {
-            cacheBust: true,
-            quality: 1,
-            canvasHeight: 1024,
-            canvasWidth: 1024,
-            backgroundColor: "#ffffff", // Set background to white
-            skipFonts: true,
-            preferredFontFormat: "woff2",
-          });
-
-          // console.log("Generating PDF...");
-          generatePdf(dataUrl);
-        } catch (error) {
-          // console.error("Error capturing element:", error);
-        }
+        toast({
+          title: "Failed to generate PDF",
+          description:
+            "Failed to generate PDF. Trying to generate PNG document.",
+          className: ToastWarn,
+        });
+        await downloadHighQualityImage(wrapperEl);
+      } finally {
+        toast({
+          title: "Document generated!",
+          className: ToastSuccess,
+        });
       }
-
-      // wrapperEl.style.paddingTop = oldStyles.paddingTop;
-      // wrapperEl.style.minWidth = oldStyles.minWidth;
-      // wrapperEl.style.minHeight = oldStyles.minHeight;
-      // wrapperEl.style.display = oldStyles.display;
-      // wrapperEl.style.alignItems = oldStyles.alignItems;
-      // wrapperEl.style.justifyContent = oldStyles.justifyContent;
 
       setLoading(false);
     }
-  }, [canvasRef, generatePdf]);
+  }, [canvasRef, downloadHighQualityImage, generatePDFWithPDFLib]);
 
   return (
     <Button
@@ -255,7 +150,7 @@ export default function OrgChartReportGenerator({
       {loading ? (
         <Icons.spinner className="animate-spin ease-in-out" />
       ) : (
-        <Icons.imageDownload />
+        <Icons.pdf />
       )}
     </Button>
   );

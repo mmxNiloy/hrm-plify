@@ -96,7 +96,7 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const apiRes = await fetch(
-      `${process.env.API_BASE_URL}/company/operation/docs/${data.doc_id}`,
+      `${process.env.API_BASE_URL}/company/operation/docs/${data.document_id}`,
       {
         method: "DELETE",
         headers: {

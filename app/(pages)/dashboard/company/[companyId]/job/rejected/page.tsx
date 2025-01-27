@@ -49,7 +49,11 @@ export default async function JobHiredPage({ params }: CompanyByIDPageProps) {
 
   const [company, allJobs] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyAllJobListingsMetadata({ company_id: companyId }),
+    getCompanyAllJobListingsMetadata({
+      company_id: companyId,
+      page: 0,
+      limit: 0,
+    }),
   ]);
 
   if (company.error || allJobs.error) {
