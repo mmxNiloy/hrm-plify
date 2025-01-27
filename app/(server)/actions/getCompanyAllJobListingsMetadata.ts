@@ -9,7 +9,9 @@ export async function getCompanyAllJobListingsMetadata({
   page,
   limit,
 }: {
-  [key: string]: number;
+  company_id: number;
+  page: number;
+  limit: number;
 }) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";

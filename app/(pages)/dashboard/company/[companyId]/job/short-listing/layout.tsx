@@ -1,7 +1,8 @@
 import React from "react";
 
 interface Props {
-  [key: string]: Readonly<React.ReactNode>;
+  children: Readonly<React.ReactNode>;
+  dataSlot: Readonly<React.ReactNode>;
 }
 
 export default function JobShortlistPageLayout({ children, dataSlot }: Props) {

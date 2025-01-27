@@ -13,6 +13,7 @@ export async function POST(req: NextRequest, { params }: IDProps) {
   const founded_year = fd.get("founded_year"); // string
   const website = fd.get("website"); // string
   const logo = fd.get("logo"); // string
+  const email = fd.get("email"); // string
   return NextResponse.json(
     {
       message: "TODO: Integrate with the server when it's ready",
@@ -25,6 +26,7 @@ export async function POST(req: NextRequest, { params }: IDProps) {
         founded_year: founded_year as string,
         website: website as string,
         logo: logo as string,
+        email: (email as string | undefined) ?? "",
       },
     },
     { status: 501 }
@@ -44,6 +46,7 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
     const logo = fd.get("logo") as File | undefined; // file
     const logoUrl = fd.get("logo_url") as string | undefined;
     const is_active = fd.get("is_active") as "yes" | "no"; // enum('yes', 'no')
+    const email = (fd.get("email") as string | undefined) ?? "";
 
     console.log("File included", logo);
 
@@ -62,6 +65,7 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
       website: website as string,
       logo: uploadRes?.data?.fileUrl ?? logoUrl ?? "",
       is_active: is_active === "yes" ? 1 : 0,
+      email,
     };
 
     // Check if the user is logged in
