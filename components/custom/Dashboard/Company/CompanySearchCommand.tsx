@@ -33,6 +33,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import AvatarNamePlaceholder from "../../AvatarNamePlaceholder";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,6 +69,11 @@ export default function CompanySearchCommand() {
 
     setLoading(false);
   }, [toast]);
+
+  const resetSearch = useCallback(() => {
+    setSearchBarValue("");
+    loadInitialData();
+  }, [loadInitialData]);
 
   useEffect(() => {
     loadInitialData();
@@ -97,7 +111,7 @@ export default function CompanySearchCommand() {
 
   return (
     <Command className="rounded-lg border shadow-md" shouldFilter={false}>
-      <div className="relative flex">
+      <div className="relative flex items-center">
         <CommandInput
           placeholder={"Select a company or search..."}
           onValueChange={(query) => {
@@ -110,8 +124,8 @@ export default function CompanySearchCommand() {
           className="flex-grow pr-10"
         />
 
-        <Drawer direction="right">
-          <DrawerTrigger asChild>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <Button
               disabled={loading}
               size={"icon"}
@@ -119,54 +133,85 @@ export default function CompanySearchCommand() {
               className="absolute right-0"
             >
               <div className="relative">
-                <Icons.history className="text-muted-foreground" />
+                <Icons.menu />
                 {history.length > 0 && (
                   <span className="absolute size-2 bg-red-400 rounded-full top-0 right-0" />
                 )}
               </div>
             </Button>
-          </DrawerTrigger>
+          </DropdownMenuTrigger>
 
-          <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
-            <div className="flex flex-col gap-2 px-4">
-              <DrawerHeader>
-                <DrawerTitle>Search History</DrawerTitle>
-                <DrawerDescription>
-                  These are the latest 10 searches by you in this session.
-                </DrawerDescription>
-              </DrawerHeader>
+          <DropdownMenuContent align="end">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
 
-              <Separator />
+              <DropdownMenuItem
+                className="gap-1"
+                disabled={loading}
+                onClick={resetSearch}
+              >
+                <Icons.reset /> Reset
+              </DropdownMenuItem>
+              <Drawer direction="right">
+                <DrawerTrigger asChild>
+                  <DropdownMenuItem className="gap-1" disabled={loading}>
+                    <div className="relative">
+                      <Icons.history />
+                      {history.length > 0 && (
+                        <span className="absolute size-2 bg-red-400 rounded-full top-0 right-0" />
+                      )}
+                    </div>{" "}
+                    Search History
+                  </DropdownMenuItem>
+                </DrawerTrigger>
 
-              {history.length > 0 ? (
-                <>
-                  {history.reverse().map((item, index) => (
-                    <DrawerClose asChild key={`search-history-item-${index}`}>
-                      <Button
-                        disabled={loading}
-                        variant={"ghost"}
-                        size={"sm"}
-                        className="gap-2 justify-start"
-                        onClick={() => {
-                          handleSearchChange(item);
-                          setSearchBarValue(item);
-                        }}
-                      >
-                        <Icons.history />
-                        <p>{item}</p>
-                      </Button>
-                    </DrawerClose>
-                  ))}
-                </>
-              ) : (
-                <div className="flex-grow flex flex-col gap-2 w-full items-center justify-center">
-                  <Icons.rabbit className="size-32" />
-                  No search history...
-                </div>
-              )}
-            </div>
-          </DrawerContent>
-        </Drawer>
+                <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
+                  <div className="flex flex-col gap-2 px-4">
+                    <DrawerHeader>
+                      <DrawerTitle>Search History</DrawerTitle>
+                      <DrawerDescription>
+                        These are the latest 10 searches by you in this session.
+                      </DrawerDescription>
+                    </DrawerHeader>
+
+                    <Separator />
+
+                    {history.length > 0 ? (
+                      <>
+                        {history.reverse().map((item, index) => (
+                          <DrawerClose
+                            asChild
+                            key={`search-history-item-${index}`}
+                          >
+                            <Button
+                              disabled={loading}
+                              variant={"ghost"}
+                              size={"sm"}
+                              className="gap-2 justify-start"
+                              onClick={() => {
+                                handleSearchChange(item);
+                                setSearchBarValue(item);
+                              }}
+                            >
+                              <Icons.history />
+                              <p>{item}</p>
+                            </Button>
+                          </DrawerClose>
+                        ))}
+                      </>
+                    ) : (
+                      <div className="flex-grow flex flex-col gap-2 w-full items-center justify-center">
+                        <Icons.rabbit className="size-32" />
+                        No search history...
+                      </div>
+                    )}
+                  </div>
+                </DrawerContent>
+              </Drawer>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <CommandList className="max-h-fit">
         <CommandEmpty>No companies found.</CommandEmpty>
