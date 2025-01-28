@@ -45,19 +45,6 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
     ),
   },
   {
-    accessorKey: "is_active",
-    header: ({ column }) => <SortableHeader name="Status" column={column} />,
-    cell: ({ row }) => (
-      <TextCapsule
-        className={
-          row.original.is_active ? "bg-green-500" : "bg-muted-foreground"
-        }
-      >
-        {row.original.is_active ? "Active" : "Inactive"}
-      </TextCapsule>
-    ),
-  },
-  {
     accessorKey: "transcript_link",
     header: "Transcript",
     cell: ({ row }) =>
@@ -68,7 +55,7 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
           passHref
         >
           <Button size={"icon"} variant={"ghost"} className="rounuded-full">
-            <Icons.pdf />
+            <Icons.externalLink />
           </Button>
         </Link>
       ) : (
@@ -78,7 +65,7 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
           variant={"ghost"}
           className="rounuded-full"
         >
-          <Icons.pdf />
+          <Icons.externalLink />
         </Button>
       ),
   },
@@ -89,7 +76,7 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
       row.original.certificate_link ? (
         <Link target="_blank" href={row.original.certificate_link} passHref>
           <Button size={"icon"} variant={"ghost"} className="rounuded-full">
-            <Icons.document />
+            <Icons.externalLink />
           </Button>
         </Link>
       ) : (
@@ -99,7 +86,7 @@ export const EducationalInfoDataTableColumns: ColumnDef<Props>[] = [
           variant={"ghost"}
           className="rounuded-full"
         >
-          <Icons.document />
+          <Icons.externalLink />
         </Button>
       ),
   },

@@ -5,6 +5,7 @@ import { ICompanyUser } from "@/schema/UserSchema";
 import { getFullNameOfUser } from "@/utils/Misc";
 import { ColumnDef } from "@tanstack/react-table";
 import CompanyAdminEditDialog from "../../../Dialog/Company/CompanyAdminEditDialog";
+import UserDeleteAlertDialog from "@/components/custom/AlertDialog/UserDeleteAlertDialog";
 
 interface Props extends ICompanyUser {
   updateAccess?: boolean;
@@ -35,6 +36,13 @@ export const CompanyAdminListDataTableColumns: ColumnDef<Props>[] = [
           asIcon
           asEdit
         />
+      ),
+  },
+  {
+    id: "delete-action",
+    cell: ({ row }) =>
+      !row.original.updateAccess ? null : (
+        <UserDeleteAlertDialog user_id={row.original.user_id} asIcon />
       ),
   },
 ];
