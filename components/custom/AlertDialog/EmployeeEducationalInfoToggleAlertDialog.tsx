@@ -42,11 +42,17 @@ export default function EmployeeEducationalInfoToggleAlertDialog({
       const newData = { ...data };
 
       try {
+        // With recovery option
+        // const apiRes = await fetch(`/api/employee/educational-info`, {
+        //   method: "PATCH",
+        //   body: JSON.stringify(
+        //     Object.assign(newData, { is_active: !data.is_active })
+        //   ),
+        // });
+
         const apiRes = await fetch(`/api/employee/educational-info`, {
-          method: "PATCH",
-          body: JSON.stringify(
-            Object.assign(newData, { is_active: !data.is_active })
-          ),
+          method: "DELETE",
+          body: JSON.stringify({ education_id: data.education_id }),
         });
 
         if (apiRes.ok) {
@@ -106,6 +112,8 @@ export default function EmployeeEducationalInfoToggleAlertDialog({
           <AlertDialogDescription>
             Are you sure you want to {data.is_active ? "delete" : "recover"}{" "}
             this document?
+            <br />
+            <em>This action is irreversable.</em>
           </AlertDialogDescription>
         </AlertDialogHeader>
 

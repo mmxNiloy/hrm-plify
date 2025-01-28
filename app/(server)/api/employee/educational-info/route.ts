@@ -82,3 +82,42 @@ export async function PATCH(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  // Check if the user is logged in
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
+  if (!session || session.value.length < 1) {
+    return NextResponse.json(
+      { message: "Session expired. Login again." },
+      { status: 401 }
+    );
+  }
+
+  const data = (await req.json()) as IEmployeeEducationalDetail;
+
+  try {
+    const apiRes = await fetch(
+      `${process.env.API_BASE_URL}/employee/delete-education-data/${data.education_id}`,
+      {
+        method: "DELETE",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.value}`,
+        },
+      }
+    );
+
+    const res = await apiRes.json();
+    return NextResponse.json(res, { status: apiRes.status });
+  } catch (err) {
+    console.error(
+      "DELETE > DELETE Educationa Detail of Employee > Failed to delete educational detail",
+      err
+    );
+    return NextResponse.json(
+      { message: "Failed to Delete educational information" },
+      { status: 500 }
+    );
+  }
+}
