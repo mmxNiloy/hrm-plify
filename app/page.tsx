@@ -55,7 +55,7 @@ export default function Home() {
           height={0}
           width={0}
           src={"/site-logo.svg"}
-          className="h-16 w-fit"
+          className="h-16 w-fit dark:invert"
           alt={`${SiteConfig.siteName} logo`}
         />
         <div className="container px-32">
