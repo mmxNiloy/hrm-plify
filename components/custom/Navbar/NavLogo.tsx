@@ -12,7 +12,7 @@ export default function NavLogo({ href }: { href?: string }) {
         unoptimized
         height={0}
         width={0}
-        className="h-16 w-32"
+        className="h-16 w-32 dark:invert"
         alt={`${SiteConfig.siteName} Logo`}
       />
     </Link>

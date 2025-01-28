@@ -6,12 +6,22 @@ import { ICompany } from "@/schema/CompanySchema";
 import { AvatarPicker } from "../ui/avatar-picker";
 import { Skeleton } from "../ui/skeleton";
 import { getSampleCompanies } from "@/app/(server)/actions/getSampleCompanies";
+import AvatarNamePlaceholder from "./AvatarNamePlaceholder";
+import TextCapsule from "./TextCapsule";
+import Icons from "../ui/icons";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import Link from "next/link";
 
 export default function CompanyCarousel() {
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -27,75 +37,125 @@ export default function CompanyCarousel() {
     loadData();
   }, [loadData]);
 
-  useEffect(() => {
-    if (loading || companies.length === 0) return;
-
-    const container = containerRef.current;
-    const slides = container?.children;
-
-    if (!container || !slides) return;
-
-    // Duplicate the slides for a seamless looping effect
-    const slideWidth = slides[0].clientWidth;
-    const totalSlides = slides.length;
-
-    const timeline = gsap.timeline({
-      repeat: -1, // Infinite loop
-      defaults: { ease: "linear" },
-    });
-
-    timeline.to(container, {
-      x: `-${slideWidth * totalSlides}px`, // Move the container to the end
-      duration: totalSlides * 2, // Adjust the duration for speed
-    });
-
-    return () => {
-      timeline.kill(); // Clean up the animation
-    };
-  }, [loading, companies]);
-
   if (loading) {
-    return <Skeleton className="w-full h-16" />;
+    return (
+      <Carousel
+        opts={{
+          align: "start",
+        }}
+        className="w-full px-8"
+        plugins={[
+          //@ts-ignore
+          Autoplay({
+            delay: 2000,
+          }),
+        ]}
+      >
+        <CarouselContent>
+          {Array.from({ length: 6 }).map((item, index) => (
+            <CarouselItem
+              key={`company-card-skeleton-${index}`}
+              className="md:basis-1/2 lg:basis-1/3"
+            >
+              <CompanyCardSkeleton />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+    );
   }
 
   return (
-    <div className="container overflow-hidden relative" ref={carouselRef}>
-      <div
-        className="flex gap-4 items-center"
-        ref={containerRef}
-        style={{ display: "flex" }}
-      >
+    <Carousel
+      opts={{
+        align: "start",
+      }}
+      className="w-full px-8"
+      plugins={[
+        //@ts-ignore
+        Autoplay({
+          delay: 2000,
+        }),
+      ]}
+    >
+      <CarouselContent>
         {companies.map((item, index) => (
-          <div
-            className="min-w-64 flex gap-2 px-2 py-4 from-sky-200 to-blue-400 bg-gradient-to-br shadow-sm drop-shadow-sm rounded-md"
-            key={`customer-slide-${index}`}
+          <CarouselItem
+            key={`company-card-${index}`}
+            className="md:basis-1/2 lg:basis-1/3"
           >
-            <AvatarPicker
-              src={item.logo}
-              readOnly
-              className="min-w-10 min-h-10 size-10 p-0"
-            />
-            <p className="font-semibold text-lg line-clamp-1 text-ellipsis">
-              {item.company_name}
-            </p>
-          </div>
+            <CompanyCard comp={item} />
+          </CarouselItem>
         ))}
-        {/* Duplicate slides for seamless scrolling */}
-        {companies.map((item, index) => (
-          <div
-            className="min-w-64 flex gap-2 px-2 py-4 from-sky-200 to-blue-400 bg-gradient-to-br shadow-sm drop-shadow-sm rounded-md"
-            key={`customer-slide-duplicate-${index}`}
+      </CarouselContent>
+    </Carousel>
+  );
+}
+
+function CompanyCard({ comp }: { comp: ICompany }) {
+  return (
+    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
+      <div className="flex gap-4">
+        <div className="flex flex-col gap-4 items-center justify-center">
+          <AvatarPicker
+            readOnly
+            src={comp.logo}
+            skeleton={<AvatarNamePlaceholder name={comp.company_name} />}
+            className="size-16 p-0"
+          />
+          <Link
+            href={`${
+              comp.website
+            }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
+            target="_blank"
+            className="hover:underline"
+            passHref
           >
-            <AvatarPicker
-              src={item.logo}
-              readOnly
-              className="min-w-10 min-h-10 size-10 p-0"
-            />
-            <p className="font-semibold text-lg line-clamp-1 text-ellipsis">
-              {item.company_name}
-            </p>
+            <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
+              <Icons.externalLink />
+              Visit
+            </TextCapsule>
+          </Link>
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="font-semibold text-xl line-clamp-1 text-ellipsis">
+            {comp.company_name}
+          </p>
+
+          <div className="flex flex-col gap-2 *:text-xs">
+            <TextCapsule className="bg-blue-500">
+              <Icons.building className="size-3" />
+              {comp.headquarters ?? "N/A"}
+            </TextCapsule>
+
+            <TextCapsule className="bg-orange-500">
+              <Icons.factory className="size-3" />
+              {comp.industry ?? "N/A"}
+            </TextCapsule>
+            <TextCapsule className={comp.is_active ? "bg-green-500" : ""}>
+              {comp.is_active ? "Active" : "Inactive"}
+            </TextCapsule>
           </div>
-        ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompanyCardSkeleton() {
+  return (
+    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
+      <div className="flex gap-4 flex-grow">
+        <div className="flex flex-col gap-4 items-center justify-center">
+          <Skeleton className="size-16 rounded-full" />
+          <Skeleton className="w-16 h-4" />
+        </div>
+        <div className="flex flex-col gap-2 w-full">
+          <Skeleton className="flex-grow h-6" />
+          <Skeleton className="w-16 h-4" />
+          <Skeleton className="w-16 h-4" />
+          <Skeleton className="w-16 h-4" />
+        </div>
       </div>
     </div>
   );
