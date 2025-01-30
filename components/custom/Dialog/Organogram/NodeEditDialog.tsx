@@ -433,7 +433,10 @@ export default function NodeEditDialog({
             </DialogClose>
             <Button
               type="submit"
-              disabled={loading || availableNodes.length < 1}
+              disabled={
+                loading ||
+                (!(isVacantCheck || asEditable) && availableNodes.length < 1)
+              }
               className={ButtonSuccess}
               size="sm"
             >
