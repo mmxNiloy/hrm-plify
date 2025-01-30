@@ -370,7 +370,9 @@ export default function NodeEditDialog({
                   defaultValue={
                     node ? `${node.data.designation_id}` : undefined
                   }
-                  disabled={availableNodes.length < 1}
+                  disabled={
+                    !(isVacantCheck || asEditable) && availableNodes.length < 1
+                  }
                   items={designations.map((d) => ({
                     label: d.designation_name,
                     value: `${d.designation_id}`,
