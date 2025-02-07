@@ -26,6 +26,10 @@ import RTWFormContext from "@/context/RTWFormContext";
 import { Textarea } from "@/components/ui/textarea";
 import { IFormFragmentProps } from "@/utils/Types";
 import { IRightToWork } from "@/schema/RightToWork";
+import { FilePicker } from "@/components/ui/file-picker";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
 
 export default function RTWStep3CopyTab({
   data,
@@ -205,15 +209,27 @@ export default function RTWStep3CopyTab({
             </SelectContent>
           </Select>
 
-          <AvatarPicker
-            key={`rtw-evidence-1-${rtwEvidence1}`}
-            className="size-full max-h-64"
-            src={data?.rtw_evidence_scan_1_file_url}
-            name="rtw_evidence_scan_1_file"
-            skeleton={<VisaFrontSkeleton />}
-            variant="video"
-            readOnly={readOnly}
-          />
+          {data?.rtw_evidence_scan_1_file_url ? (
+            <Link
+              className="w-fit"
+              passHref
+              href={data.rtw_evidence_scan_1_file_url}
+              target="_blank"
+            >
+              <Button type="button" className="gap-1" variant={"link"}>
+                <Icons.externalLink /> View document
+              </Button>
+            </Link>
+          ) : (
+            <FilePicker
+              key={`rtw-evidence-1-${rtwEvidence1}`}
+              // src={data?.rtw_evidence_scan_1_file_url}
+              name="rtw_evidence_scan_1_file"
+              // skeleton={<VisaFrontSkeleton />}
+              // variant="video"
+              readOnly={readOnly}
+            />
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <p>RTW Evidence Scans - 2 (If Applicable)</p>
@@ -240,15 +256,28 @@ export default function RTWStep3CopyTab({
             </SelectContent>
           </Select>
 
-          <AvatarPicker
-            key={`rtw-evidence-2-${rtwEvidence2}`}
-            className="size-full max-h-64"
-            src={data?.rtw_evidence_scan_2_file_url}
-            name="rtw_evidence_scan_2_file"
-            skeleton={<VisaFrontSkeleton />}
-            variant="video"
-            readOnly={readOnly}
-          />
+          {data?.rtw_evidence_scan_2_file_url ? (
+            <Link
+              className="w-fit"
+              passHref
+              href={data.rtw_evidence_scan_2_file_url}
+              target="_blank"
+            >
+              <Button type="button" className="gap-1" variant={"link"}>
+                <Icons.externalLink /> View document
+              </Button>
+            </Link>
+          ) : (
+            <FilePicker
+              key={`rtw-evidence-2-${rtwEvidence2}`}
+              // className="size-full max-h-64"
+              // src={data?.rtw_evidence_scan_2_file_url}
+              name="rtw_evidence_scan_2_file"
+              // skeleton={<VisaFrontSkeleton />}
+              // variant="video"
+              readOnly={readOnly}
+            />
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <p>RTW Report</p>
@@ -275,73 +304,97 @@ export default function RTWStep3CopyTab({
             </SelectContent>
           </Select>
 
-          <AvatarPicker
-            key={`rtw-report-doc-${rtwReportDoc}`}
-            className="size-full max-h-64"
-            src={data?.rtw_report_doc_file_url}
-            name="rtw_report_doc_file"
-            skeleton={<VisaFrontSkeleton />}
-            variant="video"
-            readOnly={readOnly}
-          />
+          {data?.rtw_report_doc_file_url ? (
+            <Link
+              className="w-fit"
+              passHref
+              href={data.rtw_report_doc_file_url}
+              target="_blank"
+            >
+              <Button type="button" className="gap-1" variant={"link"}>
+                <Icons.externalLink /> View document
+              </Button>
+            </Link>
+          ) : (
+            <FilePicker
+              key={`rtw-report-doc-${rtwReportDoc}`}
+              // className="size-full max-h-64"
+              // src={data?.rtw_report_doc_file_url}
+              name="rtw_report_doc_file"
+              // skeleton={<VisaFrontSkeleton />}
+              // variant="video"
+              readOnly={readOnly}
+            />
+          )}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p>RTW Check Results</p>
-          <Label>RTW Check Results</Label>
-          <Select
-            name="rtw_check_result"
-            defaultValue={data?.rtw_check_result}
-            disabled={readOnly}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select RTW Check Result" />
-            </SelectTrigger>
+        <div className="grid grid-cols-2 gap-2 col-span-full">
+          <p className="col-span-full">RTW Check Results</p>
 
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Select RTW check result</SelectLabel>
-                <SelectItem value="positive">Positive</SelectItem>
-                <SelectItem value="negative">Negative</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-2">
+            <Label>RTW Check Results</Label>
+            <Select
+              name="rtw_check_result"
+              defaultValue={data?.rtw_check_result}
+              disabled={readOnly}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select RTW Check Result" />
+              </SelectTrigger>
 
-          <Label>Checker Name</Label>
-          <Input
-            name="checker_name"
-            required
-            placeholder="Checker Name"
-            defaultValue={data?.checker_name}
-            readOnly={readOnly}
-          />
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Select RTW check result</SelectLabel>
+                  <SelectItem value="positive">Positive</SelectItem>
+                  <SelectItem value="negative">Negative</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
 
-          <Label>Designation</Label>
-          <Input
-            name="checker_designation"
-            required
-            placeholder="Designation"
-            defaultValue={data?.checker_designation}
-            readOnly={readOnly}
-          />
+          <div className="flex flex-col gap-2">
+            <Label>Checker Name</Label>
+            <Input
+              name="checker_name"
+              required
+              placeholder="Checker Name"
+              defaultValue={data?.checker_name}
+              readOnly={readOnly}
+            />
+          </div>
 
-          <Label>Contact No.</Label>
-          <Input
-            name="checker_contact"
-            required
-            placeholder="Contact No."
-            defaultValue={data?.checker_contact}
-            readOnly={readOnly}
-          />
+          <div className="flex flex-col gap-2">
+            <Label>Designation</Label>
+            <Input
+              name="checker_designation"
+              required
+              placeholder="Designation"
+              defaultValue={data?.checker_designation}
+              readOnly={readOnly}
+            />
+          </div>
 
-          <Label>Email Address</Label>
-          <Input
-            name="checker_email"
-            required
-            placeholder="Email Address"
-            defaultValue={data?.checker_email}
-            readOnly={readOnly}
-          />
+          <div className="flex flex-col gap-2">
+            <Label>Contact No.</Label>
+            <Input
+              name="checker_contact"
+              required
+              placeholder="Contact No."
+              defaultValue={data?.checker_contact}
+              readOnly={readOnly}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Email Address</Label>
+            <Input
+              name="checker_email"
+              required
+              placeholder="Email Address"
+              defaultValue={data?.checker_email}
+              readOnly={readOnly}
+            />
+          </div>
         </div>
       </div>
 
