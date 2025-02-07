@@ -394,6 +394,15 @@ export default function RTWEditDialog({
     [company_id, data, router, toast]
   );
 
+  // Reset states
+  useEffect(() => {
+    if (!open) {
+      setSelectedEmployee(undefined);
+      setCurrentTabIndex(0);
+      setOpen(false);
+    }
+  }, [open]);
+
   return (
     <Dialog
       open={open}
