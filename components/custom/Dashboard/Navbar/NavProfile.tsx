@@ -9,12 +9,16 @@ import { useTheme } from "next-themes";
 import React from "react";
 import TextCapsule from "../../TextCapsule";
 import { logout } from "@/app/(server)/actions/logout";
+import { AvatarPicker } from "@/components/ui/avatar-picker";
+import { IEmployee, IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 
 export default function NavProfile({
   user,
+  employeeData,
   company,
 }: {
   user: IUser;
+  employeeData?: IEmployeeWithUserMetadata;
   company?: ICompany;
 }) {
   const { theme, setTheme } = useTheme();
@@ -25,7 +29,12 @@ export default function NavProfile({
         <div className="bg-accent rounded-md flex flex-col gap-2 p-2">
           <div className="flex gap-1">
             {/* Avatar */}
-            <Icons.user className="size-16" />
+            <AvatarPicker
+              readOnly
+              src={employeeData?.image}
+              className="size-16 p-0 ring-1 ring-blue-500"
+              skeleton={<Icons.user className="size-16" />}
+            />
             <div className="flex flex-col gap-1">
               <p className="text-start font-semibold text-sm">{`${
                 user.first_name

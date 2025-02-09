@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/popover";
 import { ICompany } from "@/schema/CompanySchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
+import { AvatarPicker } from "@/components/ui/avatar-picker";
 
 export default async function DashboardNavbar() {
   var user: IUser | undefined;
@@ -24,9 +26,10 @@ export default async function DashboardNavbar() {
     return null;
   }
 
-  const { data: company, error } = await getCompanyData(
-    user.usercompany?.company_id ?? 0
-  );
+  const [employeeData, company] = await Promise.all([
+    getEmployeeData(),
+    getCompanyData(user.usercompany?.company_id ?? 0),
+  ]);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -41,7 +44,12 @@ export default async function DashboardNavbar() {
         {/* <LoginDialog /> */}
         <Popover>
           <PopoverTrigger className="group flex gap-1 items-center">
-            <Icons.user />
+            <AvatarPicker
+              readOnly
+              src={employeeData.data?.data?.image}
+              className="size-6 p-0 ring-blue-500 ring-1"
+              skeleton={<Icons.user className="size-6" />}
+            />
             <p className="w-32 text-start line-clamp-1 text-ellipsis">
               {user.first_name} {user.last_name}
             </p>
@@ -50,7 +58,11 @@ export default async function DashboardNavbar() {
 
           <PopoverContent>
             <div className="flex flex-col gap-2">
-              <NavProfile user={user} company={company} />
+              <NavProfile
+                user={user}
+                employeeData={employeeData.data?.data}
+                company={company.data}
+              />
             </div>
           </PopoverContent>
         </Popover>
