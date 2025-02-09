@@ -99,8 +99,4 @@ export const LeaveRequestDataTableColumns: ColumnDef<Props>[] = [
         />
       ),
   },
-  {
-    id: "cancel-action",
-    cell: ({ row }) => <Icons.trash className="text-red-500" />,
-  },
 ];

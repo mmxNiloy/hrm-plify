@@ -39,6 +39,14 @@ export default function EmployeeHomeSidebar({
             Home
           </span>
         </SidebarLink>
+        <SidebarLink
+          href={`/dashboard/company/${company.company_id}/employee/profile`}
+        >
+          <Icons.profile />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Profile
+          </span>
+        </SidebarLink>
 
         <SidebarLink
           href={`/dashboard/company/${company.company_id}/employee/attendance`}

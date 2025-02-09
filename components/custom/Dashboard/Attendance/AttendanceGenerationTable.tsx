@@ -90,7 +90,8 @@ export default function AttendanceGenerationTable({
           variant: "destructive",
         });
       } else {
-        setAttendance(mAttendance.data.new_records);
+        console.log("Attendance Generated: ", mAttendance.data);
+        setAttendance(mAttendance.data.updated_records);
       }
 
       setLoading(false);

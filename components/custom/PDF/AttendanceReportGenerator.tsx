@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { IAttendanceReport } from "@/schema/AttendanceSchema";
-import { getFullNameOfEmployee } from "@/utils/Misc";
+import { dateDiffInDays, getFullNameOfEmployee } from "@/utils/Misc";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { ICompany } from "@/schema/CompanySchema";
@@ -119,13 +119,13 @@ export default function AttendanceReportGenerator({
           ? getFullNameOfEmployee(employee)
           : "Employee Name Not Available";
         const numberOfAttendance = records.filter(
-          (r) => r.is_present === 1
+          (r) => r.is_present == 1
         ).length;
         const numberOfAbsences = records.filter(
-          (r) => r.is_present === 0
+          (r) => r.is_present == 0
         ).length;
         const numberOfHolidays = records.filter(
-          (r) => r.is_present === 3
+          (r) => r.is_present == 3
         ).length;
 
         // Employee Details Section
@@ -158,17 +158,19 @@ export default function AttendanceReportGenerator({
         const rows = records.map((row, index) => {
           const isPresent = row.is_present;
           const status =
-            isPresent === 0
+            isPresent == 0
               ? "Absent"
-              : isPresent === 1
+              : isPresent == 1
               ? "Present"
+              : isPresent == 2
+              ? "Day Off"
               : "Holiday";
           const bgColor =
-            isPresent === 0
-              ? [255, 0, 0]
-              : isPresent === 1
-              ? [0, 255, 0]
-              : [0, 0, 255];
+            isPresent == 0
+              ? [250, 17, 23]
+              : isPresent == 1
+              ? [11, 255, 7]
+              : [78, 133, 250];
 
           return [
             index + 1, // SL No
@@ -247,7 +249,13 @@ export default function AttendanceReportGenerator({
         className: ToastSuccess,
       });
 
-      generatePdf(reports.data);
+      generatePdf(
+        reports.data.sort(
+          (report1, report2) =>
+            new Date(report1.attendance_date).getTime() -
+            new Date(report2.attendance_date).getTime()
+        )
+      );
     }
 
     setLoading(false);

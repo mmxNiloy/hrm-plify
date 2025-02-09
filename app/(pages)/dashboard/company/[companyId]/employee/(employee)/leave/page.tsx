@@ -92,12 +92,17 @@ export default async function EmployeeLeaveRequestPage({
 
       <StaticDataTable
         columns={LeaveRequestDataTableColumns}
-        data={leaveRequests.data.data.map((item) => ({
-          ...item,
-          company_leave_types: leaveTypes.data,
-          can_edit: Boolean(employeeData.data.data?.leave_approvers ?? false),
-          currentEmployee: employeeData.data.data,
-        }))}
+        data={leaveRequests.data.data
+          .filter((item) => {
+            if (employeeData.data.data?.leave_approvers) return true;
+            return item.employee_id == employeeData.data.data?.employee_id;
+          })
+          .map((item) => ({
+            ...item,
+            company_leave_types: leaveTypes.data,
+            can_edit: Boolean(employeeData.data.data?.leave_approvers ?? false),
+            currentEmployee: employeeData.data.data,
+          }))}
         pageCount={leaveRequests.data.total_page}
       />
     </main>

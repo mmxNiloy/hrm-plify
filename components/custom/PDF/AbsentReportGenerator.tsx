@@ -158,17 +158,19 @@ export default function AbsentReportGenerator({
         const rows = records.map((row, index) => {
           const isPresent = row.is_present;
           const status =
-            isPresent === 0
+            isPresent == 0
               ? "Absent"
-              : isPresent === 1
+              : isPresent == 1
               ? "Present"
+              : isPresent == 2
+              ? "Day Off"
               : "Holiday";
           const bgColor =
-            isPresent === 0
-              ? [255, 0, 0]
-              : isPresent === 1
-              ? [0, 255, 0]
-              : [0, 0, 255];
+            isPresent == 0
+              ? [250, 17, 23]
+              : isPresent == 1
+              ? [11, 255, 7]
+              : [78, 133, 250];
 
           return [
             index + 1, // SL No
@@ -247,7 +249,13 @@ export default function AbsentReportGenerator({
         className: ToastSuccess,
       });
 
-      generatePdf(reports.data);
+      generatePdf(
+        reports.data.sort(
+          (report1, report2) =>
+            new Date(report1.attendance_date).getTime() -
+            new Date(report2.attendance_date).getTime()
+        )
+      );
     }
 
     setLoading(false);
