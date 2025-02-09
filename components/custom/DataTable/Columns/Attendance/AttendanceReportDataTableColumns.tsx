@@ -47,6 +47,8 @@ export const AttendanceReportDataTableColumns: ColumnDef<IAttendanceReport>[] =
             ? "Absent"
             : row.original.is_present == 1
             ? "Present"
+            : row.original.is_present == 2
+            ? "Day Off"
             : "Holiday"}
         </p>
       ),

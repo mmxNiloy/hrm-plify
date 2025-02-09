@@ -29,19 +29,19 @@ export interface IAttendanceRecord {
   employee_id: number;
   company_id: number;
   attendance_date: Date;
-  is_present: 0 | 1 | 3; /// 0 -> Absent, 1 -> Present, 3 -> Holiday
+  is_present: number; /// 0 -> Absent, 1 -> Present, 2-> Weekend, 3 -> Holiday
 }
 
 export interface IAttendanceGenerationResponse {
   message: string;
-  new_records: IAttendanceRecord[];
+  updated_records: IAttendanceRecord[];
 }
 
 export interface IAttendanceReport {
   shift_id?: number;
   status_id?: number;
-  is_holiday?: 0 | 1;
-  is_present: 0 | 1 | 3;
+  is_holiday?: number;
+  is_present: number;
   notes?: string;
   attendance_date: Date;
   employees: IEmployeeWithUserMetadata;

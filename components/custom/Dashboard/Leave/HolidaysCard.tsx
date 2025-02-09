@@ -17,6 +17,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IHoliday } from "@/schema/HolidaySchema";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
 
 interface Event {
   title: string;
@@ -51,14 +54,21 @@ export default function HolidaysCard({ holidays }: { holidays?: IHoliday[] }) {
   return (
     <Card>
       <CardHeader className="py-4">
-        <CardTitle className="text-lg font-semibold">Holidays</CardTitle>
+        <CardTitle className="text-lg font-semibold flex items-center justify-between">
+          Holidays
+          <Link href={"holiday"} passHref>
+            <Button variant={"link"}>
+              View All
+              <Icons.chevronRight />
+            </Button>
+          </Link>
+        </CardTitle>
         <CardDescription className="sr-only">
-          View all leaves in an organized fashion.
+          View all holidays in an organized fashion.
         </CardDescription>
       </CardHeader>
 
       <CardContent>
-        {/* TODO: Get leaves and show them here */}
         <FullCalendar
           headerToolbar={{
             start: "today prev,next",

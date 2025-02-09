@@ -52,6 +52,10 @@ export const AttendanceGenerationRecordDataTableColumns: ColumnDef<IAttendanceRe
             ? "Absent"
             : row.original.is_present == 1
             ? "Present"
+            : row.original.is_present == 2
+            ? "Day Off"
+            : row.original.is_present == 2
+            ? "Day Off"
             : "Holiday"}
         </p>
       ),
