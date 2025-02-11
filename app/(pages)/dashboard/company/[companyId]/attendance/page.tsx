@@ -120,6 +120,7 @@ export default async function AttendanceReportPage({
       <StaticDataTable
         data={reports.data.data.map((item) => ({
           ...item,
+          company_id: companyId,
           updateAccess: updateAccess ? true : false,
         }))}
         pageCount={reports.data.total_page}
