@@ -9,6 +9,7 @@ import AttendanceUpdateDropdown from "@/components/custom/Dashboard/Employee/Att
 
 interface Props extends IAttendanceReport {
   updateAccess?: boolean;
+  company_id: number;
 }
 
 export const AttendanceReportDataTableColumns: ColumnDef<Props>[] = [
@@ -36,7 +37,10 @@ export const AttendanceReportDataTableColumns: ColumnDef<Props>[] = [
     header: ({ column }) => <SortableHeader column={column} name="Status" />,
     cell: ({ row }) =>
       row.original.updateAccess ? (
-        <AttendanceUpdateDropdown data={row.original} />
+        <AttendanceUpdateDropdown
+          companyID={row.original.company_id}
+          data={row.original}
+        />
       ) : (
         <p
           className={cn(

@@ -129,7 +129,11 @@ export default async function EmployeeAttendancePage({
       </div>
 
       <StaticDataTable
-        data={reports.data.data}
+        data={reports.data.data.map((item) => ({
+          ...item,
+          company_id: companyId,
+          updateAccess: updateAccess ? true : false,
+        }))}
         columns={AttendanceReportDataTableColumns}
         pageCount={reports.data.total_page}
       />

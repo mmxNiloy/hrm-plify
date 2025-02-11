@@ -17,8 +17,10 @@ import React, { useCallback, useMemo, useState } from "react";
 
 export default function AttendanceUpdateDropdown({
   data,
+  companyID,
 }: {
   data: IAttendanceReport;
+  companyID: number;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -38,7 +40,7 @@ export default function AttendanceUpdateDropdown({
 
       const result = await updateAttendance({
         employee_id: data.employees.employee_id,
-        company_id: data.employees.company_id,
+        company_id: companyID,
         from_date: data.attendance_date,
         to_date: data.attendance_date,
         value: isPresent,
@@ -54,7 +56,7 @@ export default function AttendanceUpdateDropdown({
       }
       setLoading(false);
     },
-    [data, router, toast]
+    [data, router, toast, companyID]
   );
 
   return (
