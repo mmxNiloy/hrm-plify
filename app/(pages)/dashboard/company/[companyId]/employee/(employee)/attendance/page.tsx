@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/input";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AttendanceReportGenerator from "@/components/custom/PDF/AttendanceReportGenerator";
+import { TPermission } from "@/schema/Permissions";
+import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/AttendanceBulkUpdateDialog";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -41,9 +43,20 @@ export default async function EmployeeAttendancePage({
 }: Props) {
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
+  const mCookies = await cookies();
   const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_attend_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_attend_create");
+  const updateAccess = mPermissions.find(
+    (item) => item === "cmp_attend_update"
+  );
 
   const [employee, company, companyExtraData, sParams] = await Promise.all([
     getEmployeeData(),
@@ -101,6 +114,12 @@ export default async function EmployeeAttendancePage({
         />
 
         <div className="flex gap-4">
+          {updateAccess && (
+            <AttendanceBulkUpdateDialog
+              company_id={companyId}
+              employees={companyExtraData.data.employees}
+            />
+          )}
           <AttendanceReportGenerator company={company.data} filters={filters} />
           <AttendanceReportFilterPopover
             asEmployee

@@ -30,6 +30,9 @@ import { Input } from "@/components/ui/input";
 import { getFullNameOfUser } from "@/utils/Misc";
 import { Label } from "@/components/ui/label";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
+import EmployeeLeaveStatsCard from "@/components/custom/Dashboard/Employee/EmployeeLeaveStatsCard";
+import EmployeeAttendanceStatsCard from "@/components/custom/Dashboard/Employee/EmployeeAttendanceStatsCard";
+import EmployeeSalaryStructureCard from "@/components/custom/Dashboard/Employee/EmployeeSalaryStructureCard";
 
 export async function generateMetadata({
   params,
@@ -143,6 +146,7 @@ export default async function EditEmployeeInfoByUserIdPage({
               <Label>Designation</Label>
               <Input
                 readOnly
+                placeholder="Designation"
                 value={employeeData.data.data?.designations?.designation_name}
               />
             </div>
@@ -152,22 +156,19 @@ export default async function EditEmployeeInfoByUserIdPage({
               <Input
                 readOnly
                 value={employeeData.data.data?.departments?.dpt_name}
+                placeholder="Department"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Employee Statistics here */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">Statistics</CardTitle>
-            <CardDescription className="sr-only">
-              Your statistics.
-            </CardDescription>
-          </CardHeader>
+        <EmployeeSalaryStructureCard
+          employeeID={employeeData.data.data?.employee_id ?? 0}
+        />
+        <EmployeeLeaveStatsCard />
 
-          <CardContent>Work In Progress</CardContent>
-        </Card>
+        <EmployeeAttendanceStatsCard />
 
         {/* Holiday Calendar */}
         <HolidaysCard holidays={holidays.data} />

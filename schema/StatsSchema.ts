@@ -9,3 +9,13 @@ export interface ICompanyEmployeeStats {
   foreignEmployees: number;
   empTypeCounts: IEmployeeTypeCount[];
 }
+
+export interface IEmployeeLeaveStats {
+  total: number;
+  data: { status: string; freq: number }[];
+}
+
+export interface IEmployeeAttendanceStats {
+  total: number;
+  data: { is_present: number; freq: number }[];
+}
