@@ -16,6 +16,8 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AttendanceReportGenerator from "@/components/custom/PDF/AttendanceReportGenerator";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
+import { TPermission } from "@/schema/Permissions";
+import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/AttendanceBulkUpdateDialog";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -51,9 +53,20 @@ export default async function AttendanceReportPage({
   const sParams = await searchParams;
   var companyId = (await params).companyId;
   companyId = Number.parseInt(`${companyId}`);
+  const mCookies = await cookies();
   const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_attend_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_attend_create");
+  const updateAccess = mPermissions.find(
+    (item) => item === "cmp_attend_update"
+  );
+
   const filters = getFilters(sParams);
   const { limit, page } = getPaginationParams(sParams);
 
@@ -92,6 +105,12 @@ export default async function AttendanceReportPage({
         />
 
         <div className="flex gap-4">
+          {updateAccess && (
+            <AttendanceBulkUpdateDialog
+              company_id={companyId}
+              employees={companyExtraData.data.employees}
+            />
+          )}
           <AttendanceReportGenerator company={company.data} filters={filters} />
 
           <AttendanceReportFilterPopover {...companyExtraData.data} />
@@ -99,7 +118,10 @@ export default async function AttendanceReportPage({
       </div>
 
       <StaticDataTable
-        data={reports.data.data}
+        data={reports.data.data.map((item) => ({
+          ...item,
+          updateAccess: updateAccess ? true : false,
+        }))}
         pageCount={reports.data.total_page}
         columns={AttendanceReportDataTableColumns}
       />
