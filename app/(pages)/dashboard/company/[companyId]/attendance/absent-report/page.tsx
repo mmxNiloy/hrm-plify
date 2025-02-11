@@ -101,7 +101,10 @@ export default async function AbsentReportPage({
       </div>
 
       <StaticDataTable
-        data={reports.data.data}
+        data={reports.data.data.map((item) => ({
+          ...item,
+          company_id: companyId,
+        }))}
         pageCount={reports.data.total_page}
         columns={AttendanceReportDataTableColumns}
       />
