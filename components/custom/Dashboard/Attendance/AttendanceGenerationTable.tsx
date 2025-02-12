@@ -126,11 +126,28 @@ export default function AttendanceGenerationTable({
             canvas.width = size;
             canvas.height = size;
 
-            // Draw circular clipped image
+            // Ensure the image fits the circle without distortion
             ctx.beginPath();
             ctx.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI);
             ctx.clip();
-            ctx.drawImage(logoImage, 0, 0, size, size);
+            ctx.fillStyle = "white"; // Background fill to avoid transparency issues
+            ctx.fillRect(0, 0, size, size);
+
+            const aspectRatio = logoImage.width / logoImage.height;
+            let drawWidth = size,
+              drawHeight = size;
+
+            if (aspectRatio > 1) {
+              // Image is wider than tall
+              drawHeight = size / aspectRatio;
+            } else {
+              // Image is taller than wide
+              drawWidth = size * aspectRatio;
+            }
+
+            const xOffset = (size - drawWidth) / 2;
+            const yOffset = (size - drawHeight) / 2;
+            ctx.drawImage(logoImage, xOffset, yOffset, drawWidth, drawHeight);
 
             // Add the image to the PDF
             const base64Image = canvas.toDataURL("image/png");
@@ -159,58 +176,120 @@ export default function AttendanceGenerationTable({
       doc.setFontSize(16);
       doc.text("Attendance Report", 14, 80);
 
-      // Column Headers
-      const headers = [
-        { id: "sl-no", name: "SL No" },
-        { id: "employee-name", name: "Employee" },
-        { id: "attendance_date", name: "Date" },
-        { id: "is_present", name: "Status" },
-      ];
+      // Group data by employee
+      const groupedData = data.reduce<Record<string, IAttendanceReport[]>>(
+        (acc, record) => {
+          const employeeId = record.employees?.employee_id ?? "Unknown";
+          if (!acc[employeeId]) acc[employeeId] = [];
+          acc[employeeId].push(record);
+          return acc;
+        },
+        {}
+      );
 
-      const columns = headers.map((header) => header.name);
+      let currentY = 90; // Start position for employee sections
 
-      // Generate rows dynamically based on column definitions
-      const rows = data.map((row, index) => {
-        const isPresent = row.is_present;
-        const status =
-          isPresent === 0 ? "Absent" : isPresent === 1 ? "Present" : "Holiday";
-        const bgColor =
-          isPresent === 0
-            ? [255, 0, 0] // Red for absent
-            : isPresent === 1
-            ? [0, 255, 0] // Green for present
-            : [0, 0, 255]; // Blue for holiday
+      for (const [employeeId, records] of Object.entries(groupedData)) {
+        const employee = records[0]?.employees;
+        const employeeName = employee
+          ? getFullNameOfEmployee(employee)
+          : "Employee Name Not Available";
+        const numberOfAttendance = records.filter(
+          (r) => r.is_present == 1
+        ).length;
+        const numberOfAbsences = records.filter(
+          (r) => r.is_present == 0
+        ).length;
+        const numberOfHolidays = records.filter(
+          (r) => r.is_present == 3
+        ).length;
 
-        return [
-          row.record_id, // SL No
-          row.employees
-            ? getFullNameOfEmployee(row.employees)
-            : "Data Not Found", // Employee
-          new Date(row.attendance_date).toLocaleDateString("en-GB"), // Date
-          {
-            content: status,
-            styles: { fillColor: bgColor, textColor: [255, 255, 255] },
-          }, // Status
+        // Employee Details Section
+        doc.setFontSize(12);
+        doc.text(`Employee Details:`, 14, currentY);
+        doc.setFontSize(10);
+        doc.text(`Full Name: ${employeeName}`, 14, currentY + 7);
+        doc.text(
+          `Designation: ${employee?.designations?.designation_name ?? "N/A"}`,
+          14,
+          currentY + 12
+        );
+        doc.text(
+          `Number of Attendance: ${numberOfAttendance}`,
+          14,
+          currentY + 17
+        );
+        doc.text(`Number of Absences: ${numberOfAbsences}`, 14, currentY + 22);
+        doc.text(`Number of Holidays: ${numberOfHolidays}`, 14, currentY + 27);
+
+        // Table Headers (Removed Employee Name)
+        const headers = [
+          { id: "sl-no", name: "SL No" },
+          { id: "attendance_date", name: "Date" },
+          { id: "is_present", name: "Status" },
         ];
-      });
+        const columns = headers.map((header) => header.name);
 
-      // Add table using jsPDF-Autotable
-      autoTable(doc, {
-        startY: 85,
-        head: [columns],
-        //@ts-ignore
-        body: rows,
-        styles: {
-          fontSize: 10,
-          cellPadding: 4,
-        },
-        headStyles: { fillColor: "#4F81BD", textColor: "#FFFFFF" },
-        bodyStyles: { lineColor: "#E0E0E0", textColor: "#000000" },
-        alternateRowStyles: { fillColor: "#F2F2F2" },
-        columnStyles: {
-          3: { halign: "center" }, // Align "Status" column to center
-        },
-      });
+        // Generate rows dynamically based on column definitions
+        const rows = records.map((row, index) => {
+          const isPresent = row.is_present;
+          const status =
+            isPresent == 0
+              ? "Absent"
+              : isPresent == 1
+              ? "Present"
+              : isPresent == 2
+              ? "Day Off"
+              : "Holiday";
+          const bgColor =
+            isPresent == 0
+              ? [250, 17, 23]
+              : isPresent == 1
+              ? [11, 255, 7]
+              : [78, 133, 250];
+
+          return [
+            row.record_id, // SL No
+            new Date(row.attendance_date).toLocaleDateString("en-GB"), // Date
+            {
+              content: status,
+              styles: { fillColor: bgColor, textColor: [255, 255, 255] },
+            }, // Status
+          ];
+        });
+
+        let finalY = currentY + 35;
+
+        // Add table using jsPDF-Autotable
+        autoTable(doc, {
+          startY: currentY + 35,
+          head: [columns],
+          //@ts-ignore
+          body: rows,
+          styles: {
+            fontSize: 10,
+            cellPadding: 4,
+          },
+          headStyles: { fillColor: "#4F81BD", textColor: "#FFFFFF" },
+          bodyStyles: { lineColor: "#E0E0E0", textColor: "#000000" },
+          alternateRowStyles: { fillColor: "#F2F2F2" },
+          columnStyles: {
+            2: { halign: "center" }, // Align "Status" column to center
+          },
+          didDrawPage: (data) => {
+            finalY = data.cursor?.y ?? currentY + 35;
+          },
+        });
+
+        // Update currentY position for next employee
+        currentY = finalY + 10;
+
+        // Add page break if required
+        if (currentY > 260) {
+          doc.addPage();
+          currentY = 20;
+        }
+      }
 
       doc.save(`Attendance_Report_${Date.now()}.pdf`);
 
@@ -304,6 +383,7 @@ export default function AttendanceGenerationTable({
                   attendance_date: item.attendance_date,
                   is_holiday: item.is_present == 3 ? 1 : 0,
                   is_present: item.is_present,
+                  record_id: item.record_id,
                 }))
               );
             }
