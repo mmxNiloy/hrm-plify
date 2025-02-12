@@ -98,7 +98,7 @@ export default function DutyRosterReportGenerator({
 
       // Generate rows dynamically
       const rows = data.map((row, index) => [
-        index + 1, // SL No
+        row.roaster_id, // SL No
         getFullNameOfEmployee(row.employees), // Employee Name
         row.departments.dpt_name, // Department
         row.shift_db.shift_name, // Shift Name

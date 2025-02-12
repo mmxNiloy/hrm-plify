@@ -173,7 +173,7 @@ export default function AttendanceReportGenerator({
               : [78, 133, 250];
 
           return [
-            index + 1, // SL No
+            row.record_id, // SL No
             new Date(row.attendance_date).toLocaleDateString("en-GB"), // Date
             {
               content: status,
