@@ -14,9 +14,8 @@ interface IAttendanceRecordWithEmployeeMetadata extends IAttendanceRecord {
 export const AttendanceGenerationRecordDataTableColumns: ColumnDef<IAttendanceRecordWithEmployeeMetadata>[] =
   [
     {
-      id: "sl-no",
-      header: ({ column }) => <SortableHeader column={column} name="SL No" />,
-      cell: ({ row }) => row.index + 1,
+      accessorKey: "record_id",
+      header: ({ column }) => <SortableHeader column={column} name="ID" />,
     },
     {
       accessorKey: "employee_id",

@@ -78,9 +78,7 @@ export default function AttendanceAlert({ attendanceResponse }: Props) {
       <div className="text-center bg-yellow-500 text-white py-1 px-4 flex items-center justify-around gap-2 rounded-md">
         <p className="flex items-center justify-center gap-2">
           <Icons.warn /> <b>Alert:</b> Your attendance needs confirmation.
-          Please review and confirm now. Company ID:{" "}
-          {attendanceResponse.data.company_id}, Emp ID:{" "}
-          {attendanceResponse.data.employee_id}
+          Please review and confirm now.
         </p>
 
         {/* Confirmation button */}

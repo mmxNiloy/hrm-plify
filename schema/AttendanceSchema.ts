@@ -26,6 +26,7 @@ export interface IPaginatedAttendance extends IPaginatedResponse {
 }
 
 export interface IAttendanceRecord {
+  record_id?: number;
   employee_id: number;
   company_id: number;
   attendance_date: Date;
@@ -38,6 +39,7 @@ export interface IAttendanceGenerationResponse {
 }
 
 export interface IAttendanceReport {
+  record_id?: number;
   shift_id?: number;
   status_id?: number;
   is_holiday?: number;

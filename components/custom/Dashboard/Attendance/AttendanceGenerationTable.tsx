@@ -182,7 +182,7 @@ export default function AttendanceGenerationTable({
             : [0, 0, 255]; // Blue for holiday
 
         return [
-          index + 1, // SL No
+          row.record_id, // SL No
           row.employees
             ? getFullNameOfEmployee(row.employees)
             : "Data Not Found", // Employee
