@@ -170,7 +170,7 @@ export default function AttendanceAlertCard() {
       <Card className="flex flex-col gap-1 from-orange-50/50 to-fuchsia-200/75 bg-gradient-to-br">
         <CardHeader>
           <CardTitle className="text-lg font-semibold flex items-center justify-between">
-            Attendance Alert
+            Today&apos;s Attendance
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center text-xl flex flex-col items-center justify-center gap-2 flex-1">
@@ -186,7 +186,7 @@ export default function AttendanceAlertCard() {
       <Card className="flex flex-col gap-1 from-pink-50/50 to-red-500/50 bg-gradient-to-br">
         <CardHeader>
           <CardTitle className="text-lg font-semibold flex items-center justify-between">
-            Attendance Alert
+            Today&apos;s Attendance
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center flex flex-col items-center justify-around gap-2 flex-1">
@@ -239,7 +239,7 @@ export default function AttendanceAlertCard() {
     <Card className="flex flex-col gap-1 from-amber-300/50 pb-4 to-zinc-200 bg-gradient-to-br">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center justify-between">
-          Attendance Alert{" "}
+          Today&apos;s Attendance{" "}
           {!attendanceResponse.data.check_in_time
             ? " - Check In"
             : " - Check Out"}
