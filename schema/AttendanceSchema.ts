@@ -30,6 +30,8 @@ export interface IAttendanceRecord {
   employee_id: number;
   company_id: number;
   attendance_date: Date;
+  check_in_time?: Date;
+  check_out_time?: Date;
   is_present: number; /// 0 -> Absent, 1 -> Present, 2-> Weekend, 3 -> Holiday
 }
 

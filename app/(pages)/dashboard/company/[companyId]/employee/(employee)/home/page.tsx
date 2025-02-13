@@ -11,7 +11,7 @@ import { CompanyByIDPageProps } from "../../../PageProps";
 import didAttendToday from "@/app/(server)/actions/didAttendToday";
 import Icons from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
-import AttendanceAlert from "@/components/custom/Dashboard/Attendance/AttendanceAlert";
+import AttendanceAlertCard from "@/components/custom/Dashboard/Attendance/AttendanceAlertCard";
 import HolidaysCard from "@/components/custom/Dashboard/Leave/HolidaysCard";
 import { getHolidays } from "@/app/(server)/actions/getHolidays";
 import LeaveRequestsCard from "@/components/custom/Dashboard/Leave/LeaveRequestsCard";
@@ -108,7 +108,7 @@ export default async function EditEmployeeInfoByUserIdPage({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4">
         {/* Profile Summary here */}
         <Card>
           <CardHeader>
@@ -161,7 +161,8 @@ export default async function EditEmployeeInfoByUserIdPage({
             </div>
           </CardContent>
         </Card>
-
+        {/* Employee Attendance Alert */}
+        <AttendanceAlertCard />
         {/* Employee Statistics here */}
         <EmployeeSalaryStructureCard
           employeeID={employeeData.data.data?.employee_id ?? 0}
