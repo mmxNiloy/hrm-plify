@@ -7,9 +7,18 @@ import { cookies } from "next/headers";
 interface Props {
   company_id: number;
   employee_id: number;
+  check_in_time?: string;
+  check_out_time?: string;
+  notes?: string;
 }
 
-export default async function checkInToday({ company_id, employee_id }: Props) {
+export default async function checkInToday({
+  company_id,
+  employee_id,
+  check_in_time,
+  check_out_time,
+  notes,
+}: Props) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const req = fetch(`${process.env.API_BASE_URL}/attendance/check-in-today`, {
@@ -17,6 +26,9 @@ export default async function checkInToday({ company_id, employee_id }: Props) {
     body: JSON.stringify({
       company_id,
       employee_id,
+      check_in_time,
+      check_out_time,
+      notes,
     }),
     headers: {
       Authorization: `Bearer ${session}`,

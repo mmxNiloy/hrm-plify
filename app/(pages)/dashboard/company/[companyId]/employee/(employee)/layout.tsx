@@ -10,8 +10,6 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import EmployeeHomeSidebar from "@/components/custom/Dashboard/Sidebar/EmployeeHomeSidebar";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import AttendanceAlert from "@/components/custom/Dashboard/Attendance/AttendanceAlert";
-import didAttendToday from "@/app/(server)/actions/didAttendToday";
 
 interface Props extends LayoutProps, CompanyByIDPageProps {}
 
@@ -22,10 +20,10 @@ export default async function EmployeeHomeLayout({ children, params }: Props) {
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const [employee, company, attendance] = await Promise.all([
+  const [employee, company] = await Promise.all([
     getEmployeeData(),
     getCompanyData(companyId),
-    didAttendToday(),
+    // didAttendToday(),
   ]);
 
   if (employee.error || company.error) {
@@ -54,7 +52,6 @@ export default async function EmployeeHomeLayout({ children, params }: Props) {
       <EmployeeHomeSidebar company={company.data} />
 
       <SidebarViewport className="flex flex-col gap-1">
-        <AttendanceAlert attendanceResponse={attendance} />
         {children}
       </SidebarViewport>
     </div>
