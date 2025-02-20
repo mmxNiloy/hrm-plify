@@ -3,6 +3,7 @@ import CompanySearchCommand from "@/components/custom/Dashboard/Company/CompanyS
 import CompanyCreationDialog from "@/components/custom/Dialog/Company/CompanyCreationDialog";
 import { Label } from "@/components/ui/label";
 import { TPermission } from "@/schema/Permissions";
+import SiteConfig from "@/utils/SiteConfig";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import React from "react";
@@ -10,7 +11,7 @@ import React from "react";
 export async function generateMetadata(): Promise<Metadata> {
   // const user = await getUserData();
   return {
-    title: `Artemis | Dashboard | Super Admin`,
+    title: `${SiteConfig.siteName} | Dashboard | Super Admin`,
   };
 }
 

@@ -42,6 +42,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -245,9 +246,11 @@ export default function CompanySearchCommand() {
                             className="size-16 p-0"
                           />
                           <Link
-                            href={`${
-                              comp.website
-                            }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
+                            href={`${comp.website}?_ref=${
+                              SiteConfig.siteName
+                            }HRMS&_clickId=${
+                              SiteConfig.siteName
+                            }-${Date.now()}`}
                             target="_blank"
                             className="hover:underline"
                             passHref

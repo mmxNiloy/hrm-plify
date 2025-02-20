@@ -1,4 +1,4 @@
-# Artemis - Deadline: 05-Nov-2024
+# ${SiteConfig.siteName} - Deadline: 05-Nov-2024
 
 ## Tasks
 

@@ -26,6 +26,7 @@ import JoinCompanyPopover from "@/components/custom/Popover/Profile/JoinCompanyP
 import CompanyCreationDialog from "@/components/custom/Dialog/Company/CompanyCreationDialog";
 import { Metadata } from "next";
 import { getUserData } from "@/app/(server)/actions/getUserData";
+import SiteConfig from "@/utils/SiteConfig";
 
 enum ProfileStep {
   ROLE = 1,
@@ -72,7 +73,9 @@ function getProfileCompletion(user: IUser) {
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getUserData();
   return {
-    title: `Artemis | ${user ? getFullNameOfUser(user) : "User Profile"}`,
+    title: `${SiteConfig.siteName} | ${
+      user ? getFullNameOfUser(user) : "User Profile"
+    }`,
   };
 }
 

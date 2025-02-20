@@ -22,6 +22,7 @@ import { getLatePolicies } from "@/app/(server)/actions/getLatePolicies";
 import LatePolicyEditDialog from "@/components/custom/Dialog/Rota/LatePolicyEditDialog";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { LatePolicyDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/LatePolicyDataTableColumns";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -32,7 +33,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Late Policy`,
   };

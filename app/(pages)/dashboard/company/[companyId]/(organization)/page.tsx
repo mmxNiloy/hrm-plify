@@ -21,6 +21,7 @@ import { toHTTPSString } from "@/utils/Misc";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CompanyAuthorityTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyAuthorityTab";
 import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyDocumentsTab";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface Props extends CompanyByIDPageProps {
   readOnly?: boolean;
@@ -35,7 +36,9 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${company.data?.company_name ?? "Company Dashboard"}`,
+    title: `${SiteConfig.siteName} | ${
+      company.data?.company_name ?? "Company Dashboard"
+    }`,
   };
 }
 

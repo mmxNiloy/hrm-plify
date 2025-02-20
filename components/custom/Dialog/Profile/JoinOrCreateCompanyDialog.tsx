@@ -17,6 +17,7 @@ import React from "react";
 import CompanyCreationDialog from "../Company/CompanyCreationDialog";
 import Icons from "@/components/ui/icons";
 import JoinCompanyPopover from "../../Popover/Profile/JoinCompanyPopover";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function JoinOrCreateCompanyDialog({
   defaultOpen = false,
@@ -34,10 +35,10 @@ export default function JoinOrCreateCompanyDialog({
         <DialogHeader>
           <DialogTitle>Welcome, {getFullNameOfUser(user)}</DialogTitle>
           <DialogDescription>
-            Looks like this is you have yet to join a company. Artemis offers
-            robust solutions for your HR management needs. To use all of our
-            fetures, join a company or create your own organization and start
-            managing today.
+            Looks like this is you have yet to join a company. $
+            {SiteConfig.siteName} offers robust solutions for your HR management
+            needs. To use all of our fetures, join a company or create your own
+            organization and start managing today.
           </DialogDescription>
         </DialogHeader>
 
@@ -47,8 +48,8 @@ export default function JoinOrCreateCompanyDialog({
               Create a Company
             </p>
             <p className="bg-clip-text drop-shadow-lg">
-              Simplify your HR management tasks with Artemis. Create a profile
-              for your organization to get started.
+              Simplify your HR management tasks with {SiteConfig.siteName}.
+              Create a profile for your organization to get started.
             </p>
 
             <span className="flex-grow" />
@@ -63,7 +64,8 @@ export default function JoinOrCreateCompanyDialog({
             </p>
             <p className="bg-clip-text drop-shadow-lg">
               Does your organization use our solutions? Join your colleagues and
-              streamline your managerial tasks today with Artemis.
+              streamline your managerial tasks today with ${SiteConfig.siteName}
+              .
             </p>
 
             <span className="flex-grow" />

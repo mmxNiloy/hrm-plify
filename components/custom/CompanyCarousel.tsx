@@ -18,6 +18,7 @@ import {
 } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function CompanyCarousel() {
   const [companies, setCompanies] = useState<ICompany[]>([]);
@@ -104,9 +105,9 @@ function CompanyCard({ comp }: { comp: ICompany }) {
             className="size-16 p-0"
           />
           <Link
-            href={`${
-              comp.website
-            }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
+            href={`${comp.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
+              SiteConfig.siteName
+            }-${Date.now()}`}
             target="_blank"
             className="hover:underline"
             passHref

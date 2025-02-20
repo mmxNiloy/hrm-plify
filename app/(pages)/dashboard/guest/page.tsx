@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/schema/UserSchema";
 import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import SiteConfig from "@/utils/SiteConfig";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -14,7 +15,7 @@ import React from "react";
 export async function generateMetadata(): Promise<Metadata> {
   // const user = await getUserData();
   return {
-    title: `Artemis | Welcome`,
+    title: `${SiteConfig.siteName} | Welcome`,
   };
 }
 

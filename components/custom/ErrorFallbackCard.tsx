@@ -6,10 +6,11 @@ import { Button } from "../ui/button";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function ErrorFallbackCard({ error }: { error?: Error }) {
   const pathname = usePathname();
-  const mailSubject = encodeURIComponent("Artemis > Bug Report");
+  const mailSubject = encodeURIComponent(`${SiteConfig.siteName} > Bug Report`);
   const mailBody = encodeURIComponent(
     `A bug has been found in the following route: ${pathname}
     Error encountered: ${error?.name}
