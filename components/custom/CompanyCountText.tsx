@@ -69,7 +69,7 @@ export default function CompanyCountText() {
   }, [loading, total]);
 
   return (
-    <p className="mt-16 text-4xl font-extrabold text-center">
+    <p className="mt-16 text-4xl font-extrabold text-center text-white">
       We have <span ref={ref}>0</span>+ clients worldwide
     </p>
   );

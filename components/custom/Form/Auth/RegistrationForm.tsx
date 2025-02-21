@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import React, { useState, useCallback } from "react";
@@ -133,47 +140,84 @@ export default function RegistrationForm() {
 
   return (
     <form className="w-full h-fit flex flex-col gap-1 md:gap-4">
-      <div className="grid grid-cols-3 gap-2">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="first-name-input">First Name</Label>
-          <Input
-            disabled={loading}
-            id="first-name-input"
-            placeholder="First Name"
-            required
-            onChange={(e) => setFirstName(e.target.value.trim())}
-            name="first_name"
-            className="rounded-full valid:border-green-500 valid:focus-within:ring-green-500"
-          />
-        </div>
+      <div className="flex gap-2 items-center justify-center">
+        {/* <Label htmlFor="first-name-input">First Name</Label> */}
+        <Input
+          disabled={loading}
+          id="first-name-input"
+          placeholder="First Name"
+          required
+          onChange={(e) => setFirstName(e.target.value.trim())}
+          name="first_name"
+          className="rounded-md valid:border-green-500 valid:focus-within:ring-green-500"
+        />
 
-        <div className="flex-col gap-2">
-          <Label htmlFor="middle-name-input">Middle Name</Label>
-          <Input
-            onChange={(e) => setMiddleName(e.target.value.trim())}
-            disabled={loading}
-            id="first-name-input"
-            placeholder="Middle Name"
-            name="middle_name"
-            className="rounded-full"
-          />
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" disabled={firstName.length > 0}>
+              <Icons.check
+                className={`text-green-500 transition-all ${
+                  firstName.length < 1 ? "scale-0 hidden" : "scale-100 block"
+                }`}
+              />
+            </TooltipTrigger>
+            <TooltipContent>This field is required</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="last-name-input">Last Name</Label>
-          <Input
-            onChange={(e) => setLastName(e.target.value.trim())}
-            disabled={loading}
-            id="last-name-input"
-            placeholder="Last Name"
-            required
-            name="last_name"
-            className="rounded-full valid:border-green-500 valid:focus-within:ring-green-500"
-          />
-        </div>
+      <div className="flex gap-2 items-center justify-center">
+        {/* <Label htmlFor="middle-name-input">Middle Name</Label> */}
+        <Input
+          onChange={(e) => setMiddleName(e.target.value.trim())}
+          disabled={loading}
+          id="first-name-input"
+          placeholder="Middle Name"
+          name="middle_name"
+          className="rounded-md"
+        />
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" disabled={middleName.length > 0}>
+              <Icons.check
+                className={`text-green-500 transition-all ${
+                  middleName.length < 1 ? "scale-0 hidden" : "scale-100 block"
+                }`}
+              />
+            </TooltipTrigger>
+            <TooltipContent>This field is required</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      <div className="flex gap-2 items-center justify-center">
+        {/* <Label htmlFor="last-name-input">Last Name</Label> */}
+        <Input
+          onChange={(e) => setLastName(e.target.value.trim())}
+          disabled={loading}
+          id="last-name-input"
+          placeholder="Last Name"
+          required
+          name="last_name"
+          className="rounded-md valid:border-green-500 valid:focus-within:ring-green-500"
+        />
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" disabled={lastName.length > 0}>
+              <Icons.check
+                className={`text-green-500 transition-all ${
+                  lastName.length < 1 ? "scale-0 hidden" : "scale-100 block"
+                }`}
+              />
+            </TooltipTrigger>
+            <TooltipContent>This field is required</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div className="flex-col gap-2 hidden">
-        <Label htmlFor="contact-input">Contact</Label>
+        {/* <Label htmlFor="contact-input">Contact</Label> */}
         <Input
           disabled={loading}
           id="contact-input"
@@ -194,8 +238,8 @@ export default function RegistrationForm() {
         )}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email-input">Email</Label>
+      <div className="flex gap-2 items-center justify-center">
+        {/* <Label htmlFor="email-input">Email</Label> */}
         <Input
           disabled={loading}
           id="email-input"
@@ -205,19 +249,76 @@ export default function RegistrationForm() {
           name="email"
           onChange={handleEmailChange}
           className={cn(
-            "rounded-full",
+            "rounded-md",
             emailErrorMsg.length > 0
               ? "border-red-500 focus-visible:ring-red-500 "
               : "valid:border-green-500 valid:focus-within:ring-green-500"
           )}
         />
-        {emailErrorMsg.length > 0 && (
-          <p className="text-xs text-red-500">{emailErrorMsg}</p>
-        )}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              type="button"
+              disabled={emailErrorMsg.length < 1}
+              // className="relative"
+            >
+              <Icons.info
+                className={`text-red-600 fill-red-300/50 transition-all ${
+                  emailErrorMsg.length < 1
+                    ? "scale-0 hidden"
+                    : "scale-100 block"
+                }`}
+              />
+              <Icons.check
+                className={`text-green-500 transition-all ${
+                  emailErrorMsg.length > 0 || email.length < 1
+                    ? "scale-0 hidden"
+                    : "scale-100 block"
+                }`}
+              />
+            </TooltipTrigger>
+            <TooltipContent>{emailErrorMsg}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password-input">Password</Label>
-        <div
+      <div className="flex gap-2 items-center justify-center">
+        {/* <Label htmlFor="password-input">Password</Label> */}
+        <PasswordInput
+          disabled={loading}
+          id="password-input"
+          required
+          minLength={8}
+          name="password"
+          onChange={handlePasswordChange}
+          className={cn(
+            "flex-1",
+            pwdErrorMsg.length > 0
+              ? "border-red-500"
+              : password.length > 0
+              ? "border-green-500"
+              : ""
+          )}
+        />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" disabled={pwdErrorMsg.length < 1}>
+              <Icons.info
+                className={`text-red-600 fill-red-300/50 transition-all ${
+                  pwdErrorMsg.length < 1 ? "scale-0 hidden" : "scale-100 block"
+                }`}
+              />
+              <Icons.check
+                className={`text-green-500 transition-all ${
+                  pwdErrorMsg.length > 0 || password.length < 1
+                    ? "scale-0 hidden"
+                    : "scale-100 block"
+                }`}
+              />
+            </TooltipTrigger>
+            <TooltipContent>{pwdErrorMsg}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        {/* <div
           className={cn(
             "flex flex-row rounded-full has-[input:focus-visible]:ring-2 ring-offset-2 ring-primary",
             pwdErrorMsg.length > 0
@@ -227,25 +328,6 @@ export default function RegistrationForm() {
               : ""
           )}
         >
-          <Input
-            disabled={loading}
-            id="password-input"
-            type={passwordVisible ? "text" : "password"}
-            placeholder="Password"
-            required
-            minLength={8}
-            maxLength={32}
-            name="password"
-            onChange={handlePasswordChange}
-            className={cn(
-              "rounded-s-full border-e-0 ring-0 focus-within:ring-0 focus-visible:ring-0",
-              pwdErrorMsg.length > 0
-                ? "border-red-500"
-                : password.length > 0
-                ? "border-green-500"
-                : ""
-            )}
-          />
           <Button
             disabled={loading}
             type="button"
@@ -263,10 +345,7 @@ export default function RegistrationForm() {
           >
             {passwordVisible ? <Icons.hidden /> : <Icons.visible />}
           </Button>
-        </div>
-        {pwdErrorMsg.length > 0 && (
-          <p className="text-red-500 text-xs">{pwdErrorMsg}</p>
-        )}
+        </div> */}
       </div>
 
       <Button
@@ -274,18 +353,24 @@ export default function RegistrationForm() {
           loading ||
           contactErrorMsg.length > 0 ||
           emailErrorMsg.length > 0 ||
-          pwdErrorMsg.length > 0
+          pwdErrorMsg.length > 0 ||
+          firstName.length < 1 ||
+          middleName.length < 1 ||
+          lastName.length < 1 ||
+          email.length < 1 ||
+          password.length < 1
         }
         onClick={handleRegister}
         size="sm"
-        className="w-full rounded-full bg-green-500 hover:bg-green-400 gap-2"
+        className="w-full font-semibold text-lg rounded-md bg-green-500 hover:bg-green-400 gap-2"
       >
         {loading ? (
-          <Icons.spinner className="animate-spin ease-in-out" />
+          <>
+            <Icons.spinner className="animate-spin ease-in-out" /> Processing...
+          </>
         ) : (
-          <Icons.badgeCheck />
-        )}{" "}
-        {loading ? "Processing..." : "Sign-up"}
+          <>Sign-up</>
+        )}
       </Button>
     </form>
   );

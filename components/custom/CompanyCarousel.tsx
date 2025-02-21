@@ -56,7 +56,7 @@ export default function CompanyCarousel() {
           {Array.from({ length: 6 }).map((item, index) => (
             <CarouselItem
               key={`company-card-skeleton-${index}`}
-              className="md:basis-1/2 lg:basis-1/3"
+              className="basis-1/2 md:basis-1/3 lg:basis-1/4"
             >
               <CompanyCardSkeleton />
             </CarouselItem>
@@ -83,7 +83,7 @@ export default function CompanyCarousel() {
         {companies.map((item, index) => (
           <CarouselItem
             key={`company-card-${index}`}
-            className="md:basis-1/2 lg:basis-1/3"
+            className="basis-1/2 md:basis-1/3 lg:basis-1/4"
           >
             <CompanyCard comp={item} />
           </CarouselItem>
@@ -95,16 +95,16 @@ export default function CompanyCarousel() {
 
 function CompanyCard({ comp }: { comp: ICompany }) {
   return (
-    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-4 items-center justify-center">
+    <div className="w-full px-4 py-2 rounded-md drop-shadow bg-white backdrop-blur flex gap-2 items-center justify-between">
+      <div className="flex gap-2">
+        <div className="flex flex-col gap-2 items-center justify-center">
           <AvatarPicker
             readOnly
             src={comp.logo}
             skeleton={<AvatarNamePlaceholder name={comp.company_name} />}
-            className="size-16 p-0"
+            className="size-8 p-0"
           />
-          <Link
+          {/* <Link
             href={`${comp.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
               SiteConfig.siteName
             }-${Date.now()}`}
@@ -116,14 +116,14 @@ function CompanyCard({ comp }: { comp: ICompany }) {
               <Icons.externalLink />
               Visit
             </TextCapsule>
-          </Link>
+          </Link> */}
         </div>
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold text-xl line-clamp-1 text-ellipsis">
+        <div className="flex flex-col gap-2 items-center justify-center">
+          <p className="font-bold text-xl line-clamp-1 text-ellipsis">
             {comp.company_name}
           </p>
 
-          <div className="flex flex-col gap-2 *:text-xs">
+          {/* <div className="flex flex-col gap-2 *:text-xs">
             <TextCapsule className="bg-blue-500">
               <Icons.building className="size-3" />
               {comp.headquarters ?? "N/A"}
@@ -136,7 +136,7 @@ function CompanyCard({ comp }: { comp: ICompany }) {
             <TextCapsule className={comp.is_active ? "bg-green-500" : ""}>
               {comp.is_active ? "Active" : "Inactive"}
             </TextCapsule>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -145,18 +145,18 @@ function CompanyCard({ comp }: { comp: ICompany }) {
 
 function CompanyCardSkeleton() {
   return (
-    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-      <div className="flex gap-4 flex-grow">
-        <div className="flex flex-col gap-4 items-center justify-center">
-          <Skeleton className="size-16 rounded-full" />
+    <div className="w-full px-4 py-2 rounded-md drop-shadow bg-white flex gap-2 items-center justify-between">
+      <div className="flex w-full items-center justify-center gap-2">
+        <Skeleton className="size-8 rounded-full invert-[0.25]" />
+        {/* <div className="flex flex-col gap-4 items-center justify-center">
+           <Skeleton className="w-16 h-4" /> 
+        </div> */}
+        <Skeleton className="flex-1 h-6 invert-[0.25]" />
+        {/* <div className="flex flex-col gap-2 w-full items-center justify-center">
           <Skeleton className="w-16 h-4" />
-        </div>
-        <div className="flex flex-col gap-2 w-full">
-          <Skeleton className="flex-grow h-6" />
           <Skeleton className="w-16 h-4" />
           <Skeleton className="w-16 h-4" />
-          <Skeleton className="w-16 h-4" />
-        </div>
+        </div> */}
       </div>
     </div>
   );

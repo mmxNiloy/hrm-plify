@@ -147,23 +147,36 @@ import React from "react";
 const YouTubeIcon = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={cn(className, "lucide lucide-youtube fill-current")}
+      viewBox="0 -3.5 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
     >
-      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-      <path d="m10 15 5-3-5-3z" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M23.46 2.631A3 3 0 0 0 21.344.503C19.48 0 12 0 12 0S4.52 0 2.655.503A3 3 0 0 0 .541 2.631C.04 4.51.04 8.426.04 8.426s0 3.917.5 5.794a2.96 2.96 0 0 0 2.114 2.094c1.866.503 9.345.503 9.345.503s7.48 0 9.345-.503a2.96 2.96 0 0 0 2.114-2.094c.5-1.877.5-5.794.5-5.794s0-3.917-.5-5.795M9.553 11.982V4.87l6.251 3.557z"
+      />
     </svg>
   )
 );
 YouTubeIcon.displayName = "YouTubeIcon";
+
+const InstagramIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 256 256"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("stroke-current", className)}
+    >
+      <path d="M128,82a46,46,0,1,0,46,46A46.05239,46.05239,0,0,0,128,82Zm0,68a22,22,0,1,1,22-22A22.02489,22.02489,0,0,1,128,150ZM176,20H80A60.06812,60.06812,0,0,0,20,80v96a60.06812,60.06812,0,0,0,60,60h96a60.06812,60.06812,0,0,0,60-60V80A60.06812,60.06812,0,0,0,176,20Zm36,156a36.04061,36.04061,0,0,1-36,36H80a36.04061,36.04061,0,0,1-36-36V80A36.04061,36.04061,0,0,1,80,44h96a36.04061,36.04061,0,0,1,36,36ZM196,76a16,16,0,1,1-16-16A16.01833,16.01833,0,0,1,196,76Z" />
+    </svg>
+  )
+);
+InstagramIcon.displayName = "InstagramIcon";
 
 const GenderIcon = React.forwardRef<SVGElement, SVGAttributes>(
   ({ className, ...props }, ref) => (
@@ -838,7 +851,42 @@ const ProfileIcon = React.forwardRef<SVGElement, SVGAttributes>(
 );
 ProfileIcon.displayName = "ProfileIcon";
 
+const FacebookRounded = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      className={cn("fill-current", className)}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M23 12.067C23 5.955 18.075 1 12 1S1 5.955 1 12.067C1 17.591 5.023 22.17 10.281 23v-7.734H7.488v-3.199h2.793V9.63c0-2.774 1.643-4.306 4.155-4.306 1.204 0 2.462.216 2.462.216v2.724h-1.387c-1.366 0-1.792.853-1.792 1.728v2.076h3.05l-.487 3.2h-2.563V23C18.978 22.17 23 17.591 23 12.067"
+      />
+    </svg>
+  )
+);
+FacebookRounded.displayName = "FacebookRounded";
+
+const LinkedIn = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("fill-current", className)}
+    >
+      <path d="M17.04 17.043h-2.962v-4.64c0-1.107-.023-2.531-1.544-2.531-1.544 0-1.78 1.204-1.78 2.449v4.722H7.793V7.5h2.844v1.3h.039c.397-.75 1.364-1.54 2.808-1.54 3.001 0 3.556 1.974 3.556 4.545zM4.447 6.194c-.954 0-1.72-.771-1.72-1.72s.767-1.72 1.72-1.72a1.72 1.72 0 0 1 0 3.44m1.484 10.85h-2.97V7.5h2.97zM18.522 0H1.476C.66 0 0 .645 0 1.44v17.12C0 19.355.66 20 1.476 20h17.042c.815 0 1.482-.644 1.482-1.44V1.44C20 .646 19.333 0 18.518 0z" />
+    </svg>
+  )
+);
+LinkedIn.displayName = "LinkedIn";
+
 const Icons = {
+  instagram: InstagramIcon,
   profile: ProfileIcon,
   imageDownload: ImageDown,
   recover: RecoverIcon,
@@ -1038,40 +1086,8 @@ const Icons = {
   uploadCloud: UploadCloud,
   close: XCircle,
   calendar: Calendar,
-  fb: () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-facebook"
-    >
-      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-    </svg>
-  ),
-  linkedin: () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-linkedin"
-    >
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  ),
+  fb: FacebookRounded,
+  linkedin: LinkedIn,
   twitter: () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
