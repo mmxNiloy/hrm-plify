@@ -1,38 +1,68 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import gsap from "gsap";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ICompany } from "@/schema/CompanySchema";
 import { AvatarPicker } from "../ui/avatar-picker";
 import { Skeleton } from "../ui/skeleton";
-import { getSampleCompanies } from "@/app/(server)/actions/getSampleCompanies";
+import { getFeaturedCompanies } from "@/app/(server)/actions/getFeaturedCompanies";
 import AvatarNamePlaceholder from "./AvatarNamePlaceholder";
-import TextCapsule from "./TextCapsule";
-import Icons from "../ui/icons";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import Link from "next/link";
-import SiteConfig from "@/utils/SiteConfig";
 
 export default function CompanyCarousel() {
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const hardcodedFeaturedCompanyNames = useMemo(
+    () => [
+      { company_name: "East West Holdings" },
+      { company_name: "Revolo Consultancy International" },
+      { company_name: "Wycombe Green" },
+      { company_name: "RCI Chartered Accountants" },
+      { company_name: "Wisdom Property Developments" },
+      { company_name: "Silverwood Property Holdings" },
+      { company_name: "The Motor Group" },
+      { company_name: "Intelligent Property Assets" },
+      { company_name: "Construction for Generations" },
+      { company_name: "Bengal Spice" },
+      { company_name: "Tropical Holdings" },
+      { company_name: "Maidenhead Green" },
+      { company_name: "East West Services London" },
+      { company_name: "Magpie Nest Holdings" },
+      { company_name: "Bramingham Wood" },
+      { company_name: "B’s Online" },
+      { company_name: "Beckenham Ltd" },
+      { company_name: "Apollo Global Research & Consultancy" },
+      { company_name: "Next Ways" },
+      { company_name: "Abroad Next" },
+      { company_name: "Artemis Consultancy" },
+      { company_name: "Magpie Nest Finance" },
+      { company_name: "Earthbound Services" },
+      { company_name: "Winnersh Motors" },
+      { company_name: "Hampsted Ltd" },
+      { company_name: "Limbury Mead" },
+      { company_name: "Progress Tax and Accounts" },
+      { company_name: "3 Counties Holdings" },
+      { company_name: "SSD Networks" },
+      { company_name: "Revolution Tax Services" },
+      { company_name: "Burnham Green" },
+    ],
+    []
+  );
+
   const loadData = useCallback(async () => {
     setLoading(true);
 
-    const mCompanies = await getSampleCompanies();
-    if (mCompanies.error) setCompanies([]);
-    else setCompanies(mCompanies.data);
+    //! Uncomment this section to get featured companies from the DB
+    // const mCompanies = await getFeaturedCompanies();
+    // if (mCompanies.error) setCompanies([]);
+    // else setCompanies(mCompanies.data);
+
+    // Remove this line when the client comes to their senses.
+    setCompanies(hardcodedFeaturedCompanyNames as ICompany[]);
 
     setLoading(false);
-  }, []);
+  }, [hardcodedFeaturedCompanyNames]);
 
   useEffect(() => {
     loadData();

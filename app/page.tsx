@@ -1,10 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Icons from "@/components/ui/icons";
 import Image from "next/image";
 import SiteConfig from "@/utils/SiteConfig";
-import Navbar from "@/components/custom/Navbar/Navbar";
 import AuthCard from "@/components/custom/Auth/AuthCard";
 import Footer from "@/components/custom/Footer";
 import CompanyCarousel from "@/components/custom/CompanyCarousel";
@@ -68,10 +65,14 @@ export default function Home() {
 
       {/* Main Content: Company Count and Showcase */}
       <div className="container flex flex-col gap-4">
-        <CompanyCountText />
-        <p className="text-white text-xl text-center">
-          Here are some of our clients
+        <p className="mt-16 text-4xl font-extrabold text-center text-white">
+          Clients That Have Trusted Us
+          <br /> With Their HR
         </p>
+
+        {/* <p className="text-white text-xl text-center">
+          Here are some of our clients
+        </p> */}
 
         <CompanyCarousel />
       </div>

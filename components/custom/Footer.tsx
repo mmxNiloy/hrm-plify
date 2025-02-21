@@ -1,10 +1,15 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
+import { cn } from "@/lib/utils";
 import SiteConfig from "@/utils/SiteConfig";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 
 export default function Footer() {
+  const params = useSearchParams();
+
   return (
     <footer className="flex flex-col gap-2 text-white container">
       <div className="flex items-center justify-evenly rounded-full from-blue-600 to-purple-500 bg-gradient-to-r px-8 py-2 text-white">
@@ -24,31 +29,19 @@ export default function Footer() {
           <p className="font-bold text-lg">Contact Us</p>
           <span className="h-0.5 w-10 bg-[#ed1c24] group-hover:w-full transition-all" />
         </div>
-        {/* <div className="flex items-center gap-8">
-          <Link href={"#?_ref=RevoloHR"} passHref>
-            <Icons.fb className="size-10 cursor-pointer fill-white" />
-            </Link>
-
-            <Link href={"#?_ref=RevoloHR"} passHref>
-            <Icons.linkedin className="size-10 cursor-pointer fill-white" />
-            </Link>
-            
-          <Link href={"#?_ref=RevoloHR"} passHref>
-          <Icons.youtube className="size-10 cursor-pointer fill-white" />
-          </Link>
-
-          <Link href={"#?_ref=RevoloHR"} passHref>
-            <Icons.instagram className="size-10 cursor-pointer fill-white" />
-          </Link>
-        </div> */}
       </div>
 
-      <div className="flex items-center justify-between">
+      <div
+        className={cn(
+          "flex items-center justify-center",
+          params.get("credits") && "justify-between"
+        )}
+      >
         <p>
-          &copy; {new Date().getFullYear()} {SiteConfig.siteName} HR UK, Inc.
-          Alrights reserved.
+          &copy; {new Date().getFullYear()} {SiteConfig.siteName} Revolo
+          Consultancy International Limited.
         </p>
-        <p>
+        <p className={params.get("credits") ? "block" : "hidden"}>
           Made with ❤ by
           <Link
             passHref

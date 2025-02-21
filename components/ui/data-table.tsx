@@ -153,7 +153,11 @@ export function DataTable<TData, TValue>({
                 <DropdownMenuContent align="end">
                   {table
                     .getAllColumns()
-                    .filter((column) => column.getCanHide())
+                    .filter((column) => {
+                      return (
+                        column.getCanHide() && !column.id.includes("action")
+                      );
+                    })
                     .map((column) => {
                       return (
                         <DropdownMenuCheckboxItem

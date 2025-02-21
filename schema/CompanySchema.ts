@@ -20,6 +20,7 @@ export interface ICompany {
   updated_at: Date;
   contact_number?: string;
   is_active: number;
+  is_featured?: boolean;
 }
 
 export interface ICompanyWithEmployeeMeta extends ICompany {

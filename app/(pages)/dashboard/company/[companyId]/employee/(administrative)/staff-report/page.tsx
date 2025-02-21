@@ -77,7 +77,7 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Job Applications</p>
+      <p className="text-xl font-semibold">Staff Report</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           company={company.data}
