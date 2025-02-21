@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/melodeathmmx/artemis-web:latest
+          tags: ghcr.io/mmxNiloy/artemis-web:latest
