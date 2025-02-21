@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/mmxNiloy/artemis-web:latest
+          tags: ghcr.io/mmxniloy/artemis-web:latest
