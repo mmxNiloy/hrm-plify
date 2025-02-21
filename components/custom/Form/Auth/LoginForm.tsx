@@ -13,8 +13,6 @@ export default function LoginForm() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleLogin = useCallback(
@@ -84,35 +82,7 @@ export default function LoginForm() {
       </div>
 
       <div className="flex flex-col gap-1 justify-center">
-        {/* <Label
-          htmlFor="password-input"
-          className="after:content-['*'] after:ml-0.5 after:text-red-500"
-        >
-          Password
-        </Label>
-        <div className="flex flex-row rounded-full has-[input]:focus-within:ring-2 ring-offset-2 ring-primary">
-          <Input
-            disabled={loading}
-            className="rounded-s-full border-e-0 border-primary/30 ring-0 focus:ring-0 focus-within:ring-0 focus-visible:ring-0"
-            required
-            minLength={3}
-            id="password-input"
-            type={passwordVisible ? "text" : "password"}
-            placeholder="Password"
-            name="password"
-          />
-          <Button
-            disabled={loading}
-            className="px-2 rounded-e-full border-s-0 border-primary/30 ring-0 focus:ring-0 focus-within:ring-0 focus-visible:ring-0"
-            onClick={() => setPasswordVisible(!passwordVisible)}
-            type="button"
-            variant={"outline"}
-            size="icon"
-          >
-            {passwordVisible ? <Icons.hidden /> : <Icons.visible />}
-          </Button>
-        </div> */}
-        <PasswordInput name="password" required />
+        <PasswordInput name="password" minLength={3} required />
       </div>
 
       <div className="flex flex-row gap-2 items-center">
