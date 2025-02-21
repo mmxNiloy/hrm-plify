@@ -103,8 +103,8 @@ export default function LeaveRequestFormFragment({
           className="resize-none"
           key={`reason-${data?.reason}`}
           defaultValue={data?.reason}
-          readOnly={readOnly}
-          disabled={disabled}
+          readOnly={readOnly || Boolean(data)}
+          disabled={disabled || Boolean(data)}
         />
       </div>
 
@@ -126,7 +126,7 @@ export default function LeaveRequestFormFragment({
                 <SelectItem value="Pending">Pending</SelectItem>
                 <SelectItem value="Approved">Approved</SelectItem>
                 <SelectItem value="Cancelled">Cancelled</SelectItem>
-                <SelectItem value="Rejected">Rejected</SelectItem>
+                {/* <SelectItem value="Rejected">Rejected</SelectItem> */}
               </SelectGroup>
             </SelectContent>
           </Select>

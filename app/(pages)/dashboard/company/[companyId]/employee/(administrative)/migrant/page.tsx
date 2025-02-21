@@ -17,6 +17,7 @@ import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import EmployeeMigrationPopover from "@/components/custom/Popover/Company/EmployeeMigrationPopover";
 import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface MigrantEmployeePageProps
   extends ISearchParamsProps,
@@ -29,7 +30,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Migrant Employees`,
   };

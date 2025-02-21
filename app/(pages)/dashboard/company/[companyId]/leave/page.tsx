@@ -18,6 +18,7 @@ import { LeaveTypeDataTableColumns } from "@/components/custom/DataTable/Columns
 import { getCompanyLeaveTypes } from "@/app/(server)/actions/getCompanyLeaveTypes";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import SiteConfig from "@/utils/SiteConfig";
 
 export async function generateMetadata({
   params,
@@ -26,7 +27,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Leave Management`,
   };

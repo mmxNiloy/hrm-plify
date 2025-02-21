@@ -1,7 +1,7 @@
 const SiteConfig = {
-  siteName: "Artemis",
+  siteName: "Revolo",
   siteDescription: "", // TODO: Add site description
-  currentVersion: "1.3.2",
+  currentVersion: "1.3.6",
   maxFileSize: 5e6,
   featureFlags: {
     disableExperimentalUI: true,

@@ -17,6 +17,7 @@ import { StaffReportDataTableColumns } from "@/components/custom/DataTable/Colum
 import StaffReportGenerator from "@/components/custom/PDF/StaffReportGenerator";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -27,7 +28,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Staff Report`,
   };
@@ -76,7 +77,7 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
 
   return (
     <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Job Applications</p>
+      <p className="text-xl font-semibold">Staff Report</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           company={company.data}

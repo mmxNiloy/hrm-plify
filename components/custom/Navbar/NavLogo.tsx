@@ -5,15 +5,15 @@ import SiteConfig from "@/utils/SiteConfig";
 
 export default function NavLogo({ href }: { href?: string }) {
   return (
-    <Link href={href ?? "/"}>
+    <Link href={href ?? "/"} className="flex gap-1 items-center justify-center">
       <Image
-        src={"/site-logo.svg"}
+        src={"/site-logo-horizontal.svg"}
         priority
         unoptimized
         height={0}
         width={0}
-        className="h-16 w-32 dark:invert"
-        alt={`${SiteConfig.siteName} Logo`}
+        className="w-40 dark:invert"
+        alt={`Revolo HR`}
       />
     </Link>
   );

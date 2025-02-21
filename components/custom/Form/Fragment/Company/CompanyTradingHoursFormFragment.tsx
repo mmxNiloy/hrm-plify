@@ -71,10 +71,15 @@ export default function CompanyTradingHoursFormFragment({
       <p>Closing Time</p>
       {weekDays.map((day, index) => (
         <React.Fragment key={`${day}-trading-hour-input`}>
-          <Input readOnly tabIndex={-1} defaultValue={day} name="day_name" />
+          <Input
+            readOnly
+            tabIndex={-1}
+            defaultValue={day}
+            name={day.toLowerCase()}
+          />
           <Select
             key={`${day}-trading-hour-status-${getStatusString(day)}`}
-            name="trade_status"
+            name={`${day.toLowerCase()}_trade_status`}
             defaultValue={getStatusString(day)}
             onValueChange={(val: ReturnType<typeof getStatusString>) => {
               setStatus((oldStatus) =>
@@ -102,9 +107,8 @@ export default function CompanyTradingHoursFormFragment({
             key={`${day}-trading-hour-starting-time-${getOpeningTime(day)}`}
             type="time"
             disabled={!status[index]}
-            name="opening_time"
+            name={`${day.toLowerCase()}_opening_time`}
             defaultValue={getOpeningTime(day)}
-            placeholder={getOpeningTime(day)}
             onChange={(e) => {
               const val = e.target.value;
               setStartTime((oldVal) =>
@@ -117,7 +121,7 @@ export default function CompanyTradingHoursFormFragment({
             key={`${day}-trading-hour-closing-time-${getClosingTime(day)}`}
             type="time"
             disabled={!status[index]}
-            name="closing_time"
+            name={`${day.toLowerCase()}_closing_time`}
             defaultValue={getClosingTime(day)}
             placeholder={getClosingTime(day)}
           />

@@ -12,6 +12,7 @@ import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
+import SiteConfig from "@/utils/SiteConfig";
 
 export async function generateMetadata({
   params,
@@ -20,7 +21,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Shortlisted Applicants`,
   };

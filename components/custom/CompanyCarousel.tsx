@@ -1,37 +1,68 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import gsap from "gsap";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ICompany } from "@/schema/CompanySchema";
 import { AvatarPicker } from "../ui/avatar-picker";
 import { Skeleton } from "../ui/skeleton";
-import { getSampleCompanies } from "@/app/(server)/actions/getSampleCompanies";
+import { getFeaturedCompanies } from "@/app/(server)/actions/getFeaturedCompanies";
 import AvatarNamePlaceholder from "./AvatarNamePlaceholder";
-import TextCapsule from "./TextCapsule";
-import Icons from "../ui/icons";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import Link from "next/link";
 
 export default function CompanyCarousel() {
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const hardcodedFeaturedCompanyNames = useMemo(
+    () => [
+      { company_name: "East West Holdings" },
+      { company_name: "Revolo Consultancy International" },
+      { company_name: "Wycombe Green" },
+      { company_name: "RCI Chartered Accountants" },
+      { company_name: "Wisdom Property Developments" },
+      { company_name: "Silverwood Property Holdings" },
+      { company_name: "The Motor Group" },
+      { company_name: "Intelligent Property Assets" },
+      { company_name: "Construction for Generations" },
+      { company_name: "Bengal Spice" },
+      { company_name: "Tropical Holdings" },
+      { company_name: "Maidenhead Green" },
+      { company_name: "East West Services London" },
+      { company_name: "Magpie Nest Holdings" },
+      { company_name: "Bramingham Wood" },
+      { company_name: "B’s Online" },
+      { company_name: "Beckenham Ltd" },
+      { company_name: "Apollo Global Research & Consultancy" },
+      { company_name: "Next Ways" },
+      { company_name: "Abroad Next" },
+      { company_name: "Artemis Consultancy" },
+      { company_name: "Magpie Nest Finance" },
+      { company_name: "Earthbound Services" },
+      { company_name: "Winnersh Motors" },
+      { company_name: "Hampsted Ltd" },
+      { company_name: "Limbury Mead" },
+      { company_name: "Progress Tax and Accounts" },
+      { company_name: "3 Counties Holdings" },
+      { company_name: "SSD Networks" },
+      { company_name: "Revolution Tax Services" },
+      { company_name: "Burnham Green" },
+    ],
+    []
+  );
+
   const loadData = useCallback(async () => {
     setLoading(true);
 
-    const mCompanies = await getSampleCompanies();
-    if (mCompanies.error) setCompanies([]);
-    else setCompanies(mCompanies.data);
+    //! Uncomment this section to get featured companies from the DB
+    // const mCompanies = await getFeaturedCompanies();
+    // if (mCompanies.error) setCompanies([]);
+    // else setCompanies(mCompanies.data);
+
+    // Remove this line when the client comes to their senses.
+    setCompanies(hardcodedFeaturedCompanyNames as ICompany[]);
 
     setLoading(false);
-  }, []);
+  }, [hardcodedFeaturedCompanyNames]);
 
   useEffect(() => {
     loadData();
@@ -55,7 +86,7 @@ export default function CompanyCarousel() {
           {Array.from({ length: 6 }).map((item, index) => (
             <CarouselItem
               key={`company-card-skeleton-${index}`}
-              className="md:basis-1/2 lg:basis-1/3"
+              className="basis-1/2 md:basis-1/3 lg:basis-1/4"
             >
               <CompanyCardSkeleton />
             </CarouselItem>
@@ -82,7 +113,7 @@ export default function CompanyCarousel() {
         {companies.map((item, index) => (
           <CarouselItem
             key={`company-card-${index}`}
-            className="md:basis-1/2 lg:basis-1/3"
+            className="basis-1/2 md:basis-1/3 lg:basis-1/4"
           >
             <CompanyCard comp={item} />
           </CarouselItem>
@@ -94,19 +125,19 @@ export default function CompanyCarousel() {
 
 function CompanyCard({ comp }: { comp: ICompany }) {
   return (
-    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-4 items-center justify-center">
+    <div className="w-full px-4 py-2 rounded-md drop-shadow bg-white backdrop-blur flex gap-2 items-center justify-between">
+      <div className="flex gap-2">
+        <div className="flex flex-col gap-2 items-center justify-center">
           <AvatarPicker
             readOnly
             src={comp.logo}
             skeleton={<AvatarNamePlaceholder name={comp.company_name} />}
-            className="size-16 p-0"
+            className="size-8 p-0"
           />
-          <Link
-            href={`${
-              comp.website
-            }?_ref=ArtemisHRMS&_clickId=Artemis-${Date.now()}`}
+          {/* <Link
+            href={`${comp.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
+              SiteConfig.siteName
+            }-${Date.now()}`}
             target="_blank"
             className="hover:underline"
             passHref
@@ -115,14 +146,14 @@ function CompanyCard({ comp }: { comp: ICompany }) {
               <Icons.externalLink />
               Visit
             </TextCapsule>
-          </Link>
+          </Link> */}
         </div>
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold text-xl line-clamp-1 text-ellipsis">
+        <div className="flex flex-col gap-2 items-center justify-center">
+          <p className="font-bold text-xl line-clamp-1 text-ellipsis">
             {comp.company_name}
           </p>
 
-          <div className="flex flex-col gap-2 *:text-xs">
+          {/* <div className="flex flex-col gap-2 *:text-xs">
             <TextCapsule className="bg-blue-500">
               <Icons.building className="size-3" />
               {comp.headquarters ?? "N/A"}
@@ -135,7 +166,7 @@ function CompanyCard({ comp }: { comp: ICompany }) {
             <TextCapsule className={comp.is_active ? "bg-green-500" : ""}>
               {comp.is_active ? "Active" : "Inactive"}
             </TextCapsule>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -144,18 +175,18 @@ function CompanyCard({ comp }: { comp: ICompany }) {
 
 function CompanyCardSkeleton() {
   return (
-    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-      <div className="flex gap-4 flex-grow">
-        <div className="flex flex-col gap-4 items-center justify-center">
-          <Skeleton className="size-16 rounded-full" />
+    <div className="w-full px-4 py-2 rounded-md drop-shadow bg-white flex gap-2 items-center justify-between">
+      <div className="flex w-full items-center justify-center gap-2">
+        <Skeleton className="size-8 rounded-full invert-[0.25]" />
+        {/* <div className="flex flex-col gap-4 items-center justify-center">
+           <Skeleton className="w-16 h-4" /> 
+        </div> */}
+        <Skeleton className="flex-1 h-6 invert-[0.25]" />
+        {/* <div className="flex flex-col gap-2 w-full items-center justify-center">
           <Skeleton className="w-16 h-4" />
-        </div>
-        <div className="flex flex-col gap-2 w-full">
-          <Skeleton className="flex-grow h-6" />
           <Skeleton className="w-16 h-4" />
           <Skeleton className="w-16 h-4" />
-          <Skeleton className="w-16 h-4" />
-        </div>
+        </div> */}
       </div>
     </div>
   );

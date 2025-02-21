@@ -1,5 +1,5 @@
 "use client";
-import { upload } from "@/app/(server)/actions/upload";
+import getCurrentUser from "@/app/(server)/actions/getCurrentUser";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
@@ -13,11 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
+import { IUser } from "@/schema/UserSchema";
 import { IFormFragmentProps } from "@/utils/Types";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface Props extends IFormFragmentProps<ICompany> {
   asClient?: boolean;
@@ -31,6 +31,31 @@ export default function CompanyProfileFormFragment({
   asClient = false,
   onSizeExceeded,
 }: Props) {
+  const [user, setUser] = useState<IUser>();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const getUserData = useCallback(async () => {
+    setLoading(true);
+
+    const userData = await getCurrentUser();
+    setUser(userData);
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    getUserData();
+  }, [getUserData]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-2 w-full flex-1">
+        <Icons.spinner className="animate-spin" />
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -83,7 +108,16 @@ export default function CompanyProfileFormFragment({
             className="rounded-full"
           />
         </div>
-        <div className={cn("flex flex-col gap-2", asClient ? "hidden" : "")}>
+        <div
+          className={cn(
+            "flex flex-col gap-2",
+            asClient ||
+              (user?.user_roles?.roles.role_name !== "Super Admin" &&
+                user?.user_roles?.roles.role_name !== "Admin")
+              ? "hidden"
+              : ""
+          )}
+        >
           <Label>Status</Label>
           <Select
             key={`company-status-${data?.is_active ?? 0}`}

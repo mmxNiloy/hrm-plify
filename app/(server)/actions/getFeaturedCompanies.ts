@@ -3,7 +3,7 @@
 import { ICompany } from "@/schema/CompanySchema";
 import { withError } from "@/utils/Debug";
 
-export async function getSampleCompanies() {
+export async function getFeaturedCompanies() {
   const req = fetch(`${process.env.API_BASE_URL}/companies/showcase`, {
     method: "GET",
   });

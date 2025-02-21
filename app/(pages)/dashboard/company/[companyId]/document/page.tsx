@@ -9,6 +9,7 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyDocumentsTab";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { Metadata } from "next";
+import SiteConfig from "@/utils/SiteConfig";
 
 export async function generateMetadata({
   params,
@@ -17,7 +18,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Document Management`,
   };

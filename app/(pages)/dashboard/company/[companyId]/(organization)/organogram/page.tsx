@@ -14,6 +14,7 @@ import OrgChartVersionSelect from "@/components/custom/Organogram/OrgChartVersio
 import OrgChartVersionCreationPopover from "@/components/custom/Popover/Organogram/OrgChartVersionCreationPopover";
 import { getAllOrganograms } from "@/app/(server)/actions/getAllOrganograms";
 import OrgChartNameEditPopover from "@/components/custom/Popover/Organogram/OrgChartNameEditPopover";
+import SiteConfig from "@/utils/SiteConfig";
 
 export async function generateMetadata({
   params,
@@ -22,7 +23,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `Artemis | ${
+    title: `${SiteConfig.siteName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Organogram Chart`,
   };

@@ -8,12 +8,13 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { Metadata } from "next";
 import { CompanyByIDPageProps } from "../../../PageProps";
 import { getFullNameOfUser } from "@/utils/Misc";
+import SiteConfig from "@/utils/SiteConfig";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
   return {
-    title: `Artemis | Employee Profile`,
+    title: `${SiteConfig.siteName} | Employee Profile`,
   };
 }
 
