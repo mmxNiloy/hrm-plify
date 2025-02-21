@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: melodeathmmx/artemis-web:latest, melodeathmmx/artemis-web:${{ github.sha }}
+          tags: ghcr.io/melodeathmmx/artemis-web:latest
