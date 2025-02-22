@@ -14,6 +14,9 @@ import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
 import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
+import SalaryStructureEditDialog from "@/components/custom/Dialog/Payroll/SalaryStructureEditDialog";
+import { getEmployeeSalaryStructure } from "@/app/(server)/actions/getEmployeeSalaryStructure";
+import SalaryStructureFormFragment from "@/components/custom/Form/Fragment/Payroll/SalaryStructureFormFragment";
 
 export default async function PersonalInfoSlot({
   params,
@@ -36,19 +39,26 @@ export default async function PersonalInfoSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const [company, companyExtraData, personalInfo, employmentTypes] =
-    await Promise.all([
-      getCompanyData(companyId),
-      getCompanyExtraData(companyId),
-      getPersonalInfo(employeeId),
-      getAllEmploymentTypes(),
-    ]);
+  const [
+    company,
+    companyExtraData,
+    personalInfo,
+    employmentTypes,
+    salaryStructure,
+  ] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(companyId),
+    getPersonalInfo(employeeId),
+    getAllEmploymentTypes(),
+    getEmployeeSalaryStructure(employeeId),
+  ]);
 
   if (
     company.error ||
     companyExtraData.error ||
     personalInfo.error ||
-    employmentTypes.error
+    employmentTypes.error ||
+    salaryStructure.error
   ) {
     return (
       <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
@@ -60,7 +70,8 @@ export default async function PersonalInfoSlot({
             company.error ??
             companyExtraData.error ??
             personalInfo.error ??
-            employmentTypes.error
+            employmentTypes.error ??
+            salaryStructure.error
           }
         />
       </div>
@@ -95,6 +106,18 @@ export default async function PersonalInfoSlot({
         employmentTypes={empTypes}
         readOnly
       />
+
+      <div className="col-span-full w-full flex flex-row items-center justify-between">
+        <p className="text-lg font-semibold">Salary Structure</p>
+        {/* <CompanyProfileEditDialog data={data} /> */}
+        {updateAccess && (
+          <SalaryStructureEditDialog
+            data={salaryStructure.data.data}
+            company_id={companyId}
+          />
+        )}
+      </div>
+      <SalaryStructureFormFragment data={salaryStructure.data.data} readOnly />
     </div>
   );
 }
