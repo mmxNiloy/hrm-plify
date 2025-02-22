@@ -2,6 +2,7 @@ import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { ISearchParams } from "./Types";
 import { IUser, IUserBase } from "@/schema/UserSchema";
 import { IJobApplicant } from "@/schema/JobSchema";
+import SiteConfig from "./SiteConfig";
 
 export const nationalities: string[] = [
   "Afghan",
@@ -472,7 +473,7 @@ export function getPaginationParams(
   limit: number;
 } {
   var page = 1;
-  var limit = 5;
+  var limit = SiteConfig.defaultPageSize;
   try {
     page = Math.max(
       1,
@@ -492,7 +493,7 @@ export function getPaginationParams(
     );
   } catch (_) {
     page = 1;
-    limit = 5;
+    limit = SiteConfig.defaultPageSize;
   }
 
   return { page, limit };
