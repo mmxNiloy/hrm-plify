@@ -126,6 +126,7 @@ export default async function GenerateAttendancePage({
             employee_id: employeeId,
             company_id: companyId,
           }))}
+          pageCount={attendance.data.total_page}
           columns={AttendanceGenerationRecordDataTableColumns}
         />
       </div>
