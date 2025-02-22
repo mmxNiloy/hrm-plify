@@ -18,7 +18,7 @@ import {
   DialogTitleStyles,
 } from "@/styles/dialog.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { IUser } from "@/schema/UserSchema";
 import { IEmployee, IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
@@ -38,24 +38,21 @@ import { getFullNameOfEmployee } from "@/utils/Misc";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-interface EmployeeCreationResponse {
-  message: string;
-  user: IUser;
-  employee: IEmployee;
-  password: string;
-}
-
 interface Props {
   company_id: number;
   employees: IEmployeeWithUserMetadata[];
+  asGenerator?: boolean;
 }
 
 export default function AttendanceBulkUpdateDialog({
   company_id,
   employees,
+  asGenerator = false,
 }: Props) {
   const { toast } = useToast();
   const router = useRouter();
+
+  const path = usePathname();
 
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -83,7 +80,10 @@ export default function AttendanceBulkUpdateDialog({
 
       setLoading(true);
 
-      const result = await updateAttendance({ ...reqBod });
+      const result = await updateAttendance({
+        ...reqBod,
+        run_generate: asGenerator,
+      });
 
       if (result.error) {
         toast({
@@ -98,12 +98,18 @@ export default function AttendanceBulkUpdateDialog({
         });
 
         setOpen(false);
-        router.refresh();
+        if (asGenerator) {
+          router.push(
+            path.concat(`?employeeId=${reqBod.employee_id}&sort=DESC`)
+          );
+        } else {
+          router.refresh();
+        }
       }
 
       setLoading(false);
     },
-    [company_id, router, toast]
+    [asGenerator, company_id, path, router, toast]
   );
 
   return (
@@ -122,7 +128,8 @@ export default function AttendanceBulkUpdateDialog({
       >
         <DialogHeader>
           <DialogTitle className={DialogTitleStyles}>
-            <Icons.update /> Update Attendance of an Employee
+            <Icons.update /> {asGenerator ? "Generate" : "Update"} Attendance of
+            an Employee
           </DialogTitle>
           <DialogDescription>
             Fill out the form with appropriate information.
@@ -187,14 +194,18 @@ export default function AttendanceBulkUpdateDialog({
                   <RadioGroupItem value={"1"} />
                   <p>Present</p>
                 </div>
-                <div className="flex gap-1 items-center">
-                  <RadioGroupItem value={"2"} />
-                  <p>Day Off</p>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <RadioGroupItem value={"3"} />
-                  <p>Holiday</p>
-                </div>
+                {!asGenerator && (
+                  <>
+                    <div className="flex gap-1 items-center">
+                      <RadioGroupItem value={"2"} />
+                      <p>Day Off</p>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <RadioGroupItem value={"3"} />
+                      <p>Holiday</p>
+                    </div>
+                  </>
+                )}
               </RadioGroup>
             </div>
           </div>

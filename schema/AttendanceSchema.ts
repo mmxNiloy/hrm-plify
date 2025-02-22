@@ -54,3 +54,7 @@ export interface IAttendanceReport {
 export interface IPaginatedAttendanceReport extends IPaginatedResponse {
   data: IAttendanceReport[];
 }
+
+export interface IPaginatedAttendanceRecords extends IPaginatedResponse {
+  data: IAttendanceRecord[];
+}

@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
-import AttendanceGenerationTable from "@/components/custom/Dashboard/Attendance/AttendanceGenerationTable";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
@@ -13,6 +12,13 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/AttendanceBulkUpdateDialog";
+import { StaticDataTable } from "@/components/ui/data-table";
+import { AttendanceGenerationRecordDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceGenerationRecordDataTableColumns";
+import { ISearchParamsProps } from "@/utils/Types";
+import { getPaginationParams } from "@/utils/Misc";
+import { getAttendanceOfEmployee } from "@/app/(server)/actions/getAttendanceOfEmployee";
+import AttendancePDFGenerator from "@/components/custom/Dashboard/Attendance/AttendancePDFGenerator";
 
 export async function generateMetadata({
   params,
@@ -27,10 +33,24 @@ export async function generateMetadata({
   };
 }
 
+interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
+
 export default async function GenerateAttendancePage({
   params,
-}: CompanyByIDPageProps) {
-  const mCookies = await cookies();
+  searchParams,
+}: Props) {
+  const [sParams, mCookies, mParams] = await Promise.all([
+    searchParams,
+    cookies(),
+    params,
+  ]);
+
+  const employeeId = Number.parseInt(
+    (sParams["employeeId"] as string | undefined) ?? "0"
+  );
+  const sort = (sParams["sort"] as "ASC" | "DESC" | undefined) ?? "DESC";
+  const { limit, page } = getPaginationParams(sParams);
+
   const mPermissions = JSON.parse(
     mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
   ) as TPermission[];
@@ -45,21 +65,24 @@ export default async function GenerateAttendancePage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
+  var companyId = mParams.companyId;
   companyId = Number.parseInt(`${companyId}`);
   const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
-  const [company, companyExtraData] = await Promise.all([
+  const [company, companyExtraData, attendance] = await Promise.all([
     getCompanyData(companyId),
     getCompanyExtraData(companyId),
+    getAttendanceOfEmployee({ employeeId, limit, page, sort }),
   ]);
 
-  if (company.error || companyExtraData.error) {
+  if (company.error || companyExtraData.error || attendance.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Generate Attendance</p>
-        <ErrorFallbackCard error={company.error ?? companyExtraData.error} />
+        <ErrorFallbackCard
+          error={company.error ?? companyExtraData.error ?? attendance.error}
+        />
       </main>
     );
   }
@@ -76,13 +99,34 @@ export default async function GenerateAttendancePage({
             parent: "Attendance Management",
           }}
         />
-        {/* <AttendanceFilterPopover {...companyExtraData} /> */}
+        <div className="flex gap-4">
+          <AttendanceBulkUpdateDialog
+            asGenerator
+            company_id={companyId}
+            employees={companyExtraData.data.employees}
+          />
+
+          <AttendancePDFGenerator
+            company={company.data}
+            employee={companyExtraData.data.employees.find(
+              (item) => item.employee_id == employeeId
+            )}
+            data={attendance.data.data}
+          />
+        </div>
       </div>
       <div className="flex flex-col gap-4">
-        <AttendanceGenerationTable
-          company={company.data}
-          employees={companyExtraData.data.employees}
-          companyId={companyId}
+        <StaticDataTable
+          // showOptions={false}
+          data={attendance.data.data.map((item) => ({
+            ...item,
+            employee: companyExtraData.data.employees.find(
+              (emp) => emp.employee_id == employeeId
+            ),
+            employee_id: employeeId,
+            company_id: companyId,
+          }))}
+          columns={AttendanceGenerationRecordDataTableColumns}
         />
       </div>
     </main>

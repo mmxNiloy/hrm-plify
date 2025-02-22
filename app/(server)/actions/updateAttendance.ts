@@ -10,6 +10,7 @@ interface Props {
   from_date: Date;
   to_date: Date;
   value: number;
+  run_generate?: boolean;
 }
 
 export async function updateAttendance({
@@ -18,6 +19,7 @@ export async function updateAttendance({
   from_date,
   to_date,
   value,
+  run_generate = false,
 }: Props) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
@@ -36,6 +38,7 @@ export async function updateAttendance({
         from_date,
         to_date,
         value,
+        run_generate,
       }),
     }
   );
