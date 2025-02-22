@@ -113,11 +113,18 @@ export default async function PersonalInfoSlot({
         {updateAccess && (
           <SalaryStructureEditDialog
             data={salaryStructure.data.data}
+            employees={companyExtraData.data.employees}
+            currentEmployee={employeeId}
             company_id={companyId}
           />
         )}
       </div>
-      <SalaryStructureFormFragment data={salaryStructure.data.data} readOnly />
+      <SalaryStructureFormFragment
+        data={salaryStructure.data.data}
+        currentEmployee={employeeId}
+        employees={companyExtraData.data.employees}
+        readOnly
+      />
     </div>
   );
 }
