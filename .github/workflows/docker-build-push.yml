@@ -41,5 +41,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            chmod +x ~/redeploy.sh
-            ~/redeploy.sh
+            sudo ~/redeploy.sh
