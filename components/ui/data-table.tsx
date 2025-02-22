@@ -53,6 +53,7 @@ import {
   AccordionTrigger,
 } from "./accordion";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -128,7 +129,7 @@ export function DataTable<TData, TValue>({
                 }}
               >
                 <SelectTrigger className="w-16">
-                  <SelectValue placeholder={5} />
+                  <SelectValue placeholder={pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="5">5</SelectItem>
@@ -426,7 +427,7 @@ export function NetworkedDataTable<TData, TValue>({
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: SiteConfig.defaultPageSize,
   });
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -516,7 +517,7 @@ export function NetworkedDataTable<TData, TValue>({
                 }}
               >
                 <SelectTrigger className="w-16">
-                  <SelectValue placeholder={5} />
+                  <SelectValue placeholder={pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="5">5</SelectItem>
@@ -765,7 +766,7 @@ export function DataTableSkeleton<TValue>({
 }) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: SiteConfig.defaultPageSize,
   });
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -806,7 +807,7 @@ export function DataTableSkeleton<TValue>({
               <Label>Page size</Label>
               <Select disabled>
                 <SelectTrigger className="w-16">
-                  <SelectValue placeholder={5} />
+                  <SelectValue placeholder={pagination.pageSize} />
                 </SelectTrigger>
               </Select>
             </div>
@@ -1097,7 +1098,7 @@ export function StaticDataTable<TData, TValue>({
                 }}
               >
                 <SelectTrigger className="w-16">
-                  <SelectValue placeholder={5} />
+                  <SelectValue placeholder={SiteConfig.defaultPageSize} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="5">5</SelectItem>
