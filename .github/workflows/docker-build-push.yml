@@ -29,3 +29,17 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/mmxniloy/artemis-web:latest
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            chmod +x ~/redeploy.sh
+            ~/redeploy.sh
