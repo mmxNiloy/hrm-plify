@@ -41,7 +41,7 @@ export default function Footer() {
           &copy; {new Date().getFullYear()} {SiteConfig.siteName} Revolo
           Consultancy International Limited.
         </p>
-        <p className={params.get("credits") ? "block" : "hidden"}>
+        <p className={params.get("credits") ? "block" : "hidden"} id="credits">
           Made with ❤ by
           <Link
             passHref
