@@ -6,5 +6,6 @@ const SiteConfig = {
   featureFlags: {
     disableExperimentalUI: true,
   },
+  defaultPageSize: 20,
 };
 export default SiteConfig;
