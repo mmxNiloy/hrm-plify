@@ -65,7 +65,7 @@ export default function LeaveRequestEditDialog({
           : Number.parseInt(
               (fd.get("leave_type_id") as string | undefined) ?? "0"
             ),
-        reason: fd.get("reason") as string,
+        reason: data ? data.reason : (fd.get("reason") as string),
         start_date: new Date(
           (fd.get("start_date") as string | undefined) ?? new Date()
         ),
