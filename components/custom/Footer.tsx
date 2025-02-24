@@ -38,7 +38,7 @@ export default function Footer() {
         )}
       >
         <p>
-          &copy; {new Date().getFullYear()} {SiteConfig.siteName} Revolo
+          &copy; {new Date().getFullYear()} Revolo
           Consultancy International Limited.
         </p>
         <p className={params.get("credits") ? "block" : "hidden"} id="credits">
