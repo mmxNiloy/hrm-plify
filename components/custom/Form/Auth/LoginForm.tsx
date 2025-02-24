@@ -72,7 +72,7 @@ export default function LoginForm() {
         </Label> */}
         <Input
           disabled={loading}
-          className="rounded-md border-primary/30"
+          className="rounded-md border-muted-foreground ring-1"
           required
           id="email-input"
           type="email"
@@ -82,7 +82,12 @@ export default function LoginForm() {
       </div>
 
       <div className="flex flex-col gap-1 justify-center">
-        <PasswordInput name="password" minLength={3} required />
+        <PasswordInput
+          name="password"
+          minLength={3}
+          required
+          className="border-muted-foreground ring-1"
+        />
       </div>
 
       <div className="flex flex-row gap-2 items-center">
