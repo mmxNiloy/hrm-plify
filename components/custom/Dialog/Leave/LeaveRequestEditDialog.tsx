@@ -80,6 +80,13 @@ export default function LeaveRequestEditDialog({
           body: JSON.stringify(leaveReq),
         });
 
+        const result = await apiRes.json();
+
+        console.log(
+          "Leave Request Edit Dialog > Create Leave Req > Response >",
+          result
+        );
+
         if (apiRes.ok) {
           // Close dialog, show toast, refresh parent ssc
           toast({
@@ -92,11 +99,10 @@ export default function LeaveRequestEditDialog({
           setOpen(false);
         } else {
           // show a failure dialog
-          const res = await apiRes.json();
 
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
+            description: JSON.stringify(result.message),
             variant: "destructive",
           });
         }
