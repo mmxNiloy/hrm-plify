@@ -15,6 +15,8 @@ export async function POST(req: NextRequest) {
   const data = (await req.json()) as ILeaveRequest;
   data.status = "Pending";
 
+  console.log("POST > Create Leave > Data >", data);
+
   try {
     const apiRes = await fetch(
       `${process.env.API_BASE_URL}/leave-management/create-leave`,
@@ -29,6 +31,8 @@ export async function POST(req: NextRequest) {
     );
 
     const res = await apiRes.json();
+    console.log("POST > Create Leave > Server Response >", res);
+
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
     console.error(
@@ -54,6 +58,7 @@ export async function PATCH(req: NextRequest) {
 
   const data = (await req.json()) as ILeaveRequest;
 
+  console.log("PATCH > Update Leave > Data >", data);
   try {
     const apiRes = await fetch(
       `${process.env.API_BASE_URL}/leave-management/edit-leave`,
@@ -68,6 +73,8 @@ export async function PATCH(req: NextRequest) {
     );
 
     const res = await apiRes.json();
+    console.log("PATCH > Update Leave > Server Response >", res);
+
     return NextResponse.json(res, { status: apiRes.status });
   } catch (err) {
     console.error(
