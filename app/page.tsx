@@ -52,7 +52,7 @@ export default function Home() {
             alt={`Revolo HR`}
           />
 
-          <p className="from-[#D93D74] to-orange-600 bg-gradient-to-br text-white font-bold text-xl md:text-2xl xl:text-3xl rounded-md md:rounded-xl px-4 py-2">
+          <p className="from-blue-600 to-purple-500 bg-gradient-to-br text-white font-bold text-xl md:text-2xl xl:text-3xl rounded-md md:rounded-xl px-4 py-2">
             HR Simplified
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function Home() {
           alt={`${SiteConfig.siteName} logo`}
         />
         <div className="px-32 flex flex-col gap-2 items-center">
-          <p className="from-[#D93D74] to-orange-600 bg-gradient-to-br text-white font-bold text-xl md:text-2xl xl:text-3xl rounded-md md:rounded-xl px-4 py-2">
+          <p className="from-blue-600 to-purple-500 bg-gradient-to-br text-white font-bold text-xl md:text-2xl xl:text-3xl rounded-md md:rounded-xl px-4 py-2">
             HR Simplified
           </p>
 

@@ -130,7 +130,7 @@ export default async function EditEmployeeInfoByUserIdPage({
             <AvatarPicker
               readOnly
               src={employeeData.data.data?.image}
-              className="row-span-4"
+              className="row-span-4 size-full"
             />
 
             <div className="flex flex-col gap-2">

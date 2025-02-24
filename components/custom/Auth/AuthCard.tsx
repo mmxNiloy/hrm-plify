@@ -41,7 +41,7 @@ export default function AuthCard() {
   return currentForm === "login-form" ? (
     // <animated.div style={{ ...loginAnimSprings }} >
     // </animated.div>
-    <Card className="from-sky-400/60 to-fuchsia-600/80 bg-gradient-to-b backdrop-blur-sm border-none">
+    <Card className="backdrop-blur-sm border-none">
       <CardHeader>
         <CardTitle className="text-center text-2xl md:text-4xl font-bold">
           Login
