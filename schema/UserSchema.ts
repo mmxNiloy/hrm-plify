@@ -64,6 +64,16 @@ export interface IPaginatedCompanyUser extends IPaginatedResponse {
   data: ICompanyUser[];
 }
 
+export interface ICompanyEmployeeWithPermissions {
+  employeePermissions: {
+    permission: IPermission;
+    user_id: number;
+    id: number;
+    permission_id: number;
+  }[];
+  employees: IEmployeeWithUserMetadata[];
+}
+
 export interface ICompanyUser {
   user_company_id: number;
   user_id: number;

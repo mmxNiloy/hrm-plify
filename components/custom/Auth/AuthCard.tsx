@@ -6,6 +6,7 @@ import RegistrationForm from "../Form/Auth/RegistrationForm";
 import { Button } from "@/components/ui/button";
 import LoginForm from "../Form/Auth/LoginForm";
 import { animated, useSpring } from "@react-spring/web";
+import Link from "next/link";
 
 type FormType = "login-form" | "registration-form";
 
@@ -53,13 +54,15 @@ export default function AuthCard() {
         <p className="text-center mt-4 mb-2 font-semibold text-lg text-secondary-foreground">
           Don&apos;t have an account?
         </p>
-        <Button
-          onClick={handleRegFormSlide}
-          type="button"
-          className="gap-2 w-full font-semibold text-lg rounded-md bg-blue-500 hover:bg-blue-400 text-white"
-        >
-          Sign-up
-        </Button>
+        <Link href={"#book-a-demo-form"} passHref target="_blank">
+          <Button
+            // onClick={handleRegFormSlide}
+            type="button"
+            className="gap-2 w-full font-semibold text-lg rounded-md bg-blue-500 hover:bg-blue-400 text-white"
+          >
+            Book a Demo
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   ) : (

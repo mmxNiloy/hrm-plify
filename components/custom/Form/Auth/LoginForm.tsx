@@ -1,4 +1,5 @@
 "use client";
+import { logoutNoRedir } from "@/app/(server)/actions/logoutNoRedir";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Icons from "@/components/ui/icons";
@@ -31,6 +32,28 @@ export default function LoginForm() {
         });
 
         if (apiRes.ok) {
+          const data = (await apiRes.json()) as {
+            role: string;
+            company: number;
+          };
+
+          if (
+            data.role !== "Super Admin" &&
+            data.role !== "Admin" &&
+            data.company == 0
+          ) {
+            toast({
+              title: "Access Denied.",
+              description:
+                "Your company is not yet active. Please contact our team to activate your company.",
+              variant: "destructive",
+            });
+
+            await logoutNoRedir();
+            setLoading(false);
+            return;
+          }
+
           toast({
             title: "Login successful!",
             className: "bg-green-500 text-white",
@@ -45,10 +68,11 @@ export default function LoginForm() {
           });
         }
       } catch (_) {
+        alert("Error: " + _);
         toast({
           title: "Login failed",
           description:
-            "We're hhaving trouble processing your request at the moment. Please try again later.",
+            "We're having trouble processing your request at the moment. Please try again later.",
           variant: "destructive",
         });
       }
