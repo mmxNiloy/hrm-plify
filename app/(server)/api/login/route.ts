@@ -60,5 +60,11 @@ export async function POST(req: NextRequest) {
     }
   );
 
-  return NextResponse.json(data, { status: 200 });
+  return NextResponse.json(
+    {
+      role: data.user.user_roles?.roles.role_name,
+      company: data.user.usercompany?.companies?.is_active,
+    },
+    { status: 200 }
+  );
 }

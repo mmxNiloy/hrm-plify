@@ -217,7 +217,7 @@ export default function SystemUserFormFragment({
       <div className="flex flex-col gap-2">
         <Label>Write Permissions</Label>
         <MultiSelect
-          placeholder="Read Permissions"
+          placeholder="Write Permissions"
           options={createPerms.map((item) => ({
             label: item.description,
             value: item.permission_id.toString(),
@@ -230,7 +230,7 @@ export default function SystemUserFormFragment({
       <div className="flex flex-col gap-2">
         <Label>Update Permissions</Label>
         <MultiSelect
-          placeholder="Read Permissions"
+          placeholder="Update Permissions"
           options={updatePerms.map((item) => ({
             label: item.description,
             value: item.permission_id.toString(),
