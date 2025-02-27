@@ -59,3 +59,46 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  // Check if the user is logged in
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
+  if (!session || session.value.length < 1) {
+    return NextResponse.json(
+      { message: "Session expired. Login again." },
+      { status: 401 }
+    );
+  }
+
+  const data = await req.json();
+
+  console.log("Trying to delete usercompany:", data.user_company_id);
+
+  try {
+    const apiRes = await fetch(
+      `${process.env.API_BASE_URL}/companies/my/remove-user/${data.user_company_id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${session.value}`,
+        },
+      }
+    );
+
+    const mData = await apiRes.json();
+
+    return NextResponse.json(
+      { message: mData.message },
+      { status: apiRes.status }
+    );
+  } catch (err) {
+    console.error(
+      "DELETE > Delete Company Employee > Failed to delete company employee",
+      err
+    );
+    return NextResponse.json(
+      { message: "Failed to delete company employee" },
+      { status: 500 }
+    );
+  }
+}
