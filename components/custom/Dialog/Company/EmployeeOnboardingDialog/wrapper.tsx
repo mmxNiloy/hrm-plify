@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useRouter } from "next/navigation";
 import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+import { getFullNameOfUser } from "@/utils/Misc";
 
 interface EmployeeCreationResponse {
   message: string;
@@ -86,17 +87,13 @@ export default function EmployeeOnboardingDialogWrapper({
           <AlertDialogHeader>
             <AlertDialogTitle>Employee Created Successfully!</AlertDialogTitle>
             <AlertDialogDescription>
-              Employee created successfully. Please <b>note down</b> the given
-              information. The password will{" "}
-              <b>not be disclosed once this dialog is dismissed</b>.{" "}
-              <b>
-                Please make sure to make a copy of the password before
-                dismissing this dialog.
-              </b>
+              Employee created successfully. An email has been sent to{" "}
+              {empData && getFullNameOfUser(empData.user)}{" "}
+              <em>({empData?.user.email})</em> with their login credentials.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <div className="flex flex-col gap-4">
+          <div className="hidden flex-col gap-4">
             <p>Employee Login Credentials</p>
 
             <div className="flex flex-col gap-2">
