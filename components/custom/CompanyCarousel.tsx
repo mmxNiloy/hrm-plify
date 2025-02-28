@@ -86,7 +86,7 @@ export default function CompanyCarousel() {
           {Array.from({ length: 6 }).map((item, index) => (
             <CarouselItem
               key={`company-card-skeleton-${index}`}
-              className="basis-1/2 md:basis-1/3 lg:basis-1/4"
+              className="basis-1 sm:basis-1/2 lg:basis-1/4"
             >
               <CompanyCardSkeleton />
             </CarouselItem>
@@ -149,7 +149,7 @@ function CompanyCard({ comp }: { comp: ICompany }) {
           </Link> */}
         </div>
         <div className="flex flex-col gap-2 items-center justify-center">
-          <p className="font-bold text-xl line-clamp-1 text-ellipsis">
+          <p className="font-bold md:text-lg lg:text-xl line-clamp-1 text-ellipsis">
             {comp.company_name}
           </p>
 
