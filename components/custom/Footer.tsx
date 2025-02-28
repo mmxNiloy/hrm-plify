@@ -4,13 +4,16 @@ import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import SiteConfig from "@/utils/SiteConfig";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import NavLogo from "./Navbar/NavLogo";
 import Image from "next/image";
 
 export default function Footer() {
   const params = useSearchParams();
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/dashboard")) return null;
 
   return (
     <footer className="grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-2 rounded-t-[4.875rem] md:pt-16 pt-8 xs:pt-4 md:px-16 px-8 xs:px-4 pb-8 container from-[#017bce]/[0.078] to-[#019e8f]/[0.078] bg-gradient-to-t">

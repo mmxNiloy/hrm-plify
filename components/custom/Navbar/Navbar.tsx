@@ -17,10 +17,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { usePathname } from "next/navigation";
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   const navbarContainer = useRef(null);
 
   const loginButtonRef: React.Ref<HTMLButtonElement> = useRef(null); // Add ref for login button
@@ -97,6 +100,8 @@ export default function Navbar() {
       },
     });
   }, []);
+
+  if (pathname.startsWith("/dashboard")) return null;
 
   return (
     <header className="sticky top-0 z-40 w-full flex items-center justify-center">
