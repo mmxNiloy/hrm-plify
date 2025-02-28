@@ -40,7 +40,9 @@ export default function RootLayout({
           >
             <Navbar />
             {children}
-            <Footer />
+            <Suspense fallback={<p>Loading...</p>}>
+              <Footer />
+            </Suspense>
           </div>
         </Providers>
         {/* <div className="h-screen w-screen top-0 left-0 bottom-0 right-0 sticky bg-green-500/20 -z-10"></div> */}
