@@ -51,7 +51,7 @@ export default function AuthCard() {
       <CardContent className="w-[32rem]">
         <LoginForm />
 
-        <p className="text-center mt-4 mb-2 font-semibold text-lg text-secondary-foreground">
+        {/* <p className="text-center mt-4 mb-2 font-semibold text-lg text-secondary-foreground">
           Don&apos;t have an account?
         </p>
         <Link href={"#book-a-demo-form"} passHref target="_blank">
@@ -62,7 +62,7 @@ export default function AuthCard() {
           >
             Book a Demo
           </Button>
-        </Link>
+        </Link> */}
       </CardContent>
     </Card>
   ) : (
