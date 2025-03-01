@@ -13,7 +13,9 @@ export default async function PrivacyPolicyPage() {
           <p className="text-gray-700 font-bold">
             Revolo HR Privacy Policy V1.1.1
           </p>
-          <p className="text-gray-700 italic">Effective Date: _____</p>
+          <p className="text-gray-700 italic">
+            Effective Date: {new Date("03-02-2025").toLocaleDateString("en-GB")}
+          </p>
 
           {/* Introduction */}
           <section className="flex flex-col gap-2">
@@ -134,7 +136,7 @@ export default async function PrivacyPolicyPage() {
                 <strong>Cookies and Similar Technologies:</strong> We may use
                 cookies, web beacons, and other tracking technologies to enhance
                 user experience, analyse performance, and personalize content.
-                For more details, refer to our [Cookie Policy] ([Link]).
+                {/* For more details, refer to our [Cookie Policy] ([Link]). */}
               </li>
             </ul>
             <h3 className="text-lg font-bold mt-4">
