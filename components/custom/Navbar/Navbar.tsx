@@ -118,11 +118,11 @@ export default function Navbar() {
 
         {/* Book a demo link */}
         <div className="flex gap-2">
-          <Link href={"/book-demo"} passHref>
+          {/* <Link href={"/book-demo"} passHref>
             <Button className="rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
               Book a Demo
             </Button>
-          </Link>
+          </Link> */}
 
           {/* Login Link */}
           <Link href={"/login"} passHref>
