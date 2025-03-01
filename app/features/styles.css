@@ -1,0 +1,8 @@
+.image-container,
+.feature-card,
+.bullet-item,
+.slogan-text,
+.word {
+  opacity: 0;
+  will-change: transform, opacity;
+}

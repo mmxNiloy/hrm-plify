@@ -2,31 +2,7 @@ import Icons from "@/components/ui/icons";
 import React from "react";
 
 export default function PricingPage() {
-  // Overview items
-  const overviewItems = [
-    {
-      plan: "Essential",
-      pricing: "£75/month",
-      employeesCovered: "Up to 10 employees",
-      features:
-        "Access to compliance software, document management, sponsorship tracking, basic email support",
-    },
-    {
-      plan: "Professional",
-      pricing: "£150/month",
-      employeesCovered: "Up to 20 employees",
-      features:
-        "Includes Essential features + HR compliance consultation (1 session per quarter), assistance with Home Office",
-    },
-    {
-      plan: "Enterprise",
-      pricing: "£250/month",
-      employeesCovered: "Up to 50 employees",
-      features:
-        "Includes Professional features + Dedicated HR advisor (monthly check-in), customized compliance strategy, employee visa sponsorship review, priority escalation handling, recruitment assistance",
-    },
-  ];
-
+  // Features for each plan
   const features = [
     {
       title: "Access to compliance software",
@@ -150,7 +126,7 @@ export default function PricingPage() {
         <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
       </div>
 
-      <section className="w-11/12 flex flex-col md:flex-row gap-6 items-start justify-center">
+      <section className="w-11/12 *:max-w-lg flex flex-col md:flex-row gap-6 items-start justify-center">
         {/* Essential Plan Column */}
         <div className="w-full md:w-1/3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-gray-800 text-center">
@@ -246,53 +222,54 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
-
-      <section className="flex w-11/12 flex-col gap-4 items-center justify-center h-screen overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative">
-        {/* Background circle decors */}
-        <div className="absolute -left-[6.25%] -top-1/2 lg:-top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-        <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-
-        <p className="text:2xl md:text:4xl lg:text-7xl font-extrabold from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br bg-clip-text text-transparent">
-          Overview
-        </p>
-        <div className="w-full max-w-5xl px-4 md:px-6">
-          <table className="w-full overflow-clip bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50">
-            <thead>
-              <tr className="bg-blue-600 text-white">
-                <th className="py-4 px-6 font-bold text-left">Plan</th>
-                <th className="py-4 px-6 font-bold text-left">Pricing</th>
-                <th className="py-4 px-6 font-bold text-left">
-                  Employees Covered
-                </th>
-                <th className="py-4 px-6 font-bold text-left">
-                  Features & Services
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {overviewItems.map((item, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-200/50 last:border-b-0 hover:bg-gray-50/50 transition-colors duration-200"
-                >
-                  <td className="py-4 px-6 font-bold text-gray-800">
-                    {item.plan}
-                  </td>
-                  <td className="py-4 px-6 text-gray-800">
-                    <span className="font-bold">{item.pricing}</span>
-                  </td>
-                  <td className="py-4 px-6 text-gray-800">
-                    {item.employeesCovered}
-                  </td>
-                  <td className="py-4 px-6 text-gray-700 max-w-md">
-                    {renderFeatures(item.features)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
     </main>
   );
 }
+
+// Overview section: Now removed
+// <section className="flex w-11/12 flex-col gap-4 items-center justify-center h-screen overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative">
+//   {/* Background circle decors */}
+//   <div className="absolute -left-[6.25%] -top-1/2 lg:-top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
+//   <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
+
+//   <p className="text:2xl md:text:4xl lg:text-7xl font-extrabold from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br bg-clip-text text-transparent">
+//     Overview
+//   </p>
+//   <div className="w-full max-w-5xl px-4 md:px-6">
+//     <table className="w-full overflow-clip bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50">
+//       <thead>
+//         <tr className="bg-blue-600 text-white">
+//           <th className="py-4 px-6 font-bold text-left">Plan</th>
+//           <th className="py-4 px-6 font-bold text-left">Pricing</th>
+//           <th className="py-4 px-6 font-bold text-left">
+//             Employees Covered
+//           </th>
+//           <th className="py-4 px-6 font-bold text-left">
+//             Features & Services
+//           </th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {overviewItems.map((item, index) => (
+//           <tr
+//             key={index}
+//             className="border-b border-gray-200/50 last:border-b-0 hover:bg-gray-50/50 transition-colors duration-200"
+//           >
+//             <td className="py-4 px-6 font-bold text-gray-800">
+//               {item.plan}
+//             </td>
+//             <td className="py-4 px-6 text-gray-800">
+//               <span className="font-bold">{item.pricing}</span>
+//             </td>
+//             <td className="py-4 px-6 text-gray-800">
+//               {item.employeesCovered}
+//             </td>
+//             <td className="py-4 px-6 text-gray-700 max-w-md">
+//               {renderFeatures(item.features)}
+//             </td>
+//           </tr>
+//         ))}
+//       </tbody>
+//     </table>
+//   </div>
+// </section>

@@ -1,0 +1,13 @@
+/* styles.css */
+.section-1-image,
+.preview-image,
+.specialties-container,
+.features-container,
+.specialty-item,
+.feature-item,
+.heading,
+.word,
+.subheader {
+  opacity: 0;
+  will-change: transform, opacity;
+}
