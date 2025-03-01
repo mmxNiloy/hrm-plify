@@ -76,7 +76,6 @@ export default function Home() {
             .map((word) => `<span class="word">${word}</span>`)
             .join(" ");
 
-          gsap.to(ref.current, { opacity: 1, duration: 0 }); // Make heading visible
           gsap.fromTo(
             ref.current.querySelectorAll(".word"),
             { opacity: 0, y: 20 },
@@ -96,9 +95,13 @@ export default function Home() {
         }
       };
 
+      gsap.to(heading1Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
       animateHeading(heading1Ref);
+      gsap.to(heading2Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
       animateHeading(heading2Ref);
+      gsap.to(heading1Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
       animateHeading(heading3Ref);
+      gsap.to(heading1Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
       animateHeading(heading4Ref);
 
       // Subheader animation (fade-in)
@@ -270,14 +273,14 @@ export default function Home() {
           >
             Control Compliance, Stress Less
           </p>
-          <p
+          {/* <p
             ref={subheader1Ref}
             className="text-center font-semibold text-sm md:text-base lg:text-xl subheader"
           >
             The HR software that helps you manage, develop, and retain
             <br />
             your most valuable asset: your people.
-          </p>
+          </p> */}
           <Link href={"/book-a-demo"} passHref>
             <Button className="hidden text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
               Join Us
@@ -363,7 +366,7 @@ export default function Home() {
               <div className="w-full bg-white rounded-[2rem]">
                 <Image
                   unoptimized
-                  src={"/landing-page/img-3.jpg"}
+                  src={"/landing-page/img-3.png"}
                   width={0}
                   height={0}
                   className="rounded-[2rem] w-full object-contain object-center px-4"
