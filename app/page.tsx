@@ -9,7 +9,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
-import "./styles.css";
+import AnimatedText from "@/components/custom/AnimatedText";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -21,10 +21,6 @@ interface IFeatureItem {
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const heading1Ref = useRef<HTMLParagraphElement>(null); // Section 1 heading
-  const heading2Ref = useRef<HTMLParagraphElement>(null); // Section 2 heading
-  const heading3Ref = useRef<HTMLParagraphElement>(null); // Section 3 heading
-  const heading4Ref = useRef<HTMLParagraphElement>(null); // Section 4 heading
   const subheader1Ref = useRef<HTMLParagraphElement>(null); // Section 1 subheader
 
   // For what makes us different section
@@ -66,53 +62,14 @@ export default function Home() {
 
   useGSAP(
     () => {
-      // Heading animations (word-by-word)
-      const animateHeading = (
-        ref: React.RefObject<HTMLParagraphElement | null>
-      ) => {
-        if (ref.current) {
-          const words = ref.current.textContent?.split(" ") || [];
-          ref.current.innerHTML = words
-            .map((word) => `<span class="word">${word}</span>`)
-            .join(" ");
-
-          gsap.fromTo(
-            ref.current.querySelectorAll(".word"),
-            { opacity: 0, y: 20 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.5,
-              stagger: 0.1,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: ref.current,
-                start: "top 80%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
-      };
-
-      gsap.to(heading1Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
-      animateHeading(heading1Ref);
-      gsap.to(heading2Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
-      animateHeading(heading2Ref);
-      gsap.to(heading1Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
-      animateHeading(heading3Ref);
-      gsap.to(heading1Ref.current, { opacity: 1, duration: 0 }); // Make heading visible
-      animateHeading(heading4Ref);
-
       // Subheader animation (fade-in)
       const animateSubheader = (
         ref: React.RefObject<HTMLParagraphElement | null>
       ) => {
         if (ref.current) {
-          gsap.to(ref.current, { opacity: 1, duration: 0 }); // Make visible instantly
           gsap.fromTo(
             ref.current,
-            { opacity: 0 },
+            { opacity: 0 }, // Match initial state
             {
               opacity: 1,
               duration: 0.8,
@@ -132,10 +89,9 @@ export default function Home() {
       // 1. Section 1 Image: Fade-in
       const section1Image = document.querySelector(".section-1-image");
       if (section1Image) {
-        gsap.to(section1Image, { opacity: 1, duration: 0 }); // Make visible instantly
         gsap.fromTo(
           section1Image,
-          { opacity: 0 },
+          { opacity: 0 }, // Match initial state
           {
             opacity: 1,
             duration: 1,
@@ -151,10 +107,9 @@ export default function Home() {
 
       // 2. All Preview Images: Slide in from left
       gsap.utils.toArray(".preview-image").forEach((image: any) => {
-        gsap.to(image, { opacity: 1, duration: 0 }); // Make visible instantly
         gsap.fromTo(
           image,
-          { x: -100, opacity: 0 },
+          { x: -100, opacity: 0 }, // Match initial state
           {
             x: 0,
             opacity: 1,
@@ -176,10 +131,9 @@ export default function Home() {
       const featuresContainer = document.querySelector(".features-container");
 
       if (specialtiesContainer) {
-        gsap.to(specialtiesContainer, { opacity: 1, duration: 0 });
         gsap.fromTo(
           specialtiesContainer,
-          { x: 100, opacity: 0 },
+          { x: 100, opacity: 0 }, // Match initial state
           {
             x: 0,
             opacity: 1,
@@ -195,10 +149,9 @@ export default function Home() {
       }
 
       if (featuresContainer) {
-        gsap.to(featuresContainer, { opacity: 1, duration: 0 });
         gsap.fromTo(
           featuresContainer,
-          { x: 100, opacity: 0 },
+          { x: 100, opacity: 0 }, // Match initial state
           {
             x: 0,
             opacity: 1,
@@ -215,10 +168,9 @@ export default function Home() {
 
       // 4. Each Specialty: Slide in from bottom in order
       gsap.utils.toArray(".specialty-item").forEach((item: any) => {
-        gsap.to(item, { opacity: 1, duration: 0 });
         gsap.fromTo(
           item,
-          { y: 50, opacity: 0 },
+          { y: 50, opacity: 0 }, // Match initial state
           {
             y: 0,
             opacity: 1,
@@ -235,10 +187,9 @@ export default function Home() {
 
       // 5. Each Feature: Fade in
       gsap.utils.toArray(".feature-item").forEach((item: any) => {
-        gsap.to(item, { opacity: 1, duration: 0 });
         gsap.fromTo(
           item,
-          { opacity: 0 },
+          { opacity: 0 }, // Match initial state
           {
             opacity: 1,
             duration: 0.5,
@@ -256,8 +207,6 @@ export default function Home() {
   );
 
   return (
-    //! New landing Page
-    //#region New Landing P
     <main
       ref={containerRef}
       className="flex flex-col gap-4 md:gap-8 min-h-screen items-center py-6 md:py-8 lg:-mt-[8rem]"
@@ -267,26 +216,25 @@ export default function Home() {
         <div className="absolute -left-[6.25%] -top-1/2 lg:-top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
         <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
         <div className="flex flex-col gap-4 items-center justify-center self-center lg:pb-8 px-16">
-          <p
-            ref={heading1Ref}
-            className="text-2xl md:text-4xl lg:text-7xl font-extrabold heading"
-          >
-            Control Compliance, Stress Less
+          <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold heading">
+            <AnimatedText>Control Compliance, Stress Less</AnimatedText>
           </p>
-          {/* <p
+          {/* Uncomment if needed
+          <p
             ref={subheader1Ref}
-            className="text-center font-semibold text-sm md:text-base lg:text-xl subheader"
+            className="text-center font-semibold text-sm md:text-base lg:text-xl subheader opacity-0"
           >
             The HR software that helps you manage, develop, and retain
             <br />
             your most valuable asset: your people.
-          </p> */}
+          </p>
+          */}
           <Link href={"/book-a-demo"} passHref>
             <Button className="hidden text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
               Join Us
             </Button>
           </Link>
-          <GradientBorderContainer className="bg-white rounded-[2rem] w-10/12 h-fit z-10 section-1-image">
+          <GradientBorderContainer className="bg-white rounded-[2rem] w-10/12 h-fit z-10 section-1-image opacity-0">
             <Image
               unoptimized
               src={"/landing-page/img-1.png"}
@@ -301,11 +249,8 @@ export default function Home() {
 
       {/* Section 2: Client Trust(count) and Client Showcase */}
       <section className="flex flex-col gap-4">
-        <p
-          ref={heading2Ref}
-          className="mt-16 text-xl md:text-3xl lg:text-6xl font-semibold text-center heading"
-        >
-          Companies that trust us with HR
+        <p className="mt-16 text-xl md:text-3xl lg:text-6xl font-semibold text-center heading">
+          <AnimatedText>Companies that trust us with HR</AnimatedText>
         </p>
         <div className="w-full lg:container py-2">
           <CompanyCarousel />
@@ -314,14 +259,13 @@ export default function Home() {
 
       {/* Section 3: Our Specialties */}
       <section className="w-full py-8 md:py-16 flex flex-col gap-8 items-center justify-center from-[#e51cd8]/[0.051] to-[#635be8]/[0.051] bg-gradient-to-br">
-        <p
-          ref={heading3Ref}
-          className="text-xl md:text-3xl lg:text-6xl font-semibold bg-clip-text text-transparent from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br heading"
-        >
-          What makes us different?
+        <p className="text-xl md:text-3xl lg:text-6xl font-semibold bg-clip-text text-transparent from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br heading">
+          <AnimatedText duration={0.5} scrollTriggerStart="top 80%">
+            What makes us different?
+          </AnimatedText>
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 w-11/12 items-center justify-center">
-          <GradientBorderContainer className="rounded-[2rem] w-full h-fit preview-image">
+          <GradientBorderContainer className="rounded-[2rem] w-full h-fit preview-image opacity-0 -translate-x-[100px]">
             <div className="w-full bg-white rounded-[2rem]">
               <Image
                 unoptimized
@@ -333,11 +277,11 @@ export default function Home() {
               />
             </div>
           </GradientBorderContainer>
-          <ul className="flex flex-col gap-4 specialties-container">
+          <ul className="flex flex-col gap-4 specialties-container opacity-0 translate-x-[100px]">
             {ourSpecialties.map((spec, index) => (
               <li
                 key={`our-spec-list-item-${index}`}
-                className="from-[#bd1cc2]/[0.051] to-[#f5561c]/[0.15] bg-gradient-to-r rounded-xl px-8 py-2 specialty-item"
+                className="from-[#bd1cc2]/[0.051] to-[#f5561c]/[0.15] bg-gradient-to-r rounded-xl px-8 py-2 specialty-item opacity-0 translate-y-[50px]"
               >
                 <p className="flex gap-1 font-extrabold lg:text-lg items-center">
                   <Icons.siteSparkle /> {spec.title}
@@ -352,17 +296,16 @@ export default function Home() {
       {/* Section 4: Our Features */}
       <>
         <div className="flex flex-col gap-0.5">
-          <p
-            ref={heading4Ref}
-            className="text-xl md:text-3xl lg:text-6xl font-semibold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br heading"
-          >
-            Features
+          <p className="text-xl md:text-3xl lg:text-6xl font-semibold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br heading">
+            <AnimatedText duration={0.5} scrollTriggerStart="top 80%">
+              Features
+            </AnimatedText>
           </p>
           <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
         </div>
         <section className="w-11/12 rounded-[3.25rem] py-8 md:py-16 flex flex-col gap-8 items-center justify-center from-[#017bce]/[0.051] to-[#019e8f]/[0.051] bg-gradient-to-r">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 w-11/12 items-center justify-center">
-            <GradientBorderContainer className="rounded-[2rem] h-fit w-full preview-image">
+            <GradientBorderContainer className="rounded-[2rem] h-fit w-full preview-image opacity-0 -translate-x-[100px]">
               <div className="w-full bg-white rounded-[2rem]">
                 <Image
                   unoptimized
@@ -374,11 +317,11 @@ export default function Home() {
                 />
               </div>
             </GradientBorderContainer>
-            <div className="grid grid-cols-3 gap-4 features-container">
+            <div className="grid grid-cols-3 gap-4 features-container opacity-0 translate-x-[100px]">
               {ourFeatures.map((feat, index) => (
                 <div
                   key={`our-features-grid-item-${index}`}
-                  className="flex flex-col items-center justify-center gap-2 min-h-16 text-balance text-center from-[#bd1cc2] to-[#f5561c] bg-gradient-to-r px-4 py-2 rounded-lg text-white feature-item"
+                  className="flex flex-col items-center justify-center gap-2 min-h-16 text-balance text-center from-[#bd1cc2] to-[#f5561c] bg-gradient-to-r px-4 py-2 rounded-lg text-white feature-item opacity-0"
                 >
                   <p className="font-extrabold lg:text-lg">{feat.title}</p>
                 </div>
@@ -388,6 +331,5 @@ export default function Home() {
         </section>
       </>
     </main>
-    //#endregion
   );
 }

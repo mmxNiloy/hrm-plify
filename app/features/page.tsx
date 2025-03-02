@@ -7,7 +7,7 @@ import React, { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import "./styles.css";
+import AnimatedText from "@/components/custom/AnimatedText";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -29,7 +29,6 @@ interface IFeature {
 
 export default function FeaturesPage() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sloganRef = useRef<HTMLHeadingElement>(null);
 
   const features: IFeature[] = [
     {
@@ -76,7 +75,6 @@ export default function FeaturesPage() {
         },
       ],
     },
-
     {
       section: "Absence & Leave Management",
       subtitle: "Clear, Simple, and Efficient",
@@ -184,7 +182,7 @@ export default function FeaturesPage() {
           title: "Empower Employees, Reduce HR Workload",
           bullets: [
             <>
-              Cut down HR queries by <b>100%</b> employees can check leave
+              Cut down HR queries by <b>100%</b> — employees can check leave
               balances, payslips, and update personal details themselves.
             </>,
             <>
@@ -225,29 +223,7 @@ export default function FeaturesPage() {
 
   useGSAP(
     () => {
-      // 1. Animate slogan words
-      if (sloganRef.current) {
-        const words = sloganRef.current.textContent?.split(" ") || [];
-        sloganRef.current.innerHTML = words
-          .map((word) => `<span class="word">${word}</span>`)
-          .join(" ");
-
-        gsap.to(sloganRef.current, { opacity: 1, duration: 0 });
-
-        gsap.fromTo(
-          ".word",
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: "power3.out",
-          }
-        );
-      }
-
-      // 2 & 3. Animate preview images and feature cards
+      // Animate preview images and feature cards
       gsap.utils.toArray(".feature-section").forEach((section: any, index) => {
         const imageContainer = section.querySelector(".image-container");
         const featureCard = section.querySelector(".feature-card");
@@ -256,7 +232,7 @@ export default function FeaturesPage() {
         // Image animation
         gsap.fromTo(
           imageContainer,
-          { x: 100 * direction, opacity: 0 },
+          { x: 100 * direction, opacity: 0 }, // Match initial state
           {
             x: 0,
             opacity: 1,
@@ -273,7 +249,7 @@ export default function FeaturesPage() {
         // Feature card animation
         gsap.fromTo(
           featureCard,
-          { x: -100 * direction, opacity: 0 },
+          { x: -100 * direction, opacity: 0 }, // Match initial state
           {
             x: 0,
             opacity: 1,
@@ -287,11 +263,11 @@ export default function FeaturesPage() {
           }
         );
 
-        // 4. Animate bullet points
+        // Animate bullet points
         const bulletItems = section.querySelectorAll(".bullet-item");
         gsap.fromTo(
           bulletItems,
-          { y: 20, opacity: 0 },
+          { y: 20, opacity: 0 }, // Match initial state
           {
             y: 0,
             opacity: 1,
@@ -316,12 +292,11 @@ export default function FeaturesPage() {
       className="flex flex-col gap-4 md:gap-8 min-h-screen items-center py-6 md:py-8"
     >
       {/* Slogan */}
-      <h1
-        ref={sloganRef}
-        className="container text-xl sm:text-2xl md:text-3xl lg:text-6xl text-center font-extrabold slogan-text"
-      >
-        You Run Your Business, We&apos;ll Handle the HR 100% Compliance, 24/7
-        Efficiency, and Seamless Operations
+      <h1 className="container text-xl sm:text-2xl md:text-3xl lg:text-6xl text-center font-extrabold slogan-text">
+        <AnimatedText>
+          You Run Your Business, We&apos;ll Handle the HR 100% Compliance, 24/7
+          Efficiency, and Seamless Operations
+        </AnimatedText>
       </h1>
 
       {features.map((feat, fIdx) => (
@@ -339,7 +314,10 @@ export default function FeaturesPage() {
             <div
               className={cn(
                 "relative rounded-[2rem] bg-white w-full order-1 image-container",
-                (fIdx & 1) != 0 ? "lg:order-1" : "lg:-order-1"
+                (fIdx & 1) != 0
+                  ? "lg:order-1 translate-x-[100px]"
+                  : "lg:-order-1 -translate-x-[100px]",
+                "opacity-0"
               )}
             >
               <GradientBorderContainer className="rounded-[2rem] w-full h-fit">
@@ -354,7 +332,6 @@ export default function FeaturesPage() {
               </GradientBorderContainer>
 
               {feat.overlayImage && (
-                // gradient border container
                 <GradientBorderContainer
                   className={cn(
                     "rounded-[2rem] w-full h-fit absolute top-[40%]",
@@ -374,7 +351,15 @@ export default function FeaturesPage() {
             </div>
 
             {/* Feature card */}
-            <div className="flex flex-col gap-2 feature-card">
+            <div
+              className={cn(
+                "flex flex-col gap-2 feature-card",
+                (fIdx & 1) == 0
+                  ? "translate-x-[100px]"
+                  : "-translate-x-[100px]",
+                "opacity-0"
+              )}
+            >
               <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">
                 {feat.section}
               </p>
@@ -395,7 +380,7 @@ export default function FeaturesPage() {
                       {featureItem.bullets.map((bullet, bullIdx) => (
                         <li
                           key={`section-${fIdx}-feature-${itmIdx}-bullet-${bullIdx}`}
-                          className="list-item bullet-item"
+                          className="list-item bullet-item opacity-0 translate-y-5"
                         >
                           {bullet}
                         </li>
