@@ -14,27 +14,15 @@ export default function PricingPage() {
   const features = [
     {
       title: "Access to compliance software",
-      plans: {
-        essential: "yes",
-        professional: "yes",
-        enterprise: "yes",
-      },
+      plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
       title: "Sponsorship tracking",
-      plans: {
-        essential: "yes",
-        professional: "yes",
-        enterprise: "yes",
-      },
+      plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
       title: "Basic email support",
-      plans: {
-        essential: "yes",
-        professional: "yes",
-        enterprise: "yes",
-      },
+      plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
       title: "HR compliance consultation",
@@ -46,59 +34,31 @@ export default function PricingPage() {
     },
     {
       title: "Assistance with Home Office audits",
-      plans: {
-        essential: "no",
-        professional: "yes",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "yes", enterprise: "yes" },
     },
     {
       title: "Priority email & phone support",
-      plans: {
-        essential: "no",
-        professional: "yes",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "yes", enterprise: "yes" },
     },
     {
       title: "Dedicated HR advisor",
-      plans: {
-        essential: "no",
-        professional: "no",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
     {
       title: "Customized compliance strategy",
-      plans: {
-        essential: "no",
-        professional: "no",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
     {
       title: "Employee visa sponsorship review",
-      plans: {
-        essential: "no",
-        professional: "no",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
     {
       title: "Priority escalation handling",
-      plans: {
-        essential: "no",
-        professional: "no",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
     {
       title: "Recruitment assistance",
-      plans: {
-        essential: "no",
-        professional: "no",
-        enterprise: "yes",
-      },
+      plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
   ];
 
@@ -177,9 +137,13 @@ export default function PricingPage() {
           duration: 0.8,
           stagger: 0.2,
           ease: "power3.out",
+          overwrite: "auto", // Prevent animation conflicts
           scrollTrigger: {
             trigger: ".plans-section",
             start: "top 80%",
+            end: "bottom 20%", // Extend end point for smoother exit
+            toggleActions: "play none none reverse", // Reverse on scroll out
+            invalidateOnRefresh: true, // Recalculate on resize/refresh
           },
         }
       );
@@ -195,9 +159,13 @@ export default function PricingPage() {
           duration: 0.8,
           stagger: 0.2,
           ease: "power3.out",
+          overwrite: "auto", // Prevent animation conflicts
           scrollTrigger: {
             trigger: ".additional-section",
             start: "top 80%",
+            end: "bottom 20%", // Extend end point for smoother exit
+            toggleActions: "play none none reverse", // Reverse on scroll out
+            invalidateOnRefresh: true, // Recalculate on resize/refresh
           },
         }
       );
@@ -219,7 +187,7 @@ export default function PricingPage() {
 
       <section className="plans-section w-11/12 *:max-w-lg flex flex-col md:flex-row gap-6 items-start justify-center">
         {/* Essential Plan Column */}
-        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#017bce]/20 to-[#019e8f]/20 backdrop-blur-sm rounded-2xl shadow-xl p-6 flex flex-col gap-4 opacity-0 -translate-x-[100px]">
+        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#017bce]/20 to-[#019e8f]/20 backdrop-blur-sm rounded-2xl shadow-xl p-6 flex flex-col gap-4 opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Essential
           </h2>
@@ -240,7 +208,7 @@ export default function PricingPage() {
         </div>
 
         {/* Professional Plan Column - Popular Choice */}
-        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#e51cd8]/20 to-[#635be8]/20 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col gap-4 transition-all duration-300 hover:shadow-2xl relative opacity-0 -translate-x-[100px]">
+        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#e51cd8]/20 to-[#635be8]/20 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col gap-4 duration-300 hover:shadow-2xl relative opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#e51cd8] text-white text-sm font-semibold px-3 py-1 rounded-full">
             Most Popular
           </div>
@@ -277,7 +245,7 @@ export default function PricingPage() {
         </div>
 
         {/* Enterprise Plan Column - Highlighted */}
-        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#bd1cc2]/20 to-[#f5561c]/20 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col gap-4 transform md:scale-105 transition-all duration-300 hover:shadow-3xl relative z-10 opacity-0 -translate-x-[100px]">
+        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#bd1cc2]/20 to-[#f5561c]/20 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col gap-4 transform md:scale-105 duration-300 hover:shadow-3xl relative z-10 opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#f5561c] text-white text-sm font-semibold px-3 py-1 rounded-full">
             Best Value
           </div>
@@ -326,7 +294,7 @@ export default function PricingPage() {
           {additionalConsiderations.map((item, index) => (
             <div
               key={index}
-              className={`additional-card col-span-full md:col-span-6 lg:col-span-4 bg-gradient-to-br ${item.gradient} backdrop-blur-sm rounded-xl p-6 flex flex-col gap-2 shadow-lg hover:shadow-xl transition-shadow opacity-0 translate-y-[100px]`}
+              className={`additional-card col-span-full md:col-span-6 lg:col-span-4 bg-gradient-to-br ${item.gradient} backdrop-blur-sm rounded-xl p-6 flex flex-col gap-2 shadow-lg hover:shadow-xl transition-shadow opacity-0 translate-y-[100px] will-change-transform will-change-opacity`}
             >
               <h3 className={`text-lg font-bold text-[${item.textColor}]`}>
                 {item.title}
