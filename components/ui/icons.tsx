@@ -856,15 +856,11 @@ const FacebookRounded = React.forwardRef<SVGElement, SVGAttributes>(
     <svg
       width="24"
       height="24"
-      viewBox="0 0 24 24"
+      viewBox="0 0 50 50"
       className={cn("fill-current", className)}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M23 12.067C23 5.955 18.075 1 12 1S1 5.955 1 12.067C1 17.591 5.023 22.17 10.281 23v-7.734H7.488v-3.199h2.793V9.63c0-2.774 1.643-4.306 4.155-4.306 1.204 0 2.462.216 2.462.216v2.724h-1.387c-1.366 0-1.792.853-1.792 1.728v2.076h3.05l-.487 3.2h-2.563V23C18.978 22.17 23 17.591 23 12.067"
-      />
+      <path d="M25,3C12.85,3,3,12.85,3,25c0,11.03,8.125,20.137,18.712,21.728V30.831h-5.443v-5.783h5.443v-3.848 c0-6.371,3.104-9.168,8.399-9.168c2.536,0,3.877,0.188,4.512,0.274v5.048h-3.612c-2.248,0-3.033,2.131-3.033,4.533v3.161h6.588 l-0.894,5.783h-5.694v15.944C38.716,45.318,47,36.137,47,25C47,12.85,37.15,3,25,3z"></path>
     </svg>
   )
 );
@@ -875,11 +871,11 @@ const LinkedIn = React.forwardRef<SVGElement, SVGAttributes>(
     <svg
       width="24"
       height="24"
-      viewBox="0 0 20 20"
+      viewBox="0 0 50 50"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("fill-current", className)}
     >
-      <path d="M17.04 17.043h-2.962v-4.64c0-1.107-.023-2.531-1.544-2.531-1.544 0-1.78 1.204-1.78 2.449v4.722H7.793V7.5h2.844v1.3h.039c.397-.75 1.364-1.54 2.808-1.54 3.001 0 3.556 1.974 3.556 4.545zM4.447 6.194c-.954 0-1.72-.771-1.72-1.72s.767-1.72 1.72-1.72a1.72 1.72 0 0 1 0 3.44m1.484 10.85h-2.97V7.5h2.97zM18.522 0H1.476C.66 0 0 .645 0 1.44v17.12C0 19.355.66 20 1.476 20h17.042c.815 0 1.482-.644 1.482-1.44V1.44C20 .646 19.333 0 18.518 0z" />
+      <path d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M17,20v19h-6V20H17z M11,14.47c0-1.4,1.2-2.47,3-2.47s2.93,1.07,3,2.47c0,1.4-1.12,2.53-3,2.53C12.2,17,11,15.87,11,14.47z M39,39h-6c0,0,0-9.26,0-10 c0-2-1-4-3.5-4.04h-0.08C27,24.96,26,27.02,26,29c0,0.91,0,10,0,10h-6V20h6v2.56c0,0,1.93-2.56,5.81-2.56 c3.97,0,7.19,2.73,7.19,8.26V39z"></path>
     </svg>
   )
 );
@@ -909,7 +905,23 @@ const SiteSparkle = React.forwardRef<SVGElement, SVGAttributes>(
 );
 SiteSparkle.displayName = "SiteSparkle";
 
+const TwitterXIcon = React.forwardRef<SVGElement, SVGAttributes>(
+  ({ className, ...props }, ref) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 50 50"
+      className={cn("fill-current", className)}
+    >
+      <path d="M11 4a7 7 0 0 0-7 7v28a7 7 0 0 0 7 7h28a7 7 0 0 0 7-7V11a7 7 0 0 0-7-7zm2.086 9h7.937l5.637 8.01L33.5 13H36l-8.21 9.613L37.913 37H29.98l-6.541-9.293L15.5 37H13l9.309-10.896zm3.828 2 14.107 20h3.065L19.979 15z" />
+    </svg>
+  )
+);
+TwitterXIcon.displayName = "TwitterXIcon";
+
 const Icons = {
+  x: TwitterXIcon,
   siteSparkle: SiteSparkle,
   instagram: InstagramIcon,
   profile: ProfileIcon,

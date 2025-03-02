@@ -31,6 +31,32 @@ export default function Footer() {
           <p className="font-bold text-lg sm:text-2xl md:text-3xl">
             Control Compliance, Stress Less
           </p>
+          <div className="flex gap-1 items-center justify-start">
+            {/* <p className="text">Find us on</p> */}
+            <Link
+              href={"https://www.linkedin.com/in/revolo-hr-00894a353"}
+              target="_blank"
+              passHref
+            >
+              <Button variant={"ghost"} size={"icon"}>
+                <Icons.linkedin />
+              </Button>
+            </Link>
+            <Link href={"https://x.com/REVOLOHR"} target="_blank" passHref>
+              <Button variant={"ghost"} size={"icon"}>
+                <Icons.x />
+              </Button>
+            </Link>
+            <Link
+              href={"https://www.facebook.com/profile.php?id=61573612868153"}
+              target="_blank"
+              passHref
+            >
+              <Button variant={"ghost"} size={"icon"}>
+                <Icons.fb />
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Footer navigation */}
@@ -40,11 +66,6 @@ export default function Footer() {
             <Link href={"/features"} className="sm:text-sm text-xs" passHref>
               <Button variant={"link"} className="p-0 w-full justify-start">
                 Features
-              </Button>
-            </Link>
-            <Link href={"/pricing"} className="sm:text-sm text-xs">
-              <Button variant={"link"} className="p-0 w-full justify-start">
-                Pricing
               </Button>
             </Link>
             <Link href={"/about"} className="sm:text-sm text-xs">

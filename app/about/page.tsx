@@ -74,25 +74,27 @@ export default function AboutPage() {
         <div className="flex flex-col gap-4 items-center justify-center self-center lg:pb-8 px-8 md:px-16">
           <div className="flex flex-col gap-0.5">
             <p className="section-title text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-              <AnimatedText>Our Story</AnimatedText>
+              {/* <AnimatedText> */}
+              Our Story
+              {/* </AnimatedText> */}
             </p>
             <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
           </div>
           <p className="font-semibold text-sm md:text-base lg:text-lg lg:w-2/3 text-justify">
-            <AnimatedText>
-              At RevoloHR, we saw a major problem—businesses struggling with
-              compliance-related challenges, facing stress, fines, and even
-              losing their ability to sponsor skilled workers due to complex
-              Home Office regulations. We knew there had to be a better way.
-              That&apos;s why we created RevoloHR a powerful, user-friendly HR
-              software designed to take the hassle out of compliance. Our
-              mission is simple: to help businesses navigate sponsorship and HR
-              regulations effortlessly, reducing risks and ensuring they stay
-              fully compliant. With RevoloHR, companies can manage their HR
-              processes with confidence, knowing they have the right tools to
-              protect their workforce and their business. Join us in making
-              compliance simple, stress-free, and efficient.
-            </AnimatedText>
+            {/* <AnimatedText> */}
+            At RevoloHR, we saw a major problem—businesses struggling with
+            compliance-related challenges, facing stress, fines, and even losing
+            their ability to sponsor skilled workers due to complex Home Office
+            regulations. We knew there had to be a better way. That&apos;s why
+            we created RevoloHR a powerful, user-friendly HR software designed
+            to take the hassle out of compliance. Our mission is simple: to help
+            businesses navigate sponsorship and HR regulations effortlessly,
+            reducing risks and ensuring they stay fully compliant. With
+            RevoloHR, companies can manage their HR processes with confidence,
+            knowing they have the right tools to protect their workforce and
+            their business. Join us in making compliance simple, stress-free,
+            and efficient.
+            {/* </AnimatedText> */}
           </p>
         </div>
       </section>
@@ -102,20 +104,21 @@ export default function AboutPage() {
         <div className="flex flex-col gap-4 items-center justify-center px-8 md:px-16">
           <div className="flex flex-col gap-0.5">
             <p className="section-title text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-              <AnimatedText>How We Help</AnimatedText>
+              {/* <AnimatedText> */}
+              How We Help
+              {/* </AnimatedText> */}
             </p>
             <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
           </div>
           <p className="font-semibold text-sm md:text-base lg:text-lg lg:w-2/3 text-justify">
-            <AnimatedText>
-              At RevoloHR, we make HR compliance simple and efficient for
-              businesses of all sizes. Our software is designed to streamline HR
-              operations, reduce compliance risks, and ensure that companies
-              meet UK Home Office regulations with ease. From managing employee
-              records to tracking sponsorships, we provide businesses with the
-              tools they need to stay compliant—without the administrative
-              hassle.
-            </AnimatedText>
+            {/* <AnimatedText> */}
+            At RevoloHR, we make HR compliance simple and efficient for
+            businesses of all sizes. Our software is designed to streamline HR
+            operations, reduce compliance risks, and ensure that companies meet
+            UK Home Office regulations with ease. From managing employee records
+            to tracking sponsorships, we provide businesses with the tools they
+            need to stay compliant—without the administrative hassle.
+            {/* </AnimatedText> */}
           </p>
         </div>
       </section>

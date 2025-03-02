@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import AnimatedText from "@/components/custom/AnimatedText";
+import SiteConfig from "@/utils/SiteConfig";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -217,7 +218,7 @@ export default function Home() {
         <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
         <div className="flex flex-col gap-4 items-center justify-center self-center lg:pb-8 px-16">
           <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold heading">
-            <AnimatedText>Control Compliance, Stress Less</AnimatedText>
+            <AnimatedText>{SiteConfig.siteDescription}</AnimatedText>
           </p>
           {/* Uncomment if needed
           <p
