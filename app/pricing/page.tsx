@@ -1,5 +1,13 @@
+"use client";
+
 import Icons from "@/components/ui/icons";
-import React from "react";
+import React, { useRef } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import AnimatedText from "@/components/custom/AnimatedText";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function PricingPage() {
   // Features for each plan
@@ -94,6 +102,43 @@ export default function PricingPage() {
     },
   ];
 
+  // Additional considerations data
+  const additionalConsiderations = [
+    {
+      title: "Customised Quotes",
+      description:
+        "For businesses with specific compliance needs, Revolo HR offers tailored pricing.",
+      gradient: "from-[#017bce]/20 to-[#019e8f]/20",
+      textColor: "#017bce",
+    },
+    {
+      title: "Annual Discount",
+      description:
+        "10% discount for clients who opt for an annual subscription.",
+      gradient: "from-[#e51cd8]/20 to-[#635be8]/20",
+      textColor: "#635be8",
+    },
+    {
+      title: "Onboarding Support",
+      description: "Included in all plans at no extra cost.",
+      gradient: "from-[#bd1cc2]/20 to-[#f5561c]/20",
+      textColor: "#f5561c",
+    },
+    {
+      title: "Flexibility",
+      description: "Businesses can upgrade or downgrade at any time.",
+      gradient: "from-[#017bce]/20 to-[#019e8f]/20",
+      textColor: "#017bce",
+    },
+    {
+      title: "Recruitment Assistance",
+      description:
+        "Support in finding suitable candidates for sponsored roles, guidance on compliance in hiring, and initial candidate screening (Enterprise Plan only).",
+      gradient: "from-[#e51cd8]/20 to-[#635be8]/20",
+      textColor: "#635be8",
+    },
+  ];
+
   // Function to split features and bold text after "+"
   const renderFeatures = (features: string) => {
     const parts = features.split(" + ");
@@ -117,22 +162,68 @@ export default function PricingPage() {
     return <Icons.boxChecked className="text-green-500" />;
   };
 
+  const container = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      // Animate plans cards (slide in from left)
+      const planCards = gsap.utils.toArray(".plan-card");
+      gsap.fromTo(
+        planCards,
+        { x: -100, opacity: 0 }, // Initial state
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".plans-section",
+            start: "top 80%",
+          },
+        }
+      );
+
+      // Animate additional considerations cards (slide in from bottom)
+      const additionalCards = gsap.utils.toArray(".additional-card");
+      gsap.fromTo(
+        additionalCards,
+        { y: 100, opacity: 0 }, // Initial state
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".additional-section",
+            start: "top 80%",
+          },
+        }
+      );
+    },
+    { scope: container }
+  );
+
   return (
-    <main className="flex flex-col gap-4 md:gap-8 min-h-screen items-center py-6 md:py-8">
+    <main
+      ref={container}
+      className="flex flex-col gap-4 md:gap-8 min-h-screen items-center justify-center py-6 md:py-8"
+    >
       <div className="flex flex-col gap-0.5">
         <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-          Plans
+          <AnimatedText>Plans</AnimatedText>
         </p>
         <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
       </div>
 
-      <section className="w-11/12 *:max-w-lg flex flex-col md:flex-row gap-6 items-start justify-center">
+      <section className="plans-section w-11/12 *:max-w-lg flex flex-col md:flex-row gap-6 items-start justify-center">
         {/* Essential Plan Column */}
-        <div className="w-full md:w-1/3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 flex flex-col gap-4">
+        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#017bce]/20 to-[#019e8f]/20 backdrop-blur-sm rounded-2xl shadow-xl p-6 flex flex-col gap-4 opacity-0 -translate-x-[100px]">
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Essential
           </h2>
-          <p className="text-xl font-semibold text-blue-600 text-center">
+          <p className="text-xl font-semibold text-[#017bce] text-center">
             £75/month
           </p>
           <p className="text-gray-600 text-center">Up to 10 employees</p>
@@ -149,14 +240,14 @@ export default function PricingPage() {
         </div>
 
         {/* Professional Plan Column - Popular Choice */}
-        <div className="w-full md:w-1/3 bg-gradient-to-br from-blue-200/70 to-blue-100/70 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col gap-4 transition-all duration-300 hover:shadow-2xl relative">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-400 text-white text-sm font-semibold px-3 py-1 rounded-full">
+        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#e51cd8]/20 to-[#635be8]/20 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col gap-4 transition-all duration-300 hover:shadow-2xl relative opacity-0 -translate-x-[100px]">
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#e51cd8] text-white text-sm font-semibold px-3 py-1 rounded-full">
             Most Popular
           </div>
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Professional
           </h2>
-          <p className="text-xl font-semibold text-blue-600 text-center">
+          <p className="text-xl font-semibold text-[#635be8] text-center">
             £150/month
           </p>
           <p className="text-gray-600 text-center">Up to 20 employees</p>
@@ -186,14 +277,14 @@ export default function PricingPage() {
         </div>
 
         {/* Enterprise Plan Column - Highlighted */}
-        <div className="w-full md:w-1/3 bg-gradient-to-br from-yellow-200/70 to-yellow-100/70 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col gap-4 transform md:scale-105 transition-all duration-300 hover:shadow-3xl relative z-10">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-gray-800 text-sm font-semibold px-3 py-1 rounded-full">
+        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#bd1cc2]/20 to-[#f5561c]/20 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col gap-4 transform md:scale-105 transition-all duration-300 hover:shadow-3xl relative z-10 opacity-0 -translate-x-[100px]">
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#f5561c] text-white text-sm font-semibold px-3 py-1 rounded-full">
             Best Value
           </div>
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Enterprise
           </h2>
-          <p className="text-xl font-semibold text-yellow-600 text-center">
+          <p className="text-xl font-semibold text-[#f5561c] text-center">
             £250/month
           </p>
           <p className="text-gray-600 text-center">Up to 50 employees</p>
@@ -222,54 +313,29 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
+
+      {/* Why Choose RevoloHR Section */}
+      <section className="additional-section w-11/12 py-8">
+        <div className="flex flex-col gap-0.5 mb-8 items-center">
+          <p className="text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
+            <AnimatedText>Why Choose RevoloHR?</AnimatedText>
+          </p>
+          <span className="h-1 rounded-full w-1/4 from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
+        </div>
+        <div className="container grid grid-cols-12 lg:[&>*:nth-child(4)]:col-start-3 lg:[&>*:nth-child(5)]:col-start-7 gap-6">
+          {additionalConsiderations.map((item, index) => (
+            <div
+              key={index}
+              className={`additional-card col-span-full md:col-span-6 lg:col-span-4 bg-gradient-to-br ${item.gradient} backdrop-blur-sm rounded-xl p-6 flex flex-col gap-2 shadow-lg hover:shadow-xl transition-shadow opacity-0 translate-y-[100px]`}
+            >
+              <h3 className={`text-lg font-bold text-[${item.textColor}]`}>
+                {item.title}
+              </h3>
+              <p className="text-gray-700 text-sm">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
-
-// Overview section: Now removed
-// <section className="flex w-11/12 flex-col gap-4 items-center justify-center h-screen overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative">
-//   {/* Background circle decors */}
-//   <div className="absolute -left-[6.25%] -top-1/2 lg:-top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-//   <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-
-//   <p className="text:2xl md:text:4xl lg:text-7xl font-extrabold from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br bg-clip-text text-transparent">
-//     Overview
-//   </p>
-//   <div className="w-full max-w-5xl px-4 md:px-6">
-//     <table className="w-full overflow-clip bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50">
-//       <thead>
-//         <tr className="bg-blue-600 text-white">
-//           <th className="py-4 px-6 font-bold text-left">Plan</th>
-//           <th className="py-4 px-6 font-bold text-left">Pricing</th>
-//           <th className="py-4 px-6 font-bold text-left">
-//             Employees Covered
-//           </th>
-//           <th className="py-4 px-6 font-bold text-left">
-//             Features & Services
-//           </th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         {overviewItems.map((item, index) => (
-//           <tr
-//             key={index}
-//             className="border-b border-gray-200/50 last:border-b-0 hover:bg-gray-50/50 transition-colors duration-200"
-//           >
-//             <td className="py-4 px-6 font-bold text-gray-800">
-//               {item.plan}
-//             </td>
-//             <td className="py-4 px-6 text-gray-800">
-//               <span className="font-bold">{item.pricing}</span>
-//             </td>
-//             <td className="py-4 px-6 text-gray-800">
-//               {item.employeesCovered}
-//             </td>
-//             <td className="py-4 px-6 text-gray-700 max-w-md">
-//               {renderFeatures(item.features)}
-//             </td>
-//           </tr>
-//         ))}
-//       </tbody>
-//     </table>
-//   </div>
-// </section>
