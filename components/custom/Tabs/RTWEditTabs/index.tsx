@@ -1,15 +1,6 @@
 "use client";
-import { ICompanyDetails } from "@/schema/CompanySchema";
-import React, { useMemo, useState } from "react";
-import CompanyAddressTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyAddressTab";
-import CompanyAuthorityTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyAuthorityTab";
-import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyDocumentsTab";
-import CompanyProfileTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyProfileTab";
-import CompanyTradeTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyTradeTab";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
+import React, { useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ICompanyUser } from "@/schema/UserSchema";
 import RTWEmployeeSelectionTab from "./RTWEmployeeSelectionTab";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import RTWCheckTypeTab from "./RTWCheckTypeTab";

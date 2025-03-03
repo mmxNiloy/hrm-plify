@@ -59,7 +59,8 @@ export default function CanvasControls({
       method: savedTreeData ? "PATCH" : "POST",
       body: JSON.stringify({
         ...savedTreeData,
-        data: JSON.stringify({ ...g, company_id: companyId }),
+        data: JSON.stringify(g),
+        company_id: companyId,
       }),
     });
 
