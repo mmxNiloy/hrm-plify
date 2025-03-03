@@ -20,6 +20,11 @@ export async function POST(req: NextRequest, { params }: IDProps) {
     "POST"
   );
 
+  console.log(
+    "POST > Create Company Authorized Details > Request Body >",
+    reqBod
+  );
+
   // Check if the user is logged in
   const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
