@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import NidFormFragment from "../../Form/Fragment/Employee/NidFormFragment";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function NidEditDialog({
   employee_id,
@@ -46,6 +47,18 @@ export default function NidEditDialog({
       const doc = fd.get("document") as File | undefined;
 
       setLoading(true);
+
+      if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
+        toast({
+          title: "File too large",
+          description: `Cannot upload this file. The file exceeds the permissible limit: ${
+            SiteConfig.maxFileSize / 1e5
+          }MB`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
 
       var document_link = data?.document ?? "";
       if (doc && !docError) {

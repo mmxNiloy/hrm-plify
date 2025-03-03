@@ -29,12 +29,12 @@ export default function Footer() {
             alt={`Revolo HR`}
           />
           <p className="font-bold text-lg sm:text-2xl md:text-3xl">
-            Control Compliance, Stress Less
+            {SiteConfig.siteDescription}
           </p>
           <div className="flex gap-1 items-center justify-start">
             {/* <p className="text">Find us on</p> */}
             <Link
-              href={"https://www.linkedin.com/in/revolo-hr-00894a353"}
+              href={"https://www.linkedin.com/company/revolo-hr/"}
               target="_blank"
               passHref
             >
@@ -48,7 +48,7 @@ export default function Footer() {
               </Button>
             </Link>
             <Link
-              href={"https://www.facebook.com/profile.php?id=61573612868153"}
+              href={"https://www.facebook.com/people/Revolo-Hr/61573811489863/"}
               target="_blank"
               passHref
             >

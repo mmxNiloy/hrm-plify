@@ -45,6 +45,8 @@ export default function CompanyAuthorityEditDialog({
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
+      fd.append("company_id", `${company_id}`);
+
       if (docError) {
         fd.delete("document");
       }

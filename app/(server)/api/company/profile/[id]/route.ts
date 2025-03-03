@@ -50,6 +50,21 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
 
     console.log("File included", logo);
 
+    if ((logo?.size ?? 0) > SiteConfig.maxFileSize) {
+      // toast({
+      //   title: "File too large",
+      //   description: `Cannot upload this file. The file exceeds the permissible limit: ${
+      //     SiteConfig.maxFileSize / 1e5
+      //   }MB`,
+      //   variant: "destructive",
+      // });
+      // setLoading(false);
+      return NextResponse.json(
+        { message: "File too large.", error: new Error("File too large.") },
+        { status: 400 }
+      );
+    }
+
     var uploadRes = undefined;
     if (logo && logo.size <= SiteConfig.maxFileSize) {
       uploadRes = await upload(logo);
