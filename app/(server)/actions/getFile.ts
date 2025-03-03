@@ -7,7 +7,14 @@ export async function getFile(url: string) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 
-  const req = fetch(url, {
+  const mUrl = url.replace(
+    /http[s]{0,1}:\/\/backend:50{3}/,
+    process.env.API_BASE_URL?.replace("api", "") ??
+      "https://www.revolohr.com/backend"
+  );
+  console.log("Trying to get file from url:", mUrl);
+
+  const req = fetch(mUrl, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
