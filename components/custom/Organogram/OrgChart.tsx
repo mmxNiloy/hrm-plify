@@ -83,7 +83,7 @@ export default function OrgChart({
       if (savedTreeData && savedTreeData.file_url) {
         const fileText = await getFile(savedTreeData.file_url);
         console.log("File found >", fileText);
-        storedTree = JSON.parse(savedTreeData.file ?? "{}") as ITreeNode;
+        storedTree = JSON.parse(fileText.data ?? "{}") as ITreeNode;
       } else {
         storedTree = undefined;
       }

@@ -6,7 +6,6 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import Image from "next/image";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import TextCapsule from "../../TextCapsule";
 import NodeEditDialog from "../../Dialog/Organogram/NodeEditDialog";
@@ -14,7 +13,6 @@ import addNode from "./addNode";
 import Icons from "@/components/ui/icons";
 import deleteNodes from "./deleteNode";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
-import { buildGraph } from "./buildGraph";
 
 export default function nodeTemplate(
   node: ITreeNode,
@@ -39,7 +37,7 @@ export default function nodeTemplate(
               <AvatarPicker
                 readOnly
                 alt={getFullNameOfEmployee(node.data)}
-                src={node.data.image?.replace("http", "https")}
+                src={node.data.image?.replace(/http[s]{0,1}/, "https")}
                 height={48}
                 width={48}
                 className="p-0 size-12 rounded-full bg-muted object-contain object-center"
