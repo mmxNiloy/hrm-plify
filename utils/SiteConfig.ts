@@ -1,7 +1,7 @@
 const SiteConfig = {
   siteName: "Revolo",
   siteDescription: "Control Compliance, Delete Stress",
-  currentVersion: "1.3.10",
+  currentVersion: "1.3.11",
   maxFileSize: 5e6,
   featureFlags: {
     disableExperimentalUI: true,

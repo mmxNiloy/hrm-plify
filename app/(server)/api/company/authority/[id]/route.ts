@@ -3,6 +3,7 @@ import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { IDProps } from "../../../apiParams";
+import SiteConfig from "@/utils/SiteConfig";
 
 interface IReqBody extends ICompanyAuthorizedDetailsBase {
   endpoint: string;
@@ -20,17 +21,27 @@ export async function POST(req: NextRequest, { params }: IDProps) {
     "POST"
   );
 
-  console.log(
-    "POST > Create Company Authorized Details > Request Body >",
-    reqBod
-  );
-
   // Check if the user is logged in
   const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
       { status: 401 }
+    );
+  }
+
+  if ((reqBod.document?.size ?? 0) > SiteConfig.maxFileSize) {
+    // toast({
+    //   title: "File too large",
+    //   description: `Cannot upload this file. The file exceeds the permissible limit: ${
+    //     SiteConfig.maxFileSize / 1e5
+    //   }MB`,
+    //   variant: "destructive",
+    // });
+    // setLoading(false);
+    return NextResponse.json(
+      { message: "File too large.", error: new Error("File too large.") },
+      { status: 400 }
     );
   }
 
@@ -72,6 +83,21 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
 
   const reqBod = makeRequestBody(fd, Number.parseInt((await params).id), "PUT");
+
+  if ((reqBod.document?.size ?? 0) > SiteConfig.maxFileSize) {
+    // toast({
+    //   title: "File too large",
+    //   description: `Cannot upload this file. The file exceeds the permissible limit: ${
+    //     SiteConfig.maxFileSize / 1e5
+    //   }MB`,
+    //   variant: "destructive",
+    // });
+    // setLoading(false);
+    return NextResponse.json(
+      { message: "File too large.", error: new Error("File too large.") },
+      { status: 400 }
+    );
+  }
 
   // try to upload the document here
   var uploadRes = undefined;
@@ -121,6 +147,7 @@ function makeRequestBody(
   company_id: number,
   method: "POST" | "PUT"
 ): IReqBody {
+  const cId = fd.get("company_id") as string;
   const fname = fd.get("fname") as string; // stirng
   const lname = fd.get("lname") as string; // string
   const designation = fd.get("designation") as string; // string
@@ -152,7 +179,7 @@ function makeRequestBody(
   }
 
   return {
-    company_id,
+    company_id: Number.parseInt(cId),
     fname,
     lname,
     designation,

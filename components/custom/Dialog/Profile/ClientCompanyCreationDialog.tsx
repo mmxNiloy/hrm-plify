@@ -47,6 +47,19 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
 
       // Try to upload the logo (if attached)
       const logoFile = fd.get("logo") as File | undefined;
+
+      if ((logoFile?.size ?? 0) > SiteConfig.maxFileSize) {
+        toast({
+          title: "File too large",
+          description: `Cannot upload this file. The file exceeds the permissible limit: ${
+            SiteConfig.maxFileSize / 1e5
+          }MB`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       var logoUrl = "";
       if (logoFile && logoFile.size <= SiteConfig.maxFileSize) {
         // Upload the logo

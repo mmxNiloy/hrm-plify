@@ -57,7 +57,10 @@ export default function CanvasControls({
 
     const res = await fetch("/api/organogram", {
       method: savedTreeData ? "PATCH" : "POST",
-      body: JSON.stringify({ ...savedTreeData, data: JSON.stringify(g) }),
+      body: JSON.stringify({
+        ...savedTreeData,
+        data: JSON.stringify({ ...g, company_id: companyId }),
+      }),
     });
 
     if (res.ok) {
@@ -77,7 +80,7 @@ export default function CanvasControls({
       });
     }
     setLoading(false);
-  }, [chartVersion, charts, toast, tree]);
+  }, [chartVersion, charts, companyId, toast, tree]);
 
   return (
     <div className="z-10 absolute right-0 top-0 flex flex-col gap-2 backdrop-blur">

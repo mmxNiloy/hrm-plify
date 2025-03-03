@@ -51,6 +51,7 @@ export default function DesignationEditPopover({
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
+      fd.append("designation_id", `${data?.designation_id ?? 0}`);
 
       setLoading(true);
 

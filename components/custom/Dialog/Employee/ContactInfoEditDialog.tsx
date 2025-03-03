@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import ContactInfoFormFragment from "../../Form/Fragment/Employee/ContactInfoFormFragment";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function ContactInfoEditDialog({
   data,
@@ -44,6 +45,18 @@ export default function ContactInfoEditDialog({
       const doc = fd.get("proof_of_address_doc") as File | null;
 
       setLoading(true);
+
+      if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
+        toast({
+          title: "File too large",
+          description: `Cannot upload this file. The file exceeds the permissible limit: ${
+            SiteConfig.maxFileSize / 1e5
+          }MB`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
 
       var document_link = data?.proof_address_doc_link ?? "";
       if (doc && !docError) {

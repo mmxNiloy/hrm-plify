@@ -26,6 +26,7 @@ import { upload } from "@/app/(server)/actions/upload";
 import { setSourceMapsEnabled } from "process";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function CompanyDocumentEditDialog({
   data,
@@ -60,6 +61,19 @@ export default function CompanyDocumentEditDialog({
 
       const docFile = fd.get("doc_file") as File | undefined;
       var docLink = data?.doc_link ?? "";
+
+      if ((docFile?.size ?? 0) > SiteConfig.maxFileSize) {
+        toast({
+          title: "File too large",
+          description: `Cannot upload this file. The file exceeds the permissible limit: ${
+            SiteConfig.maxFileSize / 1e5
+          }MB`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       if (docFile && !docError) {
         const docUpload = await upload(docFile);
         if (docUpload.error) {

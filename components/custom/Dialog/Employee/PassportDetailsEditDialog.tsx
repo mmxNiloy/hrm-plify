@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function PassportDetailsEditDialog({
   employee_id,
@@ -47,6 +48,19 @@ export default function PassportDetailsEditDialog({
       const doc = fd.get("document") as File | undefined;
 
       setLoading(true);
+
+      if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
+        toast({
+          title: "File too large",
+          description: `Cannot upload this file. The file exceeds the permissible limit: ${
+            SiteConfig.maxFileSize / 1e5
+          }MB`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       // Request API here
       var document_link = data?.document ?? "";
       if (doc && !docError) {

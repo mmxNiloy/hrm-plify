@@ -55,6 +55,7 @@ export default function OrgChartNameEditPopover({ data }: Props) {
     setLoading(true);
 
     const nVersion = {
+      company_id: data?.company_id ?? 0,
       id: data?.id,
       name: newVersion,
     };
@@ -82,7 +83,7 @@ export default function OrgChartNameEditPopover({ data }: Props) {
     }
     setLoading(false);
     setOpen(false);
-  }, [data?.id, newVersion, router, toast]);
+  }, [data?.id, data?.company_id, newVersion, router, toast]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

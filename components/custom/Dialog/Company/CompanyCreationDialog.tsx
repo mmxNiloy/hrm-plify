@@ -28,6 +28,7 @@ import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfi
 import { cn } from "@/lib/utils";
 import refreshUserCookie from "@/app/(server)/actions/refreshUserCookie";
 import { upload } from "@/app/(server)/actions/upload";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default function CompanyCreationDialog({
   asClient = false,
@@ -54,6 +55,19 @@ export default function CompanyCreationDialog({
       // Try to upload the logo (if attached)
       const logoFile = fd.get("logo") as File | undefined;
       var logoUrl = "";
+
+      if ((logoFile?.size ?? 0) > SiteConfig.maxFileSize) {
+        toast({
+          title: "File too large",
+          description: `Cannot upload this file. The file exceeds the permissible limit: ${
+            SiteConfig.maxFileSize / 1e5
+          }MB`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       if (logoFile && !imageFileError) {
         // Upload the logo
         const logoUpload = await upload(logoFile);
