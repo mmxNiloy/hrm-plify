@@ -19,6 +19,7 @@ import nodeTemplate from "./util/nodeTemplate";
 import { buildGraph, rebuildGraph } from "./util/buildGraph";
 import { useSearchParams } from "next/navigation";
 import SiteLoading from "@/app/loading";
+import { getFile } from "@/app/(server)/actions/getFile";
 
 interface Props extends Omit<OrgChartProps, "tree"> {
   charts: IOrganogramDB[];
@@ -80,9 +81,8 @@ export default function OrgChart({
       // Read the file from the internet
 
       if (savedTreeData && savedTreeData.file_url) {
-        // const file = await fetch(savedTreeData.file_url);
-        // const fileText = await file.text();
-        // console.log("File found >", fileText);
+        const fileText = await getFile(savedTreeData.file_url);
+        console.log("File found >", fileText);
         storedTree = JSON.parse(savedTreeData.file ?? "{}") as ITreeNode;
       } else {
         storedTree = undefined;
