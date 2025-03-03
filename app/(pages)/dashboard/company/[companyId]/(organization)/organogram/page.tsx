@@ -15,6 +15,7 @@ import OrgChartVersionCreationPopover from "@/components/custom/Popover/Organogr
 import { getAllOrganograms } from "@/app/(server)/actions/getAllOrganograms";
 import OrgChartNameEditPopover from "@/components/custom/Popover/Organogram/OrgChartNameEditPopover";
 import SiteConfig from "@/utils/SiteConfig";
+import { getOrganogramFile } from "@/app/(server)/actions/getOrganogramFile";
 
 export async function generateMetadata({
   params,
@@ -52,6 +53,10 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
     );
   }
 
+  const chartData = await Promise.all(
+    charts.data.map((item) => getOrganogramFile(item))
+  );
+
   return (
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Organogram Chart</p>
@@ -71,7 +76,15 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
       </div>
 
       <OrgChart
-        charts={charts.data}
+        charts={chartData.map((item) =>
+          item.error
+            ? {
+                company_id: companyId,
+                id: 0,
+                name: "",
+              }
+            : item.data
+        )}
         company={company.data}
         employees={companyExtra.data.employees}
         designations={companyExtra.data.designations}
