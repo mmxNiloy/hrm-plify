@@ -14,7 +14,7 @@ export async function getFile(url: string) {
   );
   console.log("Trying to get file from url:", mUrl);
 
-  const req = fetch(mUrl, {
+  const req = fetch(url, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
