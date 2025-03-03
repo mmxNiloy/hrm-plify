@@ -27,7 +27,7 @@ export default function CompanyAuthorityTab({
 
           {!readOnly && (
             <CompanyAuthorityEditDialog
-              id={id}
+              id={data?.company_authorised_details?.authorised_id}
               company_id={company_id}
               title={"Authorised Personnel"}
               data={data?.company_authorised_details}
@@ -48,7 +48,7 @@ export default function CompanyAuthorityTab({
 
           {!readOnly && (
             <CompanyAuthorityEditDialog
-              id={id}
+              id={data?.company_key_contact?.key_contact_id}
               company_id={company_id}
               title={"Key Contact"}
               data={data?.company_key_contact}
@@ -69,7 +69,7 @@ export default function CompanyAuthorityTab({
 
           {!readOnly && (
             <CompanyAuthorityEditDialog
-              id={id}
+              id={data?.company_l1_user?.l1_user_id}
               company_id={company_id}
               title={"Level 1 User"}
               data={data?.company_l1_user}
