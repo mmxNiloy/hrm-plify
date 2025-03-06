@@ -192,7 +192,7 @@ export default function PricingPage() {
             Essential
           </h2>
           <p className="text-xl font-semibold text-[#017bce] text-center">
-            £75/month
+            £100/month
           </p>
           <p className="text-gray-600 text-center">Up to 10 employees</p>
           <div className="flex flex-col gap-3">
