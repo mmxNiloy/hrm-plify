@@ -46,6 +46,11 @@ export default function CompanyCarousel() {
       { company_name: "SSD Networks" },
       { company_name: "Revolution Tax Services" },
       { company_name: "Burnham Green" },
+      { company_name: "Jay Raj" },
+      { company_name: "Baranda" },
+      { company_name: "The Old Bengal" },
+      { company_name: "St Brendans Residential Home" },
+      { company_name: "Savci" },
     ],
     []
   );
