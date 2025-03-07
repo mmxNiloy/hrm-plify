@@ -216,12 +216,11 @@ export default function Home() {
       <section className="w-11/12 flex items-center justify-center overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative lg:pt-40">
         <div className="absolute -left-[6.25%] -top-1/2 lg:-top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
         <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center self-center lg:pb-8 px-16">
-          <div className="flex flex-col gap-2 w-full h-full items-start justify-center">
-            <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold heading">
-              <AnimatedText>{SiteConfig.siteDescription}</AnimatedText>
-            </p>
-            {/* Uncomment if needed
+        <div className="flex flex-col gap-4 items-center justify-center self-center lg:pb-8 px-16">
+          <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold heading max-w-4xl w-full text-center">
+            <AnimatedText>{SiteConfig.siteDescription}</AnimatedText>
+          </p>
+          {/* Uncomment if needed
           <p
           ref={subheader1Ref}
           className="text-center font-semibold text-sm md:text-base lg:text-xl subheader opacity-0"
@@ -231,13 +230,12 @@ export default function Home() {
           your most valuable asset: your people.
           </p>
           */}
-            <Link href={"/book-a-demo"} passHref>
-              <Button className="hidden text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
-                Join Us
-              </Button>
-            </Link>
-          </div>
-          <GradientBorderContainer className="bg-white rounded-[2rem] size-full z-10 section-1-image opacity-0">
+          <Link href={"/book-a-demo"} passHref>
+            <Button className="hidden text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
+              Join Us
+            </Button>
+          </Link>
+          <GradientBorderContainer className="bg-white rounded-[2rem] max-w-5xl w-full z-10 section-1-image opacity-0">
             <Image
               unoptimized
               src={"/landing-page/img-1.png"}
@@ -253,9 +251,7 @@ export default function Home() {
       {/* Section 2: Client Trust(count) and Client Showcase */}
       <section className="flex flex-col gap-4">
         <p className="mt-16 text-xl md:text-3xl lg:text-6xl font-semibold text-center heading">
-          <AnimatedText scrollTriggerStart="top 100%">
-            Companies that trust us with HR
-          </AnimatedText>
+          <AnimatedText>Companies that trust us with HR</AnimatedText>
         </p>
         <div className="w-full lg:container py-2">
           <CompanyCarousel />
