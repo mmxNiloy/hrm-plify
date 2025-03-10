@@ -231,7 +231,7 @@ export default function Home() {
           </p>
           */}
           <Link href={"/book-a-demo"} passHref>
-            <Button className="hidden text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
+            <Button className="text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
               Join Us
             </Button>
           </Link>

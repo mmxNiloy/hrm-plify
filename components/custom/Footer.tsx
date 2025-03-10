@@ -81,11 +81,11 @@ export default function Footer() {
                 Contact Us
               </Button>
             </Link>
-            {/* <Link href={"/book-a-demo"} className="sm:text-sm text-xs">
-            <Button variant={"link"} className="p-0 w-full justify-start">
-            Book a Demo
-            </Button>
-          </Link> */}
+            <Link href={"/book-a-demo"} className="sm:text-sm text-xs">
+              <Button variant={"link"} className="p-0 w-full justify-start">
+                Book a Demo
+              </Button>
+            </Link>
             <Link href={"/pricing"} className="sm:text-sm text-xs">
               <Button variant={"link"} className="p-0 w-full justify-start">
                 Pricing

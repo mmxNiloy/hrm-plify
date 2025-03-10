@@ -67,7 +67,7 @@ export default function Navbar() {
         button.removeEventListener("mouseleave", () => tl.reverse());
       };
     },
-    { scope: navbarContainer }
+    { scope: loginButtonRef }
   );
 
   // Scroll animation for navbar
@@ -118,11 +118,11 @@ export default function Navbar() {
 
         {/* Book a demo link */}
         <div className="flex gap-2">
-          {/* <Link href={"/book-demo"} passHref>
+          <Link href={"/book-a-demo"} passHref>
             <Button className="rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
               Book a Demo
             </Button>
-          </Link> */}
+          </Link>
 
           {/* Login Link */}
           <Link href={"/login"} passHref>
@@ -166,7 +166,7 @@ export default function Navbar() {
               <NavMenu />
               <span className="flex-grow" />
               <div className="flex flex-col gap-2">
-                <Link href={"/book-demo"} passHref>
+                <Link href={"/book-a-demo"} passHref>
                   <Button className="rounded-lg w-full from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
                     Book a Demo
                   </Button>
