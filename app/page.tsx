@@ -230,11 +230,11 @@ export default function Home() {
           your most valuable asset: your people.
           </p>
           */}
-          <Link href={"/book-a-demo"} passHref>
+          {/* <Link href={"/book-a-demo"} passHref>
             <Button className="text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
               Join Us
             </Button>
-          </Link>
+          </Link> */}
           <GradientBorderContainer className="bg-white rounded-[2rem] max-w-5xl w-full z-10 section-1-image opacity-0">
             <Image
               unoptimized
