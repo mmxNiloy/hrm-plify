@@ -7,11 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ButtonBlue } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
-import React, { useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedText from "@/components/custom/AnimatedText";
+import { useToast } from "@/components/ui/use-toast";
+import { createContactRequest } from "../(server)/actions/createContactRequest";
+import { ToastSuccess } from "@/styles/toast.tailwind";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,6 +78,54 @@ export default function ContactUsPage() {
     { scope: container }
   );
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const { toast } = useToast();
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const fd = new FormData(e.currentTarget);
+
+      setLoading(true);
+
+      const [first_name, last_name, email, contact_num, message] = [
+        fd.get("first_name") as string,
+        fd.get("last_name") as string,
+        fd.get("email") as string,
+        fd.get("contact_num") as string,
+        fd.get("message") as string,
+      ];
+
+      const result = await createContactRequest({
+        first_name,
+        last_name,
+        email,
+        contact_num,
+        message,
+      });
+
+      if (result.error) {
+        toast({
+          title: "Failed to send.",
+          description: result.error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Sent!",
+          description:
+            "We've received your message. We'll contact you shortly.",
+          className: ToastSuccess,
+        });
+      }
+
+      setLoading(false);
+    },
+    [toast]
+  );
+
   return (
     <main
       ref={container}
@@ -96,7 +147,10 @@ export default function ContactUsPage() {
 
       {/* Contact us form */}
       <section className="form-section w-10/12 px-6 4xl:container z-10 -mt-[7.5%] flex items-center bg-slate-50 justify-center min-h-full overflow-clip rounded-[3.25rem] py-6">
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full xl:*:*:text-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full xl:*:*:text-lg"
+        >
           <div className="form-input flex flex-col gap-2 opacity-0 translate-y-[50px]">
             <Label className={RequiredAsterisk}>First Name</Label>
             <Input
@@ -129,11 +183,11 @@ export default function ContactUsPage() {
           </div>
 
           <div className="form-input flex flex-col gap-2 opacity-0 translate-y-[50px]">
-            <Label>Phone Number</Label>
+            <Label>Contact Number</Label>
             <Input
               type="tel"
               placeholder="+4400 0000 0000"
-              name="phone"
+              name="contact_num"
               className="h-14 xl:h-16 px-4 rounded-xl drop-shadow-sm focus:drop-shadow-lg hover:drop-shadow-lg"
             />
           </div>
@@ -150,8 +204,13 @@ export default function ContactUsPage() {
           </div>
 
           <div className="submit-button col-span-full flex items-start opacity-0 scale-90">
-            <Button className={ButtonBlue} disabled type="button">
-              <Icons.send /> Submit
+            <Button className={ButtonBlue} disabled={loading}>
+              {loading ? (
+                <Icons.spinner className="animate-spin" />
+              ) : (
+                <Icons.send />
+              )}{" "}
+              Submit
             </Button>
           </div>
         </form>

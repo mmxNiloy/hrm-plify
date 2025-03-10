@@ -72,6 +72,13 @@ export default function SuperAdminSidebar({
           </span>
         </SidebarLink>
 
+        <SidebarLink href={"/dashboard/notification"}>
+          <Icons.bell />
+          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
+            Notifications
+          </span>
+        </SidebarLink>
+
         {/* <Button variant={"ghost"} className="justify-start gap-2" disabled>
           <Icons.users />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
