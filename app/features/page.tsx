@@ -289,7 +289,7 @@ export default function FeaturesPage() {
   return (
     <main
       ref={containerRef}
-      className="flex flex-col gap-4 md:gap-8 min-h-screen items-center py-4 sm:py-6 md:py-8"
+      className="overflow-x-clip flex flex-col gap-4 md:gap-8 min-h-screen items-center py-4 sm:py-6 md:py-8"
     >
       {/* Slogan */}
       <h1 className="container text-lg sm:text-xl md:text-3xl lg:text-6xl text-center font-extrabold slogan-text">
