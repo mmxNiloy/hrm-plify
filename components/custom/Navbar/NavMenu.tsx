@@ -21,13 +21,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-export default function NavMenu() {
+export default function NavMenu({
+  onLinkClick,
+}: {
+  onLinkClick?: (link: string) => void;
+}) {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col md:flex-row gap-10 font-semibold">
+    <div className="flex flex-col xl:flex-row gap-10 font-semibold">
       <div className="flex flex-col">
-        <Link href="/features" passHref className="peer">
+        <Link
+          href="/features"
+          className="peer"
+          onClick={(e) => {
+            if (onLinkClick) {
+              onLinkClick(e.currentTarget.href);
+            }
+          }}
+        >
           Features
         </Link>
         <span
@@ -39,7 +51,15 @@ export default function NavMenu() {
       </div>
 
       <div className="flex flex-col">
-        <Link href="/about" passHref className="peer">
+        <Link
+          href="/about"
+          className="peer"
+          onClick={(e) => {
+            if (onLinkClick) {
+              onLinkClick(e.currentTarget.href);
+            }
+          }}
+        >
           About Us
         </Link>
         <span
@@ -51,7 +71,15 @@ export default function NavMenu() {
       </div>
 
       <div className="flex flex-col">
-        <Link href="/pricing" passHref className="peer">
+        <Link
+          href="/pricing"
+          className="peer"
+          onClick={(e) => {
+            if (onLinkClick) {
+              onLinkClick(e.currentTarget.href);
+            }
+          }}
+        >
           Pricing
         </Link>
         <span
@@ -63,7 +91,15 @@ export default function NavMenu() {
       </div>
 
       <div className="flex flex-col">
-        <Link href="/contact-us" passHref className="peer">
+        <Link
+          href="/contact-us"
+          className="peer"
+          onClick={(e) => {
+            if (onLinkClick) {
+              onLinkClick(e.currentTarget.href);
+            }
+          }}
+        >
           Contact Us
         </Link>
         <span

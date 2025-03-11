@@ -214,80 +214,76 @@ export default function Home() {
     >
       {/* Section 1: Control & Compliance */}
       <section className="w-11/12 flex items-center justify-center overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative lg:pt-40">
-        <div className="absolute -left-[6.25%] -top-1/2 lg:-top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-        <div className="absolute -right-[6.25%] top-1/2 lg:top-1/3 w-1/2 lg:w-1/3 aspect-square rounded-full from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129] bg-gradient-to-tr" />
-        <div className="flex flex-col gap-4 items-center justify-center self-center lg:pb-8 px-16">
-          <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold heading max-w-4xl w-full text-center">
+        <div className="absolute -left-[10%] -top-[40%] w-3/4 sm:w-1/2 lg:w-1/3 aspect-square rounded-full bg-gradient-to-tr from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129]" />
+        <div className="absolute -right-[10%] top-[60%] w-3/4 sm:w-1/2 lg:w-1/3 aspect-square rounded-full bg-gradient-to-tr from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129]" />
+        <div className="flex flex-col gap-4 items-center justify-center pb-8">
+          <p className="text-xl sm:text-2xl md:text-4xl lg:text-6xl xl:text-7xl font-extrabold text-center max-w-3xl">
             <AnimatedText>{SiteConfig.siteDescription}</AnimatedText>
           </p>
-          {/* Uncomment if needed
-          <p
-          ref={subheader1Ref}
-          className="text-center font-semibold text-sm md:text-base lg:text-xl subheader opacity-0"
-          >
-          The HR software that helps you manage, develop, and retain
-          <br />
-          your most valuable asset: your people.
-          </p>
-          */}
+          {/* Uncomment and adjust if needed */}
+          {/* <p ref={subheader1Ref} className="text-center text-xs sm:text-sm md:text-base lg:text-xl font-semibold opacity-0">
+            The HR software that helps you manage, develop, and retain your most valuable asset: your people.
+          </p> */}
           {/* <Link href={"/book-a-demo"} passHref>
-            <Button className="text-lg rounded-lg w-32 from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
+            <Button className="text-sm sm:text-base md:text-lg rounded-lg w-28 sm:w-32 md:w-36 px-4 sm:px-6 font-semibold bg-gradient-to-r from-[#bd1cc2] to-[#f5561c] hover:from-[#e528ec] hover:to-[#f36936]">
               Join Us
             </Button>
           </Link> */}
-          <GradientBorderContainer className="bg-white rounded-[2rem] max-w-5xl w-full z-10 section-1-image opacity-0">
+          <GradientBorderContainer className="bg-white rounded-2xl w-full max-w-4xl lg:max-w-5xl z-10">
             <Image
               unoptimized
               src={"/landing-page/img-1.png"}
               width={0}
               height={0}
-              className="rounded-[2rem] object-contain object-center z-20 w-full"
+              className="rounded-2xl w-full h-auto object-contain"
               alt={"System Showcase #1"}
             />
           </GradientBorderContainer>
         </div>
       </section>
 
-      {/* Section 2: Client Trust(count) and Client Showcase */}
-      <section className="flex flex-col gap-4">
-        <p className="mt-16 text-xl md:text-3xl lg:text-6xl font-semibold text-center heading">
+      {/* Section 2: Client Trust and Showcase */}
+      <section className="flex flex-col gap-4 w-full px-4 sm:px-0 items-center">
+        <p className="mt-8 sm:mt-12 md:mt-16 text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center">
           <AnimatedText>Companies that trust us with HR</AnimatedText>
         </p>
-        <div className="w-full lg:container py-2">
+        <div className="w-full md:w-11/12 lg:w-10/12">
           <CompanyCarousel />
         </div>
       </section>
 
       {/* Section 3: Our Specialties */}
-      <section className="w-full py-8 md:py-16 flex flex-col gap-8 items-center justify-center from-[#e51cd8]/[0.051] to-[#635be8]/[0.051] bg-gradient-to-br">
-        <p className="text-xl md:text-3xl lg:text-6xl font-semibold bg-clip-text text-transparent from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br heading">
+      <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 flex flex-col gap-6 sm:gap-8 items-center bg-gradient-to-br from-[#e51cd8]/[0.051] to-[#635be8]/[0.051] px-4 sm:px-8">
+        <p className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-br from-[#f5561c] to-[#bd1cc2]">
           <AnimatedText duration={0.5} scrollTriggerStart="top 80%">
             What makes us different?
           </AnimatedText>
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 w-11/12 items-center justify-center">
-          <GradientBorderContainer className="rounded-[2rem] w-full h-fit preview-image opacity-0 -translate-x-[100px]">
-            <div className="w-full bg-white rounded-[2rem]">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 w-full sm:w-11/12">
+          <GradientBorderContainer className="rounded-2xl w-full h-fit self-center">
+            <div className="bg-white rounded-2xl">
               <Image
                 unoptimized
                 src={"/landing-page/img-2.png"}
                 width={0}
                 height={0}
-                className="rounded-[2rem] w-full object-contain object-center px-4"
+                className="rounded-2xl w-full h-auto object-contain px-2 sm:px-4"
                 alt={"System Showcase #2"}
               />
             </div>
           </GradientBorderContainer>
-          <ul className="flex flex-col gap-4 specialties-container opacity-0 translate-x-[100px]">
+          <ul className="flex flex-col gap-3 sm:gap-4">
             {ourSpecialties.map((spec, index) => (
               <li
                 key={`our-spec-list-item-${index}`}
-                className="from-[#bd1cc2]/[0.051] to-[#f5561c]/[0.15] bg-gradient-to-r rounded-xl px-8 py-2 specialty-item opacity-0 translate-y-[50px]"
+                className="bg-gradient-to-r from-[#bd1cc2]/[0.051] to-[#f5561c]/[0.15] rounded-xl p-4 sm:p-6"
               >
-                <p className="flex gap-1 font-extrabold lg:text-lg items-center">
+                <p className="flex gap-1 items-center font-extrabold text-sm sm:text-base md:text-lg">
                   <Icons.siteSparkle /> {spec.title}
                 </p>
-                <p className="text-sm md:text-base pl-6">{spec.description}</p>
+                <p className="text-xs sm:text-sm md:text-base pl-4 sm:pl-6">
+                  {spec.description}
+                </p>
               </li>
             ))}
           </ul>
@@ -295,42 +291,44 @@ export default function Home() {
       </section>
 
       {/* Section 4: Our Features */}
-      <>
-        <div className="flex flex-col gap-0.5">
-          <p className="text-xl md:text-3xl lg:text-6xl font-semibold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br heading">
+      <section className="w-full flex flex-col gap-6 sm:gap-8 px-4 sm:px-8">
+        <div className="flex flex-col gap-0.5 w-fit self-center">
+          <p className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-br from-[#e51cd8] to-[#635be8]">
             <AnimatedText duration={0.5} scrollTriggerStart="top 80%">
               Features
             </AnimatedText>
           </p>
-          <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
+          <span className="h-1 rounded-full w-full bg-gradient-to-br from-[#f5561c] to-[#bd1cc2]" />
         </div>
-        <section className="w-11/12 rounded-[3.25rem] py-8 md:py-16 flex flex-col gap-8 items-center justify-center from-[#017bce]/[0.051] to-[#019e8f]/[0.051] bg-gradient-to-r">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 w-11/12 items-center justify-center">
-            <GradientBorderContainer className="rounded-[2rem] h-fit w-full preview-image opacity-0 -translate-x-[100px]">
-              <div className="w-full bg-white rounded-[2rem]">
+        <div className="flex flex-col w-full lg:w-11/12 rounded-[3.25rem] py-6 sm:py-8 md:py-12 lg:py-16 bg-gradient-to-r from-[#017bce]/[0.051] to-[#019e8f]/[0.051] self-center items-center justify-center">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 w-11/12 items-center justify-center">
+            <GradientBorderContainer className="rounded-2xl w-full h-fit">
+              <div className="bg-white rounded-2xl">
                 <Image
                   unoptimized
                   src={"/landing-page/img-3.png"}
                   width={0}
                   height={0}
-                  className="rounded-[2rem] w-full object-contain object-center px-4"
+                  className="rounded-2xl w-full h-auto object-contain px-2 sm:px-4"
                   alt={"System Showcase #3"}
                 />
               </div>
             </GradientBorderContainer>
-            <div className="grid grid-cols-3 gap-4 features-container opacity-0 translate-x-[100px]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {ourFeatures.map((feat, index) => (
                 <div
                   key={`our-features-grid-item-${index}`}
-                  className="flex flex-col items-center justify-center gap-2 min-h-16 text-balance text-center from-[#bd1cc2] to-[#f5561c] bg-gradient-to-r px-4 py-2 rounded-lg text-white feature-item opacity-0"
+                  className="flex flex-col items-center justify-center gap-2 text-center bg-gradient-to-r from-[#bd1cc2] to-[#f5561c] p-3 sm:p-4 rounded-lg text-white"
                 >
-                  <p className="font-extrabold lg:text-lg">{feat.title}</p>
+                  <p className="font-extrabold text-xs sm:text-sm md:text-base lg:text-lg">
+                    {feat.title}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
-        </section>
-      </>
+        </div>
+      </section>
     </main>
   );
 }

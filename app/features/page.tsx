@@ -289,10 +289,10 @@ export default function FeaturesPage() {
   return (
     <main
       ref={containerRef}
-      className="flex flex-col gap-4 md:gap-8 min-h-screen items-center py-6 md:py-8"
+      className="flex flex-col gap-4 md:gap-8 min-h-screen items-center py-4 sm:py-6 md:py-8"
     >
       {/* Slogan */}
-      <h1 className="container text-xl sm:text-2xl md:text-3xl lg:text-6xl text-center font-extrabold slogan-text">
+      <h1 className="container text-lg sm:text-xl md:text-3xl lg:text-6xl text-center font-extrabold slogan-text">
         <AnimatedText>
           You Run Your Business, We&apos;ll Handle the HR 100% Compliance, 24/7
           Efficiency, and Seamless Operations
@@ -303,30 +303,30 @@ export default function FeaturesPage() {
         <section
           key={`feature-section-${fIdx}`}
           className={cn(
-            "w-full py-8 md:py-16 flex flex-col gap-8 items-center justify-center feature-section",
+            "w-full py-4 sm:py-8 md:py-16 px-2 flex flex-col gap-4 sm:gap-8 items-center justify-center feature-section",
             (fIdx & 1) == 0
               ? "from-[#f5561c]/[0.102] to-[#ffffff]/[0.102] bg-gradient-to-r"
               : "bg-white"
           )}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 w-11/12 items-center justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full sm:w-11/12 items-center justify-center">
             {/* Image preview */}
             <div
               className={cn(
-                "relative rounded-[2rem] bg-white w-full order-1 image-container",
+                "relative rounded-[1rem] sm:rounded-[2rem] bg-white w-full order-1 image-container",
                 (fIdx & 1) != 0
                   ? "lg:order-1 translate-x-[100px]"
                   : "lg:-order-1 -translate-x-[100px]",
                 "opacity-0"
               )}
             >
-              <GradientBorderContainer className="rounded-[2rem] w-full h-fit">
+              <GradientBorderContainer className="rounded-[1rem] sm:rounded-[2rem] w-full h-fit">
                 <Image
                   unoptimized
                   src={feat.image}
                   width={0}
                   height={0}
-                  className="w-full object-contain object-center rounded-[2rem]"
+                  className="w-full object-contain object-center rounded-[1rem] sm:rounded-[2rem]"
                   alt={feat.imgAlt}
                 />
               </GradientBorderContainer>
@@ -334,8 +334,10 @@ export default function FeaturesPage() {
               {feat.overlayImage && (
                 <GradientBorderContainer
                   className={cn(
-                    "rounded-[2rem] w-full h-fit absolute top-[40%]",
-                    (fIdx & 1) == 0 ? "-left-10" : "-right-10"
+                    "rounded-[1rem] sm:rounded-[2rem] w-full h-fit absolute top-[40%]",
+                    (fIdx & 1) == 0
+                      ? "-left-6 sm:-left-10"
+                      : "-right-6 sm:-right-10"
                   )}
                 >
                   <Image
@@ -343,7 +345,7 @@ export default function FeaturesPage() {
                     src={feat.overlayImage}
                     width={0}
                     height={0}
-                    className="w-full object-contain object-center rounded-[2rem] z-10"
+                    className="w-full object-contain object-center rounded-[1rem] sm:rounded-[2rem] z-10"
                     alt={feat.overlayImgAlt ?? "Software Showcase Overlay"}
                   />
                 </GradientBorderContainer>
@@ -360,27 +362,29 @@ export default function FeaturesPage() {
                 "opacity-0"
               )}
             >
-              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">
+              <p className="text-lg sm:text-2xl md:text-3xl font-extrabold text-center md:text-left">
                 {feat.section}
               </p>
-              <p className="md:text-xl font-bold">{feat.subtitle}</p>
+              <p className="text-sm sm:text-base md:text-xl font-bold text-center md:text-left">
+                {feat.subtitle}
+              </p>
               {/* List of features */}
-              <ul className="flex flex-col gap-4">
+              <ul className="flex flex-col gap-2 sm:gap-4">
                 {feat.items.map((featureItem, itmIdx) => (
                   <li
                     key={`section-${fIdx}-feature-${itmIdx}`}
-                    className="from-[#bd1cc2]/[0.051] to-[#f5561c]/[0.15] bg-gradient-to-r rounded-xl px-8 py-2"
+                    className="from-[#bd1cc2]/[0.051] to-[#f5561c]/[0.15] bg-gradient-to-r rounded-xl px-4 sm:px-8 py-2"
                   >
                     {/* Title */}
-                    <p className="flex gap-1 font-extrabold lg:text-lg items-center">
+                    <p className="flex gap-1 font-extrabold text-sm sm:text-base md:text-lg lg:text-lg items-center">
                       <Icons.siteSparkle /> {featureItem.title}
                     </p>
                     {/* Bullet points */}
-                    <ul className="list list-inside list-disc pl-6">
+                    <ul className="list list-inside list-disc pl-4 sm:pl-6">
                       {featureItem.bullets.map((bullet, bullIdx) => (
                         <li
                           key={`section-${fIdx}-feature-${itmIdx}-bullet-${bullIdx}`}
-                          className="list-item bullet-item opacity-0 translate-y-5"
+                          className="list-item bullet-item opacity-0 translate-y-5 text-xs sm:text-sm"
                         >
                           {bullet}
                         </li>
