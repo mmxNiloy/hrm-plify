@@ -9,8 +9,6 @@ import SponsorComplianceDashboardSidebar from "@/components/custom/Dashboard/Sid
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 interface Props extends CompanyByIDPageProps, LayoutProps {
   visaNotif: React.ReactNode;
