@@ -18,6 +18,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { usePathname } from "next/navigation";
+import { ScrollArea } from "@/components/ui/scroll-area";
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
 
@@ -149,46 +150,48 @@ export default function Navbar() {
           </DrawerTrigger>
 
           <DrawerContent className="top-0 right-0 md:left-auto h-screen mt-0 rounded-none max-w-screen-sm">
-            <DrawerClose className="absolute top-2 right-2" asChild>
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="[&_svg]:size-4 size-6"
-              >
-                <Icons.cross className="size-4" />
-              </Button>
-            </DrawerClose>
-            <DrawerHeader>
-              <DrawerTitle>Menu</DrawerTitle>
-              <DrawerDescription className="sr-only">
-                Revolo HR | Navigation Menu
-              </DrawerDescription>
-            </DrawerHeader>
-            <div className="flex flex-col flex-grow gap-2 px-8 py-2">
-              <NavMenu onLinkClick={() => setOpen(false)} />
-              <span className="flex-grow" />
-              <div className="flex flex-col gap-2">
-                <Link href={"/book-a-demo"} passHref>
-                  <DrawerClose asChild>
-                    <Button className="rounded-lg w-full from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
-                      Book a Demo
-                    </Button>
-                  </DrawerClose>
-                </Link>
+            <ScrollArea className="h-screen">
+              <DrawerClose className="absolute top-2 right-2" asChild>
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  className="[&_svg]:size-4 size-6"
+                >
+                  <Icons.cross className="size-4" />
+                </Button>
+              </DrawerClose>
+              <DrawerHeader>
+                <DrawerTitle>Menu</DrawerTitle>
+                <DrawerDescription className="sr-only">
+                  Revolo HR | Navigation Menu
+                </DrawerDescription>
+              </DrawerHeader>
+              <div className="flex flex-col flex-grow gap-2 px-8 py-2">
+                <NavMenu onLinkClick={() => setOpen(false)} />
+                <span className="flex-grow" />
+                <div className="flex flex-col gap-2">
+                  <Link href={"/book-a-demo"} passHref>
+                    <DrawerClose asChild>
+                      <Button className="rounded-lg w-full from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
+                        Book a Demo
+                      </Button>
+                    </DrawerClose>
+                  </Link>
 
-                {/* Login Link */}
-                <Link href={"/login"} passHref>
-                  <DrawerClose asChild>
-                    <Button
-                      variant={"outline"}
-                      className="rounded-lg w-full font-semibold"
-                    >
-                      Login
-                    </Button>
-                  </DrawerClose>
-                </Link>
+                  {/* Login Link */}
+                  <Link href={"/login"} passHref>
+                    <DrawerClose asChild>
+                      <Button
+                        variant={"outline"}
+                        className="rounded-lg w-full font-semibold"
+                      >
+                        Login
+                      </Button>
+                    </DrawerClose>
+                  </Link>
+                </div>
               </div>
-            </div>
+            </ScrollArea>
           </DrawerContent>
         </Drawer>
       </div>
