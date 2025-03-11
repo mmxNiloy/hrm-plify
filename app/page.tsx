@@ -254,8 +254,12 @@ export default function Home() {
 
       {/* Section 3: Our Specialties */}
       <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 flex flex-col gap-6 sm:gap-8 items-center bg-gradient-to-br from-[#e51cd8]/[0.051] to-[#635be8]/[0.051] px-4 sm:px-8">
-        <p className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-br from-[#f5561c] to-[#bd1cc2]">
-          <AnimatedText duration={0.5} scrollTriggerStart="top 80%">
+        <p className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center">
+          <AnimatedText
+            duration={0.5}
+            scrollTriggerStart="top 80%"
+            className="bg-clip-text bg-gradient-to-br from-[#f5561c] to-[#bd1cc2] text-transparent"
+          >
             What makes us different?
           </AnimatedText>
         </p>
@@ -293,8 +297,12 @@ export default function Home() {
       {/* Section 4: Our Features */}
       <section className="w-full flex flex-col gap-6 sm:gap-8 px-4 sm:px-8">
         <div className="flex flex-col gap-0.5 w-fit self-center">
-          <p className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-br from-[#e51cd8] to-[#635be8]">
-            <AnimatedText duration={0.5} scrollTriggerStart="top 80%">
+          <p className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center">
+            <AnimatedText
+              duration={0.5}
+              scrollTriggerStart="top 80%"
+              className="bg-clip-text bg-gradient-to-br from-[#e51cd8] to-[#635be8] text-transparent"
+            >
               Features
             </AnimatedText>
           </p>

@@ -180,8 +180,10 @@ export default function PricingPage() {
       className="flex flex-col gap-4 md:gap-8 min-h-screen items-center justify-center py-4 sm:py-6 md:py-8 px-2 sm:px-4"
     >
       <div className="flex flex-col gap-0.5">
-        <p className="text-xl sm:text-2xl md:text-4xl lg:text-7xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-          <AnimatedText>Plans</AnimatedText>
+        <p className="text-xl sm:text-2xl md:text-4xl lg:text-7xl font-extrabold">
+          <AnimatedText className="bg-clip-text from-[#e51cd8] to-[#635be8] bg-gradient-to-br text-transparent">
+            Plans
+          </AnimatedText>
         </p>
         <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
       </div>
@@ -294,8 +296,8 @@ export default function PricingPage() {
       {/* Why Choose RevoloHR Section */}
       <section className="additional-section w-full sm:w-11/12 py-4 sm:py-8 items-center justify-center flex flex-col">
         <div className="flex flex-col gap-0.5 mb-4 sm:mb-8 items-center w-fit">
-          <p className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-            <AnimatedText>{`Why Choose ${SiteConfig.siteName} HR?`}</AnimatedText>
+          <p className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-extrabold">
+            <AnimatedText className="bg-clip-text from-[#e51cd8] to-[#635be8] bg-gradient-to-br text-transparent">{`Why Choose ${SiteConfig.siteName} HR?`}</AnimatedText>
           </p>
           <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
         </div>

@@ -126,8 +126,10 @@ export default function AboutPage() {
       {/* Our Values Section */}
       <section className="values-section w-full sm:w-11/12 flex flex-col items-center justify-center min-h-[50vh] sm:min-h-[70vh] rounded-[1.5rem] sm:rounded-[3.25rem] relative py-4 sm:py-8">
         <div className="flex flex-col gap-0.5 mb-4 sm:mb-8">
-          <p className="section-title text-xl sm:text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-            <AnimatedText>Our Values</AnimatedText>
+          <p className="section-title text-xl sm:text-2xl md:text-4xl lg:text-6xl font-extrabold">
+            <AnimatedText className="bg-clip-text from-[#e51cd8] to-[#635be8] bg-gradient-to-br text-transparent">
+              Our Values
+            </AnimatedText>
           </p>
           <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
         </div>
