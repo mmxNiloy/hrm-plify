@@ -11,7 +11,7 @@ export default function AnimatedText({
   children,
   duration = 0.2,
   stagger = 0.03,
-  scrollTriggerStart = "top 100%",
+  scrollTriggerStart = "top 90%",
 }: {
   children: string;
   duration?: number;
@@ -46,7 +46,7 @@ export default function AnimatedText({
       {children.split(" ").map((word, index, arr) => (
         <span
           key={index}
-          className="word-span inline-block mr-1 opacity-0 translate-y-5"
+          className="word-span inline-block mr-1 opacity-1 xl:opacity-0 translate-y-5"
         >
           {word}
           {arr.length - 1 > index && <span>&nbsp;</span>}
