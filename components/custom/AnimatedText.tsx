@@ -11,7 +11,7 @@ export default function AnimatedText({
   children,
   duration = 0.2,
   stagger = 0.03,
-  scrollTriggerStart = "top 90%",
+  scrollTriggerStart = "top 100%",
 }: {
   children: string;
   duration?: number;
