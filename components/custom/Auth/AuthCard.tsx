@@ -48,7 +48,7 @@ export default function AuthCard() {
           Login
         </CardTitle>
       </CardHeader>
-      <CardContent className="w-[32rem]">
+      <CardContent className="w-72 sm:w-96 md:w-[32rem]">
         <LoginForm />
 
         {/* <p className="text-center mt-4 mb-2 font-semibold text-lg text-secondary-foreground">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import NavLogo from "./NavLogo";
 import NavMenu from "./NavMenu";
 import { Button } from "@/components/ui/button";
@@ -101,13 +101,15 @@ export default function Navbar() {
     });
   }, []);
 
+  const [open, setOpen] = useState<boolean>(false);
+
   if (pathname.startsWith("/dashboard")) return null;
 
   return (
     <header className="sticky top-0 z-40 w-full flex items-center justify-center">
       <div
         ref={navbarContainer}
-        className="hidden lg:flex h-28 w-10/12 py-8 items-end justify-center gap-4 lg:gap-8 px-6 md:px-8 lg:px-16 sm:space-x-0 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 drop-shadow-xl shadow-xl rounded-b-[2rem]"
+        className="hidden xl:flex h-28 w-10/12 py-8 items-end justify-center gap-4 lg:gap-8 px-6 md:px-8 lg:px-16 sm:space-x-0 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 drop-shadow-xl shadow-xl rounded-b-[2rem]"
       >
         <NavLogo logoSize="lg" />
 
@@ -136,10 +138,10 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
-      <div className="flex lg:hidden w-full h-14 items-center justify-between gap-2 md:gap-4 lg:gap-8 px-6 md:px-8 lg:px-16 sm:space-x-0 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 drop-shadow-xl shadow-xl">
+      <div className="flex xl:hidden w-full h-14 items-center justify-between gap-2 md:gap-4 lg:gap-8 px-6 md:px-8 lg:px-16 sm:space-x-0 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 drop-shadow-xl shadow-xl">
         <NavLogo />
 
-        <Drawer direction="right">
+        <Drawer open={open} onOpenChange={setOpen} direction="right">
           <DrawerTrigger asChild>
             <Button variant={"ghost"} size={"icon"}>
               <Icons.menu />
@@ -163,23 +165,27 @@ export default function Navbar() {
               </DrawerDescription>
             </DrawerHeader>
             <div className="flex flex-col flex-grow gap-2 px-8 py-2">
-              <NavMenu />
+              <NavMenu onLinkClick={() => setOpen(false)} />
               <span className="flex-grow" />
               <div className="flex flex-col gap-2">
                 <Link href={"/book-a-demo"} passHref>
-                  <Button className="rounded-lg w-full from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
-                    Book a Demo
-                  </Button>
+                  <DrawerClose asChild>
+                    <Button className="rounded-lg w-full from-[#bd1cc2] to-[#f5561c] transition-colors hover:from-[#e528ec] hover:to-[#f36936] bg-gradient-to-r px-6 font-semibold">
+                      Book a Demo
+                    </Button>
+                  </DrawerClose>
                 </Link>
 
                 {/* Login Link */}
                 <Link href={"/login"} passHref>
-                  <Button
-                    variant={"outline"}
-                    className="rounded-lg w-full font-semibold"
-                  >
-                    Login
-                  </Button>
+                  <DrawerClose asChild>
+                    <Button
+                      variant={"outline"}
+                      className="rounded-lg w-full font-semibold"
+                    >
+                      Login
+                    </Button>
+                  </DrawerClose>
                 </Link>
               </div>
             </div>

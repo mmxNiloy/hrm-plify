@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedText from "@/components/custom/AnimatedText";
+import SiteConfig from "@/utils/SiteConfig";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -176,56 +177,62 @@ export default function PricingPage() {
   return (
     <main
       ref={container}
-      className="flex flex-col gap-4 md:gap-8 min-h-screen items-center justify-center py-6 md:py-8"
+      className="flex flex-col gap-4 md:gap-8 min-h-screen items-center justify-center py-4 sm:py-6 md:py-8 px-2 sm:px-4"
     >
       <div className="flex flex-col gap-0.5">
-        <p className="text-2xl md:text-4xl lg:text-7xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
+        <p className="text-xl sm:text-2xl md:text-4xl lg:text-7xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
           <AnimatedText>Plans</AnimatedText>
         </p>
         <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
       </div>
 
-      <section className="plans-section w-11/12 *:max-w-lg flex flex-col md:flex-row gap-6 items-start justify-center">
+      <section className="plans-section w-full sm:w-11/12 *:max-w-lg flex flex-col md:flex-row gap-16 items-center justify-center">
         {/* Essential Plan Column */}
-        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#017bce]/20 to-[#019e8f]/20 backdrop-blur-sm rounded-2xl shadow-xl p-6 flex flex-col gap-4 opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
-          <h2 className="text-2xl font-bold text-gray-800 text-center">
+        <div className="plan-card w-full bg-gradient-to-br from-[#017bce]/20 to-[#019e8f]/20 backdrop-blur-sm rounded-2xl shadow-xl p-4 sm:p-6 flex flex-col gap-2 sm:gap-4 opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
             Essential
           </h2>
-          <p className="text-xl font-semibold text-[#017bce] text-center">
+          <p className="text-lg sm:text-xl font-semibold text-[#017bce] text-center">
             £100/month
           </p>
-          <p className="text-gray-600 text-center">Up to 10 employees</p>
-          <div className="flex flex-col gap-3">
+          <p className="text-gray-600 text-sm sm:text-base text-center">
+            Up to 10 employees
+          </p>
+          <div className="flex flex-col gap-2 sm:gap-3">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <span className="w-6 h-6 flex items-center justify-center">
+              <div key={index} className="flex items-center gap-2 sm:gap-3">
+                <span className="w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center">
                   {renderFeatureStatus(feature.plans.essential)}
                 </span>
-                <span className="text-gray-700">{feature.title}</span>
+                <span className="text-gray-700 text-xs sm:text-sm">
+                  {feature.title}
+                </span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Professional Plan Column - Popular Choice */}
-        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#e51cd8]/20 to-[#635be8]/20 backdrop-blur-md rounded-2xl shadow-xl p-6 flex flex-col gap-4 duration-300 hover:shadow-2xl relative opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#e51cd8] text-white text-sm font-semibold px-3 py-1 rounded-full">
+        <div className="plan-card w-full bg-gradient-to-br from-[#e51cd8]/20 to-[#635be8]/20 backdrop-blur-md rounded-2xl shadow-xl p-4 sm:p-6 flex flex-col gap-2 sm:gap-4 duration-300 hover:shadow-2xl relative opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#e51cd8] text-white text-xs sm:text-sm font-semibold px-2 sm:px-3 py-1 rounded-full">
             Most Popular
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
             Professional
           </h2>
-          <p className="text-xl font-semibold text-[#635be8] text-center">
+          <p className="text-lg sm:text-xl font-semibold text-[#635be8] text-center">
             £150/month
           </p>
-          <p className="text-gray-600 text-center">Up to 20 employees</p>
-          <div className="flex flex-col gap-3">
+          <p className="text-gray-600 text-sm sm:text-base text-center">
+            Up to 20 employees
+          </p>
+          <div className="flex flex-col gap-2 sm:gap-3">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <span className="w-6 h-6 flex items-center justify-center">
+              <div key={index} className="flex items-center gap-2 sm:gap-3">
+                <span className="w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center">
                   {renderFeatureStatus(feature.plans.professional)}
                 </span>
-                <span className="text-gray-700">
+                <span className="text-gray-700 text-xs sm:text-sm">
                   {feature.plans.professional !== "yes" &&
                   feature.plans.professional !== "no" ? (
                     <>
@@ -245,24 +252,26 @@ export default function PricingPage() {
         </div>
 
         {/* Enterprise Plan Column - Highlighted */}
-        <div className="plan-card w-full md:w-1/3 bg-gradient-to-br from-[#bd1cc2]/20 to-[#f5561c]/20 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col gap-4 transform md:scale-105 duration-300 hover:shadow-3xl relative z-10 opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#f5561c] text-white text-sm font-semibold px-3 py-1 rounded-full">
+        <div className="plan-card w-full bg-gradient-to-br from-[#bd1cc2]/20 to-[#f5561c]/20 backdrop-blur-md rounded-2xl shadow-2xl p-4 sm:p-6 flex flex-col gap-2 sm:gap-4 transform md:scale-105 duration-300 hover:shadow-3xl relative z-10 opacity-0 -translate-x-[100px] will-change-transform will-change-opacity">
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#f5561c] text-white text-xs sm:text-sm font-semibold px-2 sm:px-3 py-1 rounded-full">
             Best Value
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
             Enterprise
           </h2>
-          <p className="text-xl font-semibold text-[#f5561c] text-center">
+          <p className="text-lg sm:text-xl font-semibold text-[#f5561c] text-center">
             £250/month
           </p>
-          <p className="text-gray-600 text-center">Up to 50 employees</p>
-          <div className="flex flex-col gap-3">
+          <p className="text-gray-600 text-sm sm:text-base text-center">
+            Up to 50 employees
+          </p>
+          <div className="flex flex-col gap-2 sm:gap-3">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <span className="w-6 h-6 flex items-center justify-center">
+              <div key={index} className="flex items-center gap-2 sm:gap-3">
+                <span className="w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center">
                   {renderFeatureStatus(feature.plans.enterprise)}
                 </span>
-                <span className="text-gray-700">
+                <span className="text-gray-700 text-xs sm:text-sm">
                   {feature.plans.enterprise !== "yes" &&
                   feature.plans.enterprise !== "no" ? (
                     <>
@@ -283,23 +292,27 @@ export default function PricingPage() {
       </section>
 
       {/* Why Choose RevoloHR Section */}
-      <section className="additional-section w-11/12 py-8">
-        <div className="flex flex-col gap-0.5 mb-8 items-center">
-          <p className="text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
-            <AnimatedText>Why Choose RevoloHR?</AnimatedText>
+      <section className="additional-section w-full sm:w-11/12 py-4 sm:py-8 items-center justify-center flex flex-col">
+        <div className="flex flex-col gap-0.5 mb-4 sm:mb-8 items-center w-fit">
+          <p className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-extrabold bg-clip-text text-transparent from-[#e51cd8] to-[#635be8] bg-gradient-to-br">
+            <AnimatedText>{`Why Choose ${SiteConfig.siteName} HR?`}</AnimatedText>
           </p>
-          <span className="h-1 rounded-full w-1/4 from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
+          <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
         </div>
-        <div className="container grid grid-cols-12 lg:[&>*:nth-child(4)]:col-start-3 lg:[&>*:nth-child(5)]:col-start-7 gap-6">
+        <div className="container grid grid-cols-12 gap-6 lg:[&>*:nth-child(4)]:col-start-3 lg:[&>*:nth-child(5)]:col-start-7">
           {additionalConsiderations.map((item, index) => (
             <div
               key={index}
-              className={`additional-card col-span-full md:col-span-6 lg:col-span-4 bg-gradient-to-br ${item.gradient} backdrop-blur-sm rounded-xl p-6 flex flex-col gap-2 shadow-lg hover:shadow-xl transition-shadow opacity-0 translate-y-[100px] will-change-transform will-change-opacity`}
+              className={`additional-card col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 bg-gradient-to-br ${item.gradient} backdrop-blur-sm rounded-xl p-4 sm:p-6 flex flex-col gap-2 shadow-lg hover:shadow-xl transition-shadow opacity-0 translate-y-[100px] will-change-transform will-change-opacity`}
             >
-              <h3 className={`text-lg font-bold text-[${item.textColor}]`}>
+              <h3
+                className={`text-base sm:text-lg md:text-lg font-bold text-[${item.textColor}]`}
+              >
                 {item.title}
               </h3>
-              <p className="text-gray-700 text-sm">{item.description}</p>
+              <p className="text-gray-700 text-xs sm:text-sm md:text-base">
+                {item.description}
+              </p>
             </div>
           ))}
         </div>

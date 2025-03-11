@@ -106,7 +106,7 @@ export default function CompanyCarousel() {
       opts={{
         align: "start",
       }}
-      className="w-full px-8"
+      className="w-full px-2 md:px-4 lg:px-8"
       plugins={[
         //@ts-ignore
         Autoplay({
@@ -114,7 +114,7 @@ export default function CompanyCarousel() {
         }),
       ]}
     >
-      <CarouselContent>
+      <CarouselContent className="py-2">
         {companies.map((item, index) => (
           <CarouselItem
             key={`company-card-${index}`}
@@ -130,48 +130,50 @@ export default function CompanyCarousel() {
 
 function CompanyCard({ comp }: { comp: ICompany }) {
   return (
-    <div className="w-full px-4 py-2 rounded-md drop-shadow bg-white backdrop-blur flex gap-2 items-center justify-between">
-      <div className="flex gap-2">
-        <div className="flex flex-col gap-2 items-center justify-center">
+    <div className="w-full px-2 sm:px-4 py-2 rounded-md drop-shadow bg-white backdrop-blur flex gap-2 items-center justify-between">
+      <div className="flex gap-1 sm:gap-2">
+        <div className="flex flex-col gap-1 sm:gap-2 items-center justify-center">
           <AvatarPicker
             readOnly
             src={comp.logo}
             skeleton={<AvatarNamePlaceholder name={comp.company_name} />}
-            className="size-8 p-0"
+            className="size-6 sm:size-8 p-0"
           />
+          {/* Uncomment if needed */}
           {/* <Link
-            href={`${comp.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
-              SiteConfig.siteName
-            }-${Date.now()}`}
-            target="_blank"
-            className="hover:underline"
-            passHref
-          >
-            <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
-              <Icons.externalLink />
-              Visit
-            </TextCapsule>
-          </Link> */}
+        href={`${comp.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
+          SiteConfig.siteName
+        }-${Date.now()}`}
+        target="_blank"
+        className="hover:underline"
+        passHref
+      >
+        <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
+          <Icons.externalLink />
+          Visit
+        </TextCapsule>
+      </Link> */}
         </div>
-        <div className="flex flex-col gap-2 items-center justify-center">
-          <p className="font-bold md:text-lg lg:text-xl line-clamp-1 text-ellipsis">
+        <div className="flex flex-col gap-1 sm:gap-2 items-center justify-center">
+          <p className="font-bold text-sm sm:text-base md:text-lg line-clamp-1 text-ellipsis">
             {comp.company_name}
           </p>
 
-          {/* <div className="flex flex-col gap-2 *:text-xs">
-            <TextCapsule className="bg-blue-500">
-              <Icons.building className="size-3" />
-              {comp.headquarters ?? "N/A"}
-            </TextCapsule>
+          {/* Uncomment if needed */}
+          {/* <div className="flex flex-col gap-1 sm:gap-2 *:text-[0.65rem] sm:*:text-xs">
+        <TextCapsule className="bg-blue-500">
+          <Icons.building className="size-2 sm:size-3" />
+          {comp.headquarters ?? "N/A"}
+        </TextCapsule>
 
-            <TextCapsule className="bg-orange-500">
-              <Icons.factory className="size-3" />
-              {comp.industry ?? "N/A"}
-            </TextCapsule>
-            <TextCapsule className={comp.is_active ? "bg-green-500" : ""}>
-              {comp.is_active ? "Active" : "Inactive"}
-            </TextCapsule>
-          </div> */}
+        <TextCapsule className="bg-orange-500">
+          <Icons.factory className="size-2 sm:size-3" />
+          {comp.industry ?? "N/A"}
+        </TextCapsule>
+        <TextCapsule className={comp.is_active ? "bg-green-500" : ""}>
+          {comp.is_active ? "Active" : "Inactive"}
+        </TextCapsule>
+      </div> */}
         </div>
       </div>
     </div>
