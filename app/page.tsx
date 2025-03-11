@@ -216,7 +216,7 @@ export default function Home() {
       <section className="w-11/12 flex items-center justify-center overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative lg:pt-40">
         <div className="absolute -left-[10%] -top-[40%] w-3/4 sm:w-1/2 lg:w-1/3 aspect-square rounded-full bg-gradient-to-tr from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129]" />
         <div className="absolute -right-[10%] top-[60%] w-3/4 sm:w-1/2 lg:w-1/3 aspect-square rounded-full bg-gradient-to-tr from-[#f5561c]/[0.129] to-[#bd1cc2]/[0.129]" />
-        <div className="flex flex-col gap-4 items-center justify-center pb-8">
+        <div className="flex flex-col gap-4 items-center justify-center pb-8 pt-8 px-8 lg:pt-0">
           <p className="text-xl sm:text-2xl md:text-4xl lg:text-6xl xl:text-7xl font-extrabold text-center max-w-3xl">
             <AnimatedText>{SiteConfig.siteDescription}</AnimatedText>
           </p>
