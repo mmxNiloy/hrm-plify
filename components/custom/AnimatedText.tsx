@@ -6,13 +6,12 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
-ScrollTrigger.normalizeScroll(true); // Fix mobile scroll issues
 
 export default function AnimatedText({
   children,
   duration = 0.2,
   stagger = 0.03,
-  scrollTriggerStart = "top 80%", // Adjusted for mobile
+  scrollTriggerStart = "top 80%",
 }: {
   children: string;
   duration?: number;
@@ -28,6 +27,32 @@ export default function AnimatedText({
         console.warn("No words found for animation");
         return;
       }
+
+      // Detect mobile for adjustments
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+      // ScrollTrigger animation (default)
+      gsap.fromTo(
+        words,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: isMobile ? duration * 1.5 : duration, // Slower on mobile for visibility
+          stagger: isMobile ? stagger * 1.5 : stagger, // More pronounced stagger
+          scrollTrigger: {
+            trigger: textRef.current,
+            start: isMobile ? "top 90%" : scrollTriggerStart, // Closer to viewport edge on mobile
+            end: "bottom 20%", // Allow animation to complete before leaving view
+            toggleActions: "play none none reset", // Reset on scroll out
+          },
+        }
+      );
+
+      // Optional: Fallback animation if ScrollTrigger isn’t desired on mobile
+      // Uncomment this block to use a simple entrance animation instead
+      /*
+    if (isMobile) {
       gsap.fromTo(
         words,
         { opacity: 0, y: 20 },
@@ -36,12 +61,11 @@ export default function AnimatedText({
           y: 0,
           duration: duration,
           stagger: stagger,
-          scrollTrigger: {
-            trigger: textRef.current,
-            start: scrollTriggerStart,
-          },
+          delay: 0.3, // Slight delay for entrance
         }
       );
+    }
+    */
     },
     { scope: textRef, dependencies: [duration, stagger, scrollTriggerStart] }
   );
@@ -51,8 +75,12 @@ export default function AnimatedText({
       {children.split(" ").map((word, index, arr) => (
         <span
           key={index}
-          className="word-span inline-block mr-1 opacity-0 translate-y-5 will-change-transform"
-          style={{ transform: "translateZ(0)" }} // Force GPU acceleration
+          className="word-span inline-block mr-1"
+          style={{
+            opacity: 0, // Set initial state inline
+            transform: "translateY(20px) translateZ(0)", // Match GSAP initial state
+            willChange: "opacity, transform", // Optimize for animation
+          }}
         >
           {word}
           {arr.length - 1 > index && <span> </span>}
