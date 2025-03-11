@@ -108,12 +108,13 @@ export const VisaNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] =
     {
       id: "action-view",
       header: "View",
-      cell: ({ row }) => (
-        <VisaNotificationReportGenerator
-          data={row.original}
-          company={row.original.user.usercompany?.companies!}
-        />
-      ),
+      cell: ({ row }) =>
+        row.original.user.usercompany?.companies ? (
+          <VisaNotificationReportGenerator
+            data={row.original}
+            company={row.original.user.usercompany?.companies}
+          />
+        ) : null,
     },
     {
       id: "action-email",

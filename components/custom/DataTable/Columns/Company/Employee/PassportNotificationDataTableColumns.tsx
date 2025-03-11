@@ -108,12 +108,13 @@ export const PassportNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[
     {
       id: "action-view",
       header: "View",
-      cell: ({ row }) => (
-        <PassportNotificationReportGenerator
-          data={row.original}
-          company={row.original.user.usercompany?.companies!}
-        />
-      ),
+      cell: ({ row }) =>
+        row.original.user.usercompany?.companies ? (
+          <PassportNotificationReportGenerator
+            data={row.original}
+            company={row.original.user.usercompany?.companies}
+          />
+        ) : null,
     },
     {
       id: "action-email",

@@ -99,12 +99,13 @@ export const DBSNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] = [
   {
     id: "action-view",
     header: "View",
-    cell: ({ row }) => (
-      <DBSNotificationReportGenerator
-        data={row.original}
-        company={row.original.user.usercompany?.companies!}
-      />
-    ),
+    cell: ({ row }) =>
+      row.original.user.usercompany?.companies ? (
+        <DBSNotificationReportGenerator
+          data={row.original}
+          company={row.original.user.usercompany?.companies!}
+        />
+      ) : null,
   },
   {
     id: "action-email",

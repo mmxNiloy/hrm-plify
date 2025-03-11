@@ -104,12 +104,13 @@ export const EUSSNotificationDataTableColumns: ColumnDef<IEmployeeDocument>[] =
     {
       id: "action-view",
       header: "View",
-      cell: ({ row }) => (
-        <EussNotificationReportGenerator
-          data={row.original}
-          company={row.original.user.usercompany?.companies!}
-        />
-      ),
+      cell: ({ row }) =>
+        row.original.user.usercompany?.companies ? (
+          <EussNotificationReportGenerator
+            data={row.original}
+            company={row.original.user.usercompany?.companies}
+          />
+        ) : null,
     },
     {
       id: "action-email",
