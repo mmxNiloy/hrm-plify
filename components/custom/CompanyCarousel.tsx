@@ -8,49 +8,52 @@ import { getFeaturedCompanies } from "@/app/(server)/actions/getFeaturedCompanie
 import AvatarNamePlaceholder from "./AvatarNamePlaceholder";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+
+interface ICompanyItem {
+  company_name: string;
+  logo?: string;
+  className?: string;
+}
 
 export default function CompanyCarousel() {
-  const [companies, setCompanies] = useState<ICompany[]>([]);
+  const [companies, setCompanies] = useState<ICompanyItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const hardcodedFeaturedCompanyNames = useMemo(
     () => [
-      { company_name: "East West Holdings" },
-      { company_name: "Revolo Consultancy International" },
-      { company_name: "Wycombe Green" },
-      { company_name: "RCI Chartered Accountants" },
-      { company_name: "Wisdom Property Developments" },
-      { company_name: "Silverwood Property Holdings" },
-      { company_name: "The Motor Group" },
-      { company_name: "Intelligent Property Assets" },
-      { company_name: "Construction for Generations" },
-      { company_name: "Bengal Spice" },
-      { company_name: "Tropical Holdings" },
-      { company_name: "Maidenhead Green" },
-      { company_name: "East West Services London" },
-      { company_name: "Magpie Nest Holdings" },
-      { company_name: "Bramingham Wood" },
-      { company_name: "B’s Online" },
-      { company_name: "Beckenham Ltd" },
-      { company_name: "Apollo Global Research & Consultancy" },
-      { company_name: "Next Ways" },
-      { company_name: "Abroad Next" },
-      { company_name: "Artemis Consultancy" },
-      { company_name: "Magpie Nest Finance" },
-      { company_name: "Earthbound Services" },
-      { company_name: "Winnersh Motors" },
-      { company_name: "Hampsted Ltd" },
-      { company_name: "Limbury Mead" },
-      { company_name: "Progress Tax and Accounts" },
-      { company_name: "3 Counties Holdings" },
-      { company_name: "SSD Networks" },
-      { company_name: "Revolution Tax Services" },
-      { company_name: "Burnham Green" },
-      { company_name: "Jay Raj" },
-      { company_name: "Baranda" },
-      { company_name: "The Old Bengal" },
-      { company_name: "St Brendans Residential Home" },
-      { company_name: "Savci" },
+      { company_name: "Jay Raj", logo: "/trust-company/1.svg" },
+      { company_name: "Baranda", logo: "/trust-company/2.svg" },
+      { company_name: "The Old Bengal", logo: "/trust-company/3.svg" },
+      {
+        company_name: "St Brendans Residential Home",
+        logo: "/trust-company/4.svg",
+      },
+      { company_name: "Savci", logo: "/trust-company/5.svg" },
+      {
+        company_name: "The Motor Group",
+        logo: "/trust-company/6.svg",
+        className: "bg-secondary-foreground",
+      },
+      {
+        company_name: "Maidenhead Spice",
+        logo: "/trust-company/7.svg",
+        className: "bg-secondary-foreground",
+      },
+      { company_name: "Intelligent Property", logo: "/trust-company/8.svg" },
+      { company_name: "Silverwood Property", logo: "/trust-company/9.svg" },
+      { company_name: "Magpie Nest Finance", logo: "/trust-company/10.svg" },
+      { company_name: "Ether Wroldwide", logo: "/trust-company/11.svg" },
+      { company_name: "Mangia E Bevi", logo: "/trust-company/12.svg" },
+      {
+        company_name: "Al Pomodoro",
+        logo: "/trust-company/13.svg",
+        className: "bg-secondary-foreground",
+      },
+      { company_name: "EFES BBQ", logo: "/trust-company/14.svg" },
+      { company_name: "Deshi Fashion", logo: "/trust-company/15.svg" },
+      { company_name: "AutoZone", logo: "/trust-company/16.png" },
     ],
     []
   );
@@ -64,7 +67,7 @@ export default function CompanyCarousel() {
     // else setCompanies(mCompanies.data);
 
     // Remove this line when the client comes to their senses.
-    setCompanies(hardcodedFeaturedCompanyNames as ICompany[]);
+    setCompanies(hardcodedFeaturedCompanyNames);
 
     setLoading(false);
   }, [hardcodedFeaturedCompanyNames]);
@@ -128,53 +131,41 @@ export default function CompanyCarousel() {
   );
 }
 
-function CompanyCard({ comp }: { comp: ICompany }) {
+function CompanyCard({ comp }: { comp: ICompanyItem }) {
   return (
-    <div className="w-full px-2 sm:px-4 py-2 rounded-md drop-shadow bg-white backdrop-blur flex gap-2 items-center justify-between">
-      <div className="flex gap-1 sm:gap-2">
-        <div className="flex flex-col gap-1 sm:gap-2 items-center justify-center">
+    <div
+      className={cn(
+        "w-full px-3 py-3 sm:px-5 sm:py-4 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-3 sm:gap-4"
+      )}
+    >
+      {/* Logo Container */}
+      <div className="relative flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16">
+        {comp.logo ? (
+          <Image
+            src={comp.logo}
+            alt={`${comp.company_name} logo`}
+            fill
+            className={cn("object-contain rounded-md", comp.className)}
+            sizes="(max-width: 640px) 48px, 64px" // Responsive sizes
+            priority={false} // Set to true if logos are above the fold
+            placeholder="blur" // Optional: Add a blurDataURL for better UX
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHfgLNAXqNkgAAAABJRU5ErkJggg=="
+          />
+        ) : (
           <AvatarPicker
             readOnly
             src={comp.logo}
             skeleton={<AvatarNamePlaceholder name={comp.company_name} />}
-            className="size-6 sm:size-8 p-0"
+            className={cn("size-6 sm:size-8 p-0", comp.className)}
           />
-          {/* Uncomment if needed */}
-          {/* <Link
-        href={`${comp.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
-          SiteConfig.siteName
-        }-${Date.now()}`}
-        target="_blank"
-        className="hover:underline"
-        passHref
-      >
-        <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
-          <Icons.externalLink />
-          Visit
-        </TextCapsule>
-      </Link> */}
-        </div>
-        <div className="flex flex-col gap-1 sm:gap-2 items-center justify-center">
-          <p className="font-bold text-sm sm:text-base md:text-lg line-clamp-1 text-ellipsis">
-            {comp.company_name}
-          </p>
+        )}
+      </div>
 
-          {/* Uncomment if needed */}
-          {/* <div className="flex flex-col gap-1 sm:gap-2 *:text-[0.65rem] sm:*:text-xs">
-        <TextCapsule className="bg-blue-500">
-          <Icons.building className="size-2 sm:size-3" />
-          {comp.headquarters ?? "N/A"}
-        </TextCapsule>
-
-        <TextCapsule className="bg-orange-500">
-          <Icons.factory className="size-2 sm:size-3" />
-          {comp.industry ?? "N/A"}
-        </TextCapsule>
-        <TextCapsule className={comp.is_active ? "bg-green-500" : ""}>
-          {comp.is_active ? "Active" : "Inactive"}
-        </TextCapsule>
-      </div> */}
-        </div>
+      {/* Company Name */}
+      <div className="flex-1 min-w-0">
+        <p className="font-semibold text-sm sm:text-base md:text-lg text-gray-800 line-clamp-1 text-ellipsis">
+          {comp.company_name}
+        </p>
       </div>
     </div>
   );
