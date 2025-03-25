@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 278.61">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: FONTSPRINGDEMO-ArtegraSansMediumRegular, 'FONTSPRING DEMO - Artegra Sans Medium';
+        font-size: 56.17px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        font-family: MontserratAlt1-ExtraBold, Montserrat-Alt1;
+        font-size: 103.06px;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <g>
+    <text class="cls-4" transform="translate(245.06 180.14)"><tspan x="0" y="0">MAGPIE NEST</tspan></text>
+    <g>
+      <path class="cls-2" d="m112.09,179.88c-15.71.63-63.03,0-63.03,0h-7.44v-96.9h9.09v88.02h55.37s28.71-.83,35.53-30.77c-.41.78-14,26.41-38.84,24.98-25.21-1.44-36.99,0-36.99,0,0,0,17.62-36.36,48.62-49.56,5.3-2.26,10.12-5.5,14.06-9.71,2.17-2.32,4.56-5.2,6.96-8.71,3.58-5.24,9.04-6.88,14-7.09,7.82-.33,15.41,3.18,20.16,9.39.36.47.68.93.97,1.41l9.09,3.93s-5.58,2.74-11.57,2.89c-8.26.21-12.6,11.98-12.6,11.98,0,0-2.89,4.55-7.85,21.9-4.96,17.36-9.3,23.56-9.3,23.56,0,0-10.53,14.05-26.24,14.67Z"/>
+      <path class="cls-2" d="m203.41,82.97v97.18h-73.71s7.6-2.54,12.55-9.16h51.45v-88.02h9.71Z"/>
+      <circle class="cls-3" cx="157.85" cy="100.02" r="2.17"/>
+      <path class="cls-2" d="m73.86,182.98s-15.5,30.37-13.64,38.43l4.96,8.47s5.79-30.17,15.29-45.25l-6.61-1.65Z"/>
+      <path class="cls-2" d="m70.27,182.15s-10.67,18.8-23.69,58.68c0,0-13.43-21.9-7.44-35.75,5.99-13.84,17.36-26.04,17.36-26.04l13.77,3.1Z"/>
+      <path class="cls-2" d="m32.74,78.42L123.45,19.39l86.99,59.03h-27.93c-22.19-14.65-48.02-31.82-59.06-38.72l-63.19,38.72h-27.52Z"/>
+    </g>
+    <text class="cls-1" transform="translate(648.09 257.15)"><tspan x="0" y="0">FINANCE</tspan></text>
+  </g>
+  <polygon class="cls-2" points="164.81 51.41 164.81 30.61 182.79 30.61 182.79 66.08 164.81 51.41"/>
+</svg>
