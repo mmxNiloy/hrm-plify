@@ -7,7 +7,7 @@ export const ButtonBlue = cn(
 );
 export const ButtonGradient = cn(
   ButtonBase,
-  "bg-site-gradient-lr drop-shadow-md hover:drop-shadow-lg text-white"
+  "from-[#bd1cc2] to-[#f5561c] bg-gradient-to-r drop-shadow-md hover:from-[#fa662c] hover:to-[#cd3cd2] text-white"
 );
 export const ButtonSuccess = cn(
   ButtonBase,
