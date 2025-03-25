@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { IShift } from "@/schema/RotaSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import React, { useCallback, useState } from "react";
 import ShiftManagementFormFragment from "../../Form/Fragment/Rota/ShiftManagementFormFragment";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -99,7 +99,7 @@ export default function ShiftManagementEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create a Shift
           </Button>
         )}

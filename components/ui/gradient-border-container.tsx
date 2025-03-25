@@ -10,7 +10,7 @@ const GradientBorderContainer = React.forwardRef<HTMLDivElement, Props>(
   ({ className, fromColor, toColor, ...props }, ref) => (
     <div
       className={cn(
-        `p-[0.125rem] from-[${fromColor ?? "#bd1cc2"}] to-[${
+        `p-0.5 from-[${fromColor ?? "#bd1cc2"}] to-[${
           toColor ?? "#f5561c"
         }] bg-gradient-to-r`,
         className

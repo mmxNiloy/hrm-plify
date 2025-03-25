@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import {
   DialogContentWidth,
   DialogTitleStyles,
@@ -115,7 +115,7 @@ export default function AttendanceBulkUpdateDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={ButtonBlue}>
+        <Button className={ButtonGradient}>
           <Icons.update /> Update Attendance
         </Button>
       </DialogTrigger>

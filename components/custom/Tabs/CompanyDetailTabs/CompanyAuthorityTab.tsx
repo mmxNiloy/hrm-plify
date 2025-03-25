@@ -1,16 +1,11 @@
-import {
-  ICompanyAuthorizedDetailsBase,
-  ICompanyDetails,
-} from "@/schema/CompanySchema";
+import { ICompanyDetails } from "@/schema/CompanySchema";
 import React from "react";
 import CompanyAuthorityEditDialog from "../../Dialog/Company/CompanyEditDialog/CompanyAuthorityEditDialog";
 import CompanyAuthorityFormFragment from "../../Form/Fragment/Company/CompanyAuthorityFormFragment";
 
 export default function CompanyAuthorityTab({
   data,
-  title = "Authorised Personnel",
   company_id,
-  id,
   readOnly,
 }: {
   data?: ICompanyDetails;
@@ -20,11 +15,11 @@ export default function CompanyAuthorityTab({
   readOnly?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full flex flex-row items-center justify-between">
+    <div className="flex flex-col gap-6">
+      {/* Authorised Personnel Section */}
+      <div className="p-4 md:p-6 lg:p-8 border rounded-md">
+        <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <p className="text-lg font-semibold">Authorised Personnel</p>
-
           {!readOnly && (
             <CompanyAuthorityEditDialog
               id={data?.company_authorised_details?.authorised_id}
@@ -42,10 +37,10 @@ export default function CompanyAuthorityTab({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full flex flex-row items-center justify-between">
+      {/* Key Contact Section */}
+      <div className="p-4 md:p-6 lg:p-8 border rounded-md">
+        <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <p className="text-lg font-semibold">Key Contact</p>
-
           {!readOnly && (
             <CompanyAuthorityEditDialog
               id={data?.company_key_contact?.key_contact_id}
@@ -63,10 +58,10 @@ export default function CompanyAuthorityTab({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full flex flex-row items-center justify-between">
+      {/* Level 1 User Section */}
+      <div className="p-4 md:p-6 lg:p-8 border rounded-md">
+        <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <p className="text-lg font-semibold">Level 1 User</p>
-
           {!readOnly && (
             <CompanyAuthorityEditDialog
               id={data?.company_l1_user?.l1_user_id}

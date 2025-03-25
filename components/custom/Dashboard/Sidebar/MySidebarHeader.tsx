@@ -45,13 +45,13 @@ export default function MySidebarHeader({
         <span className="size-10 flex relative rounded-full items-center justify-center">
           <Icons.chevronLeft
             className={cn(
-              "absolute transition-all",
+              "absolute transition-all text-[#bd1cc2]",
               open ? "rotate-0 scale-100" : "rotate-180 scale-0"
             )}
           />
           <Icons.chevronRight
             className={cn(
-              "transition-all",
+              "transition-all text-[#bd1cc2]",
               open ? "rotate-180 scale-0" : "rotate-0 scale-100"
             )}
           />
@@ -72,7 +72,7 @@ export default function MySidebarHeader({
         <Icons.user className={open || hover ? "" : "hidden"} />
         <p
           className={cn(
-            "flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
+            "text-blue-500 flex-grow font-semibold line-clamp-1 text-ellipsis max-w-44 2xl:max-w-80",
             open || hover ? "" : "hidden"
           )}
         >
@@ -81,13 +81,13 @@ export default function MySidebarHeader({
         <span className="size-10 flex relative rounded-full items-center justify-center">
           <Icons.chevronLeft
             className={cn(
-              "absolute transition-all",
+              "absolute transition-all text-[#bd1cc2]",
               open ? "rotate-0 scale-100" : "rotate-180 scale-0"
             )}
           />
           <Icons.chevronRight
             className={cn(
-              "transition-all",
+              "transition-all text-[#bd1cc2]",
               open ? "rotate-180 scale-0" : "rotate-0 scale-100"
             )}
           />

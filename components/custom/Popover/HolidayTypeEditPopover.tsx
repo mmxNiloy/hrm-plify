@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";

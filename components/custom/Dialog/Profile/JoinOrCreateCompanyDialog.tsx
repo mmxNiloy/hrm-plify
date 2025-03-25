@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { IUser } from "@/schema/UserSchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { getFullNameOfUser } from "@/utils/Misc";
 import React from "react";
@@ -29,7 +29,7 @@ export default function JoinOrCreateCompanyDialog({
   return (
     <Dialog defaultOpen={defaultOpen}>
       <DialogTrigger asChild className="sr-only">
-        <Button className={ButtonBlue}>Open Starter Dialog</Button>
+        <Button className={ButtonGradient}>Open Starter Dialog</Button>
       </DialogTrigger>
       <DialogContent className={DialogContentWidth}>
         <DialogHeader>

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -133,7 +133,7 @@ export default function EditJobPopover({
             </PopoverClose> */}
 
             <Button
-              className={cn(ButtonBlue, "size-8")}
+              className={cn(ButtonGradient, "size-8")}
               size={"icon"}
               type="submit"
               disabled={loading}

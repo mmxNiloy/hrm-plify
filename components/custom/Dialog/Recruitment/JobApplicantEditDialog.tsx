@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import JobListingFormFragment from "../../Form/Fragment/Recruitment/JobListingFormFragment";
 import JobApplicantFormFragment from "../../Form/Fragment/Recruitment/JobApplicantFormFragment";

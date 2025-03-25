@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useCallback, useState } from "react";
 import PersonalDetailForm from "../../Form/Company/Employee/PersonalDetailForm";
 import ServiceDetailForm from "../../Form/Company/Employee/ServiceDetailForm";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import {
   DialogContentWidth,
   DialogTitleStyles,
@@ -41,7 +41,7 @@ export default function EmployeeCreationDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className={ButtonBlue}>
+        <Button size="sm" className={ButtonGradient}>
           <Icons.plus /> Add an Employee
         </Button>
       </DialogTrigger>

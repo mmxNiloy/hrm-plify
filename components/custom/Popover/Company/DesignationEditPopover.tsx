@@ -11,7 +11,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { IDesignation } from "@/schema/DesignationSchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
@@ -176,7 +176,7 @@ export default function DesignationEditPopover({
             </div>
 
             <Button
-              className={cn(ButtonBlue, "w-full")}
+              className={cn(ButtonGradient, "w-full")}
               size={"icon"}
               type="submit"
               disabled={loading}

@@ -12,7 +12,7 @@ import Icons from "@/components/ui/icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IEmployeeLeaveStats } from "@/schema/StatsSchema";
 import { Button } from "@/components/ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { Label, Pie, PieChart } from "recharts";
 import {
   ChartConfig,
@@ -153,7 +153,7 @@ export default function EmployeeLeaveStatsCard() {
             disabled={loading}
             onClick={() => getData(limit)}
             size={"sm"}
-            className={ButtonBlue}
+            className={ButtonGradient}
           >
             <Icons.resend /> Refresh
           </Button>

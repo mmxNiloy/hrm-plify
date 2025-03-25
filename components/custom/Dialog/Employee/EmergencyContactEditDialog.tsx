@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useCallback, useState } from "react";
 import EmergencyContactFormFragment from "../../Form/Fragment/Employee/EmergencyContactFormFragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { IEmployeeEmergencyContact } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -98,7 +98,7 @@ export default function EmergencyContactEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.edit /> Add Emergency Contact
           </Button>
         )}

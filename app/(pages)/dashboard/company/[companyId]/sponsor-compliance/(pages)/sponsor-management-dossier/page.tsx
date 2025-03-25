@@ -13,7 +13,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { ButtonBase, ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonBase, ButtonGradient } from "@/styles/button.tailwind";
 
 export default async function SCSponsorManagementDossier({
   params,
@@ -116,7 +116,7 @@ export default async function SCSponsorManagementDossier({
             <p className="font-semibold text-white">{item.title}</p>
             {item.link ? (
               <Link passHref href={item.link} target="_blank">
-                <Button className={cn(ButtonBlue, "w-full")}>
+                <Button className={cn(ButtonGradient, "w-full")}>
                   Visit
                   <Icons.externalLink className="size-4 self-start" />
                 </Button>

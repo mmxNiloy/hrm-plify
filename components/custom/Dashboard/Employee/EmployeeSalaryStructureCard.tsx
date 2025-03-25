@@ -12,7 +12,7 @@ import Icons from "@/components/ui/icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IEmployeeLeaveStats } from "@/schema/StatsSchema";
 import { Button } from "@/components/ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { ISalaryStructure } from "@/schema/Payroll";
 import { getEmployeeSalaryStructure } from "@/app/(server)/actions/getEmployeeSalaryStructure";
 import { Input } from "@/components/ui/input";
@@ -86,7 +86,7 @@ export default function EmployeeSalaryStructureCard({
             disabled={loading}
             onClick={getData}
             size={"sm"}
-            className={ButtonBlue}
+            className={ButtonGradient}
           >
             <Icons.resend /> Refresh
           </Button>

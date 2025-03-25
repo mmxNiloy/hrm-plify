@@ -279,11 +279,11 @@ export function DataTable<TData, TValue>({
         </div>
       )}
       <div className="rounded-md border">
-        <Table>
-          <TableHeader className="bg-blue-500">
+        <Table className="rounded-t-md overflow-clip">
+          <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-blue-500"
+                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
                 {headerGroup.headers.map((header) => {
@@ -663,11 +663,11 @@ export function NetworkedDataTable<TData, TValue>({
         </div>
       )}
       <div className="rounded-md border">
-        <Table>
-          <TableHeader className="bg-blue-500">
+        <Table className="rounded-t-md overflow-clip">
+          <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-blue-500"
+                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
                 {headerGroup.headers.map((header) => {
@@ -923,11 +923,11 @@ export function DataTableSkeleton<TValue>({
         </div>
       )}
       <div className="rounded-md border">
-        <Table>
-          <TableHeader className="bg-blue-500">
+        <Table className="rounded-t-md overflow-clip">
+          <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-blue-500"
+                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
                 {headerGroup.headers.map((header) => {
@@ -1244,11 +1244,11 @@ export function StaticDataTable<TData, TValue>({
         </div>
       )}
       <div className="rounded-md border">
-        <Table>
-          <TableHeader className="bg-blue-500">
+        <Table className="rounded-t-md overflow-clip">
+          <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-blue-500"
+                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
                 {headerGroup.headers.map((header) => {

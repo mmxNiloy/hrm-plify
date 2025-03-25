@@ -5,7 +5,7 @@ import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import React, { useCallback, useRef, useState } from "react";
 import { gsap } from "gsap";
@@ -204,7 +204,7 @@ export default function BookADemoPage() {
               </div> */}
 
           <div className="submit-button col-span-full flex items-start opacity-0 scale-90">
-            <Button className={ButtonBlue} disabled={loading}>
+            <Button className={ButtonGradient} disabled={loading}>
               {loading ? (
                 <Icons.spinner className="animate-spin" />
               ) : (

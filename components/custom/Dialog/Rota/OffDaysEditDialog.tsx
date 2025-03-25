@@ -13,7 +13,7 @@ import {
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { IOffDays, IOffDaysBase, IShift } from "@/schema/RotaSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
 import OffDaysFormFragment from "../../Form/Fragment/Rota/OffDaysFormFragment";
@@ -124,7 +124,7 @@ export default function OffDaysEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create Off Days&apos; Schedule
           </Button>
         )}

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import Icons from "@/components/ui/icons";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { FilePicker } from "@/components/ui/file-picker";
 
 interface Props extends IFormFragmentProps<IEmployeeEducationalDetail> {
@@ -125,13 +125,13 @@ export default function EducationDetailsFormFragment({
             <Button
               id="transcript-download"
               disabled={!data || !data.transcript_link}
-              className={cn(ButtonBlue, "w-full")}
+              className={cn(ButtonGradient, "w-full")}
             >
               <Icons.download /> View Transcript
             </Button>
           </Link>
         ) : (
-          <Button disabled className={cn(ButtonBlue, "w-full")}>
+          <Button disabled className={cn(ButtonGradient, "w-full")}>
             <Icons.info /> No file attached
           </Button>
         )}
@@ -162,13 +162,13 @@ export default function EducationDetailsFormFragment({
             <Button
               id="certificate-download"
               disabled={!data || !data.certificate_link}
-              className={cn(ButtonBlue, "w-full")}
+              className={cn(ButtonGradient, "w-full")}
             >
               <Icons.download /> View Certificate
             </Button>
           </Link>
         ) : (
-          <Button disabled className={cn(ButtonBlue, "w-full")}>
+          <Button disabled className={cn(ButtonGradient, "w-full")}>
             <Icons.info /> No file attached
           </Button>
         )}

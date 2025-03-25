@@ -13,7 +13,7 @@ import {
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ILeaveRule, ILeaveType } from "@/schema/LeaveSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import React, { useCallback, useState } from "react";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { useRouter } from "next/navigation";
@@ -110,7 +110,7 @@ export default function LeaveRuleEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create a Leave Rule
           </Button>
         )}

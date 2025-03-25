@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { LucideIcon } from "lucide-react";
 import React from "react";
 
@@ -17,7 +17,7 @@ const AnimatedTrigger = React.forwardRef<HTMLButtonElement, Props>(
       disabled={disabled}
       ref={ref}
       className={cn(
-        ButtonBlue,
+        ButtonGradient,
         "group drop-shadow-lg data-[state=open]:from-red-500 data-[state=open]:to-fuchsia-400 data-[state=open]:bg-gradient-to-b transition-colors",
         className
       )}

@@ -18,7 +18,7 @@ import {
   IOffDaysBase,
   IShift,
 } from "@/schema/RotaSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
 import OffDaysFormFragment from "../../Form/Fragment/Rota/OffDaysFormFragment";
@@ -126,7 +126,7 @@ export default function LatePolicyEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create Late Policy
           </Button>
         )}

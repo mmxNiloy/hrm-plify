@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
 import { FilePicker } from "@/components/ui/file-picker";
@@ -97,12 +97,12 @@ export default function DbsFormFragment({
         {readOnly ? (
           data?.dbs_doc ? (
             <Link passHref href={data.dbs_doc} target="_blank">
-              <Button className={cn(ButtonBlue, "w-full")}>
+              <Button className={cn(ButtonGradient, "w-full")}>
                 <Icons.externalLink /> View Document
               </Button>
             </Link>
           ) : (
-            <Button className={ButtonBlue} disabled>
+            <Button className={ButtonGradient} disabled>
               <Icons.externalLink /> View Document
             </Button>
           )

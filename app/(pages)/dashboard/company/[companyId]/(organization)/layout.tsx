@@ -1,7 +1,5 @@
 "use server";
 import React from "react";
-import { redirect } from "next/navigation";
-import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { LayoutProps } from "@/utils/Types";

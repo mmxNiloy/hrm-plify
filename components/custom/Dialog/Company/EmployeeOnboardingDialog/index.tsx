@@ -14,7 +14,7 @@ import Icons from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import {
   DialogContentWidth,
   DialogTitleStyles,
@@ -128,7 +128,7 @@ export default function EmployeeOnboardingDialog({
             <Icons.userPlus />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Add an Employee
           </Button>
         )}

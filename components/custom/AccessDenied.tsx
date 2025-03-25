@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "../ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
 import Icons from "../ui/icons";
 import Image from "next/image";
@@ -22,7 +22,7 @@ export default function AccessDenied() {
         </p>
         <p className="text-xl">Please refer to the system administrator.</p>
         <Link href={"."} passHref>
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.chevronLeft /> Go Back
           </Button>
         </Link>

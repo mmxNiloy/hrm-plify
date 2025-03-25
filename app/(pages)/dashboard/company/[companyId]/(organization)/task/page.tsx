@@ -4,7 +4,7 @@ import { CompanyByIDPageProps } from "../../PageProps";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { Button } from "@/components/ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Icons from "@/components/ui/icons";
 import TasksDataTable from "@/components/custom/DataTable/TasksDataTable";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
@@ -39,7 +39,7 @@ export default async function CompanyTasksDashboardPage({
 
         <div className="flex gap-4 items-center">
           {/* <TaskSearch /> */}
-          <Button disabled className={ButtonBlue}>
+          <Button disabled className={ButtonGradient}>
             <Icons.plus /> Add a Task (WIP)
           </Button>
         </div>
