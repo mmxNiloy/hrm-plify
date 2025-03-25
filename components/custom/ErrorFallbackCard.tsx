@@ -3,7 +3,7 @@ import React from "react";
 import { Card, CardContent } from "../ui/card";
 import Icons from "../ui/icons";
 import { Button } from "../ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SiteConfig from "@/utils/SiteConfig";
@@ -33,7 +33,7 @@ export default function ErrorFallbackCard({ error }: { error?: Error }) {
           href={`mailto:dev.niloysarkar@gmail.com?subject=${mailSubject}&body=${mailBody}`}
           passHref
         >
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.bug />
             Report a Bug
           </Button>

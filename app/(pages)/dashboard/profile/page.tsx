@@ -12,7 +12,7 @@ import CameraButton from "@/components/custom/Profile/CameraButton";
 import ProfileEditButton from "@/components/custom/Profile/ProfileEditButton";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -235,7 +235,7 @@ export default async function ProfilePage() {
                         </div>
                       ) : (
                         <Link href={"/dashboard"} passHref>
-                          <Button className={ButtonBlue}>
+                          <Button className={ButtonGradient}>
                             Complete now
                             <Icons.chevronRight />
                           </Button>
@@ -311,7 +311,7 @@ export default async function ProfilePage() {
                 </div>
 
                 <Link className="w-full" passHref href={"/dashboard"}>
-                  <Button className={cn(ButtonBlue, "w-full")}>
+                  <Button className={cn(ButtonGradient, "w-full")}>
                     View details
                     <Icons.chevronRight />
                   </Button>

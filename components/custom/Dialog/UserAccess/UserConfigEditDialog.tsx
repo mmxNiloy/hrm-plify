@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
@@ -104,7 +104,7 @@ export default function UserConfigEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Add User Configuration
           </Button>
         )}

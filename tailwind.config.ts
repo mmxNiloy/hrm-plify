@@ -73,6 +73,15 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "site-gradient-lmr":
+          "linear-gradient(90deg, #bd1cc2 0%, #f54a51 50%, #c120b6 100%);",
+        "site-gradient-lmr-light":
+          "linear-gradient(90deg, #cd3cd2 0%, #fa5a61 50%, #d130c6 100%);",
+        "site-gradient-lr": "linear-gradient(90deg, #bd1cc2 0%, #f5561c 100%);",
+        "site-gradient-lr-light":
+          "linear-gradient(90deg, #fa662c 0%, #cd3cd2 100%);",
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],

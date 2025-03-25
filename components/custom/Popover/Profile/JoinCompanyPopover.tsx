@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -79,7 +79,7 @@ export default function JoinCompanyPopover({ user }: { user: IUser }) {
             </div>
 
             <Button
-              className={cn(ButtonBlue, "w-full")}
+              className={cn(ButtonGradient, "w-full")}
               size={"icon"}
               type="submit"
               disabled={loading}

@@ -13,7 +13,7 @@ import {
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { IDutyRoster, IDutyRosterBase, IShift } from "@/schema/RotaSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
 import DutyRosterFormFragment from "../../Form/Fragment/Rota/DutyRosterFormFragment";
@@ -126,7 +126,7 @@ export default function DutyRosterEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create a Duty Roster
           </Button>
         )}

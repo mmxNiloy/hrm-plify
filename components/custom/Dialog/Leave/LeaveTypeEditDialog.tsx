@@ -13,7 +13,7 @@ import {
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ILeaveType } from "@/schema/LeaveSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import React, { useCallback, useState } from "react";
 import LeaveTypeFormFragment from "../../Form/Fragment/Leave/LeaveTypeFormFragment";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
@@ -98,7 +98,7 @@ export default function LeaveTypeEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create a Leave Type
           </Button>
         )}

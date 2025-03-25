@@ -21,7 +21,7 @@ import {
 import { StaticDataTable } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
 import React from "react";
 

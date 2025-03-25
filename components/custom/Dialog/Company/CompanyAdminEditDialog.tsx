@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ICompanyUser } from "@/schema/UserSchema";
 import React, { useCallback, useState } from "react";
 import CompanyAdminEditDialogFormFragment from "../../Form/Fragment/Company/CompanyAdminEditDialogFormFragment";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
@@ -103,7 +103,7 @@ export default function CompanyAdminEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.userPlus /> Asssign a Company Admin
           </Button>
         )}

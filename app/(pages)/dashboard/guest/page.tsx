@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/schema/UserSchema";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import SiteConfig from "@/utils/SiteConfig";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -45,7 +45,7 @@ export default async function GuestDashboard() {
 
           <span className="flex-grow"></span>
 
-          <Button className={cn(ButtonBlue, "w-full")}>
+          <Button className={cn(ButtonGradient, "w-full")}>
             <Icons.company /> Create a company
           </Button>
         </div>

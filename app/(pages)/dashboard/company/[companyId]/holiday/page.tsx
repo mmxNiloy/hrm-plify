@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import Icons from "@/components/ui/icons";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
@@ -90,7 +90,7 @@ export default async function HolidayDashboardPage({
 
         <CardFooter>
           <Link href="./holiday/all" passHref>
-            <Button className={ButtonBlue}>
+            <Button className={ButtonGradient}>
               <Icons.visible />
               View all
             </Button>
@@ -112,7 +112,7 @@ export default async function HolidayDashboardPage({
 
         <CardFooter>
           <Link href="./holiday/type" passHref>
-            <Button className={ButtonBlue}>
+            <Button className={ButtonGradient}>
               <Icons.visible />
               View all
             </Button>

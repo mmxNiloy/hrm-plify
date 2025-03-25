@@ -15,7 +15,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { LeaveRequestDataTableColumns } from "../../DataTable/Columns/Leave/LeaveRequestDataTableColumns";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import Icons from "@/components/ui/icons";
 
 export default function LeaveRequestsCard({

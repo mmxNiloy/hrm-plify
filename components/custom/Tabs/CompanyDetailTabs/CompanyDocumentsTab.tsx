@@ -14,18 +14,22 @@ export default function CompanyDocumentsTab({
   readOnly?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-4 p-8 border rounded-md">
-      <div className="flex felx-row items-center justify-between">
+    <div className="flex flex-col gap-4 p-4 md:p-6 lg:p-8 border rounded-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <p className="text-lg font-semibold">Company Documents</p>
         {!readOnly && (
           <CompanyDocumentEditDialog company_id={company_id} type="create" />
         )}
       </div>
 
-      <DataTable
-        data={data?.map((item) => ({ ...item, updateAccess: !readOnly })) ?? []}
-        columns={CompanyDocumentDataTableColumns}
-      />
+      <div className="overflow-x-auto">
+        <DataTable
+          data={
+            data?.map((item) => ({ ...item, updateAccess: !readOnly })) ?? []
+          }
+          columns={CompanyDocumentDataTableColumns}
+        />
+      </div>
     </div>
   );
 }

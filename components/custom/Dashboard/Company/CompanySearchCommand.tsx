@@ -14,7 +14,7 @@ import {
 import Icons from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { ICompany } from "@/schema/CompanySchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { stringToColor } from "@/utils/Misc";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -43,6 +43,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SiteConfig from "@/utils/SiteConfig";
+import { shortenText } from "@/utils/Text";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -233,7 +234,10 @@ export default function CompanySearchCommand() {
                   passHref
                   key={`company-id-${comp.company_id}`}
                 >
-                  <CommandItem className="cursor-pointer">
+                  <CommandItem
+                    className="cursor-pointer"
+                    title={comp.company_name}
+                  >
                     <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
                       <div className="flex gap-4">
                         <div className="flex flex-col gap-4 items-center justify-center">
@@ -262,19 +266,19 @@ export default function CompanySearchCommand() {
                           </Link>
                         </div>
                         <div className="flex flex-col gap-2">
-                          <p className="font-semibold text-xl">
-                            {comp.company_name}
+                          <p className="font-semibold text-lg">
+                            {shortenText(comp.company_name, 18)}
                           </p>
 
                           <div className="flex flex-col gap-2 *:text-xs">
-                            <TextCapsule className="bg-blue-500">
+                            <TextCapsule className="bg-blue-600">
                               <Icons.building className="size-3" />
-                              {comp.headquarters}
+                              {shortenText(comp.headquarters)}
                             </TextCapsule>
 
-                            <TextCapsule className="bg-orange-500">
+                            <TextCapsule className="bg-purple-600">
                               <Icons.factory className="size-3" />
-                              {comp.industry}
+                              {shortenText(comp.industry)}
                             </TextCapsule>
                             <TextCapsule
                               className={comp.is_active ? "bg-green-500" : ""}
@@ -285,7 +289,7 @@ export default function CompanySearchCommand() {
                         </div>
                       </div>
 
-                      {/* <Button className={ButtonBlue}>
+                      {/* <Button className={ButtonGradient}>
                       Select
                       <Icons.chevronRight />
                     </Button> */}

@@ -9,7 +9,7 @@ import Icons from "@/components/ui/icons";
 import React from "react";
 import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { toYYYYMMDD } from "@/utils/Misc";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { Textarea } from "@/components/ui/textarea";
 import { FilePicker } from "@/components/ui/file-picker";
 
@@ -137,13 +137,13 @@ export default function PassportDetailsFormFragment({
             target="_blank"
             passHref
           >
-            <Button className={cn(ButtonBlue, "w-full")}>
+            <Button className={cn(ButtonGradient, "w-full")}>
               <Icons.externalLink />
               View Document
             </Button>
           </Link>
         ) : (
-          <Button disabled className={cn(ButtonBlue, "w-full")}>
+          <Button disabled className={cn(ButtonGradient, "w-full")}>
             <Icons.externalLink />
             View Document
           </Button>

@@ -18,7 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { IEmployeeNid } from "@/schema/EmployeeSchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { countryNames, nationalities, toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
@@ -151,12 +151,12 @@ export default function NidFormFragment({
         {readOnly ? (
           data?.document ? (
             <Link passHref href={data.document} target="_blank">
-              <Button className={cn(ButtonBlue, "w-full")}>
+              <Button className={cn(ButtonGradient, "w-full")}>
                 <Icons.externalLink /> View Document
               </Button>
             </Link>
           ) : (
-            <Button className={ButtonBlue} disabled>
+            <Button className={ButtonGradient} disabled>
               <Icons.externalLink /> View Document
             </Button>
           )

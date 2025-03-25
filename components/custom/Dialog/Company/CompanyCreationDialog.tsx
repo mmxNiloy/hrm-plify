@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import {
   ButtonBase,
-  ButtonBlue,
+  ButtonGradient,
   ButtonSuccess,
 } from "@/styles/button.tailwind";
 import {
@@ -130,7 +130,7 @@ export default function CompanyCreationDialog({
       <DialogTrigger asChild>
         <Button
           size={asClient ? "default" : "sm"}
-          className={cn(ButtonBlue, asClient ? "w-full" : "")}
+          className={cn(ButtonGradient, asClient ? "w-full" : "")}
         >
           {Icon ? <>{Icon}</> : <Icons.plus />} Create a Company
         </Button>

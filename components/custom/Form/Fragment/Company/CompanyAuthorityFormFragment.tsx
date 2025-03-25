@@ -7,12 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import {
-  ICompanyAuthorisedDetails,
-  ICompanyAuthorizedDetailsBase,
-} from "@/schema/CompanySchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
-import { FileSizeWarning, RequiredAsterisk } from "@/styles/label.tailwind";
+import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
+import { ButtonGradient } from "@/styles/button.tailwind";
+import { FileSizeWarning } from "@/styles/label.tailwind";
 import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
 import React from "react";
@@ -30,16 +27,19 @@ export default function CompanyAuthorityFormFragment({
   title,
 }: Props) {
   return (
-    <>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
       {!readOnly && (
-        <div className="col-span-full flex gap-2 items-center">
+        <div className="col-span-full flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-4">
           <Checkbox
             defaultChecked={data?.is_same_as_key_contact}
             disabled={readOnly || disabled}
             id="is-same-as-key-contact"
             name="is_same_as_key_contact"
           />
-          <Label htmlFor="is-same-as-key-contact">
+          <Label
+            htmlFor="is-same-as-key-contact"
+            className="text-sm md:text-base"
+          >
             Are{" "}
             {title === "Authorised Personnel"
               ? "Key Contact and L1 User"
@@ -69,7 +69,7 @@ export default function CompanyAuthorityFormFragment({
           defaultValue={data?.fname ?? ""}
           placeholder="First Name"
           name="fname"
-          id="fist-name-input"
+          id="first-name-input"
         />
       </div>
 
@@ -170,7 +170,6 @@ export default function CompanyAuthorityFormFragment({
         >
           Document
         </Label>
-
         {readOnly ? (
           <Link
             key={`authority-doc-link-${data?.doc_link}`}
@@ -179,7 +178,7 @@ export default function CompanyAuthorityFormFragment({
             target={data?.doc_link ? "_blank" : "_self"}
             passHref
           >
-            <Button className={cn(ButtonBlue, "w-full")}>
+            <Button className={cn(ButtonGradient, "w-full")}>
               <Icons.document /> Document
             </Button>
           </Link>
@@ -214,6 +213,6 @@ export default function CompanyAuthorityFormFragment({
           placeholder="Do you have a history of criminal conviction, bankruptcy, or disqualification?"
         />
       </div>
-    </>
+    </div>
   );
 }

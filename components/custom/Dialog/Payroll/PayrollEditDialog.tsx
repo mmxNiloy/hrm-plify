@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ButtonBlue, ButtonSuccess } from "@/styles/button.tailwind";
+import { ButtonGradient, ButtonSuccess } from "@/styles/button.tailwind";
 import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
@@ -188,7 +188,7 @@ export default function PayrollEditDialog({
             <Icons.printer />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.printer /> Create Payroll
           </Button>
         )}

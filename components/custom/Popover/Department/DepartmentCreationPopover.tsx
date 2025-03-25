@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -103,7 +103,7 @@ export default function DepartmentCreationPopover({
               <Input name="dpt_name" placeholder="Department Name" required />
             </div>
 
-            <Button className={ButtonBlue} type="submit" disabled={loading}>
+            <Button className={ButtonGradient} type="submit" disabled={loading}>
               <Icons.check />
               Submit
             </Button>

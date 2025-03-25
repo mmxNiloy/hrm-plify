@@ -12,7 +12,7 @@ import SalaryStructureEditDialog from "@/components/custom/Dialog/Payroll/Salary
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import Icons from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import TextCapsule from "@/components/custom/TextCapsule";
 
 export const PayrollDataTableColumns: ColumnDef<IPayroll>[] = [

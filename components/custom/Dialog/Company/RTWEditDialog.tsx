@@ -13,7 +13,7 @@ import {
 import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  ButtonBlue,
+  ButtonGradient,
   ButtonSuccess,
   ButtonWarn,
 } from "@/styles/button.tailwind";
@@ -424,7 +424,7 @@ export default function RTWEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Add a RTW check
           </Button>
         )}
@@ -495,7 +495,10 @@ export default function RTWEditDialog({
               type="button"
               size={"sm"}
               disabled={loading || currentTabIndex > 3}
-              className={cn(ButtonBlue, currentTabIndex > 3 ? "hidden" : "")}
+              className={cn(
+                ButtonGradient,
+                currentTabIndex > 3 ? "hidden" : ""
+              )}
             >
               Next
               <Icons.chevronRight />

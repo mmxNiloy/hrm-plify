@@ -14,7 +14,7 @@ import Icons from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ICompanyDoc } from "@/schema/CompanySchema";
 import {
-  ButtonBlue,
+  ButtonGradient,
   ButtonSuccess,
   ButtonWarn,
 } from "@/styles/button.tailwind";
@@ -120,7 +120,7 @@ export default function CompanyDocumentEditDialog({
             <Icons.edit />
           </Button>
         ) : (
-          <Button className={ButtonBlue}>
+          <Button className={ButtonGradient}>
             <Icons.plus /> Create a Document
           </Button>
         )}

@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RequiredAsterisk } from "@/styles/label.tailwind";
 import {
-  ButtonBlue,
+  ButtonGradient,
   ButtonSuccess,
   ButtonWarn,
 } from "@/styles/button.tailwind";
@@ -271,7 +271,7 @@ export default function AttendanceAlertCard() {
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button type="button" className={ButtonBlue}>
+              <Button type="button" className={ButtonGradient}>
                 Submit
               </Button>
             </AlertDialogTrigger>

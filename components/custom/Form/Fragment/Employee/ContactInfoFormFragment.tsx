@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { IEmployeeContactInfo } from "@/schema/EmployeeSchema";
-import { ButtonBlue } from "@/styles/button.tailwind";
+import { ButtonGradient } from "@/styles/button.tailwind";
 import { countryNames } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import Link from "next/link";
@@ -101,12 +101,12 @@ export default function ContactInfoFormFragment({
           />
         ) : data?.proof_address_doc_link ? (
           <Link passHref href={data.proof_address_doc_link} target="_blank">
-            <Button className={cn(ButtonBlue, "w-full")}>
+            <Button className={cn(ButtonGradient, "w-full")}>
               <Icons.externalLink /> View Document
             </Button>
           </Link>
         ) : (
-          <Button className={ButtonBlue} disabled>
+          <Button className={ButtonGradient} disabled>
             <Icons.externalLink /> View Document
           </Button>
         )}

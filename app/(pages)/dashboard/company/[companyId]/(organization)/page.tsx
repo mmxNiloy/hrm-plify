@@ -1,13 +1,10 @@
 "use server";
-import { ICompanyDetails } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import React from "react";
 import { CompanyByIDPageProps } from "../PageProps";
 import { redirect } from "next/navigation";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
-import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
@@ -18,10 +15,11 @@ import TextCapsule from "@/components/custom/TextCapsule";
 import Icons from "@/components/ui/icons";
 import Link from "next/link";
 import { toHTTPSString } from "@/utils/Misc";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import CompanyAuthorityTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyAuthorityTab";
 import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyDocumentsTab";
 import SiteConfig from "@/utils/SiteConfig";
+import { shortenText } from "@/utils/Text";
 
 interface Props extends CompanyByIDPageProps {
   readOnly?: boolean;
@@ -54,9 +52,6 @@ export default async function CompanyByIDPage({
   ) as TPermission[];
 
   const readAccess = mPermissions.find((item) => item === "cmp_mgmt_read");
-  const writeAccess = mPermissions.find((item) => item === "cmp_mgmt_create");
-  const updateAccess = mPermissions.find((item) => item === "cmp_mgmt_update");
-
   if (!readAccess) {
     return <AccessDenied />;
   }
@@ -69,7 +64,6 @@ export default async function CompanyByIDPage({
 
   var company = await getCompanyDetails(companyId);
 
-  // Guard unauthorized access
   if (
     user.user_roles?.roles.role_name !== "Super Admin" &&
     user.user_roles?.roles.role_name !== "Admin" &&
@@ -82,102 +76,102 @@ export default async function CompanyByIDPage({
 
   if (company.error) {
     return (
-      <main className="container flex flex-col gap-2">
+      <main className="container mx-auto flex flex-col gap-4 p-4">
         <p className="text-xl font-semibold">Company Details</p>
-
         <ErrorFallbackCard error={company.error} />
       </main>
     );
   }
 
-  // console.log("Company Details > Company Doc Db", company.data.company_docs_db);
-
   return (
-    <main className="container flex flex-col gap-2">
-      {/* <p className="text-xl font-semibold">Company Details</p> */}
-
-      {/* <MyBreadcrumbs
-        company={company.data}
-        user={user}
-        parent={parent}
-        title={title}
-      /> */}
-
-      <div className="flex flex-row gap-2">
+    <main className="container mx-auto flex flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-7xl">
+      <div className="flex flex-col md:flex-row gap-6 md:gap-8">
         <AvatarPicker
           readOnly
           src={company.data.logo}
           skeleton={<AvatarNamePlaceholder name={company.data.company_name} />}
-          className="size-32 p-0 ring-2"
+          className="size-24 md:size-32 p-0 ring-2 shrink-0"
         />
 
-        <div className="grid grid-cols-2 gap-2">
-          <p className="text-2xl font-bold col-span-full">
-            {company.data.company_name}
-          </p>
-          <TextCapsule className="bg-amber-500">
-            <Icons.factory /> {company.data.industry ?? "Unspecified"}
-          </TextCapsule>
+        <div className="flex-1">
+          <p className="text-2xl font-bold mb-4">{company.data.company_name}</p>
+          <div className="flex flex-wrap gap-4">
+            <TextCapsule className="bg-amber-500" title={company.data.industry}>
+              <Icons.factory />{" "}
+              {shortenText(company.data.industry ?? "Unspecified", 32)}
+            </TextCapsule>
 
-          <TextCapsule className="bg-emerald-500">
-            <Icons.mapPin /> {company.data.headquarters ?? "Unspecified"}
-          </TextCapsule>
-
-          <Link
-            target="_blank"
-            href={
-              company.data.contact_number
-                ? `tel:${company.data.contact_number}`
-                : "#"
-            }
-            passHref
-            className="hover:underline"
-          >
             <TextCapsule
-              className="bg-fuchsia-500"
-              title={company.data.contact_number}
+              className="bg-emerald-500"
+              title={company.data.headquarters}
             >
-              <Icons.phone /> {company.data.contact_number ?? "Unspecified"}
+              <Icons.mapPin />{" "}
+              {shortenText(company.data.headquarters ?? "Unspecified", 48)}
             </TextCapsule>
-          </Link>
 
-          <Link
-            target="_blank"
-            href={company.data.email ? `mailto:${company.data.email}` : "#"}
-            passHref
-            className="hover:underline"
-          >
-            <TextCapsule className="bg-rose-500" title={company.data.email}>
-              <Icons.mail /> {company.data.email ?? "Unspecified"}
-            </TextCapsule>
-          </Link>
+            <Link
+              target="_blank"
+              href={
+                company.data.contact_number
+                  ? `tel:${company.data.contact_number}`
+                  : "#"
+              }
+              passHref
+              className="hover:underline"
+            >
+              <TextCapsule
+                className="bg-fuchsia-500"
+                title={company.data.contact_number}
+              >
+                <Icons.phone />{" "}
+                {shortenText(company.data.contact_number ?? "Unspecified")}
+              </TextCapsule>
+            </Link>
 
-          <Link
-            target="_blank"
-            passHref
-            className="hover:underline"
-            href={toHTTPSString(company.data.website)}
-          >
-            <TextCapsule className="bg-blue-500" title={company.data.website}>
-              <Icons.externalLink />{" "}
-              {company.data.website ? "Visit Website" : "Unspecified"}
-            </TextCapsule>
-          </Link>
+            <Link
+              target="_blank"
+              href={company.data.email ? `mailto:${company.data.email}` : "#"}
+              passHref
+              className="hover:underline"
+            >
+              <TextCapsule className="bg-rose-500" title={company.data.email}>
+                <Icons.mail />{" "}
+                {shortenText(company.data.email ?? "Unspecified")}
+              </TextCapsule>
+            </Link>
+
+            <Link
+              target="_blank"
+              passHref
+              className="hover:underline sm:col-span-2"
+              href={toHTTPSString(company.data.website)}
+            >
+              <TextCapsule className="bg-blue-500" title={company.data.website}>
+                <Icons.externalLink />{" "}
+                {company.data.website ? "Visit Website" : "Unspecified"}
+              </TextCapsule>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Company Authorized personnel and documents tabs */}
-      <Tabs defaultValue="auth">
-        <TabsList className="w-full">
-          <TabsTrigger value="auth">
-            <Icons.adminUser /> Authorized Personnel
+      <Tabs defaultValue="auth" className="w-full">
+        <TabsList className="w-full h-full flex flex-wrap justify-center gap-2 md:gap-4 bg-gray-100 p-2 rounded-lg">
+          <TabsTrigger
+            value="auth"
+            className="flex-1 md:flex-none text-center min-w-[150px]"
+          >
+            <Icons.adminUser className="mr-2" /> Authorized Personnel
           </TabsTrigger>
-          <TabsTrigger value="docs">
-            <Icons.files /> Company Documents
+          <TabsTrigger
+            value="docs"
+            className="flex-1 md:flex-none text-center min-w-[150px]"
+          >
+            <Icons.files className="mr-2" /> Company Documents
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="auth">
+        <TabsContent value="auth" className="mt-4">
           <CompanyAuthorityTab
             readOnly
             data={company.data}
@@ -185,7 +179,7 @@ export default async function CompanyByIDPage({
           />
         </TabsContent>
 
-        <TabsContent value="docs">
+        <TabsContent value="docs" className="mt-4">
           <CompanyDocumentsTab
             readOnly
             data={company.data.company_docs_db}
