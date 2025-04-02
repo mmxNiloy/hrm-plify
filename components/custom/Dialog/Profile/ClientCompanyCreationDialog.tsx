@@ -148,7 +148,7 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
             <Input readOnly defaultValue={user.user_id} name="user_id" />
           </div>
           {/* Company Creation form */}
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
               <CompanyProfileFormFragment asClient disabled={loading} />
             </div>

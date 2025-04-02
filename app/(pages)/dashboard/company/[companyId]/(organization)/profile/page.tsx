@@ -1,4 +1,5 @@
 "use server";
+
 import { ICompanyDetails } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
@@ -64,27 +65,26 @@ export default async function CompanyByIDPage({
 
   if (company.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Company Details</p>
-
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Company Details
+        </p>
         <ErrorFallbackCard error={company.error} />
       </main>
     );
   }
 
-  // console.log("Company Details > Company Doc Db", company.data.company_docs_db);
-
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Company Details</p>
-
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Company Details
+      </p>
       <MyBreadcrumbs
         company={company.data}
         user={user}
         parent={"Company Dashboard"}
         title={"Organization Profile"}
       />
-
       <CompanyDetailTabs readOnly={!updateAccess} company={company.data} />
     </main>
   );

@@ -18,7 +18,13 @@ import AnimatedTrigger from "../AnimatedTrigger";
 import { WIPToastOptions } from "@/utils/Misc";
 import { IUser } from "@/schema/UserSchema";
 
-export default function JoinCompanyPopover({ user }: { user: IUser }) {
+export default function JoinCompanyPopover({
+  user,
+  className,
+}: {
+  user: IUser;
+  className?: string;
+}) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -44,8 +50,11 @@ export default function JoinCompanyPopover({ user }: { user: IUser }) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <AnimatedTrigger
-          className="w-full shadow-lg bg-green-500 hover:bg-green-400"
-          Icon={<Icons.userPlus />}
+          className={cn(
+            "w-full shadow-lg bg-green-500 hover:bg-green-400",
+            className
+          )}
+          Icon={<Icons.userPlus className="size-4 sm:size-5" />}
           label="Join a Company"
         />
       </PopoverTrigger>
@@ -57,7 +66,7 @@ export default function JoinCompanyPopover({ user }: { user: IUser }) {
             e.preventDefault();
           }
         }}
-        className="max-w-xl w-[32rem]"
+        className="w-[90vw] max-w-md sm:max-w-lg p-4 sm:p-5"
       >
         <form onSubmit={handleSubmit}>
           <div className="sr-only">
@@ -69,23 +78,25 @@ export default function JoinCompanyPopover({ user }: { user: IUser }) {
           </div>
 
           <div className="flex flex-col gap-4 items-center justify-center">
-            <div className="w-full flex-grow flex flex-col gap-2">
-              <Label className={RequiredAsterisk}>Invitation Link</Label>
+            <div className="w-full flex flex-col gap-2">
+              <Label className={cn(RequiredAsterisk, "text-sm sm:text-base")}>
+                Invitation Link
+              </Label>
               <Input
                 required
                 name="invitation_link"
                 placeholder="Invitation Link"
+                className="text-sm sm:text-base"
               />
             </div>
 
             <Button
-              className={cn(ButtonGradient, "w-full")}
-              size={"icon"}
+              className={cn(ButtonGradient, "w-full text-sm sm:text-base")}
               type="submit"
               disabled={loading}
               title="Join"
             >
-              <Icons.check /> Join
+              <Icons.check className="size-4 sm:size-5 mr-2" /> Join
             </Button>
           </div>
         </form>

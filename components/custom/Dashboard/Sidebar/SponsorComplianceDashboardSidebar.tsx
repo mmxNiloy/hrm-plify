@@ -1,11 +1,13 @@
 "use client";
-import React, { useState } from "react";
-import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
+import React, { useMemo, useState } from "react";
+import { Sidebar, SidebarContent, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
+import NavList from "./NavList";
+import { INavAccordionItemProps } from "./NavAccordion";
+import NavDrawer from "./NavDrawer";
 
 export default function SponsorComplianceDashboardSidebar({
   company,
@@ -13,159 +15,90 @@ export default function SponsorComplianceDashboardSidebar({
   company: ICompany;
 }) {
   const [open, setOpen] = useState<boolean>(true);
-  const [hovered, setHovered] = useState<boolean>(false);
+
+  const sidebarItems = useMemo(
+    (): INavAccordionItemProps[] => [
+      {
+        href: `/dashboard/company/${company.company_id}/sponsor-compliance`,
+        title: "Sponsor Compliance",
+        icon: <Icons.home />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/sponsor-compliance/organization`,
+        title: "Organization Profile",
+        icon: <Icons.company />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/employee/all`,
+        title: "Employees",
+        icon: <Icons.employees />,
+        target: "_blank",
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/employee/migrant`,
+        title: "Migrant Employees",
+        icon: <Icons.employee />,
+        target: "_blank",
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/sponsor-compliance/right-to-work`,
+        title: "Right to Work Checks",
+        icon: <Icons.lawBuilding />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/job`,
+        title: "Recruitment Process",
+        icon: <Icons.userSearch />,
+        target: "_blank",
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/leave`,
+        title: "Leave Management",
+        icon: <Icons.leave />,
+        target: "_blank",
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/payroll`,
+        title: "Payroll",
+        icon: <Icons.pay />,
+        target: "_blank",
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/sponsor-compliance/sponsor-management-dossier`,
+        title: "Sponsor Management Dossier",
+        icon: <Icons.userRole />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/sponsor-compliance/monitoring`,
+        title: "Monitoring and Reporting",
+        icon: <Icons.visible />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/employee/staff-report`,
+        title: "Staff Report",
+        icon: <Icons.list />,
+        target: "_blank",
+      },
+    ],
+    [company.company_id]
+  );
 
   return (
-    <Sidebar
-      open={
-        open
-        // || hovered
-      }
-      //   onMouseEnter={(e) => setHovered(true)}
-      //   onMouseLeave={(e) => setHovered(false)}
-      className="overflow-y-scroll"
-    >
-      <SidebarContent>
-        <MySidebarHeader
-          open={open}
-          onClick={() => setOpen((old) => !old)}
-          company={company}
-        />
+    <>
+      <NavDrawer>
+        <NavList items={sidebarItems} />
+      </NavDrawer>
+      <Sidebar open={open}>
+        <SidebarContent>
+          <MySidebarHeader
+            open={open}
+            onClick={() => setOpen((old) => !old)}
+            company={company}
+          />
 
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance`}
-        >
-          <Icons.home />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Sponsor Compliance
-          </span>
-        </SidebarLink>
+          <NavList items={sidebarItems} />
 
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/organization`}
-        >
-          <Icons.company />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Organization Profile
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          target="_blank"
-          href={`/dashboard/company/${company.company_id}/employee/all`}
-        >
-          <Icons.employees />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Employees
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          target="_blank"
-          href={`/dashboard/company/${company.company_id}/employee/migrant`}
-        >
-          <Icons.employee />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Migrant Employees
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/right-to-work`}
-        >
-          <Icons.lawBuilding />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Right to Work Checks
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          target={"_blank"}
-          href={`/dashboard/company/${company.company_id}/job`}
-        >
-          <Icons.userSearch />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Recruitment Process
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          target="_blank"
-          href={`/dashboard/company/${company.company_id}/leave`}
-        >
-          <Icons.leave />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Management
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          target="_blank"
-          href={`/dashboard/company/${company.company_id}/payroll`}
-        >
-          <Icons.pay />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Payroll
-          </span>
-        </SidebarLink>
-
-        {/* <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/key-contact`}
-        >
-          <Icons.userKey />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Key Contact
-          </span>
-        </SidebarLink> */}
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/sponsor-management-dossier`}
-        >
-          <Icons.userRole />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Sponsor Management Dossier
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/monitoring`}
-        >
-          <Icons.visible />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Monitoring and Reporting
-          </span>
-        </SidebarLink>
-
-        {/* <SidebarLink
-          href={`/dashboard/company/${company.company_id}/sponsor-compliance/message-center`}
-        >
-          <Icons.chat />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Message Center
-          </span>
-        </SidebarLink>
-          */}
-        <SidebarLink
-          target="_blank"
-          href={`/dashboard/company/${company.company_id}/employee/staff-report`}
-        >
-          <Icons.list />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Staff Report
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          target="_blank"
-          href={`/dashboard/company/${company.company_id}/attendance/absent-report`}
-        >
-          <Icons.todo />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Absent Report
-          </span>
-        </SidebarLink>
-
-        {/* <SidebarLink
+          {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/sponsor-compliance/change-of-circumstances`}
         >
           <Icons.userCog />
@@ -183,10 +116,11 @@ export default function SponsorComplianceDashboardSidebar({
           </span>
         </SidebarLink> */}
 
-        <BackLinkButton />
+          <BackLinkButton />
 
-        <span className="h-10" />
-      </SidebarContent>
-    </Sidebar>
+          <span className="h-10" />
+        </SidebarContent>
+      </Sidebar>
+    </>
   );
 }

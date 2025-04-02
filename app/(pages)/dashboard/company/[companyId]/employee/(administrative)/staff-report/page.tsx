@@ -7,8 +7,6 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { TPermission } from "@/schema/Permissions";
-import CompanyEmployeeSelect from "@/components/custom/Select/CompanyEmployeeSelect";
-import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { getCompanyStaffReportPaginated } from "@/app/(server)/actions/getCompanyStaffReportPaginated";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
@@ -66,8 +64,10 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
 
   if (company.error || staffReports.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Job Applications</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Job Applications
+        </p>
         <ErrorFallbackCard error={company.error || staffReports.error} />
       </main>
     );
@@ -76,9 +76,11 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
   //   console.log("Staff report found >", staffReports);
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Staff Report</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Staff Report
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}
@@ -87,7 +89,9 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
         />
 
         {/* Download PDF button here */}
-        <StaffReportGenerator company={company.data} />
+        <div className="w-full sm:w-auto">
+          <StaffReportGenerator company={company.data} />
+        </div>
       </div>
 
       <StaticDataTable

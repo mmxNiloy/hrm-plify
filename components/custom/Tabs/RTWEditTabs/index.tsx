@@ -80,7 +80,7 @@ export default function RTWEditTabs({
       //   setCurrentTabIndex(tabList.findIndex((tab) => tab.value === e))
       // }
     >
-      <TabsList className="w-full bg-background border">
+      <TabsList className="w-full bg-background border flex-col sm:flex-row h-fit">
         {/* Tab navigation: Previous */}
         {/* <Button
           disabled={currentTabIndex < 1}

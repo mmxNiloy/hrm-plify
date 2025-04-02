@@ -78,8 +78,10 @@ export default async function GenerateAttendancePage({
 
   if (company.error || companyExtraData.error || attendance.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Generate Attendance</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Generate Attendance
+        </p>
         <ErrorFallbackCard
           error={company.error ?? companyExtraData.error ?? attendance.error}
         />
@@ -88,9 +90,11 @@ export default async function GenerateAttendancePage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Generate Attendance</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Generate Attendance
+      </p>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           {...{
             user,
@@ -99,7 +103,7 @@ export default async function GenerateAttendancePage({
             parent: "Attendance Management",
           }}
         />
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <AttendanceBulkUpdateDialog
             asGenerator
             company_id={companyId}

@@ -11,10 +11,16 @@ export default function CompanyProfileTab({
   readOnly?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-4 p-8 border rounded-md">
-      <div className="w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">Company Profile</p>
-        {!readOnly && <CompanyProfileEditDialog data={data} />}
+    <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 border rounded-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <p className="text-base sm:text-lg md:text-xl font-semibold">
+          Company Profile
+        </p>
+        {!readOnly && (
+          <div className="w-full sm:w-auto">
+            <CompanyProfileEditDialog data={data} />
+          </div>
+        )}
       </div>
       <CompanyProfileFormFragment data={data} readOnly />
     </div>

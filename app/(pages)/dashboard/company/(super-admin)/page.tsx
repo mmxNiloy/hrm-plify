@@ -12,7 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { StaticDataTable } from "@/components/ui/data-table";
 import { TPermission } from "@/schema/Permissions";
 import { getPaginationParams } from "@/utils/Misc";
 import SiteConfig from "@/utils/SiteConfig";
@@ -22,7 +22,6 @@ import { cookies } from "next/headers";
 import React from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  // const user = await getUserData();
   return {
     title: `${SiteConfig.siteName} | Companies | Super Admin`,
   };
@@ -48,24 +47,33 @@ export default async function CompanyDashboardPage({
     page,
     limit,
   });
+
   if (error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Company Management</p>
-        <div className="flex items-center justify-between">
+      <main className="container mx-auto flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Company Management
+        </p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <Breadcrumb>
-            <BreadcrumbList>
+            <BreadcrumbList className="flex-wrap">
               <BreadcrumbItem>
-                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+                <BreadcrumbLink
+                  href="/dashboard"
+                  className="text-sm sm:text-base"
+                >
+                  Dashboard
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Company Management</BreadcrumbPage>
+                <BreadcrumbPage className="text-sm sm:text-base">
+                  Company Management
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-
         <ErrorFallbackCard error={error} />
       </main>
     );
@@ -73,17 +81,26 @@ export default async function CompanyDashboardPage({
 
   console.log("Super Admin > Companies > ", paginatedCompanies);
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Company Management</p>
-      <div className="flex items-center justify-between">
+    <main className="container mx-auto flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Company Management
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <Breadcrumb>
-          <BreadcrumbList>
+          <BreadcrumbList className="flex-wrap">
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              <BreadcrumbLink
+                href="/dashboard"
+                className="text-sm sm:text-base"
+              >
+                Dashboard
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Company Management</BreadcrumbPage>
+              <BreadcrumbPage className="text-sm sm:text-base">
+                Company Management
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

@@ -19,7 +19,7 @@ export default function NotificationPageLayout({
   const [currentTab, setCurrentTab] = useState<TabType>("message");
 
   return (
-    <main className="container flex flex-col gap-2">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
       {children}
       <Tabs
         defaultValue="message"

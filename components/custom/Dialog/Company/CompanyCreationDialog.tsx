@@ -153,7 +153,7 @@ export default function CompanyCreationDialog({
 
         <form onSubmit={handleCreateCompany}>
           {/* Company Creation form */}
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
               <CompanyProfileFormFragment
                 onSizeExceeded={() => setImageFileError(false)}
@@ -163,7 +163,7 @@ export default function CompanyCreationDialog({
             </div>
           </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="gap-1">
             <DialogClose asChild>
               <Button
                 disabled={loading}

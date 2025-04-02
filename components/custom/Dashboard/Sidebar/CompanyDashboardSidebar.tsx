@@ -1,28 +1,14 @@
 "use client";
-import React, { useState } from "react";
-import { Sidebar, SidebarContent, SidebarLink } from "./Sidebar";
+import React, { useMemo, useState } from "react";
+import { Sidebar, SidebarContent } from "./Sidebar";
 import Icons from "@/components/ui/icons";
 import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
 import SiteConfig from "@/utils/SiteConfig";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import NavDrawer from "./NavDrawer";
+import NavAccordion, { INavAccordionSectionProps } from "./NavAccordion";
 
 interface INavAccordionProps {
   company: ICompany;
@@ -36,10 +22,145 @@ export default function CompanyDashboardSidebar({
 }: INavAccordionProps) {
   const [open, setOpen] = useState<boolean>(true);
 
+  const CompanyDashboardSidebarItems = useMemo(
+    (): INavAccordionSectionProps[] => [
+      {
+        value: "org",
+        icon: <Icons.building />,
+        title: "Organization",
+        children: [
+          {
+            href: `/dashboard/company/${company.company_id}`,
+            title: "Company Dashboard",
+            icon: <Icons.home />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/profile`,
+            title: "Organization Profile",
+            icon: <Icons.profile />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/company-admin`,
+            title: "Company Admin",
+            icon: <Icons.adminUser />,
+            hidden: !(
+              user.user_roles?.roles.role_name === "Super Admin" ||
+              user.user_roles?.roles.role_name === "Admin"
+            ),
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/department`,
+            title: "Department",
+            icon: <Icons.department />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/designation`,
+            title: "Designation",
+            icon: <Icons.idCard />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/employment-type`,
+            title: "Employment Type",
+            icon: <Icons.userCog />,
+          },
+        ],
+      },
+      {
+        value: "hr",
+        icon: <Icons.hr />,
+        title: "Human Resources",
+        children: [
+          {
+            href: `/dashboard/company/${company.company_id}/employee`,
+            title: "Employee Management",
+            icon: <Icons.employees />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/organogram`,
+            title: "Organogram Chart",
+            icon: <Icons.chart />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/job`,
+            title: "Job & Recruitment",
+            icon: <Icons.briefcase />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/user-access`,
+            title: "Employee Access Management",
+            icon: <Icons.userKey />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/leave`,
+            title: "Leave Management",
+            icon: <Icons.leave />,
+          },
+        ],
+      },
+      {
+        value: "ops",
+        icon: <Icons.operations />,
+        title: "Operations",
+        children: [
+          {
+            href: `/dashboard/company/${company.company_id}/attendance`,
+            title: "Attendance Management",
+            icon: <Icons.usersCheck />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/rota`,
+            title: "Rota",
+            icon: <Icons.cycle />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/holiday`,
+            title: "Holiday Management",
+            icon: <Icons.clockStar />,
+          },
+        ],
+      },
+      {
+        value: "fin",
+        icon: <Icons.statGraph />,
+        title: "Finance & Documents",
+        children: [
+          {
+            href: `/dashboard/company/${company.company_id}/payroll`,
+            title: "Payroll Management",
+            icon: <Icons.money />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/sponsor-compliance`,
+            title: "Sponsor Compliance",
+            icon: <Icons.pay />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/document`,
+            title: "Documents",
+            icon: <Icons.document />,
+          },
+        ],
+      },
+    ],
+    [company.company_id, user.user_roles?.roles.role_name]
+  );
+
+  const CompanyDashboardSidebarItemsDefaultValues = useMemo(
+    () => ["org", "hr", "ops", "fin"],
+    []
+  );
+
   return (
     <>
-      <CompanyDashboardDrawer company={company} user={user} />
-      <Sidebar open={open} className="overflow-auto hidden md:block">
+      <NavDrawer
+        description={`${SiteConfig.siteName} | ${company.company_name}`}
+      >
+        <NavAccordion
+          items={CompanyDashboardSidebarItems}
+          defaultValue={CompanyDashboardSidebarItemsDefaultValues}
+        />
+      </NavDrawer>
+      <Sidebar open={open}>
         <SidebarContent>
           <MySidebarHeader
             open={open}
@@ -47,273 +168,15 @@ export default function CompanyDashboardSidebar({
             company={company}
           />
 
-          <NavAccordion company={company} user={user} />
+          <NavAccordion
+            items={CompanyDashboardSidebarItems}
+            defaultValue={CompanyDashboardSidebarItemsDefaultValues}
+          />
 
           <BackLinkButton />
           <span className="h-8"></span>
         </SidebarContent>
       </Sidebar>
     </>
-  );
-}
-
-export function CompanyDashboardDrawer({ company, user }: INavAccordionProps) {
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  return (
-    <Drawer direction="left" open={openDrawer} onOpenChange={setOpenDrawer}>
-      <DrawerTrigger className="fixed top-5 left-4 z-50 md:hidden">
-        <Icons.menu />
-      </DrawerTrigger>
-
-      <DrawerContent className="fixed top-0 left-0 right-auto h-screen mt-0 sm:max-w-screen-sm md:max-w-screen-md rounded-none">
-        <DrawerHeader className="relative">
-          <DrawerTitle>Menu</DrawerTitle>
-          <DrawerDescription>
-            {SiteConfig.siteName} | {company.company_name} | Main Navigation
-            Menu{" "}
-          </DrawerDescription>
-          <DrawerClose className="absolute top-2 right-2">
-            <Icons.cross />
-          </DrawerClose>
-        </DrawerHeader>
-
-        <ScrollArea className="h-[calc(100vh-5rem)] px-2">
-          <NavAccordion
-            onLinkClick={() => setOpenDrawer(false)}
-            company={company}
-            user={user}
-          />
-        </ScrollArea>
-
-        <BackLinkButton onClick={() => setOpenDrawer(false)} />
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
-function NavAccordion({ company, user, onLinkClick }: INavAccordionProps) {
-  return (
-    <Accordion type="multiple" defaultValue={["org", "hr", "ops", "fin"]}>
-      <AccordionItem value="org">
-        <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
-          <div className="flex gap-2 items-center">
-            <Icons.building className="h-4 w-4 lg:h-5 lg:w-5 xl:h-6 xl:w-6 shrink-0" />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Organization
-            </span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}`}
-          >
-            <Icons.home />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Company Dashboard
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/profile`}
-          >
-            <Icons.profile />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Organization Profile
-            </span>
-          </SidebarLink>
-
-          {(user.user_roles?.roles.role_name === "Super Admin" ||
-            user.user_roles?.roles.role_name === "Admin") && (
-            <SidebarLink
-              onClick={onLinkClick}
-              href={`/dashboard/company/${company.company_id}/company-admin`}
-            >
-              <Icons.adminUser />
-              <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-                Company Admin
-              </span>
-            </SidebarLink>
-          )}
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/department`}
-          >
-            <Icons.department />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Department
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/designation`}
-          >
-            <Icons.idCard />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Designation
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/employment-type`}
-          >
-            <Icons.userCog />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Employment Type
-            </span>
-          </SidebarLink>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="hr">
-        <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
-          <div className="flex gap-2 items-center">
-            <Icons.hr className="h-4 w-4 lg:h-5 lg:w-5 xl:h-6 xl:w-6 shrink-0" />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Human Resources
-            </span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/employee`}
-          >
-            <Icons.employees />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Employee Management
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/organogram`}
-          >
-            <Icons.chart />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Organogram Chart
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/job`}
-          >
-            <Icons.briefcase />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Job & Recruitment
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/user-access`}
-          >
-            <Icons.userKey />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Employee Access Management
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/leave`}
-          >
-            <Icons.leave />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Leave Management
-            </span>
-          </SidebarLink>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="ops">
-        <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
-          <div className="flex gap-2 items-center">
-            <Icons.operations className="h-4 w-4 lg:h-5 lg:w-5 xl:h-6 xl:w-6 shrink-0" />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Operations
-            </span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/attendance`}
-          >
-            <Icons.usersCheck />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Attendance Management
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/rota`}
-          >
-            <Icons.cycle />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Rota
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/holiday`}
-          >
-            <Icons.clockStar />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Holiday Management
-            </span>
-          </SidebarLink>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="fin">
-        <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
-          <div className="flex gap-2 items-center">
-            <Icons.statGraph className="h-4 w-4 lg:h-5 lg:w-5 xl:h-6 xl:w-6 shrink-0" />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Finance & Documents
-            </span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/payroll`}
-          >
-            <Icons.money />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Payroll Management
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/sponsor-compliance`}
-          >
-            <Icons.pay />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Sponsor Compliance
-            </span>
-          </SidebarLink>
-
-          <SidebarLink
-            onClick={onLinkClick}
-            href={`/dashboard/company/${company.company_id}/document`}
-          >
-            <Icons.document />
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
-              Documents
-            </span>
-          </SidebarLink>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
   );
 }

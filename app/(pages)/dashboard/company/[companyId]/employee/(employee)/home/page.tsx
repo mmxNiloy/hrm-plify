@@ -84,8 +84,10 @@ export default async function EditEmployeeInfoByUserIdPage({
     employeeData.error
   ) {
     return (
-      <div className="flex flex-col gap-2">
-        <p className="text-xl font-semibold">Employee Dashboard</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Employee Dashboard
+        </p>
         <ErrorFallbackCard
           error={
             company.error ??
@@ -94,13 +96,13 @@ export default async function EditEmployeeInfoByUserIdPage({
             employeeData.error
           }
         />
-      </div>
+      </main>
     );
   }
   return (
-    <div className="flex flex-col gap-2">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
       {/* <AttendanceAlert attendanceResponse={attendance} /> */}
-      <p className="text-xl font-semibold">Dashboard</p>
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">Dashboard</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
           title={`${getFullNameOfUser(user)}'s Dashboard`}
@@ -126,7 +128,7 @@ export default async function EditEmployeeInfoByUserIdPage({
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="grid grid-cols-2 gap-2">
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <AvatarPicker
               readOnly
               src={employeeData.data.data?.image}
@@ -189,6 +191,6 @@ export default async function EditEmployeeInfoByUserIdPage({
             }))}
         />
       </div>
-    </div>
+    </main>
   );
 }

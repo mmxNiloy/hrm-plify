@@ -43,7 +43,9 @@ export default async function EducationalInfoSlot({
     return (
       <div className="flex flex-col gap-4 p-8 border rounded-md">
         <div className="w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">Educational Information</p>
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Educational Information
+          </p>
         </div>
         <ErrorFallbackCard error={error} />
       </div>
@@ -51,9 +53,11 @@ export default async function EducationalInfoSlot({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-8 border rounded-md">
-      <div className="w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">Educational Information</p>
+    <div className="flex flex-col gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+      <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Educational Information
+        </p>
         {/* {writeAccess && 
         } */}
         <EducationalInfoEditDialog employee_id={employeeId} />

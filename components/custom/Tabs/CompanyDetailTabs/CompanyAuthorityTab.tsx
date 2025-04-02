@@ -15,18 +15,22 @@ export default function CompanyAuthorityTab({
   readOnly?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 border rounded-md">
       {/* Authorised Personnel Section */}
-      <div className="p-4 md:p-6 lg:p-8 border rounded-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <p className="text-lg font-semibold">Authorised Personnel</p>
+          <p className="text-base sm:text-lg md:text-xl font-semibold">
+            Authorised Personnel
+          </p>
           {!readOnly && (
-            <CompanyAuthorityEditDialog
-              id={data?.company_authorised_details?.authorised_id}
-              company_id={company_id}
-              title={"Authorised Personnel"}
-              data={data?.company_authorised_details}
-            />
+            <div className="w-full sm:w-auto">
+              <CompanyAuthorityEditDialog
+                id={data?.company_authorised_details?.authorised_id}
+                company_id={company_id}
+                title={"Authorised Personnel"}
+                data={data?.company_authorised_details}
+              />
+            </div>
           )}
         </div>
 
@@ -38,16 +42,20 @@ export default function CompanyAuthorityTab({
       </div>
 
       {/* Key Contact Section */}
-      <div className="p-4 md:p-6 lg:p-8 border rounded-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <p className="text-lg font-semibold">Key Contact</p>
+          <p className="text-base sm:text-lg md:text-xl font-semibold">
+            Key Contact
+          </p>
           {!readOnly && (
-            <CompanyAuthorityEditDialog
-              id={data?.company_key_contact?.key_contact_id}
-              company_id={company_id}
-              title={"Key Contact"}
-              data={data?.company_key_contact}
-            />
+            <div className="w-full sm:w-auto">
+              <CompanyAuthorityEditDialog
+                id={data?.company_key_contact?.key_contact_id}
+                company_id={company_id}
+                title={"Key Contact"}
+                data={data?.company_key_contact}
+              />
+            </div>
           )}
         </div>
 
@@ -59,16 +67,20 @@ export default function CompanyAuthorityTab({
       </div>
 
       {/* Level 1 User Section */}
-      <div className="p-4 md:p-6 lg:p-8 border rounded-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <p className="text-lg font-semibold">Level 1 User</p>
+          <p className="text-base sm:text-lg md:text-xl font-semibold">
+            Level 1 User
+          </p>
           {!readOnly && (
-            <CompanyAuthorityEditDialog
-              id={data?.company_l1_user?.l1_user_id}
-              company_id={company_id}
-              title={"Level 1 User"}
-              data={data?.company_l1_user}
-            />
+            <div className="w-full sm:w-auto">
+              <CompanyAuthorityEditDialog
+                id={data?.company_l1_user?.l1_user_id}
+                company_id={company_id}
+                title={"Level 1 User"}
+                data={data?.company_l1_user}
+              />
+            </div>
           )}
         </div>
 

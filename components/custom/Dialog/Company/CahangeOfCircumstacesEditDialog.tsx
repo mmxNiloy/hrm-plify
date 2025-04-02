@@ -100,7 +100,7 @@ export default function ChangeOfCircumstancesEditDialog({
           action="/api/employee"
           encType="multipart/form-data"
         >
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             {/* Employee creation form here */}
             <Tabs
               value={currentTab}

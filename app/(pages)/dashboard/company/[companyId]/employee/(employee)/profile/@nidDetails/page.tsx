@@ -39,9 +39,11 @@ export default async function NidDetailsSlot({
   const { data: nid, error } = await getNIDInfo(empId);
   if (error) {
     return (
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">National ID Information</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            National ID Information
+          </p>
         </div>
         <ErrorFallbackCard error={error} />
       </div>
@@ -49,9 +51,11 @@ export default async function NidDetailsSlot({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-      <div className="col-span-full w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">National ID Information</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+      <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          National ID Information
+        </p>
         {/* {updateAccess && 
         } */}
         <NidEditDialog data={nid} employee_id={employeeId} />

@@ -1,19 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
+import React, { useMemo, useState } from "react";
+import { Sidebar, SidebarContent } from "./Sidebar";
 import Icons from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
+import NavAccordion, {
+  INavAccordionItemProps,
+  INavAccordionSectionProps,
+} from "./NavAccordion";
+import NavDrawer from "./NavDrawer";
+import NavList from "./NavList";
 
 export default function JobDashboardSidebar({
   company,
@@ -21,101 +18,85 @@ export default function JobDashboardSidebar({
   company: ICompany;
 }) {
   const [open, setOpen] = useState<boolean>(true);
-  const [hovered, setHovered] = useState<boolean>(false);
-  const path = usePathname();
-  const [isAccordionOpen, setIsAccordionOpen] = useState<number>(0);
+
+  const sidebarItems = useMemo(
+    (): INavAccordionItemProps[] => [
+      {
+        href: `/dashboard/company/${company.company_id}/job`,
+        title: "Job & Recruitment Dashboard",
+        icon: <Icons.home />,
+      },
+    ],
+    [company.company_id]
+  );
+
+  const accordionItems = useMemo(
+    (): INavAccordionSectionProps[] => [
+      {
+        value: "job",
+        icon: <Icons.briefcase />,
+        title: "Job",
+        children: [
+          {
+            href: `/dashboard/company/${company.company_id}/job/all`,
+            title: "Job Listings",
+            icon: <Icons.list />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/job/applied`,
+            title: "Job Applications",
+            icon: <Icons.usersCheck />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/job/short-listing`,
+            title: "Shortlisted Applicants",
+            icon: <Icons.userSearch />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/job/hired`,
+            title: "Hired",
+            icon: <Icons.handshake />,
+          },
+          {
+            href: `/dashboard/company/${company.company_id}/job/rejected`,
+            title: "Rejected",
+            icon: <Icons.userX />,
+          },
+        ],
+      },
+    ],
+    [company.company_id]
+  );
+
+  const accordionDefaultValues = useMemo(() => ["job"], []);
 
   return (
-    <Sidebar
-      className="overflow-auto"
-      open={
-        open
-        // || hovered
-      }
-      // onMouseEnter={(e) => setHovered(true)}
-      // onMouseLeave={(e) => setHovered(false)}
-    >
-      <SidebarContent>
-        <MySidebarHeader
-          open={open}
-          onClick={() => setOpen((old) => !old)}
-          company={company}
+    <>
+      <NavDrawer>
+        <NavList items={sidebarItems} />
+        <NavAccordion
+          defaultValue={accordionDefaultValues}
+          items={accordionItems}
         />
+      </NavDrawer>
+      <Sidebar className="overflow-auto" open={open}>
+        <SidebarContent>
+          <MySidebarHeader
+            open={open}
+            onClick={() => setOpen((old) => !old)}
+            company={company}
+          />
 
-        <SidebarLink href={`/dashboard/company/${company.company_id}/job`}>
-          <Icons.home />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Job & Recruitment Dashboard
-          </span>
-        </SidebarLink>
+          <NavList items={sidebarItems} />
+          {/* Jobs Navigation */}
+          <NavAccordion
+            defaultValue={accordionDefaultValues}
+            items={accordionItems}
+          />
 
-        {/* Jobs Navigation */}
-        <Accordion
-          type="single"
-          collapsible
-          defaultValue={"job"}
-          onValueChange={(e) => {
-            if (e.length > 0) {
-              setIsAccordionOpen((oldValue) => oldValue | 1);
-            } else {
-              setIsAccordionOpen((oldValue) => oldValue & 2);
-            }
-          }}
-        >
-          <AccordionItem value="job">
-            <AccordionTrigger className="rounded-md px-2 data-[state=open]:bg-blue-500 data-[state=open]:text-white">
-              <div className="flex gap-2 items-center">
-                <Icons.briefcase />
-                <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-                  Job
-                </span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 mt-1 px-2 group-data-[state=closed]/sidebar:hidden">
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/all`}
-              >
-                <Icons.list />
-                Job Listings
-              </SidebarLink>
-
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/applied`}
-              >
-                <Icons.usersCheck />
-                Job Applications
-              </SidebarLink>
-
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/short-listing`}
-              >
-                <Icons.userSearch />
-                Shortlisted Applicants
-              </SidebarLink>
-
-              {/* <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/interview`}
-              >
-                Interview
-              </SidebarLink> */}
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/hired`}
-              >
-                <Icons.handshake /> Hired
-              </SidebarLink>
-
-              <SidebarLink
-                href={`/dashboard/company/${company.company_id}/job/rejected`}
-              >
-                <Icons.userX /> Rejected
-              </SidebarLink>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {/* <SidebarLink
+          {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/job/offer-letter`}
-        >
+          >
           <Icons.mail />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
             Generate Offer Letter
@@ -138,8 +119,8 @@ export default function JobDashboardSidebar({
           </span>
         </SidebarLink> */}
 
-        {/* Mock Interview Accordion */}
-        {/* {!(open || hovered) && (
+          {/* Mock Interview Accordion */}
+          {/* {!(open || hovered) && (
           <Button
             variant={"ghost"}
             className={cn(
@@ -217,9 +198,10 @@ export default function JobDashboardSidebar({
             Message Center
           </span>
         </SidebarLink> */}
-        <BackLinkButton />
-        <span className="h-8"></span>
-      </SidebarContent>
-    </Sidebar>
+          <BackLinkButton />
+          <span className="h-8"></span>
+        </SidebarContent>
+      </Sidebar>
+    </>
   );
 }

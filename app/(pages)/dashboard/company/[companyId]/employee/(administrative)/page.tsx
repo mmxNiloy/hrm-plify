@@ -6,17 +6,11 @@ import { cookies } from "next/headers";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
-import EmployeeOnboardingDialog from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog";
-import { ISearchParamsProps } from "@/utils/Types";
-import { getPaginationParams } from "@/utils/Misc";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
-import { CompanyUserDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyUserDataTableColumns";
-import { getCompanyEmployees } from "@/app/(server)/actions/getCompanyEmployees";
+import { DataTable } from "@/components/ui/data-table";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { TPermission } from "@/schema/Permissions";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
-import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/wrapper";
 import Icons from "@/components/ui/icons";
 import Link from "next/link";
 import Counter from "@/components/custom/Counter";
@@ -64,8 +58,10 @@ export default async function EmployeeDashboardPage({
 
   if (company.error || companyExtraData.error || stats.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Employee Dashboard</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Employee Dashboard
+        </p>
         <ErrorFallbackCard
           error={company.error ?? companyExtraData.error ?? stats.error}
         />
@@ -74,19 +70,20 @@ export default async function EmployeeDashboardPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4">
-      <p className="text-xl font-semibold">Employee Dashboard</p>
-      <div className="flex items-center justify-between">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          title={"Employee Dashboard"}
-        />
-      </div>
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Employee Dashboard
+      </p>
 
-      <p className="text-xl font-semibold">Statistics</p>
+      <MyBreadcrumbs
+        company={company.data}
+        user={user}
+        title={"Employee Dashboard"}
+      />
 
-      <div className="grid grid-cols-3 gap-4 justify-items-center *:min-w-64">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">Statistics</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-items-center *:w-full *:sm:min-w-40 *:md:min-w-64">
         <Link href={"./employee/all"}>
           <div className="flex flex-col gap-2 p-4 rounded-md from-teal-500/80 to-indigo-600 hover:from-sky-400/80 hover:to-indigo-500 bg-gradient-to-br text-white">
             <div className="flex gap-2 text-xl font-semibold">

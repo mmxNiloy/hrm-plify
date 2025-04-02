@@ -41,8 +41,10 @@ export default async function SCRightToWorkPage({
 
   if (company.error || companyExtra.error || rtws.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Right to Work Checks</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Right to Work Checks
+        </p>
 
         <ErrorFallbackCard
           error={company.error ?? companyExtra.error ?? rtws.error}
@@ -52,10 +54,12 @@ export default async function SCRightToWorkPage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Right to Work Checks</p>
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Right to Work Checks
+      </p>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}

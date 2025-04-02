@@ -18,6 +18,7 @@ import CompanyCreationDialog from "../Company/CompanyCreationDialog";
 import Icons from "@/components/ui/icons";
 import JoinCompanyPopover from "../../Popover/Profile/JoinCompanyPopover";
 import SiteConfig from "@/utils/SiteConfig";
+import { cn } from "@/lib/utils";
 
 export default function JoinOrCreateCompanyDialog({
   defaultOpen = false,
@@ -31,46 +32,49 @@ export default function JoinOrCreateCompanyDialog({
       <DialogTrigger asChild className="sr-only">
         <Button className={ButtonGradient}>Open Starter Dialog</Button>
       </DialogTrigger>
-      <DialogContent className={DialogContentWidth}>
+      <DialogContent
+        className={cn(
+          DialogContentWidth,
+          "max-w-[90vw] sm:max-w-2xl p-4 sm:p-6"
+        )}
+      >
         <DialogHeader>
-          <DialogTitle>Welcome, {getFullNameOfUser(user)}</DialogTitle>
-          <DialogDescription>
-            Looks like this is you have yet to join a company. $
-            {SiteConfig.siteName} offers robust solutions for your HR management
-            needs. To use all of our fetures, join a company or create your own
-            organization and start managing today.
+          <DialogTitle className="text-lg sm:text-xl">
+            Welcome, {getFullNameOfUser(user)}
+          </DialogTitle>
+          <DialogDescription className="text-sm sm:text-base">
+            Looks like you have yet to join a company. {SiteConfig.siteName}{" "}
+            offers robust solutions for your HR management needs. To use all of
+            our features, join a company or create your own organization and
+            start managing today.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="text-white shadow-lg aspect-video flex flex-col gap-2 bg-green-400 rounded-lg border p-4">
-            <p className="bg-clip-text drop-shadow-lg text-xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="text-white shadow-lg flex flex-col gap-3 bg-green-400 rounded-lg border p-3 sm:p-4 min-h-[200px] sm:min-h-[250px]">
+            <p className="bg-clip-text drop-shadow-lg text-lg sm:text-xl font-semibold">
               Create a Company
             </p>
-            <p className="bg-clip-text drop-shadow-lg">
+            <p className="bg-clip-text drop-shadow-lg text-sm sm:text-base flex-grow">
               Simplify your HR management tasks with {SiteConfig.siteName}.
               Create a profile for your organization to get started.
             </p>
-
-            <span className="flex-grow" />
-
-            <div className="rounded-full shadow-xl drop-shadow-lg">
-              <CompanyCreationDialog asClient Icon={<Icons.badgeCheck />} />
+            <div className="rounded-full shadow-xl drop-shadow-lg self-start">
+              <CompanyCreationDialog
+                asClient
+                Icon={<Icons.badgeCheck className="size-4 sm:size-5" />}
+              />
             </div>
           </div>
-          <div className="text-white shadow-lg aspect-video flex flex-col gap-2 bg-blue-400 rounded-lg border p-4">
-            <p className="bg-clip-text drop-shadow-lg text-xl">
+          <div className="text-white shadow-lg flex flex-col gap-3 bg-blue-400 rounded-lg border p-3 sm:p-4 min-h-[200px] sm:min-h-[250px]">
+            <p className="bg-clip-text drop-shadow-lg text-lg sm:text-xl font-semibold">
               Join a Company
             </p>
-            <p className="bg-clip-text drop-shadow-lg">
+            <p className="bg-clip-text drop-shadow-lg text-sm sm:text-base flex-grow">
               Does your organization use our solutions? Join your colleagues and
-              streamline your managerial tasks today with ${SiteConfig.siteName}
-              .
+              streamline your managerial tasks today with {SiteConfig.siteName}.
             </p>
-
-            <span className="flex-grow" />
-
-            <JoinCompanyPopover user={user} />
+            <JoinCompanyPopover user={user} className="self-start w-auto" />
           </div>
         </div>
       </DialogContent>

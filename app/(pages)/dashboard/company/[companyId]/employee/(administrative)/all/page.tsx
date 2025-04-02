@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
-import EmployeeOnboardingDialog from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { StaticDataTable } from "@/components/ui/data-table";
@@ -69,8 +68,10 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
     employmentTypes.error
   ) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">All Employees</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          All Employees
+        </p>
         <ErrorFallbackCard
           error={
             company.error ??
@@ -84,9 +85,11 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Employees</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        All Employees
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}
@@ -96,13 +99,15 @@ export default async function AllEmployeePage({ params, searchParams }: Props) {
 
         {/* <EmployeeCreationDialog /> */}
         {writeAccess && (
-          <EmployeeOnboardingDialogWrapper
-            employmentType={employmentTypes.data.filter(
-              (item) => item.isActive
-            )}
-            company_id={companyId}
-            {...companyExtraData.data}
-          />
+          <div className="w-full sm:w-auto">
+            <EmployeeOnboardingDialogWrapper
+              employmentType={employmentTypes.data.filter(
+                (item) => item.isActive
+              )}
+              company_id={companyId}
+              {...companyExtraData.data}
+            />
+          </div>
         )}
       </div>
 

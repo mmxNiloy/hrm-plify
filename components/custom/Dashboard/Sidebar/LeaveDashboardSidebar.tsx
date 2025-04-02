@@ -1,11 +1,13 @@
 "use client";
-import React, { useState } from "react";
-import { Sidebar, SidebarContent, SidebarHeader, SidebarLink } from "./Sidebar";
+import React, { useMemo, useState } from "react";
+import { Sidebar, SidebarContent, SidebarLink } from "./Sidebar";
 import Icons from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 import MySidebarHeader from "./MySidebarHeader";
 import { BackLinkButton } from "./BackLinkButton";
+import { INavAccordionItemProps } from "./NavAccordion";
+import NavList from "./NavList";
+import NavDrawer from "./NavDrawer";
 
 export default function LeaveDashboardSidebar({
   company,
@@ -13,79 +15,68 @@ export default function LeaveDashboardSidebar({
   company: ICompany;
 }) {
   const [open, setOpen] = useState<boolean>(true);
-  const [hovered, setHovered] = useState<boolean>(false);
+
+  const sidebarItems = useMemo(
+    (): INavAccordionItemProps[] => [
+      {
+        href: `/dashboard/company/${company.company_id}/leave`,
+        title: "Leave Management Dashboard",
+        icon: <Icons.home />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/leave/request`,
+        title: "Leave Requests",
+        icon: <Icons.todo />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/leave/type`,
+        title: "Leave Type",
+        icon: <Icons.category />,
+      },
+      {
+        href: `/dashboard/company/${company.company_id}/leave/approver`,
+        title: "Leave Approvers",
+        icon: <Icons.userCheck />,
+      },
+    ],
+    [company.company_id]
+  );
 
   return (
-    <Sidebar
-      className="overflow-auto"
-      open={
-        open
-        // || hovered
-      }
-      // onMouseEnter={(e) => setHovered(true)}
-      // onMouseLeave={(e) => setHovered(false)}
-    >
-      <SidebarContent>
-        <MySidebarHeader
-          open={open}
-          onClick={() => setOpen((old) => !old)}
-          company={company}
-        />
+    <>
+      <NavDrawer>
+        <NavList items={sidebarItems} />
+      </NavDrawer>
+      <Sidebar open={open}>
+        <SidebarContent>
+          <MySidebarHeader
+            open={open}
+            onClick={() => setOpen((old) => !old)}
+            company={company}
+          />
 
-        <SidebarLink href={`/dashboard/company/${company.company_id}/leave`}>
-          <Icons.home />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Management Dashboard
-          </span>
-        </SidebarLink>
+          <NavList items={sidebarItems} />
 
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/leave/request`}
-        >
-          <Icons.todo />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Requests
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/leave/type`}
-        >
-          <Icons.category />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Type
-          </span>
-        </SidebarLink>
-
-        <SidebarLink
-          href={`/dashboard/company/${company.company_id}/leave/approver`}
-        >
-          <Icons.userCheck />
-          <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Approvers
-          </span>
-        </SidebarLink>
-
-        {/* TODO: Future Features */}
-        {/* <SidebarLink
+          {/* TODO: Future Features */}
+          {/* <SidebarLink
           href={`/dashboard/company/${company.company_id}/leave/rules`}
-        >
+          >
           <Icons.lawBuilding />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Rules
+          Leave Rules
           </span>
-        </SidebarLink>
-
-        <SidebarLink
+          </SidebarLink>
+          
+          <SidebarLink
           href={`/dashboard/company/${company.company_id}/leave/allocation`}
-        >
+          >
           <Icons.distribution />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Allocation
+          Leave Allocation
           </span>
-        </SidebarLink>
+          </SidebarLink>
 
-        <SidebarLink
+          <SidebarLink
           href={`/dashboard/company/${company.company_id}/leave/balance`}
         >
           <Icons.scale />
@@ -99,12 +90,13 @@ export default function LeaveDashboardSidebar({
         >
           <Icons.note />
           <span className="transition-all group-data-[state=closed]/sidebar:hidden">
-            Leave Report
+          Leave Report
           </span>
         </SidebarLink> */}
 
-        <BackLinkButton />
-      </SidebarContent>
-    </Sidebar>
+          <BackLinkButton />
+        </SidebarContent>
+      </Sidebar>
+    </>
   );
 }

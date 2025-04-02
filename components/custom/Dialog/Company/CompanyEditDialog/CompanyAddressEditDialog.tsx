@@ -102,7 +102,7 @@ export default function CompanyAddressEditDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-1 grid grid-cols-2 gap-4">
               <CompanyAddressFormFragment disabled={updating} data={data} />
             </div>
