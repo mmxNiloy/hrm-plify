@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <RotatePhoneOverlay />
+      {/* <RotatePhoneOverlay /> */}
       <DashboardNavbar />
       {children}
     </>
