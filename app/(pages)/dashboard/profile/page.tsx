@@ -66,7 +66,6 @@ function getProfileCompletion(user: IUser) {
       status |= ProfileStep.COMPANY_WEBSITE;
     if (user.usercompany.companies?.email) status |= ProfileStep.COMPANY_EMAIL;
   }
-
   return status;
 }
 
@@ -92,48 +91,45 @@ export default async function ProfilePage() {
     user.user_roles?.roles.role_name === "Admin";
 
   const profileStatus = getProfileCompletion(user);
-  const isProfileIncomplete = profileStatus & 0x07ff; /// 0 -> complete, incomplete otherwise
+  const isProfileIncomplete = profileStatus & 0x07ff;
 
   return (
-    <main className="container flex flex-col gap-2">
+    <main className="container mx-auto flex flex-col gap-4 px-2 py-4 sm:px-6 lg:px-8">
       <JoinOrCreateCompanyDialog
         defaultOpen={!hasCompany && !isAdmin}
         user={user}
       />
 
-      <div className="flex flex-col gap-2 bg-background rounded-lg">
+      <div className="flex flex-col gap-4 bg-background rounded-lg shadow-sm">
         {/* Profile overview card */}
         <div className="flex flex-col gap-4">
-          <div className="rounded-lg relative flex flex-col items-center justify-between">
+          <div className="relative flex flex-col items-center justify-between">
             <Image
               height={0}
               width={0}
               unoptimized
               priority
-              src={
-                "/vecteezy_white-abstract-geometric-shapes-background-ideal-for-poster_22925498.jpg"
-              }
+              src="/vecteezy_white-abstract-geometric-shapes-background-ideal-for-poster_22925498.jpg"
               alt="Cover Photo"
-              style={{ aspectRatio: 4 / 1 }}
-              className="rounded-t-lg w-full absolute"
+              className="rounded-t-lg w-full object-cover h-32 sm:h-40 md:h-48"
             />
-
-            <CameraButton />
-
-            <span className="w-full" style={{ aspectRatio: 4 / 1 }} />
-
-            <div className="px-8 w-full flex flex-row items-end justify-between">
+            <CameraButton
+            // className="absolute top-2 right-2"
+            />
+            <div className="px-4 sm:px-6 lg:px-8 w-full flex flex-row items-center sm:items-end justify-between gap-4 -mt-12 sm:-mt-20">
               <AvatarPicker
                 key={`profile-avatar-`}
                 name="file"
-                className="size-48 -mt-24 border border-muted-foreground/50 shadow-lg"
+                className="size-24 sm:size-32 md:size-40 border border-muted-foreground/50 shadow-lg"
               />
-              <ProfileEditButton />
+              <ProfileEditButton
+              // className="mb-4 sm:mb-0"
+              />
             </div>
           </div>
 
-          <div className="px-8 py-4 flex flex-col gap-2">
-            <p className="flex-grow text-2xl font-bold flex gap-2 items-center">
+          <div className="px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-3">
+            <p className="text-xl sm:text-2xl font-bold flex flex-wrap gap-2 items-center">
               {getFullNameOfUser(user)}
               {isProfileIncomplete && !isAdmin && (
                 <Popover>
@@ -143,12 +139,11 @@ export default async function ProfilePage() {
                       variant={"ghost"}
                       className="rounded-full"
                     >
-                      <Icons.warn className="fill-yellow-300 stroke-yellow-700" />
+                      <Icons.warn className="fill-yellow-300 stroke-yellow-700 size-5" />
                     </Button>
                   </PopoverTrigger>
-
-                  <PopoverContent>
-                    <div className={"flex flex-col gap-4"}>
+                  <PopoverContent className="w-80 sm:w-96">
+                    <div className="flex flex-col gap-4">
                       <Label className="font-semibold">
                         Complete the following steps
                       </Label>
@@ -179,14 +174,13 @@ export default async function ProfilePage() {
                             : "text-red-500"
                         )}
                       >
-                        {profileStatus & ProfileStep.ROLE ? (
+                        {profileStatus & ProfileStep.COMPANY ? (
                           <Icons.boxChecked />
                         ) : (
                           <Icons.boxCrossed />
                         )}{" "}
                         Join or create a company
                       </div>
-
                       {hasCompany && (
                         <>
                           <p className="text-sm">Company Information</p>
@@ -198,14 +192,13 @@ export default async function ProfilePage() {
                                 : "text-red-500"
                             )}
                           >
-                            {profileStatus & ProfileStep.ROLE ? (
+                            {profileStatus & ProfileStep.COMPANY_CONTACT ? (
                               <Icons.boxChecked />
                             ) : (
                               <Icons.boxCrossed />
                             )}{" "}
                             Add company contact information
                           </div>
-
                           <div
                             className={cn(
                               "flex gap-2 items-center text-sm [&>svg]:size-4",
@@ -214,7 +207,7 @@ export default async function ProfilePage() {
                                 : "text-red-500"
                             )}
                           >
-                            {profileStatus & ProfileStep.ROLE ? (
+                            {profileStatus & ProfileStep.COMPANY_ESTD ? (
                               <Icons.boxChecked />
                             ) : (
                               <Icons.boxCrossed />
@@ -223,7 +216,6 @@ export default async function ProfilePage() {
                           </div>
                         </>
                       )}
-
                       {!hasCompany ? (
                         <div className="flex flex-col gap-2 items-center">
                           <JoinCompanyPopover user={user} />
@@ -235,9 +227,11 @@ export default async function ProfilePage() {
                         </div>
                       ) : (
                         <Link href={"/dashboard"} passHref>
-                          <Button className={ButtonGradient}>
+                          <Button
+                            className={cn(ButtonGradient, "w-full sm:w-auto")}
+                          >
                             Complete now
-                            <Icons.chevronRight />
+                            <Icons.chevronRight className="ml-2 size-4" />
                           </Button>
                         </Link>
                       )}
@@ -247,31 +241,33 @@ export default async function ProfilePage() {
               )}
             </p>
             {hasCompany && (
-              <p className="flex-grow text-base flex gap-2 items-center">
-                <Icons.company /> {user.usercompany?.companies?.company_name}
+              <p className="text-base flex gap-2 items-center">
+                <Icons.company className="size-5" />{" "}
+                {user.usercompany?.companies?.company_name}
               </p>
             )}
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
               <TextCapsule className="bg-green-500">
-                <Icons.idCard />
+                <Icons.idCard className="size-4" />
                 {user.user_roles?.roles.role_name ?? "Guest"}
               </TextCapsule>
               <TextCapsule className="bg-blue-500">
-                <Icons.mail />
+                <Icons.mail className="size-4" />
                 {user.email}
               </TextCapsule>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-8 py-4">
-            <div className="border relative rounded-md row-span-2">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 sm:px-6 lg:px-8 py-4">
+            <div className="border relative rounded-md">
               {!user.usercompany && (
-                <div className="absolute size-full bg-muted/50 backdrop-blur flex flex-col gap-2 items-center justify-center">
-                  <p className="text-lg font-semibold">
+                <div className="absolute inset-0 bg-muted/50 backdrop-blur flex flex-col gap-2 items-center justify-center p-4 text-center">
+                  <p className="text-base sm:text-lg font-semibold">
                     You are not affiliated with a company yet.
                   </p>
-                  <div className="flex gap-4 items-center">
+                  <div className="flex flex-col sm:flex-row gap-4 items-center">
                     <JoinCompanyPopover user={user} />
-                    <p className="text-base font-semibold">Or</p>
+                    <p className="text-sm font-semibold">Or</p>
                     <CompanyCreationDialog
                       asClient
                       Icon={<Icons.badgeCheck />}
@@ -279,10 +275,9 @@ export default async function ProfilePage() {
                   </div>
                 </div>
               )}
-
               <div className="p-4 flex flex-col gap-4">
-                <p className="text-xl font-semibold flex gap-2">
-                  <Icons.company />
+                <p className="text-lg sm:text-xl font-semibold flex gap-2 items-center">
+                  <Icons.company className="size-5" />
                   My Company
                 </p>
                 <div className="flex flex-col gap-2">
@@ -309,19 +304,18 @@ export default async function ProfilePage() {
                     placeholder="Company Website"
                   />
                 </div>
-
                 <Link className="w-full" passHref href={"/dashboard"}>
                   <Button className={cn(ButtonGradient, "w-full")}>
                     View details
-                    <Icons.chevronRight />
+                    <Icons.chevronRight className="ml-2 size-4" />
                   </Button>
                 </Link>
               </div>
             </div>
-            <div className="border relative rounded-md row-span-3">
+            <div className="border relative rounded-md">
               <div className="p-4 flex flex-col gap-4">
-                <p className="text-xl font-semibold flex gap-2">
-                  <Icons.user />
+                <p className="text-lg sm:text-xl font-semibold flex gap-2 items-center">
+                  <Icons.user className="size-5" />
                   User Information
                 </p>
                 <div className="flex flex-col gap-2">
@@ -356,7 +350,6 @@ export default async function ProfilePage() {
                     placeholder="Email"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <Label>Role</Label>
                   <Input
@@ -365,9 +358,8 @@ export default async function ProfilePage() {
                     placeholder="Role"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
-                  <Label>Date of Joinning</Label>
+                  <Label>Date of Joining</Label>
                   <Input
                     readOnly
                     defaultValue={new Date(user.created_at).toLocaleDateString(
@@ -381,8 +373,6 @@ export default async function ProfilePage() {
           </div>
         </div>
       </div>
-
-      {/* <Footer /> */}
     </main>
   );
 }

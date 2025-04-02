@@ -454,7 +454,7 @@ export default function RTWEditDialog({
         </DialogHeader>
 
         <form ref={formRef} onSubmit={handleSubmit}>
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-4">
               <RTWFormContextProvider>
                 <RTWEditTabs

@@ -69,17 +69,17 @@ export default async function JobListingsPage({ params, searchParams }: Props) {
 
   if (company.error || jobs.error || companyExtra.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">All Jobs</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">All Jobs</p>
         <ErrorFallbackCard error={company.error ?? jobs.error} />
       </main>
     );
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">All Jobs</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">All Jobs</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}
@@ -87,11 +87,13 @@ export default async function JobListingsPage({ params, searchParams }: Props) {
           title="All Jobs"
         />
         {writeAccess && (
-          <JobListingEditDialog
-            company_id={companyId}
-            companyData={companyExtra.data}
-            employeeId={employee.data?.data?.employee_id ?? 0}
-          />
+          <div className="w-full sm:w-auto">
+            <JobListingEditDialog
+              company_id={companyId}
+              companyData={companyExtra.data}
+              employeeId={employee.data?.data?.employee_id ?? 0}
+            />
+          </div>
         )}
       </div>
 

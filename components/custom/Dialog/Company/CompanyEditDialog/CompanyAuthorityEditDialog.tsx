@@ -117,7 +117,7 @@ export default function CompanyAuthorityEditDialog({
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <input className="hidden" name="type" defaultValue={title} />
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-1 grid grid-cols-2 gap-4">
               <CompanyAuthorityFormFragment
                 setDocError={setDocError}

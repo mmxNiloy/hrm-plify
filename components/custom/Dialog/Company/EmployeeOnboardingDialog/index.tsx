@@ -27,6 +27,7 @@ import { IJobApplicant } from "@/schema/JobSchema";
 import { IUser } from "@/schema/UserSchema";
 import { IEmployee } from "@/schema/EmployeeSchema";
 import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface EmployeeCreationResponse {
   message: string;
@@ -155,14 +156,16 @@ export default function EmployeeOnboardingDialog({
 
         <form onSubmit={handleSubmit}>
           {/* Form body */}
-          <div className="grid grid-cols-3 gap-4 py-4">
-            <EmployeeOnboardingFormFragment
-              data={data}
-              departments={departments}
-              designations={designations}
-              employmentTypes={employmentTypes}
-            />
-          </div>
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 py-4 *:px-1">
+              <EmployeeOnboardingFormFragment
+                data={data}
+                departments={departments}
+                designations={designations}
+                employmentTypes={employmentTypes}
+              />
+            </div>
+          </ScrollArea>
 
           <DialogFooter>
             <DialogClose asChild>

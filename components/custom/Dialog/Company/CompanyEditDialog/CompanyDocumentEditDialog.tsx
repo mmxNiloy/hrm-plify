@@ -145,7 +145,7 @@ export default function CompanyDocumentEditDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-1 flex flex-col gap-4">
               <CompanyDocumentFormFragment
                 setDocError={setDocError}

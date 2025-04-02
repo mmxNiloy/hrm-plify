@@ -29,17 +29,48 @@ export default function EditEmployeeInfoByUserIdPageLayout({
       <div className="col-span-full">{children}</div>
       {/* TabList */}
       <Tabs className="col-span-full" defaultValue="personal-info">
-        <TabsList className="w-full">
-          <TabsTrigger value="personal-info">Personal Information</TabsTrigger>
-          <TabsTrigger value="educational-info">
+        <TabsList className="w-full h-fit flex-col xl:flex-row xl:flex sm:grid sm:grid-cols-4 sm:gap-2">
+          <TabsTrigger
+            value="personal-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
+            Personal Information
+          </TabsTrigger>
+          <TabsTrigger
+            value="educational-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
             Educational Information
           </TabsTrigger>
-          <TabsTrigger value="passport-info">Passport & VISA</TabsTrigger>
-          <TabsTrigger value="euss-dbs-info">EUSS & DBS</TabsTrigger>
-          <TabsTrigger value="nid-info">NID Information</TabsTrigger>
-          <TabsTrigger value="contact-info">Contact Information</TabsTrigger>
-          <TabsTrigger value="emergency-contact-info">
-            Emergency Contact Information
+          <TabsTrigger
+            value="passport-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
+            Passport & VISA
+          </TabsTrigger>
+          <TabsTrigger
+            value="euss-dbs-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
+            EUSS & DBS
+          </TabsTrigger>
+          <TabsTrigger
+            value="nid-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
+            NID Information
+          </TabsTrigger>
+          <TabsTrigger
+            value="contact-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
+            Contact Information
+          </TabsTrigger>
+          <TabsTrigger
+            value="emergency-contact-info"
+            className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
+          >
+            Emergency Contact
           </TabsTrigger>
         </TabsList>
 

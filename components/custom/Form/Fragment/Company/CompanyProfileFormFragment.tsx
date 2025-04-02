@@ -1,4 +1,5 @@
 "use client";
+
 import getCurrentUser from "@/app/(server)/actions/getCurrentUser";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import Icons from "@/components/ui/icons";
@@ -36,10 +37,8 @@ export default function CompanyProfileFormFragment({
 
   const getUserData = useCallback(async () => {
     setLoading(true);
-
     const userData = await getCurrentUser();
     setUser(userData);
-
     setLoading(false);
   }, []);
 
@@ -49,19 +48,20 @@ export default function CompanyProfileFormFragment({
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-2 w-full flex-1">
-        <Icons.spinner className="animate-spin" />
+      <div className="flex flex-col items-center gap-2 w-full flex-1 text-sm sm:text-base">
+        <Icons.spinner className="animate-spin size-5 sm:size-6" />
         Loading...
       </div>
     );
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="company-name-input"
           className={cn(
+            "text-sm sm:text-base",
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
         >
@@ -77,17 +77,18 @@ export default function CompanyProfileFormFragment({
           id="company-name-input"
           name="company_name"
           placeholder="Company Name"
-          className="rounded-full"
+          className="rounded-full text-sm sm:text-base"
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <div
           className={cn("flex flex-col gap-2", asClient ? "col-span-full" : "")}
         >
           <Label
             htmlFor="industry-input"
             className={cn(
+              "text-sm sm:text-base",
               readOnly
                 ? ""
                 : "after:content-['*'] after:text-red-500 after:ml-1"
@@ -105,7 +106,7 @@ export default function CompanyProfileFormFragment({
             id="industry-input"
             name="industry"
             placeholder="Industry"
-            className="rounded-full"
+            className="rounded-full text-sm sm:text-base"
           />
         </div>
         <div
@@ -118,17 +119,16 @@ export default function CompanyProfileFormFragment({
               : ""
           )}
         >
-          <Label>Status</Label>
+          <Label className="text-sm sm:text-base">Status</Label>
           <Select
             key={`company-status-${data?.is_active ?? 0}`}
             disabled={disabled || readOnly}
             name="is_active"
             defaultValue={(data?.is_active ?? 0) == 1 ? "yes" : "no"}
           >
-            <SelectTrigger className="rounded-full">
+            <SelectTrigger className="rounded-full text-sm sm:text-base">
               <SelectValue placeholder="Select a status" />
             </SelectTrigger>
-
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select a company status</SelectLabel>
@@ -143,6 +143,7 @@ export default function CompanyProfileFormFragment({
       <div className="flex flex-col gap-2">
         <Label
           className={cn(
+            "text-sm sm:text-base",
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
           htmlFor="headquarters-input"
@@ -159,13 +160,14 @@ export default function CompanyProfileFormFragment({
           id="headquarters-input"
           name="headquarters"
           placeholder="Headquarters"
-          className="rounded-full"
+          className="rounded-full text-sm sm:text-base"
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <Label
           className={cn(
+            "text-sm sm:text-base",
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
           htmlFor="contact-number-input"
@@ -182,14 +184,15 @@ export default function CompanyProfileFormFragment({
           type="tel"
           name="contact_number"
           placeholder="Contact Number"
-          className="rounded-full"
+          className="rounded-full text-sm sm:text-base"
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex-grow flex flex-col gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <div className="flex flex-col gap-2">
           <Label
             className={cn(
+              "text-sm sm:text-base",
               readOnly
                 ? ""
                 : "after:content-['*'] after:text-red-500 after:ml-1"
@@ -210,12 +213,13 @@ export default function CompanyProfileFormFragment({
             min={0}
             name="founded_year"
             placeholder="Founded Year"
-            className="rounded-full"
+            className="rounded-full text-sm sm:text-base"
           />
         </div>
-
-        <div className="flex-grow flex flex-col gap-2">
-          <Label htmlFor="website-input">Website</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="text-sm sm:text-base" htmlFor="website-input">
+            Website
+          </Label>
           <Input
             key={`company-website-${data?.website ?? ""}`}
             disabled={disabled}
@@ -225,12 +229,13 @@ export default function CompanyProfileFormFragment({
             type="url"
             name="website"
             placeholder="Website"
-            className="rounded-full"
+            className="rounded-full text-sm sm:text-base"
           />
         </div>
-
-        <div className="flex-grow flex flex-col gap-2">
-          <Label htmlFor="email-input">Email</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="text-sm sm:text-base" htmlFor="email-input">
+            Email
+          </Label>
           <Input
             key={`company-email-${data?.email ?? ""}`}
             disabled={disabled}
@@ -240,13 +245,15 @@ export default function CompanyProfileFormFragment({
             type="email"
             name="email"
             placeholder="Email"
-            className="rounded-full"
+            className="rounded-full text-sm sm:text-base"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="logo-input">Logo</Label>
+        <Label className="text-sm sm:text-base" htmlFor="logo-input">
+          Logo
+        </Label>
         <Input className="hidden" defaultValue={data?.logo} name="logo_url" />
         <div className="relative">
           <AvatarPicker
@@ -258,18 +265,18 @@ export default function CompanyProfileFormFragment({
             placeholderIcon={
               <Icons.factory
                 className={cn(
-                  "size-1/2",
+                  "size-8 sm:size-12",
                   disabled || readOnly ? "" : "group-hover:invisible"
                 )}
               />
             }
-            className="w-1/2"
+            className="w-24 sm:w-32 md:w-40"
             variant="video"
             src={data?.logo?.replace("http:", "https:")}
             alt={`${data?.company_name} Logo`}
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }

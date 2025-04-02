@@ -59,17 +59,21 @@ export default async function JobAppliedPage({ params }: CompanyByIDPageProps) {
 
   if (company.error || allJobs.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Job Applications</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Job Applications
+        </p>
         <ErrorFallbackCard error={company.error || allJobs.error} />
       </main>
     );
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Job Applications</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Job Applications
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}

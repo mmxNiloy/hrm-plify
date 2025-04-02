@@ -56,9 +56,11 @@ export default async function PersonalInfoSlot({
     empTypes.error
   ) {
     return (
-      <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
-        <div className="col-span-full w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">Personal Information</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Personal Information
+          </p>
         </div>
         <ErrorFallbackCard
           error={
@@ -73,17 +75,21 @@ export default async function PersonalInfoSlot({
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
-      <div className="col-span-full w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">Personal Information</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-8 border rounded-md">
+      <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Personal Information
+        </p>
         {/* {updateAccess && 
         } */}
         <EmployeeDetailsEditDialog data={personalInfo.data} />
       </div>
       <EmployeeDetailsFormFragment data={personalInfo.data} readOnly />
 
-      <div className="col-span-full w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">Service Information</p>
+      <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Service Information
+        </p>
         {/* <CompanyProfileEditDialog data={data} /> */}
         {/* {updateAccess && (
         )} */}

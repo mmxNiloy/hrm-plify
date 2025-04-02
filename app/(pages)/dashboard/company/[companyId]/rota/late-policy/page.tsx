@@ -4,16 +4,11 @@ import { CompanyByIDPageProps } from "../../PageProps";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { getOffDays } from "@/app/(server)/actions/getOffDays";
-import { getShifts } from "@/app/(server)/actions/getShifts";
-import OffDaysDataTable from "@/components/custom/DataTable/Rota/OffDaysDataTable";
-import OffDaysEditDialog from "@/components/custom/Dialog/Rota/OffDaysEditDialog";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
-import { OffDaysDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/OffDaysDataTableColumns";
+import { DataTable } from "@/components/ui/data-table";
 import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
@@ -77,8 +72,8 @@ export default async function RotaLatePolicyPage({
 
   if (company.error || paginatedLatePolicies.error || companyExtra.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Off Days</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">Off Days</p>
         <ErrorFallbackCard
           error={
             company.error ?? paginatedLatePolicies.error ?? companyExtra.error
@@ -89,9 +84,11 @@ export default async function RotaLatePolicyPage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Late Policy</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Late Policy
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}

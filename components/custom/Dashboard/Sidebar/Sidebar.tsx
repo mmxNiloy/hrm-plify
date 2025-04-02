@@ -24,6 +24,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         data-position-state={`${position}-${open ? "open" : "closed"}`}
         className={cn(
           "peer/sidebar group/sidebar fixed transition-all duration-100 data-[state=closed]:w-[5vw] data-[state=closed]:2xl:w-[6vw] data-[state=open]:w-1/4 data-[state=open]:2xl:w-1/5 h-screen data-[position=left]:border-e data-[position=left]:left-0 data-[position=right]:border-s data-[position=right]:right-0 drop-shadow-sm",
+          "overflow-auto hidden md:block",
           hasNavbar ? "top-16" : "",
           className
         )}
@@ -94,7 +95,7 @@ const SidebarLink = React.forwardRef<HTMLButtonElement, SidebarLinkProps>(
           className={cn(
             "w-full gap-1 lg:gap-2 xl:gap-4 hover:underline justify-start transition-all group-data-[state=open]/sidebar:justify-start ",
             "[&_svg]:size-5 [&_svg]:2xl:size-6",
-            "text-wrap text-start lg:text-center",
+            "text-wrap text-start",
             path === href
               ? "bg-blue-500 hover:bg-blue-400 text-white hover:text-white"
               : "",

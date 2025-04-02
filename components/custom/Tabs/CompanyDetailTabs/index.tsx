@@ -1,4 +1,5 @@
 "use client";
+
 import { ICompanyDetails } from "@/schema/CompanySchema";
 import React, { useMemo, useState } from "react";
 import CompanyAddressTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyAddressTab";
@@ -8,7 +9,7 @@ import CompanyProfileTab from "@/components/custom/Tabs/CompanyDetailTabs/Compan
 import CompanyTradeTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyTradeTab";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type TabValue =
   | "profile"
@@ -51,7 +52,6 @@ export default function CompanyDetailTabs({
           />
         ),
       },
-
       {
         value: "address",
         title: "Address",
@@ -93,6 +93,7 @@ export default function CompanyDetailTabs({
   );
 
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+
   return (
     <Tabs
       defaultValue={tabList[currentTabIndex].value}
@@ -100,43 +101,45 @@ export default function CompanyDetailTabs({
       onValueChange={(e) =>
         setCurrentTabIndex(tabList.findIndex((tab) => tab.value === e))
       }
+      className="w-full"
     >
-      <TabsList className="w-full bg-background border">
-        {/* Tab navigation: Previous */}
+      <div className="flex items-center gap-2 sm:gap-4 w-full">
         <Button
           disabled={currentTabIndex < 1}
           onClick={() => setCurrentTabIndex((idx) => idx - 1)}
-          className="rounded-full h-full aspect-square"
-          variant={"ghost"}
-          size={"icon"}
+          className="rounded-full h-8 sm:h-10 aspect-square flex-shrink-0"
+          variant="ghost"
+          size="icon"
         >
-          <Icons.chevronLeft className="size-4" />
+          <Icons.chevronLeft className="size-4 sm:size-5" />
         </Button>
-
-        {tabList.map((tab) => (
-          <TabsTrigger
-            className="rounded-none data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-indigo-400"
-            value={tab.value}
-            key={tab.value}
-          >
-            {tab.title}
-          </TabsTrigger>
-        ))}
-
-        {/* Tab navigation next */}
+        <TabsList className="flex-1 bg-background border md:border-none justify-start gap-1 sm:gap-2 p-1 sm:p-2 min-w-0 overflow-x-auto h-fit">
+          {tabList.map((tab) => (
+            <TabsTrigger
+              className="text-sm sm:text-base px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none rounded-none data-[state=active]:shadow-none data-[state=active]:md:border-b-2 data-[state=active]:border-t-2 data-[state=active]:border-indigo-400 whitespace-nowrap"
+              value={tab.value}
+              key={tab.value}
+            >
+              {tab.title}
+            </TabsTrigger>
+          ))}
+        </TabsList>
         <Button
           disabled={currentTabIndex > tabList.length - 2}
           onClick={() => setCurrentTabIndex((idx) => idx + 1)}
-          className="rounded-full h-full aspect-square"
-          variant={"ghost"}
-          size={"icon"}
+          className="rounded-full h-8 sm:h-10 aspect-square flex-shrink-0"
+          variant="ghost"
+          size="icon"
         >
-          <Icons.chevronRight className="size-4" />
+          <Icons.chevronRight className="size-4 sm:size-5" />
         </Button>
-      </TabsList>
-
+      </div>
       {tabList.map((tab) => (
-        <TabsContent value={tab.value} key={tab.value}>
+        <TabsContent
+          value={tab.value}
+          key={tab.value}
+          className="mt-4 sm:mt-6 text-sm sm:text-base"
+        >
           {tab.content}
         </TabsContent>
       ))}

@@ -18,6 +18,7 @@ import { Metadata } from "next";
 import EmployeeMigrationPopover from "@/components/custom/Popover/Company/EmployeeMigrationPopover";
 import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 import SiteConfig from "@/utils/SiteConfig";
+import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/EmployeeOnboardingDialog/wrapper";
 
 interface MigrantEmployeePageProps
   extends ISearchParamsProps,
@@ -70,8 +71,10 @@ export default async function MigrantEmployeePage({
     employmentTypes.error
   ) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Migrant Employees</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Migrant Employees
+        </p>
         <ErrorFallbackCard
           error={
             company.error ??
@@ -85,9 +88,11 @@ export default async function MigrantEmployeePage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Migrant Employees</p>
-      <div className="flex items-center justify-between">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Migrant Employees
+      </p>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
         <MyBreadcrumbs
           company={company.data}
           user={user}
@@ -95,18 +100,22 @@ export default async function MigrantEmployeePage({
           title={"Migrant Employees"}
         />
 
-        <div className="flex gap-4 items-center">
-          <EmployeeMigrationPopover
-            employees={companyExtraData.data.employees}
-          />
-          <EmployeeOnboardingDialog
-            employmentTypes={employmentTypes.data.filter(
-              (item) => item.isActive
-            )}
-            company_id={companyId}
-            {...companyExtraData.data}
-            asMigrant
-          />
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          <div className="w-full sm:w-auto">
+            <EmployeeMigrationPopover
+              employees={companyExtraData.data.employees}
+            />
+          </div>
+          <div className="w-full sm:w-auto">
+            <EmployeeOnboardingDialogWrapper
+              employmentType={employmentTypes.data.filter(
+                (item) => item.isActive
+              )}
+              company_id={companyId}
+              {...companyExtraData.data}
+              asMigrant
+            />
+          </div>
         </div>
       </div>
 

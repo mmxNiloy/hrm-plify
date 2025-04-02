@@ -1,20 +1,18 @@
 "use client";
 
 import {
-  Column,
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  GlobalFilterTableState,
-  SortingState,
   useReactTable,
+  SortingState,
+  ColumnFiltersState,
   VisibilityState,
+  Column,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -30,7 +28,6 @@ import { Label } from "./label";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -43,16 +40,15 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IPaginatedResponse } from "@/schema/PaginatedResponse";
-import { Skeleton } from "./skeleton";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./accordion";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { IPaginatedResponse } from "@/schema/PaginatedResponse";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -75,7 +71,6 @@ export function DataTable<TData, TValue>({
     pageIndex: 0,
     pageSize: pageSize,
   });
-
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<string>("");
@@ -114,20 +109,21 @@ export function DataTable<TData, TValue>({
   );
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex items-center justify-between">
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Page size</Label>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Page size</Label>
               <Select
                 onValueChange={(val) => {
-                  const mPagination = { ...pagination };
-                  mPagination.pageSize = Number.parseInt(val);
-                  setPagination(mPagination);
+                  setPagination((prev) => ({
+                    ...prev,
+                    pageSize: Number.parseInt(val),
+                  }));
                 }}
               >
-                <SelectTrigger className="w-16">
+                <SelectTrigger className="w-full sm:w-20">
                   <SelectValue placeholder={5} />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,166 +134,164 @@ export function DataTable<TData, TValue>({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label>Visible Columns</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Visible Columns</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="items-center gap-4 justify-between"
+                    className="w-full sm:w-48 justify-between gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
                     Visible Columns
-                    <Icons.chevronsUpDown className="size-4" />
+                    <Icons.chevronsUpDown className="size-4 sm:size-5" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-full sm:w-48">
                   {table
                     .getAllColumns()
-                    .filter((column) => {
-                      return (
+                    .filter(
+                      (column) =>
                         column.getCanHide() && !column.id.includes("action")
-                      );
-                    })
-                    .map((column) => {
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={column.id}
-                          className="capitalize"
-                          checked={column.getIsVisible()}
-                          onSelect={(e) => e.preventDefault()}
-                          onCheckedChange={(value) =>
-                            column.toggleVisibility(!!value)
-                          }
-                        >
-                          {column.id}
-                        </DropdownMenuCheckboxItem>
-                      );
-                    })}
+                    )
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize text-sm sm:text-base"
+                        checked={column.getIsVisible()}
+                        onSelect={(e) => e.preventDefault()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
 
-          {/* Filters */}
-          <div className="flex gap-4 items-center">
-            {/* Column Filter */}
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="col-filter-input">Column Filter</Label>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label
+                htmlFor="col-filter-input"
+                className="text-sm sm:text-base"
+              >
+                Column Filter
+              </Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant={"outline"}
-                    className="justify-start gap-2 w-48"
+                    variant="outline"
+                    className="w-full sm:w-48 justify-start gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
-                    <Icons.filter className="size-4" /> Filters
+                    <Icons.filter className="size-4 sm:size-5" /> Filters
                   </Button>
                 </PopoverTrigger>
-
-                <PopoverContent asChild>
+                <PopoverContent className="w-[90vw] sm:w-96 max-h-[70vh] p-2">
                   <Accordion
-                    className="max-h-96 overflow-scroll"
                     type="multiple"
                     defaultValue={columnFilters.map((item) => item.id)}
+                    className="overflow-auto"
                   >
                     {table
                       .getAllColumns()
                       .filter((column) => column.getCanHide())
-                      .map((item) => {
-                        return (
-                          <AccordionItem
-                            value={item.id}
-                            key={`accordion-${item.id}`}
-                          >
-                            <AccordionTrigger className="capitalize text-xs">
-                              {item.id}
-                            </AccordionTrigger>
-                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
-                              <Input
-                                placeholder={`Filter ${item.id}`}
-                                value={
-                                  (columnFilters.find((f) => f.id === item.id)
-                                    ?.value as string) ?? undefined
-                                }
-                                onChange={(e) => {
-                                  const text = e.target.value;
-                                  if (text.length < 1) {
-                                    setColumnFilters((oldVal) =>
-                                      oldVal.filter((f) => f.id !== item.id)
-                                    );
-                                    return;
-                                  }
-                                  // .trim();
-                                  // Check if this filter exists
-                                  const allColumnFilters = [...columnFilters];
-                                  const filterRef = allColumnFilters.find(
-                                    (f) => f.id === item.id
+                      .map((item) => (
+                        <AccordionItem
+                          value={item.id}
+                          key={`accordion-${item.id}`}
+                        >
+                          <AccordionTrigger className="capitalize text-sm sm:text-base">
+                            {item.id}
+                          </AccordionTrigger>
+                          <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                            <Input
+                              placeholder={`Filter ${item.id}`}
+                              value={
+                                (columnFilters.find((f) => f.id === item.id)
+                                  ?.value as string) ?? ""
+                              }
+                              onChange={(e) => {
+                                const text = e.target.value;
+                                if (text.length < 1) {
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
                                   );
-                                  if (filterRef) {
-                                    filterRef.value = text;
-                                  } else {
-                                    allColumnFilters.push({
-                                      id: item.id,
-                                      value: text,
-                                    });
-                                  }
-
-                                  setColumnFilters(allColumnFilters);
-                                }}
-                              />
-
-                              {columnFilters.find((f) => f.id === item.id) && (
-                                <Button
-                                  size={"sm"}
-                                  variant={"destructive"}
-                                  onClick={() => {
-                                    setColumnFilters((oldVal) => [
-                                      ...oldVal.filter((f) => f.id !== item.id),
-                                    ]);
-                                  }}
-                                >
-                                  <Icons.trash /> Remove Filter
-                                </Button>
-                              )}
-                            </AccordionContent>
-                          </AccordionItem>
-                        );
-                      })}
+                                  return;
+                                }
+                                const allColumnFilters = [...columnFilters];
+                                const filterRef = allColumnFilters.find(
+                                  (f) => f.id === item.id
+                                );
+                                if (filterRef) {
+                                  filterRef.value = text;
+                                } else {
+                                  allColumnFilters.push({
+                                    id: item.id,
+                                    value: text,
+                                  });
+                                }
+                                setColumnFilters(allColumnFilters);
+                              }}
+                              className="text-sm sm:text-base"
+                            />
+                            {columnFilters.find((f) => f.id === item.id) && (
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() =>
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
+                                  )
+                                }
+                                className="text-sm sm:text-base px-3 sm:px-4"
+                              >
+                                <Icons.trash className="size-4 sm:size-5 mr-2" />{" "}
+                                Remove
+                              </Button>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
                   </Accordion>
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="search-input">Global Filter</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label htmlFor="search-input" className="text-sm sm:text-base">
+                Global Filter
+              </Label>
               <Input
                 type="search"
                 placeholder="Global Filter..."
                 onChange={handleFilterChange}
+                className="w-full sm:w-64 text-sm sm:text-base"
               />
             </div>
           </div>
         </div>
       )}
-      <div className="rounded-md border">
-        <Table className="rounded-t-md overflow-clip">
+
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
           <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
+                className="*:text-white text-sm sm:text-base hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="whitespace-nowrap">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -305,12 +299,12 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="even:bg-accent text-xs"
+                  className="even:bg-accent text-xs sm:text-sm"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="whitespace-nowrap">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -323,7 +317,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-sm sm:text-base"
                 >
                   No results.
                 </TableCell>
@@ -332,30 +326,31 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       {showOptions && (
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <p className="text-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 py-3 sm:py-4">
+          <p className="text-sm sm:text-base">
             Showing page: {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </p>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 w-full sm:w-auto">
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <Icons.chevronLeft /> Previous
+              <Icons.chevronLeft className="size-4 sm:size-5" /> Previous
             </Button>
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Next <Icons.chevronRight />
+              Next <Icons.chevronRight className="size-4 sm:size-5" />
             </Button>
           </div>
         </div>
@@ -364,51 +359,10 @@ export function DataTable<TData, TValue>({
   );
 }
 
-export function SortableHeader<TData, TValue>({
-  name,
-  column,
-  title,
-  hasOverflow,
-}: {
-  name: string;
-  column: Column<TData, TValue>;
-  hasOverflow?: boolean;
-  title?: string;
-}) {
-  const sortState = column.getIsSorted();
-  return (
-    <Button
-      title={title}
-      className="gap-1 hover:bg-transparent text-xs p-0"
-      variant={"ghost"}
-      onClick={() => {
-        if (sortState) {
-          if (sortState === "desc") {
-            column.clearSorting();
-          } else column.toggleSorting();
-        } else {
-          column.toggleSorting();
-        }
-      }}
-    >
-      {name}
-      {sortState ? (
-        sortState === "asc" ? (
-          <Icons.arrowUp className="size-4" />
-        ) : (
-          <Icons.arrowDown className="size-4" />
-        )
-      ) : (
-        <Icons.arrowUpDown className="size-4" />
-      )}
-      {hasOverflow && <Icons.help className="ml-4 size-4" />}
-    </Button>
-  );
-}
-
-interface NetworkedDataTableProps<TData, TValue>
-  extends Omit<DataTableProps<TData, TValue>, "data"> {
+interface NetworkedDataTableProps<TData, TValue> {
   src: string;
+  columns: ColumnDef<TData, TValue>[];
+  showOptions?: boolean;
   skeleton?: React.JSX.Element;
 }
 
@@ -423,18 +377,12 @@ export function NetworkedDataTable<TData, TValue>({
 }: NetworkedDataTableProps<TData, TValue>) {
   const [data, setData] = useState<TData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 5,
-  });
-
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-
   const [totalPage, setTotalPage] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -463,7 +411,6 @@ export function NetworkedDataTable<TData, TValue>({
 
   const getData = useCallback(async () => {
     setLoading(true);
-
     try {
       const apiRes = await fetch(
         `${src}${src.includes("?") ? "&" : "?"}page=${currentPage}&limit=${
@@ -480,9 +427,8 @@ export function NetworkedDataTable<TData, TValue>({
       }
     } catch (_) {
       setData([]);
-      setTotalPage;
+      setTotalPage(1);
     }
-
     setLoading(false);
   }, [currentPage, pagination.pageSize, src]);
 
@@ -499,23 +445,24 @@ export function NetworkedDataTable<TData, TValue>({
   }, [getData]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex items-center justify-between">
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Page size</Label>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Page size</Label>
               <Select
                 disabled={loading}
                 onValueChange={(val) => {
                   setCurrentPage(1);
-                  const mPagination = { ...pagination };
-                  mPagination.pageSize = Number.parseInt(val);
-                  mPagination.pageIndex = 1;
-                  setPagination(mPagination);
+                  setPagination((prev) => ({
+                    ...prev,
+                    pageSize: Number.parseInt(val),
+                    pageIndex: 0,
+                  }));
                 }}
               >
-                <SelectTrigger className="w-16">
+                <SelectTrigger className="w-full sm:w-20">
                   <SelectValue placeholder={5} />
                 </SelectTrigger>
                 <SelectContent>
@@ -526,171 +473,174 @@ export function NetworkedDataTable<TData, TValue>({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label>Visible Columns</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Visible Columns</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     disabled={loading}
                     variant="outline"
-                    className="items-center gap-4 justify-between"
+                    className="w-full sm:w-48 justify-between gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
                     Visible Columns
-                    <Icons.chevronsUpDown className="size-4" />
+                    <Icons.chevronsUpDown className="size-4 sm:size-5" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-full sm:w-48">
                   {table
                     .getAllColumns()
                     .filter((column) => column.getCanHide())
-                    .map((column) => {
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={column.id}
-                          className="capitalize"
-                          checked={column.getIsVisible()}
-                          onSelect={(e) => e.preventDefault()}
-                          onCheckedChange={(value) =>
-                            column.toggleVisibility(!!value)
-                          }
-                        >
-                          {column.id}
-                        </DropdownMenuCheckboxItem>
-                      );
-                    })}
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize text-sm sm:text-base"
+                        checked={column.getIsVisible()}
+                        onSelect={(e) => e.preventDefault()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
-          {/* Filters */}
-          <div className="flex gap-4 items-center">
-            {/* Column Filter */}
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="col-filter-input">Column Filter</Label>
+
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label
+                htmlFor="col-filter-input"
+                className="text-sm sm:text-base"
+              >
+                Column Filter
+              </Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant={"outline"}
-                    className="justify-start gap-2 w-48"
+                    variant="outline"
+                    className="w-full sm:w-48 justify-start gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
-                    <Icons.filter className="size-4" /> Filters
+                    <Icons.filter className="size-4 sm:size-5" /> Filters
                   </Button>
                 </PopoverTrigger>
-
-                <PopoverContent asChild>
+                <PopoverContent className="w-[90vw] sm:w-96 max-h-[70vh] p-2">
                   <Accordion
-                    className="max-h-96 overflow-scroll"
                     type="multiple"
                     defaultValue={columnFilters.map((item) => item.id)}
+                    className="overflow-auto"
                   >
                     {table
                       .getAllColumns()
                       .filter((column) => column.getCanHide())
-                      .map((item) => {
-                        return (
-                          <AccordionItem
-                            value={item.id}
-                            key={`accordion-${item.id}`}
-                          >
-                            <AccordionTrigger className="capitalize text-xs">
-                              {item.id}
-                            </AccordionTrigger>
-                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
-                              <Input
-                                placeholder={`Filter ${item.id}`}
-                                value={
-                                  (columnFilters.find((f) => f.id === item.id)
-                                    ?.value as string) ?? undefined
-                                }
-                                onChange={(e) => {
-                                  const text = e.target.value;
-                                  if (text.length < 1) {
-                                    setColumnFilters((oldVal) =>
-                                      oldVal.filter((f) => f.id !== item.id)
-                                    );
-                                    return;
-                                  }
-                                  // .trim();
-                                  // Check if this filter exists
-                                  const allColumnFilters = [...columnFilters];
-                                  const filterRef = allColumnFilters.find(
-                                    (f) => f.id === item.id
+                      .map((item) => (
+                        <AccordionItem
+                          value={item.id}
+                          key={`accordion-${item.id}`}
+                        >
+                          <AccordionTrigger className="capitalize text-sm sm:text-base">
+                            {item.id}
+                          </AccordionTrigger>
+                          <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                            <Input
+                              placeholder={`Filter ${item.id}`}
+                              value={
+                                (columnFilters.find((f) => f.id === item.id)
+                                  ?.value as string) ?? ""
+                              }
+                              onChange={(e) => {
+                                const text = e.target.value;
+                                if (text.length < 1) {
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
                                   );
-                                  if (filterRef) {
-                                    filterRef.value = text;
-                                  } else {
-                                    allColumnFilters.push({
-                                      id: item.id,
-                                      value: text,
-                                    });
-                                  }
-
-                                  setColumnFilters(allColumnFilters);
-                                }}
-                              />
-
-                              {columnFilters.find((f) => f.id === item.id) && (
-                                <Button
-                                  size={"sm"}
-                                  variant={"destructive"}
-                                  onClick={() => {
-                                    setColumnFilters((oldVal) => [
-                                      ...oldVal.filter((f) => f.id !== item.id),
-                                    ]);
-                                  }}
-                                >
-                                  <Icons.trash /> Remove Filter
-                                </Button>
-                              )}
-                            </AccordionContent>
-                          </AccordionItem>
-                        );
-                      })}
+                                  return;
+                                }
+                                const allColumnFilters = [...columnFilters];
+                                const filterRef = allColumnFilters.find(
+                                  (f) => f.id === item.id
+                                );
+                                if (filterRef) {
+                                  filterRef.value = text;
+                                } else {
+                                  allColumnFilters.push({
+                                    id: item.id,
+                                    value: text,
+                                  });
+                                }
+                                setColumnFilters(allColumnFilters);
+                              }}
+                              className="text-sm sm:text-base"
+                            />
+                            {columnFilters.find((f) => f.id === item.id) && (
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() =>
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
+                                  )
+                                }
+                                className="text-sm sm:text-base px-3 sm:px-4"
+                              >
+                                <Icons.trash className="size-4 sm:size-5 mr-2" />{" "}
+                                Remove
+                              </Button>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
                   </Accordion>
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="search-input">Global Filter</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label htmlFor="search-input" className="text-sm sm:text-base">
+                Global Filter
+              </Label>
               <Input
                 type="search"
                 placeholder="Global Filter..."
                 onChange={handleFilterChange}
+                className="w-full sm:w-64 text-sm sm:text-base"
               />
             </div>
           </div>
         </div>
       )}
-      <div className="rounded-md border">
-        <Table className="rounded-t-md overflow-clip">
+
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
           <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
+                className="*:text-white text-sm sm:text-base hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="whitespace-nowrap">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24">
-                  <p className="w-full h-full flex flex-row gap-2 items-center justify-center">
-                    <Icons.spinner className="animate-spin ease-in-out" />
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center text-sm sm:text-base"
+                >
+                  <p className="flex flex-row gap-2 items-center justify-center">
+                    <Icons.spinner className="animate-spin size-5 sm:size-6 ease-in-out" />
                     Loading...
                   </p>
                 </TableCell>
@@ -698,12 +648,12 @@ export function NetworkedDataTable<TData, TValue>({
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="even:bg-accent text-xs"
+                  className="even:bg-accent text-xs sm:text-sm"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="whitespace-nowrap">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -716,7 +666,7 @@ export function NetworkedDataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-sm sm:text-base"
                 >
                   No results.
                 </TableCell>
@@ -725,29 +675,30 @@ export function NetworkedDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       {showOptions && (
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <p className="text-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 py-3 sm:py-4">
+          <p className="text-sm sm:text-base">
             Showing page: {currentPage} of {totalPage}
           </p>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 w-full sm:w-auto">
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               onClick={() => setCurrentPage((oldVal) => oldVal - 1)}
               disabled={loading || currentPage < 2}
             >
-              <Icons.chevronLeft /> Previous
+              <Icons.chevronLeft className="size-4 sm:size-5" /> Previous
             </Button>
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               onClick={() => setCurrentPage((oldVal) => oldVal + 1)}
               disabled={loading || currentPage >= totalPage}
             >
-              Next <Icons.chevronRight />
+              Next <Icons.chevronRight className="size-4 sm:size-5" />
             </Button>
           </div>
         </div>
@@ -756,18 +707,16 @@ export function NetworkedDataTable<TData, TValue>({
   );
 }
 
-export function DataTableSkeleton<TValue>({
-  columns,
-  showOptions,
-}: {
+interface DataTableSkeletonProps<TValue> {
   columns: ColumnDef<any | undefined, TValue>[];
   showOptions?: boolean;
-}) {
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 5,
-  });
+}
 
+export function DataTableSkeleton<TValue>({
+  columns,
+  showOptions = true,
+}: DataTableSkeletonProps<TValue>) {
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<string>("");
@@ -798,158 +747,190 @@ export function DataTableSkeleton<TValue>({
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex items-center justify-between">
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Page size</Label>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Page size</Label>
               <Select disabled>
-                <SelectTrigger className="w-16">
+                <SelectTrigger className="w-full sm:w-20">
                   <SelectValue placeholder={5} />
                 </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label>Visible Columns</Label>
-              <Button
-                disabled
-                variant="outline"
-                className="items-center gap-4 justify-between"
-              >
-                Visible Columns
-                <Icons.chevronsUpDown className="size-4" />
-              </Button>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Visible Columns</Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    disabled
+                    variant="outline"
+                    className="w-full sm:w-48 justify-between gap-2 text-sm sm:text-base px-3 sm:px-4"
+                  >
+                    Visible Columns
+                    <Icons.chevronsUpDown className="size-4 sm:size-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-full sm:w-48">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize text-sm sm:text-base"
+                        checked={column.getIsVisible()}
+                        onSelect={(e) => e.preventDefault()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
-          {/* Filters */}
-          <div className="flex gap-4 items-center">
-            {/* Column Filter */}
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="col-filter-input">Column Filter</Label>
+
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label
+                htmlFor="col-filter-input"
+                className="text-sm sm:text-base"
+              >
+                Column Filter
+              </Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant={"outline"}
-                    className="justify-start gap-2 w-48"
+                    variant="outline"
+                    className="w-full sm:w-48 justify-start gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
-                    <Icons.filter className="size-4" /> Filters
+                    <Icons.filter className="size-4 sm:size-5" /> Filters
                   </Button>
                 </PopoverTrigger>
-
-                <PopoverContent asChild>
+                <PopoverContent className="w-[90vw] sm:w-96 max-h-[70vh] p-2">
                   <Accordion
-                    className="max-h-96 overflow-scroll"
                     type="multiple"
                     defaultValue={columnFilters.map((item) => item.id)}
+                    className="overflow-auto"
                   >
                     {table
                       .getAllColumns()
                       .filter((column) => column.getCanHide())
-                      .map((item) => {
-                        return (
-                          <AccordionItem
-                            value={item.id}
-                            key={`accordion-${item.id}`}
-                          >
-                            <AccordionTrigger className="capitalize text-xs">
-                              {item.id}
-                            </AccordionTrigger>
-                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
-                              <Input
-                                placeholder={`Filter ${item.id}`}
-                                value={
-                                  (columnFilters.find((f) => f.id === item.id)
-                                    ?.value as string) ?? undefined
-                                }
-                                onChange={(e) => {
-                                  const text = e.target.value;
-                                  if (text.length < 1) {
-                                    setColumnFilters((oldVal) =>
-                                      oldVal.filter((f) => f.id !== item.id)
-                                    );
-                                    return;
-                                  }
-                                  // .trim();
-                                  // Check if this filter exists
-                                  const allColumnFilters = [...columnFilters];
-                                  const filterRef = allColumnFilters.find(
-                                    (f) => f.id === item.id
+                      .map((item) => (
+                        <AccordionItem
+                          value={item.id}
+                          key={`accordion-${item.id}`}
+                        >
+                          <AccordionTrigger className="capitalize text-sm sm:text-base">
+                            {item.id}
+                          </AccordionTrigger>
+                          <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                            <Input
+                              placeholder={`Filter ${item.id}`}
+                              value={
+                                (columnFilters.find((f) => f.id === item.id)
+                                  ?.value as string) ?? ""
+                              }
+                              onChange={(e) => {
+                                const text = e.target.value;
+                                if (text.length < 1) {
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
                                   );
-                                  if (filterRef) {
-                                    filterRef.value = text;
-                                  } else {
-                                    allColumnFilters.push({
-                                      id: item.id,
-                                      value: text,
-                                    });
-                                  }
-
-                                  setColumnFilters(allColumnFilters);
-                                }}
-                              />
-
-                              {columnFilters.find((f) => f.id === item.id) && (
-                                <Button
-                                  size={"sm"}
-                                  variant={"destructive"}
-                                  onClick={() => {
-                                    setColumnFilters((oldVal) => [
-                                      ...oldVal.filter((f) => f.id !== item.id),
-                                    ]);
-                                  }}
-                                >
-                                  <Icons.trash /> Remove Filter
-                                </Button>
-                              )}
-                            </AccordionContent>
-                          </AccordionItem>
-                        );
-                      })}
+                                  return;
+                                }
+                                const allColumnFilters = [...columnFilters];
+                                const filterRef = allColumnFilters.find(
+                                  (f) => f.id === item.id
+                                );
+                                if (filterRef) {
+                                  filterRef.value = text;
+                                } else {
+                                  allColumnFilters.push({
+                                    id: item.id,
+                                    value: text,
+                                  });
+                                }
+                                setColumnFilters(allColumnFilters);
+                              }}
+                              className="text-sm sm:text-base"
+                            />
+                            {columnFilters.find((f) => f.id === item.id) && (
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() =>
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
+                                  )
+                                }
+                                className="text-sm sm:text-base px-3 sm:px-4"
+                              >
+                                <Icons.trash className="size-4 sm:size-5 mr-2" />{" "}
+                                Remove
+                              </Button>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
                   </Accordion>
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="search-input">Global Filter</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label htmlFor="search-input" className="text-sm sm:text-base">
+                Global Filter
+              </Label>
               <Input
                 type="search"
                 placeholder="Global Filter..."
-                // onChange={handleFilterChange}
+                className="w-full sm:w-64 text-sm sm:text-base"
               />
             </div>
           </div>
         </div>
       )}
-      <div className="rounded-md border">
-        <Table className="rounded-t-md overflow-clip">
+
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
           <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
+                className="*:text-white text-sm sm:text-base hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="whitespace-nowrap">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24">
-                <p className="w-full h-full flex flex-row gap-2 items-center justify-center">
-                  <Icons.spinner className="animate-spin ease-in-out" />
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center text-sm sm:text-base"
+              >
+                <p className="flex flex-row gap-2 items-center justify-center">
+                  <Icons.spinner className="animate-spin size-5 sm:size-6 ease-in-out" />
                   Loading...
                 </p>
               </TableCell>
@@ -957,25 +938,26 @@ export function DataTableSkeleton<TValue>({
           </TableBody>
         </Table>
       </div>
+
       {showOptions && (
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <p className="text-sm">Showing page: 1 of 1</p>
-          <div className="flex flex-row gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 py-3 sm:py-4">
+          <p className="text-sm sm:text-base">Showing page: 1 of 1</p>
+          <div className="flex flex-row gap-2 w-full sm:w-auto">
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               disabled
             >
-              <Icons.chevronLeft /> Previous
+              <Icons.chevronLeft className="size-4 sm:size-5" /> Previous
             </Button>
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               disabled
             >
-              Next <Icons.chevronRight />
+              Next <Icons.chevronRight className="size-4 sm:size-5" />
             </Button>
           </div>
         </div>
@@ -984,7 +966,6 @@ export function DataTableSkeleton<TValue>({
   );
 }
 
-/// Server Side Data table, uses query params to paginate
 export function StaticDataTable<TData, TValue>({
   columns,
   data,
@@ -995,10 +976,8 @@ export function StaticDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
-
   const searchParams = useSearchParams();
 
-  // update search params
   const createQueryString = useCallback(
     ({
       name,
@@ -1015,13 +994,11 @@ export function StaticDataTable<TData, TValue>({
       if (name && value) {
         params.set(prefix ? prefix.concat(`_${name}`) : name, value);
       }
-
       if (names && values) {
         names.forEach((n, i) =>
           params.set(prefix ? prefix.concat(`_${n}`) : n, values.at(i) ?? "")
         );
       }
-
       return params.toString();
     },
     [prefix, searchParams]
@@ -1079,12 +1056,12 @@ export function StaticDataTable<TData, TValue>({
   );
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex items-center justify-between">
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Page size</Label>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Page size</Label>
               <Select
                 disabled={loading}
                 onValueChange={(val) => {
@@ -1096,7 +1073,7 @@ export function StaticDataTable<TData, TValue>({
                   );
                 }}
               >
-                <SelectTrigger className="w-16">
+                <SelectTrigger className="w-full sm:w-20">
                   <SelectValue placeholder={5} />
                 </SelectTrigger>
                 <SelectContent>
@@ -1107,162 +1084,162 @@ export function StaticDataTable<TData, TValue>({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label>Visible Columns</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label className="text-sm sm:text-base">Visible Columns</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     disabled={loading}
                     variant="outline"
-                    className="items-center gap-4 justify-between"
+                    className="w-full sm:w-48 justify-between gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
                     Visible Columns
-                    <Icons.chevronsUpDown className="size-4" />
+                    <Icons.chevronsUpDown className="size-4 sm:size-5" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-full sm:w-48">
                   {table
                     .getAllColumns()
                     .filter((column) => column.getCanHide())
-                    .map((column) => {
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={column.id}
-                          className="capitalize"
-                          checked={column.getIsVisible()}
-                          onSelect={(e) => e.preventDefault()}
-                          onCheckedChange={(value) =>
-                            column.toggleVisibility(!!value)
-                          }
-                        >
-                          {column.id}
-                        </DropdownMenuCheckboxItem>
-                      );
-                    })}
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize text-sm sm:text-base"
+                        checked={column.getIsVisible()}
+                        onSelect={(e) => e.preventDefault()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
-          {/* Filters */}
-          <div className="flex gap-4 items-center">
-            {/* Column Filter */}
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="col-filter-input">Column Filter</Label>
+
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label
+                htmlFor="col-filter-input"
+                className="text-sm sm:text-base"
+              >
+                Column Filter
+              </Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    variant={"outline"}
-                    className="justify-start gap-2 w-48"
+                    variant="outline"
+                    className="w-full sm:w-48 justify-start gap-2 text-sm sm:text-base px-3 sm:px-4"
                   >
-                    <Icons.filter className="size-4" /> Filters
+                    <Icons.filter className="size-4 sm:size-5" /> Filters
                   </Button>
                 </PopoverTrigger>
-
-                <PopoverContent asChild>
+                <PopoverContent className="w-[90vw] sm:w-96 max-h-[70vh] p-2">
                   <Accordion
-                    className="max-h-96 overflow-scroll"
                     type="multiple"
                     defaultValue={columnFilters.map((item) => item.id)}
+                    className="overflow-auto"
                   >
                     {table
                       .getAllColumns()
                       .filter((column) => column.getCanHide())
-                      .map((item) => {
-                        return (
-                          <AccordionItem
-                            value={item.id}
-                            key={`accordion-${item.id}`}
-                          >
-                            <AccordionTrigger className="capitalize text-xs">
-                              {item.id}
-                            </AccordionTrigger>
-                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
-                              <Input
-                                placeholder={`Filter ${item.id}`}
-                                value={
-                                  (columnFilters.find((f) => f.id === item.id)
-                                    ?.value as string) ?? undefined
-                                }
-                                onChange={(e) => {
-                                  const text = e.target.value;
-                                  if (text.length < 1) {
-                                    setColumnFilters((oldVal) =>
-                                      oldVal.filter((f) => f.id !== item.id)
-                                    );
-                                    return;
-                                  }
-                                  // .trim();
-                                  // Check if this filter exists
-                                  const allColumnFilters = [...columnFilters];
-                                  const filterRef = allColumnFilters.find(
-                                    (f) => f.id === item.id
+                      .map((item) => (
+                        <AccordionItem
+                          value={item.id}
+                          key={`accordion-${item.id}`}
+                        >
+                          <AccordionTrigger className="capitalize text-sm sm:text-base">
+                            {item.id}
+                          </AccordionTrigger>
+                          <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                            <Input
+                              placeholder={`Filter ${item.id}`}
+                              value={
+                                (columnFilters.find((f) => f.id === item.id)
+                                  ?.value as string) ?? ""
+                              }
+                              onChange={(e) => {
+                                const text = e.target.value;
+                                if (text.length < 1) {
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
                                   );
-                                  if (filterRef) {
-                                    filterRef.value = text;
-                                  } else {
-                                    allColumnFilters.push({
-                                      id: item.id,
-                                      value: text,
-                                    });
-                                  }
-
-                                  setColumnFilters(allColumnFilters);
-                                }}
-                              />
-
-                              {columnFilters.find((f) => f.id === item.id) && (
-                                <Button
-                                  size={"sm"}
-                                  variant={"destructive"}
-                                  onClick={() => {
-                                    setColumnFilters((oldVal) => [
-                                      ...oldVal.filter((f) => f.id !== item.id),
-                                    ]);
-                                  }}
-                                >
-                                  <Icons.trash /> Remove Filter
-                                </Button>
-                              )}
-                            </AccordionContent>
-                          </AccordionItem>
-                        );
-                      })}
+                                  return;
+                                }
+                                const allColumnFilters = [...columnFilters];
+                                const filterRef = allColumnFilters.find(
+                                  (f) => f.id === item.id
+                                );
+                                if (filterRef) {
+                                  filterRef.value = text;
+                                } else {
+                                  allColumnFilters.push({
+                                    id: item.id,
+                                    value: text,
+                                  });
+                                }
+                                setColumnFilters(allColumnFilters);
+                              }}
+                              className="text-sm sm:text-base"
+                            />
+                            {columnFilters.find((f) => f.id === item.id) && (
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() =>
+                                  setColumnFilters((oldVal) =>
+                                    oldVal.filter((f) => f.id !== item.id)
+                                  )
+                                }
+                                className="text-sm sm:text-base px-3 sm:px-4"
+                              >
+                                <Icons.trash className="size-4 sm:size-5 mr-2" />{" "}
+                                Remove
+                              </Button>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
                   </Accordion>
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="search-input">Global Filter</Label>
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
+              <Label htmlFor="search-input" className="text-sm sm:text-base">
+                Global Filter
+              </Label>
               <Input
                 type="search"
                 placeholder="Global Filter..."
                 onChange={handleFilterChange}
+                className="w-full sm:w-64 text-sm sm:text-base"
               />
             </div>
           </div>
         </div>
       )}
-      <div className="rounded-md border">
-        <Table className="rounded-t-md overflow-clip">
+
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
           <TableHeader className="bg-site-gradient-lmr">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className="*:text-white text-sm hover:bg-site-gradient-lmr-light"
+                className="*:text-white text-sm sm:text-base hover:bg-site-gradient-lmr-light"
                 key={headerGroup.id}
               >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="whitespace-nowrap">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -1271,12 +1248,12 @@ export function StaticDataTable<TData, TValue>({
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
-                    className="even:bg-accent text-xs"
+                    className="even:bg-accent text-xs sm:text-sm"
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="whitespace-nowrap">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -1289,7 +1266,7 @@ export function StaticDataTable<TData, TValue>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-24 text-center text-sm sm:text-base"
                   >
                     No results.
                   </TableCell>
@@ -1300,9 +1277,12 @@ export function StaticDataTable<TData, TValue>({
           {loading && (
             <TableBody>
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24">
-                  <p className="w-full h-full flex flex-row gap-2 items-center justify-center">
-                    <Icons.spinner className="animate-spin ease-in-out" />
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center text-sm sm:text-base"
+                >
+                  <p className="flex flex-row gap-2 items-center justify-center">
+                    <Icons.spinner className="animate-spin size-5 sm:size-6 ease-in-out" />
                     Loading...
                   </p>
                 </TableCell>
@@ -1311,15 +1291,16 @@ export function StaticDataTable<TData, TValue>({
           )}
         </Table>
       </div>
+
       {showOptions && (
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <p className="text-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 py-3 sm:py-4">
+          <p className="text-sm sm:text-base">
             Showing page: {table.getState().pagination.pageIndex + 1} of{" "}
             {Math.max(1, pageCount)}
           </p>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 w-full sm:w-auto">
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               onClick={() => {
@@ -1333,10 +1314,10 @@ export function StaticDataTable<TData, TValue>({
               }}
               disabled={!table.getCanPreviousPage()}
             >
-              <Icons.chevronLeft /> Previous
+              <Icons.chevronLeft className="size-4 sm:size-5" /> Previous
             </Button>
             <Button
-              className="rounded-full gap-2"
+              className="w-full sm:w-auto rounded-full gap-2 text-sm sm:text-base px-3 sm:px-4"
               variant="outline"
               size="sm"
               onClick={() => {
@@ -1350,10 +1331,39 @@ export function StaticDataTable<TData, TValue>({
               }}
               disabled={!table.getCanNextPage()}
             >
-              Next <Icons.chevronRight />
+              Next <Icons.chevronRight className="size-4 sm:size-5" />
             </Button>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+interface SortableHeaderProps<TData, TValue> {
+  column: Column<TData, TValue>;
+  name: string;
+  title?: string;
+}
+
+export function SortableHeader<TData, TValue>({
+  column,
+  name,
+  title,
+}: SortableHeaderProps<TData, TValue>) {
+  return (
+    <div
+      title={title}
+      className="flex items-center gap-2 cursor-pointer select-none whitespace-nowrap"
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    >
+      <span className="text-sm sm:text-base text-white">{name}</span>
+      {column.getIsSorted() === "asc" ? (
+        <Icons.chevronUp className="size-4 sm:size-5" />
+      ) : column.getIsSorted() === "desc" ? (
+        <Icons.chevronDown className="size-4 sm:size-5" />
+      ) : (
+        <Icons.chevronsUpDown className="size-4 sm:size-5" />
       )}
     </div>
   );

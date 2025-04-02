@@ -40,9 +40,11 @@ export default async function EussDetailsSlot({
 
   if (error) {
     return (
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">EUSS/Time Limit Information</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            EUSS/Time Limit Information
+          </p>
         </div>
         <ErrorFallbackCard error={error} />
       </div>
@@ -51,9 +53,11 @@ export default async function EussDetailsSlot({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">EUSS/Time Limit Information</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            EUSS/Time Limit Information
+          </p>
           {/* {updateAccess && (
           )} */}
           <EussDbsEditDialog data={euss} employee_id={employeeId} />
@@ -61,9 +65,9 @@ export default async function EussDetailsSlot({
         <EussFormFragment readOnly data={euss} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
-        <div className="col-span-full w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
             Disclosure and Barring Service (DBS) Details
           </p>
           {/* <DbsEditDialog data={euss} employee_id={params.employeeId} /> */}

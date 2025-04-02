@@ -9,7 +9,6 @@ import { cookies } from "next/headers";
 import React from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  // const user = await getUserData();
   return {
     title: `${SiteConfig.siteName} | Dashboard | Super Admin`,
   };
@@ -25,16 +24,16 @@ export default async function DashboardPage() {
   const writeAccess = mPermissions.find((item) => item === "cmp_mgmt_create");
 
   return (
-    <main className="container flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <p className="text-xl font-semibold">Dashboard</p>
+    <main className="container mx-auto flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Dashboard
+        </p>
         {writeAccess && <CompanyCreationDialog asClient={false} />}
-
-        {/* Filters */}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <Label className="text-lg">Please Select a Company</Label>
+      <div className="flex flex-col gap-2 sm:gap-3">
+        <Label className="text-base sm:text-lg">Please Select a Company</Label>
         <CompanySearchCommand />
       </div>
     </main>

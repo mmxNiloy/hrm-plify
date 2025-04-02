@@ -113,7 +113,7 @@ export const ChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfCircumsta
           title="Are Sponsored migrants aware that they must inform HR/line manager promptly of changes in contact Details?"
           name="Conform to change reports?"
           column={column}
-          hasOverflow
+          // hasOverflow
         />
       ),
     },
@@ -124,7 +124,7 @@ export const ChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfCircumsta
           title="Are Sponsored migrants aware that they need to cooperate Home Office interview by presenting original passports during the Interview (In applicable cases)?"
           name="Compliance with cooperation?"
           column={column}
-          hasOverflow
+          // hasOverflow
         />
       ),
     },

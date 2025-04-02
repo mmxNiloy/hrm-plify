@@ -40,8 +40,10 @@ export default async function CompanyJobsPageLayout({
 
   if (company.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Job & Recruitment Dashboard
+        </p>
         <ErrorFallbackCard error={company.error} />
       </main>
     );

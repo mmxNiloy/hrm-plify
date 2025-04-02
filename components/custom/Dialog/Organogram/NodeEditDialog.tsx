@@ -314,7 +314,7 @@ export default function NodeEditDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="grid grid-cols-2 p-4 gap-4">
               <p className="col-span-full font-semibold">Parent Node</p>
 

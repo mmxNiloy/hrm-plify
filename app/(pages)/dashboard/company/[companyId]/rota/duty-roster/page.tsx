@@ -90,8 +90,10 @@ export default async function RotaDutyRosterPage({
 
   if (company.error || companyExtraData.error || paginatedDutyRoster.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Duty Roster</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Duty Roster
+        </p>
         <ErrorFallbackCard
           error={
             company.error ?? companyExtraData.error ?? paginatedDutyRoster.error
@@ -102,9 +104,11 @@ export default async function RotaDutyRosterPage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Duty Roster</p>
-      <div className="flex items-center justify-between gap-2">
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Duty Roster
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <MyBreadcrumbs
           company={company.data}
           user={user}
@@ -119,7 +123,7 @@ export default async function RotaDutyRosterPage({
           reports={paginatedDutyRoster.data.data}
         />
       </div>
-      <div className="flex items-center justify-end gap-2 mt-2 mb-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-2 mt-2 mb-2">
         {/* Duty Roster Filter */}
         <DutyRosterFilterDialog {...companyExtraData.data} />
 

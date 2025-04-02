@@ -44,31 +44,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 import SiteConfig from "@/utils/SiteConfig";
 import { shortenText } from "@/utils/Text";
+import { cn } from "@/lib/utils";
 
 export default function CompanySearchCommand() {
   const [loading, setLoading] = useState<boolean>(false);
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const router = useRouter();
-  const [history, setHistory] = useState<string[]>([]); // Max capacity: 10
+  const [history, setHistory] = useState<string[]>([]);
   const [searchBarValue, setSearchBarValue] = useState<string>("");
 
   const { toast } = useToast();
 
   const loadInitialData = useCallback(async () => {
     setLoading(true);
-
     const result = await getCompanies({ page: 1, limit: 10 });
     if (result.error) {
       toast({
         title: "Failed to get initial data",
         variant: "destructive",
       });
-
       setCompanies([]);
     } else {
       setCompanies(result.data.data);
     }
-
     setLoading(false);
   }, [toast]);
 
@@ -85,25 +83,20 @@ export default function CompanySearchCommand() {
     useCallback(
       async (query: string) => {
         if (query.length < 3) return;
-        // Handle search history here
         const sHistory = [...history];
         if (sHistory.find((item) => item === query) === undefined) {
-          if (sHistory.length >= 10) {
-            sHistory.shift();
-          }
+          if (sHistory.length >= 10) sHistory.shift();
           sHistory.push(query);
           setHistory(sHistory);
         }
 
         setLoading(true);
         const result = await searchCompanies({ companyName: query });
-
         if (result.error) {
           setCompanies([]);
         } else {
           setCompanies(result.data);
         }
-
         setLoading(false);
       },
       [history]
@@ -112,10 +105,10 @@ export default function CompanySearchCommand() {
   );
 
   return (
-    <Command className="rounded-lg border shadow-md" shouldFilter={false}>
+    <Command className="rounded-lg border shadow-md">
       <div className="relative flex items-center">
         <CommandInput
-          placeholder={"Select a company or search..."}
+          placeholder="Select a company or search..."
           onValueChange={(query) => {
             handleSearchChange(query);
             setSearchBarValue(query);
@@ -123,19 +116,19 @@ export default function CompanySearchCommand() {
           value={searchBarValue}
           disabled={loading}
           wrapperClassName="flex-grow"
-          className="flex-grow pr-10"
+          className="text-sm sm:text-base pr-10 sm:pr-12"
         />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               disabled={loading}
-              size={"icon"}
-              variant={"ghost"}
-              className="absolute right-0"
+              size="icon"
+              variant="ghost"
+              className="absolute right-0 h-8 w-8 sm:h-10 sm:w-10"
             >
               <div className="relative">
-                <Icons.menu />
+                <Icons.menu className="size-4 sm:size-5" />
                 {history.length > 0 && (
                   <span className="absolute size-2 bg-red-400 rounded-full top-0 right-0" />
                 )}
@@ -143,44 +136,50 @@ export default function CompanySearchCommand() {
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-48 sm:w-56">
             <DropdownMenuGroup>
-              <DropdownMenuLabel>Options</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-sm sm:text-base">
+                Options
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-
               <DropdownMenuItem
-                className="gap-1"
+                className="gap-2 text-sm sm:text-base"
                 disabled={loading}
                 onClick={resetSearch}
               >
-                <Icons.reset /> Reset
+                <Icons.reset className="size-4 sm:size-5" /> Reset
               </DropdownMenuItem>
               <Drawer direction="right">
                 <DrawerTrigger asChild>
-                  <DropdownMenuItem className="gap-1" disabled={loading}>
+                  <DropdownMenuItem
+                    className="gap-2 text-sm sm:text-base"
+                    disabled={loading}
+                  >
                     <div className="relative">
-                      <Icons.history />
+                      <Icons.history className="size-4 sm:size-5" />
                       {history.length > 0 && (
                         <span className="absolute size-2 bg-red-400 rounded-full top-0 right-0" />
                       )}
-                    </div>{" "}
+                    </div>
                     Search History
                   </DropdownMenuItem>
                 </DrawerTrigger>
 
-                <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
-                  <div className="flex flex-col gap-2 px-4">
+                <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[85vw] sm:w-[400px] max-w-md rounded-none">
+                  <div className="flex flex-col gap-2 px-4 py-2">
                     <DrawerHeader>
-                      <DrawerTitle>Search History</DrawerTitle>
-                      <DrawerDescription>
-                        These are the latest 10 searches by you in this session.
+                      <DrawerTitle className="text-lg sm:text-xl">
+                        Search History
+                      </DrawerTitle>
+                      <DrawerDescription className="text-sm sm:text-base">
+                        Latest 10 searches in this session.
                       </DrawerDescription>
                     </DrawerHeader>
 
                     <Separator />
 
                     {history.length > 0 ? (
-                      <>
+                      <div className="flex flex-col gap-1">
                         {history.reverse().map((item, index) => (
                           <DrawerClose
                             asChild
@@ -188,24 +187,26 @@ export default function CompanySearchCommand() {
                           >
                             <Button
                               disabled={loading}
-                              variant={"ghost"}
-                              size={"sm"}
-                              className="gap-2 justify-start"
+                              variant="ghost"
+                              size="sm"
+                              className="gap-2 justify-start text-sm sm:text-base px-3 sm:px-4"
                               onClick={() => {
                                 handleSearchChange(item);
                                 setSearchBarValue(item);
                               }}
                             >
-                              <Icons.history />
-                              <p>{item}</p>
+                              <Icons.history className="size-4 sm:size-5" />
+                              <p>{shortenText(item, 25)}</p>
                             </Button>
                           </DrawerClose>
                         ))}
-                      </>
+                      </div>
                     ) : (
-                      <div className="flex-grow flex flex-col gap-2 w-full items-center justify-center">
-                        <Icons.rabbit className="size-32" />
-                        No search history...
+                      <div className="flex-grow flex flex-col gap-2 items-center justify-center min-h-[50vh]">
+                        <Icons.rabbit className="size-20 sm:size-24" />
+                        <p className="text-sm sm:text-base">
+                          No search history...
+                        </p>
                       </div>
                     )}
                   </div>
@@ -215,18 +216,21 @@ export default function CompanySearchCommand() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <CommandList className="max-h-fit">
-        <CommandEmpty>No companies found.</CommandEmpty>
+
+      <CommandList className="max-h-[60vh] sm:max-h-[70vh] overflow-auto">
+        <CommandEmpty className="py-4 text-sm sm:text-base">
+          No companies found.
+        </CommandEmpty>
         {loading ? (
           <CommandGroup heading="Companies">
-            <CommandItem className="flex flex-col gap-2 items-center justify-center min-h-64 text-xl">
-              <Icons.spinner className="animate-spin size-8 ease-in-out" />
+            <CommandItem className="flex flex-col gap-2 items-center justify-center min-h-48 sm:min-h-64 text-base sm:text-xl">
+              <Icons.spinner className="animate-spin size-6 sm:size-8 ease-in-out" />
               Loading...
             </CommandItem>
           </CommandGroup>
         ) : (
-          <CommandGroup heading="Companies">
-            <div className="grid grid-cols-2 2xl:grid-cols-3 gap-4">
+          <CommandGroup heading="Companies" className="text-sm sm:text-base">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 p-2 sm:p-4">
               {companies.map((comp) => (
                 <Link
                   className="cursor-pointer col-span-1"
@@ -238,16 +242,16 @@ export default function CompanySearchCommand() {
                     className="cursor-pointer"
                     title={comp.company_name}
                   >
-                    <div className="w-full px-8 py-4 rounded-md drop-shadow border flex gap-2 items-center justify-between">
-                      <div className="flex gap-4">
-                        <div className="flex flex-col gap-4 items-center justify-center">
+                    <div className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-md drop-shadow border flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between">
+                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+                        <div className="flex flex-col gap-3 sm:gap-4 items-center justify-center shrink-0">
                           <AvatarPicker
                             readOnly
                             src={comp.logo}
                             skeleton={
                               <AvatarNamePlaceholder name={comp.company_name} />
                             }
-                            className="size-16 p-0"
+                            className="size-12 sm:size-14 p-0"
                           />
                           <Link
                             href={`${comp.website}?_ref=${
@@ -256,29 +260,27 @@ export default function CompanySearchCommand() {
                               SiteConfig.siteName
                             }-${Date.now()}`}
                             target="_blank"
-                            className="hover:underline"
+                            className="hover:underline w-full"
                             passHref
                           >
-                            <TextCapsule className="text-xs bg-sky-500 hover:bg-sky-400">
-                              <Icons.externalLink />
+                            <TextCapsule className="text-xs sm:text-sm bg-sky-500 hover:bg-sky-400 w-full justify-center">
+                              <Icons.externalLink className="size-3 sm:size-4" />
                               Visit
                             </TextCapsule>
                           </Link>
                         </div>
-                        <div className="flex flex-col gap-2">
-                          <p className="font-semibold text-lg">
+                        <div className="flex flex-col gap-2 w-full">
+                          <p className="font-semibold text-base sm:text-lg">
                             {shortenText(comp.company_name, 18)}
                           </p>
-
-                          <div className="flex flex-col gap-2 *:text-xs">
+                          <div className="flex flex-col gap-1 sm:gap-2 *:text-xs sm:*:text-sm">
                             <TextCapsule className="bg-blue-600">
-                              <Icons.building className="size-3" />
-                              {shortenText(comp.headquarters)}
+                              <Icons.building className="size-3 sm:size-4" />
+                              {shortenText(comp.headquarters, 20)}
                             </TextCapsule>
-
                             <TextCapsule className="bg-purple-600">
-                              <Icons.factory className="size-3" />
-                              {shortenText(comp.industry)}
+                              <Icons.factory className="size-3 sm:size-4" />
+                              {shortenText(comp.industry, 20)}
                             </TextCapsule>
                             <TextCapsule
                               className={comp.is_active ? "bg-green-500" : ""}
@@ -288,11 +290,6 @@ export default function CompanySearchCommand() {
                           </div>
                         </div>
                       </div>
-
-                      {/* <Button className={ButtonGradient}>
-                      Select
-                      <Icons.chevronRight />
-                    </Button> */}
                     </div>
                   </CommandItem>
                 </Link>

@@ -39,7 +39,7 @@ export default async function EmployeeHomeLayout({ children, params }: Props) {
     employee.data.role_name === "Admin" ||
     employee.data.role_name === "Super Admin"
   ) {
-    redirect("/dashboard/company/leave?_ref=role-mismatch");
+    redirect("/dashboard?_ref=role-mismatch");
   }
 
   if (!employee.data.data) {

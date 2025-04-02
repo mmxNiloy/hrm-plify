@@ -38,15 +38,19 @@ export default async function JobDashboardPage({
 
   if (company.error) {
     return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Job & Recruitment Dashboard
+        </p>
         <ErrorFallbackCard error={company.error} />
       </main>
     );
   }
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Job & Recruitment Dashboard</p>
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+        Job & Recruitment Dashboard
+      </p>
 
       <MyBreadcrumbs
         company={company.data}
@@ -57,7 +61,7 @@ export default async function JobDashboardPage({
       <div className="grid lg:grid-cols-2 gap-2">
         <JobDashboardStatisticsCard />
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           <p className="text-bold col-span-full">Work In Progress (WIP)</p>
           <Card className="bg-gradient-to-br from-indigo-300 to-green-200 drop-shadow-md">
             <CardHeader className="flex flex-row gap-4">

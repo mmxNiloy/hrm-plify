@@ -100,7 +100,7 @@ export default function CompanyTradingHoursEditDialog({
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          <ScrollArea className="h-[70vh]">
+          <ScrollArea className="h-[60vh] sm:h-[70vh]">
             <div className="p-1 grid grid-cols-4 gap-4">
               <CompanyTradingHoursFormFragment data={data} />
             </div>

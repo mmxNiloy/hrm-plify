@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import getCompanyAdmin from "@/app/(server)/actions/getCompanyAdmin";
 import CompanyAdminEditDialog from "@/components/custom/Dialog/Company/CompanyAdminEditDialog";
 import { CompanyAdminListDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyAdminListDataTableColumns";
@@ -60,20 +60,26 @@ export default async function CompanyAdminPage({
   const { data: companyAdmins, error } = await getCompanyAdmin(companyId);
   if (error) {
     return (
-      <div className="flex flex-col gap-2">
-        <div className="w-full flex flex-row items-center justify-between">
-          <p className="text-lg font-semibold">Company Admin</p>
-        </div>
+      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Company Admin
+        </p>
         <ErrorFallbackCard error={error} />
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-full flex flex-row items-center justify-between">
-        <p className="text-lg font-semibold">Company Admin</p>
-        {writeAccess && <CompanyAdminEditDialog companyId={companyId} />}
+    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Company Admin
+        </p>
+        {writeAccess && (
+          <div className="w-full sm:w-auto">
+            <CompanyAdminEditDialog companyId={companyId} />
+          </div>
+        )}
       </div>
       <DataTable
         data={companyAdmins.map((item) => ({
@@ -82,6 +88,6 @@ export default async function CompanyAdminPage({
         }))}
         columns={CompanyAdminListDataTableColumns}
       />
-    </div>
+    </main>
   );
 }
