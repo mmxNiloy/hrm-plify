@@ -1343,14 +1343,17 @@ export function StaticDataTable<TData, TValue>({
 interface SortableHeaderProps<TData, TValue> {
   column: Column<TData, TValue>;
   name: string;
+  title?: string;
 }
 
 export function SortableHeader<TData, TValue>({
   column,
   name,
+  title,
 }: SortableHeaderProps<TData, TValue>) {
   return (
     <div
+      title={title}
       className="flex items-center gap-2 cursor-pointer select-none whitespace-nowrap"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >

@@ -111,10 +111,10 @@ export const FilteredChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfC
       accessorKey: "is_informed",
       header: ({ column }) => (
         <SortableHeader
-          name="Are Sponsored migrants aware that they must inform HR/line manager promptly of changes in contact Details?"
+          title="Are Sponsored migrants aware that they must inform HR/line manager promptly of changes in contact Details?"
           name="Conform to change reports?"
           column={column}
-          hasOverflow
+          // hasOverflow
         />
       ),
     },
@@ -122,10 +122,10 @@ export const FilteredChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfC
       accessorKey: "is_cooperative",
       header: ({ column }) => (
         <SortableHeader
-          name="Are Sponsored migrants aware that they need to cooperate Home Office interview by presenting original passports during the Interview (In applicable cases)?"
+          title="Are Sponsored migrants aware that they need to cooperate Home Office interview by presenting original passports during the Interview (In applicable cases)?"
           name="Compliance with cooperation?"
           column={column}
-          hasOverflow
+          // hasOverflow
         />
       ),
     },
@@ -133,7 +133,7 @@ export const FilteredChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfC
       accessorKey: "annual_reminder_date",
       header: ({ column }) => (
         <SortableHeader
-          name="Annual Reminder Date"
+          title="Annual Reminder Date"
           name="Annual Reminder Date"
           column={column}
         />
