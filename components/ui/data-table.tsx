@@ -111,7 +111,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 overflow-x-scroll">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <Label className="text-sm sm:text-base">Page size</Label>
@@ -447,7 +447,7 @@ export function NetworkedDataTable<TData, TValue>({
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 overflow-x-scroll">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <Label className="text-sm sm:text-base">Page size</Label>
@@ -749,7 +749,7 @@ export function DataTableSkeleton<TValue>({
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 overflow-x-scroll">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <Label className="text-sm sm:text-base">Page size</Label>
@@ -1058,7 +1058,7 @@ export function StaticDataTable<TData, TValue>({
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 overflow-x-scroll">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <Label className="text-sm sm:text-base">Page size</Label>
