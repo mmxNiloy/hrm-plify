@@ -2,6 +2,7 @@
 
 import getCurrentUser from "@/app/(server)/actions/getCurrentUser";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
+import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
 import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 
 interface Props extends IFormFragmentProps<ICompany> {
@@ -67,18 +69,43 @@ export default function CompanyProfileFormFragment({
         >
           Company Name
         </Label>
-        <Input
-          minLength={3}
-          required
-          key={`company-name-${data?.company_name ?? ""}`}
-          disabled={disabled}
-          readOnly={readOnly}
-          defaultValue={data?.company_name ?? ""}
-          id="company-name-input"
-          name="company_name"
-          placeholder="Company Name"
-          className="rounded-full text-sm sm:text-base"
-        />
+        <div className="w-full flex relative items-center justify-center">
+          <Input
+            minLength={3}
+            required
+            key={`company-name-${data?.company_name ?? ""}`}
+            disabled={disabled}
+            readOnly={readOnly}
+            defaultValue={data?.company_name ?? ""}
+            id="company-name-input"
+            name="company_name"
+            placeholder="Company Name"
+            className={cn(
+              "rounded-full text-sm sm:text-base",
+              readOnly ? "pr-24" : "pr-0"
+            )}
+          />
+
+          {readOnly && (
+            <Link
+              target="_blank"
+              passHref
+              className="absolute right-0"
+              href={`https://find-and-update.company-information.service.gov.uk/search?q=${encodeURIComponent(
+                data?.company_name ?? ""
+              )}#services-information-results`}
+            >
+              <Button
+                variant={"outline"}
+                size={"sm"}
+                className="rounded-e-full text-sm border-t-0 border-b-0 border-e-0"
+              >
+                <Icons.externalLink />
+                Find
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">

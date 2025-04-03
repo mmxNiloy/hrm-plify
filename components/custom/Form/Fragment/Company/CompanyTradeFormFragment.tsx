@@ -1,4 +1,6 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ICompanyTradeDetails } from "@/schema/CompanySchema";
 import { IFormFragmentProps } from "@/utils/Types";
+import Link from "next/link";
 import React from "react";
 
 export default function CompanyTradeFormFragment({
@@ -30,17 +33,43 @@ export default function CompanyTradeFormFragment({
         >
           Registration No.
         </Label>
-        <Input
-          required
-          key={`company-reg-${data?.company_reg}`}
-          className="rounded-full"
-          readOnly={readOnly}
-          disabled={disabled}
-          defaultValue={data?.company_reg ?? ""}
-          placeholder="Registration Number"
-          name="company_reg"
-          id="company-reg-input"
-        />
+
+        <div className="w-full flex relative items-center justify-center">
+          <Input
+            required
+            key={`company-reg-${data?.company_reg}`}
+            className={cn(
+              "rounded-full text-sm sm:text-base",
+              readOnly ? "pr-24" : "pr-0"
+            )}
+            readOnly={readOnly}
+            disabled={disabled}
+            defaultValue={data?.company_reg ?? ""}
+            placeholder="Registration Number"
+            name="company_reg"
+            id="company-reg-input"
+          />
+
+          {readOnly && (
+            <Link
+              target="_blank"
+              passHref
+              className="absolute right-0"
+              href={`https://find-and-update.company-information.service.gov.uk/search?q=${encodeURIComponent(
+                data?.company_reg ?? ""
+              )}#services-information-results`}
+            >
+              <Button
+                variant={"outline"}
+                size={"sm"}
+                className="rounded-e-full text-sm border-t-0 border-b-0 border-e-0"
+              >
+                <Icons.externalLink />
+                Find
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
