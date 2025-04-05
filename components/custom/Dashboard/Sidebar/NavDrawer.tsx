@@ -53,7 +53,7 @@ const NavDrawer = React.forwardRef<HTMLDivElement, INavDrawerProps>(
 
             <ScrollArea
               ref={ref}
-              className={cn("h-[calc(100vh-5rem)] px-2", className)}
+              className={cn("h-[80vh] px-2", className)}
               {...props}
             ></ScrollArea>
 
