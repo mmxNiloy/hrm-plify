@@ -59,10 +59,7 @@ export default async function PassportInfoSlot({
         </p>
         {/* {updateAccess && (
         )} */}
-        <PassportDetailsEditDialog
-          employee_id={employeeId}
-          data={passportInfo}
-        />
+        <PassportDetailsEditDialog employee_id={empId} data={passportInfo} />
       </div>
       <PassportDetailsFormFragment readOnly data={passportInfo} />
     </div>

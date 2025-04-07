@@ -58,7 +58,7 @@ export default async function NidDetailsSlot({
         </p>
         {/* {updateAccess && 
         } */}
-        <NidEditDialog data={nid} employee_id={employeeId} />
+        <NidEditDialog data={nid} employee_id={empId} />
       </div>
       <NidFormFragment data={nid} readOnly />
     </div>

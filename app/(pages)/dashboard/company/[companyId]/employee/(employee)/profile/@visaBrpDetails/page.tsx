@@ -58,7 +58,7 @@ export default async function VisaBRPDetailSlot({
         </p>
         {/* {updateAccess && (
         )} */}
-        <VisaBrpEditDialog data={visaBrp} employee_id={employeeId} />
+        <VisaBrpEditDialog data={visaBrp} employee_id={empId} />
       </div>
       <VisaBrpFormFragment data={visaBrp} readOnly />
     </div>

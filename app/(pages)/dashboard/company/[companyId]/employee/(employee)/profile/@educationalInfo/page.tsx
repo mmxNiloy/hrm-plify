@@ -60,7 +60,7 @@ export default async function EducationalInfoSlot({
         </p>
         {/* {writeAccess && 
         } */}
-        <EducationalInfoEditDialog employee_id={employeeId} />
+        <EducationalInfoEditDialog employee_id={empId} />
       </div>
       <DataTable
         data={educationalInfo.map((item) => ({

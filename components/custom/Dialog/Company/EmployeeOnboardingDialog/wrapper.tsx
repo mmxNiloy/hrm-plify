@@ -7,15 +7,14 @@ import { IUser } from "@/schema/UserSchema";
 import { IEmployee } from "@/schema/EmployeeSchema";
 import { IJobApplicant } from "@/schema/JobSchema";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
@@ -55,7 +54,7 @@ export default function EmployeeOnboardingDialogWrapper({
 }: Props) {
   const router = useRouter();
 
-  const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [empData, setEmpData] = useState<EmployeeCreationResponse | undefined>(
     undefined
   );
@@ -65,7 +64,7 @@ export default function EmployeeOnboardingDialogWrapper({
       <EmployeeOnboardingDialog
         onSuccess={(emp) => {
           setEmpData(emp);
-          setOpenAlertDialog(true);
+          setOpenDialog(true);
         }}
         data={data}
         asIcon={asIcon}
@@ -76,22 +75,22 @@ export default function EmployeeOnboardingDialogWrapper({
         employmentTypes={employmentType}
       />
 
-      <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
-        <AlertDialogTrigger asChild>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogTrigger asChild>
           <Button className="hidden">
-            <Icons.externalLink /> Open Alert Dialog
+            <Icons.externalLink /> Open Dialog
           </Button>
-        </AlertDialogTrigger>
+        </DialogTrigger>
 
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Employee Created Successfully!</AlertDialogTitle>
-            <AlertDialogDescription>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Employee Created Successfully!</DialogTitle>
+            <DialogDescription>
               Employee created successfully. An email has been sent to{" "}
               {empData && getFullNameOfUser(empData.user)}{" "}
               <em>({empData?.user.email})</em> with their login credentials.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+            </DialogDescription>
+          </DialogHeader>
 
           <div className="hidden flex-col gap-4">
             <p>Employee Login Credentials</p>
@@ -111,22 +110,20 @@ export default function EmployeeOnboardingDialogWrapper({
             </div>
           </div>
 
-          <AlertDialogFooter>
-            <AlertDialogAction asChild>
-              <Button
-                onClick={() => {
-                  router.refresh();
-                  setOpenAlertDialog(false);
-                }}
-                variant={"destructive"}
-                className="bg-red-500 hover:bg-red-400"
-              >
-                <Icons.cross /> Close
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+                router.refresh();
+              }}
+              variant={"destructive"}
+              className="bg-red-500 hover:bg-red-400"
+            >
+              <Icons.cross /> Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

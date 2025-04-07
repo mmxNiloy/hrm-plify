@@ -113,12 +113,16 @@ export default function PassportDetailsEditDialog({
             description: JSON.stringify(res.message),
             variant: "destructive",
           });
+
+          console.log("Passport Update Failed >", res);
         }
       } catch (err) {
         toast({
           title: "Update Failed",
           variant: "destructive",
         });
+
+        console.log("Passport Update Failed >", err);
       }
       setLoading(false);
     },

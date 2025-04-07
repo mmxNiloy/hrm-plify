@@ -34,7 +34,7 @@ export default async function ContactInfoSlot({
   const { companyId, employeeId } = await params;
 
   const emp = await getEmployeeData();
-  const empId = emp.data?.data?.employee_id;
+  const empId = emp.data?.data?.employee_id ?? 0;
   const { data: contactInfo, error } = await getContactInfo(
     emp.data?.data?.employee_id ?? 0
   );
@@ -62,7 +62,7 @@ export default async function ContactInfoSlot({
         </p>
         {/* {updateAccess && (
         )} */}
-        <ContactInfoEditDialog data={contactInfo} employeeId={employeeId} />
+        <ContactInfoEditDialog data={contactInfo} employeeId={empId} />
       </div>
       <ContactInfoFormFragment data={contactInfo} readOnly />
     </div>

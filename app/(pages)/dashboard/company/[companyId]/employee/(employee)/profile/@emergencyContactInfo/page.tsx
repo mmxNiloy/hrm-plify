@@ -58,7 +58,7 @@ export default async function EmergencyContactInfoSlot({
         )} */}
         <EmergencyContactEditDialog
           data={emergencyContact}
-          employee_id={employeeId}
+          employee_id={empId}
         />
       </div>
       <EmergencyContactFormFragment data={emergencyContact} readOnly />
