@@ -51,16 +51,16 @@ const NavDrawer = React.forwardRef<HTMLDivElement, INavDrawerProps>(
               </DrawerClose>
             </DrawerHeader>
 
+            <BackLinkButton
+              href={backLink}
+              onClick={() => setOpenDrawer(false)}
+            />
+
             <ScrollArea
               ref={ref}
               className={cn("h-[80vh] px-2", className)}
               {...props}
             ></ScrollArea>
-
-            <BackLinkButton
-              href={backLink}
-              onClick={() => setOpenDrawer(false)}
-            />
           </DrawerContent>
         </Drawer>
       </NavDrawerControlContext.Provider>
