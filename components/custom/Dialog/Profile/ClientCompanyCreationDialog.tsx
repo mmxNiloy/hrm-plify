@@ -42,75 +42,84 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
       e.preventDefault();
       e.stopPropagation();
 
-      setLoading(true);
-      const fd = new FormData(e.currentTarget);
-
-      // Try to upload the logo (if attached)
-      const logoFile = fd.get("logo") as File | undefined;
-
-      if ((logoFile?.size ?? 0) > SiteConfig.maxFileSize) {
-        toast({
-          title: "File too large",
-          description: `Cannot upload this file. The file exceeds the permissible limit: ${
-            SiteConfig.maxFileSize / 1e5
-          }MB`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      var logoUrl = "";
-      if (logoFile && logoFile.size <= SiteConfig.maxFileSize) {
-        // Upload the logo
-        const logoUpload = await upload(logoFile);
-        if (logoUpload.error) {
-          toast({
-            title: "Upload Failed",
-            description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
-            variant: "destructive",
-          });
-        } else {
-          logoUrl = logoUpload.data.fileUrl;
-        }
-      }
-
       try {
-        fd.delete("logo");
-        fd.append("logo", logoUrl);
+        setLoading(true);
+        const fd = new FormData(e.currentTarget);
 
-        const apiRes = await fetch("/api/company/client", {
-          method: "POST",
-          body: fd,
-        });
+        // Try to upload the logo (if attached)
+        const logoFile = fd.get("logo") as File | undefined;
 
-        if (apiRes.ok) {
+        if ((logoFile?.size ?? 0) > SiteConfig.maxFileSize) {
           toast({
-            title: "Company Created!",
-            className: "bg-green-500 text-white",
+            title: "File too large",
+            description: `Cannot upload this file. The file exceeds the permissible limit: ${
+              SiteConfig.maxFileSize / 1e5
+            }MB`,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        var logoUrl = "";
+        if (logoFile && logoFile.size <= SiteConfig.maxFileSize) {
+          // Upload the logo
+          const logoUpload = await upload(logoFile);
+          if (logoUpload.error) {
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+              variant: "destructive",
+            });
+          } else {
+            logoUrl = logoUpload.data.fileUrl;
+          }
+        }
+
+        try {
+          fd.delete("logo");
+          fd.append("logo", logoUrl);
+
+          const apiRes = await fetch("/api/company/client", {
+            method: "POST",
+            body: fd,
           });
 
-          // Refresh the parent server component
-          router.refresh();
+          if (apiRes.ok) {
+            toast({
+              title: "Company Created!",
+              className: "bg-green-500 text-white",
+            });
 
-          // Close the dialog
-          setOpen(false);
-        } else {
-          const res = await apiRes.json();
+            // Refresh the parent server component
+            router.refresh();
+
+            // Close the dialog
+            setOpen(false);
+          } else {
+            const res = await apiRes.json();
+            toast({
+              title: "Failed to Create a Company!",
+              description: `${res.message}`,
+              variant: "destructive",
+            });
+          }
+        } catch (_) {
           toast({
-            title: "Failed to Create a Company!",
-            description: `${res.message}`,
+            title: "Server Error Encountered!",
             variant: "destructive",
           });
         }
-      } catch (_) {
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Server Error Encountered!",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-
-      setLoading(false);
     },
     [router, toast]
   );

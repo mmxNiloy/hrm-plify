@@ -44,87 +44,96 @@ export default function PassportDetailsEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const doc = fd.get("document") as File | undefined;
+      try {
+        const fd = new FormData(e.currentTarget);
+        const doc = fd.get("document") as File | undefined;
 
-      setLoading(true);
+        setLoading(true);
 
-      if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
-        toast({
-          title: "File too large",
-          description: `Cannot upload this file. The file exceeds the permissible limit: ${
-            SiteConfig.maxFileSize / 1e5
-          }MB`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      // Request API here
-      var document_link = data?.document ?? "";
-      if (doc && !docError) {
-        const uploadRes = await upload(doc);
-        if (uploadRes.error) {
+        if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
           toast({
-            title: "Failed to upload",
-            description: `Failed to upload the document. Please try again later. Error encountered: ${uploadRes.error.message}`,
+            title: "File too large",
+            description: `Cannot upload this file. The file exceeds the permissible limit: ${
+              SiteConfig.maxFileSize / 1e5
+            }MB`,
             variant: "destructive",
           });
           setLoading(false);
           return;
         }
 
-        document_link = uploadRes.data.fileUrl;
-      }
+        // Request API here
+        var document_link = data?.document ?? "";
+        if (doc && !docError) {
+          const uploadRes = await upload(doc);
+          if (uploadRes.error) {
+            toast({
+              title: "Failed to upload",
+              description: `Failed to upload the document. Please try again later. Error encountered: ${uploadRes.error.message}`,
+              variant: "destructive",
+            });
+            setLoading(false);
+            return;
+          }
 
-      const passportDetails = {
-        employee_id: Number.parseInt(`${employee_id}`),
-        passport_number: fd.get("passport_number") as string,
-        issue_date: fd.get("issue_date") as string,
-        expiry_date: fd.get("expiry_date") as string,
-        place_of_birth: fd.get("place_of_birth") as string,
-        document: document_link,
-        remark: fd.get("remark") as string,
-      };
+          document_link = uploadRes.data.fileUrl;
+        }
 
-      const reqBod = data
-        ? Object.assign(data, passportDetails)
-        : passportDetails;
-      try {
-        const apiRes = await fetch(`/api/employee/passport-info`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const passportDetails = {
+          employee_id: Number.parseInt(`${employee_id}`),
+          passport_number: fd.get("passport_number") as string,
+          issue_date: fd.get("issue_date") as string,
+          expiry_date: fd.get("expiry_date") as string,
+          place_of_birth: fd.get("place_of_birth") as string,
+          document: document_link,
+          remark: fd.get("remark") as string,
+        };
 
-        if (apiRes.ok) {
-          toast({
-            title: "Update Successful",
-            className: ToastSuccess,
+        const reqBod = data
+          ? Object.assign(data, passportDetails)
+          : passportDetails;
+        try {
+          const apiRes = await fetch(`/api/employee/passport-info`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
           });
 
-          router.refresh();
-          setOpen(false);
-        } else {
-          const res = await apiRes.json();
+          if (apiRes.ok) {
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
 
+            router.refresh();
+            setOpen(false);
+          } else {
+            const res = await apiRes.json();
+
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+
+            console.log("Passport Update Failed >", res);
+          }
+        } catch (err) {
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
 
-          console.log("Passport Update Failed >", res);
+          console.log("Passport Update Failed >", err);
         }
-      } catch (err) {
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
-
-        console.log("Passport Update Failed >", err);
       }
-      setLoading(false);
     },
     [data, docError, employee_id, router, toast]
   );

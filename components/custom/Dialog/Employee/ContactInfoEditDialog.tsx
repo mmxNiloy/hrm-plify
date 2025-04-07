@@ -41,89 +41,98 @@ export default function ContactInfoEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const doc = fd.get("proof_of_address_doc") as File | null;
+      try {
+        const fd = new FormData(e.currentTarget);
+        const doc = fd.get("proof_of_address_doc") as File | null;
 
-      setLoading(true);
+        setLoading(true);
 
-      if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
-        toast({
-          title: "File too large",
-          description: `Cannot upload this file. The file exceeds the permissible limit: ${
-            SiteConfig.maxFileSize / 1e5
-          }MB`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      var document_link = data?.proof_address_doc_link ?? "";
-      if (doc && !docError) {
-        const docUpload = await upload(doc);
-        if (docUpload.error) {
+        if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
           toast({
-            title: "Upload Failed",
-            description: `Failed to upload contact info. Please try again later. Errors encountered: ${docUpload.error.message}`,
+            title: "File too large",
+            description: `Cannot upload this file. The file exceeds the permissible limit: ${
+              SiteConfig.maxFileSize / 1e5
+            }MB`,
             variant: "destructive",
           });
-
           setLoading(false);
           return;
         }
 
-        document_link = docUpload.data.fileUrl;
-      }
+        var document_link = data?.proof_address_doc_link ?? "";
+        if (doc && !docError) {
+          const docUpload = await upload(doc);
+          if (docUpload.error) {
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload contact info. Please try again later. Errors encountered: ${docUpload.error.message}`,
+              variant: "destructive",
+            });
 
-      const contactInfo = {
-        postcode: fd.get("postcode") as string,
-        address_line: fd.get("address_line") as string,
-        additional_address_1: fd.get("additional_address_1") as string,
-        additional_address_2: fd.get("additional_address_2") as string,
-        country: fd.get("country") as string,
-        proof_address_doc_link: document_link,
-      };
+            setLoading(false);
+            return;
+          }
 
-      const reqBod = data
-        ? Object.assign(data, contactInfo)
-        : { employee_id: employeeId, ...contactInfo };
-      // console.log("Request body", reqBod);
+          document_link = docUpload.data.fileUrl;
+        }
 
-      // Request api here
-      try {
-        const apiRes = await fetch(`/api/employee/contact-info`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const contactInfo = {
+          postcode: fd.get("postcode") as string,
+          address_line: fd.get("address_line") as string,
+          additional_address_1: fd.get("additional_address_1") as string,
+          additional_address_2: fd.get("additional_address_2") as string,
+          country: fd.get("country") as string,
+          proof_address_doc_link: document_link,
+        };
 
-        if (apiRes.ok) {
-          // Close dialog, show toast, refresh parent ssc
-          toast({
-            title: "Update Successful",
-            className: ToastSuccess,
+        const reqBod = data
+          ? Object.assign(data, contactInfo)
+          : { employee_id: employeeId, ...contactInfo };
+        // console.log("Request body", reqBod);
+
+        // Request api here
+        try {
+          const apiRes = await fetch(`/api/employee/contact-info`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
           });
-          // if (onSuccess) onSuccess(data.data.department_id);
 
-          router.refresh();
-          setOpen(false);
-        } else {
-          // show a failure dialog
-          const res = await apiRes.json();
+          if (apiRes.ok) {
+            // Close dialog, show toast, refresh parent ssc
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
+            // if (onSuccess) onSuccess(data.data.department_id);
 
+            router.refresh();
+            setOpen(false);
+          } else {
+            // show a failure dialog
+            const res = await apiRes.json();
+
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+          }
+        } catch (err) {
+          // console.error("Failed to update employee personal information.", err);
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }
-      } catch (err) {
-        // console.error("Failed to update employee personal information.", err);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-      setLoading(false);
     },
     [data, docError, employeeId, router, toast]
   );

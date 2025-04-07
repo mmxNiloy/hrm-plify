@@ -48,80 +48,89 @@ export default function CompanyCreationDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      setLoading(true);
-      const fd = new FormData(e.currentTarget);
-      fd.append("is_current_user_owner", asClient ? "true" : "false");
+      try {
+        setLoading(true);
+        const fd = new FormData(e.currentTarget);
+        fd.append("is_current_user_owner", asClient ? "true" : "false");
 
-      // Try to upload the logo (if attached)
-      const logoFile = fd.get("logo") as File | undefined;
-      var logoUrl = "";
+        // Try to upload the logo (if attached)
+        const logoFile = fd.get("logo") as File | undefined;
+        var logoUrl = "";
 
-      if ((logoFile?.size ?? 0) > SiteConfig.maxFileSize) {
-        toast({
-          title: "File too large",
-          description: `Cannot upload this file. The file exceeds the permissible limit: ${
-            SiteConfig.maxFileSize / 1e5
-          }MB`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
+        if ((logoFile?.size ?? 0) > SiteConfig.maxFileSize) {
+          toast({
+            title: "File too large",
+            description: `Cannot upload this file. The file exceeds the permissible limit: ${
+              SiteConfig.maxFileSize / 1e5
+            }MB`,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
 
-      if (logoFile && !imageFileError) {
-        // Upload the logo
-        const logoUpload = await upload(logoFile);
-        if (logoUpload.error) {
-          if (logoFile.size > 0) {
+        if (logoFile && !imageFileError) {
+          // Upload the logo
+          const logoUpload = await upload(logoFile);
+          if (logoUpload.error) {
+            if (logoFile.size > 0) {
+              toast({
+                title: "Upload Failed",
+                description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+                variant: "destructive",
+              });
+            }
+          } else {
+            logoUrl = logoUpload.data.fileUrl;
+          }
+        }
+
+        try {
+          fd.delete("logo");
+          fd.append("logo", logoUrl);
+          const apiRes = await fetch("/api/company", {
+            method: "POST",
+            body: fd,
+          });
+
+          if (apiRes.ok) {
             toast({
-              title: "Upload Failed",
-              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+              title: "Company Created!",
+              className: "bg-green-500 text-white",
+            });
+
+            if (asClient) {
+              await refreshUserCookie();
+            }
+
+            // Refresh the parent server component
+            router.refresh();
+
+            // Close the dialog
+            setOpen(false);
+          } else {
+            toast({
+              title: "Failed to Create a Company!",
+              description: JSON.stringify(await apiRes.json()),
               variant: "destructive",
             });
           }
-        } else {
-          logoUrl = logoUpload.data.fileUrl;
-        }
-      }
-
-      try {
-        fd.delete("logo");
-        fd.append("logo", logoUrl);
-        const apiRes = await fetch("/api/company", {
-          method: "POST",
-          body: fd,
-        });
-
-        if (apiRes.ok) {
+        } catch (_) {
           toast({
-            title: "Company Created!",
-            className: "bg-green-500 text-white",
-          });
-
-          if (asClient) {
-            await refreshUserCookie();
-          }
-
-          // Refresh the parent server component
-          router.refresh();
-
-          // Close the dialog
-          setOpen(false);
-        } else {
-          toast({
-            title: "Failed to Create a Company!",
-            description: JSON.stringify(await apiRes.json()),
+            title: "Server Error Encountered!",
             variant: "destructive",
           });
         }
-      } catch (_) {
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Server Error Encountered!",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-
-      setLoading(false);
     },
     [asClient, imageFileError, router, toast]
   );
