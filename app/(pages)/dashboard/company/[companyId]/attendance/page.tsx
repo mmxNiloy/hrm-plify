@@ -19,6 +19,7 @@ import { Metadata } from "next";
 import { TPermission } from "@/schema/Permissions";
 import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/AttendanceBulkUpdateDialog";
 import SiteConfig from "@/utils/SiteConfig";
+import { ESortFilter } from "@/schema/enum/sort-filter";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -37,13 +38,13 @@ export async function generateMetadata({
 
 function getFilters(searchParams: ISearchParams) {
   return {
-    employee_id: Math.max(
-      0,
-      Number.parseInt((searchParams.employee as string | undefined) ?? "0")
-    ),
-    from_date: searchParams.datepicker_from_date as string | undefined,
-    end_date: searchParams.datepicker_to_date as string | undefined,
-    sort: (searchParams.sort as string | undefined) ?? "DESC",
+    employee_ids:
+      (searchParams.employees as string | undefined)
+        ?.split(",")
+        .map((id) => Number.parseInt(id)) ?? [],
+    from_date: searchParams.fromDate as string | undefined,
+    end_date: searchParams.toDate as string | undefined,
+    sort: (searchParams.sort as ESortFilter | undefined) ?? ESortFilter.DESC,
   };
 }
 
@@ -94,6 +95,8 @@ export default async function AttendanceReportPage({
       </main>
     );
   }
+
+  console.log("Data found >", reports.data.data);
 
   return (
     <main id="pdf-view" className="container flex flex-col gap-2">

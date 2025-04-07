@@ -9,8 +9,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { searchParamsParsers } from "@/utils/searchParamsParsers";
 import { format } from "date-fns";
-import React, { useCallback, useState } from "react";
+import { useQueryState } from "nuqs";
+import React, { useCallback, useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 
 interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
@@ -25,14 +27,43 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
     { className, name, required, requireRangeEnd, onValueChange, ...props },
     ref
   ) => {
-    const [date, setDate] = useState<DateRange | undefined>();
+    const [fromDate, setFromDate] = useQueryState(
+      "fromDate",
+      searchParamsParsers.fromDate
+    );
 
-    const getRangeString = useCallback(() => {
-      if (!date) return "";
-      const d1 = date.from ? format(date.from, "yyyy-MM-dd") : "";
-      const d2 = date.to ? format(date.to, "yyyy-MM-dd") : "";
-      return `${d1}-${d2}`;
-    }, [date]);
+    const [toDate, setToDate] = useQueryState(
+      "toDate",
+      searchParamsParsers.toDate
+    );
+
+    const [date, setDate] = useState<DateRange | undefined>(
+      fromDate
+        ? {
+            from: fromDate,
+            to: toDate ?? undefined,
+          }
+        : undefined
+    );
+
+    useEffect(() => {
+      if (date?.from) {
+        setFromDate(date.from);
+      } else {
+        setFromDate(null);
+      }
+
+      if (date?.to) {
+        setToDate(date.to);
+      } else {
+        setToDate(null);
+      }
+
+      if (!date) {
+        setFromDate(null);
+        setToDate(null);
+      }
+    }, [date, setFromDate, setToDate]);
 
     return (
       <>
@@ -89,34 +120,6 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
             />
           </PopoverContent>
         </Popover>
-        <div className="sr-only">
-          <Input
-            ref={ref}
-            name={name}
-            readOnly
-            type={"text"}
-            defaultValue={getRangeString()}
-            required={required}
-            {...props}
-          />
-          <Input
-            type={"date"}
-            readOnly
-            defaultValue={
-              date && date.from ? format(date.from, "yyyy-MM-dd") : undefined
-            }
-            name="datepicker_from_date"
-          />
-          <Input
-            type={"date"}
-            readOnly
-            defaultValue={
-              date && date.to ? format(date.to, "yyyy-MM-dd") : undefined
-            }
-            name="datepicker_to_date"
-            required={requireRangeEnd}
-          />
-        </div>
       </>
     );
   }
