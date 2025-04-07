@@ -84,16 +84,16 @@ export default function EmployeeDeleteAlertDialog({
           </Button>
         ) : (
           <Button variant={"destructive"} className="rounded-full">
-            <Icons.trash /> Delete
+            <Icons.trash /> Remove
           </Button>
         )}
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Employee?</AlertDialogTitle>
+          <AlertDialogTitle>Remove Employee?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this employee?
+            Are you sure you want to remove this employee from the company?
             <br />
             <em>This action is irreversible.</em>
           </AlertDialogDescription>
