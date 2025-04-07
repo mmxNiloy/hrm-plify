@@ -38,91 +38,100 @@ export default function EmployeeDetailsEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const profile_pic = fd.get("profile_pic") as File | undefined;
+      try {
+        const fd = new FormData(e.currentTarget);
+        const profile_pic = fd.get("profile_pic") as File | undefined;
 
-      const employeeData = {
-        first_name: fd.get("first_name") as string,
-        middle_name: fd.get("middle_name") as string,
-        last_name: fd.get("last_name") as string,
-        date_of_birth: fd.get("date_of_birth") as string, // you can convert to Date if needed
-        gender: fd.get("gender") as string,
-        ni_num: fd.get("ni_num") as string,
-        nationality: fd.get("nationality") as string,
-        marital_status: fd.get("marital_status") as string,
-        email: fd.get("email") as string,
-        contact_number: fd.get("contact_number") as string,
-        alternative_number: fd.get("alternative_number") as string,
-        is_foreign: Boolean(fd.get("is_foreign") as string),
-      };
+        const employeeData = {
+          first_name: fd.get("first_name") as string,
+          middle_name: fd.get("middle_name") as string,
+          last_name: fd.get("last_name") as string,
+          date_of_birth: fd.get("date_of_birth") as string, // you can convert to Date if needed
+          gender: fd.get("gender") as string,
+          ni_num: fd.get("ni_num") as string,
+          nationality: fd.get("nationality") as string,
+          marital_status: fd.get("marital_status") as string,
+          email: fd.get("email") as string,
+          contact_number: fd.get("contact_number") as string,
+          alternative_number: fd.get("alternative_number") as string,
+          is_foreign: Boolean(fd.get("is_foreign") as string),
+        };
 
-      setLoading(true);
-      // Request api here
+        setLoading(true);
+        // Request api here
 
-      // If an image is selected, upload the image and set the new image source
-      var image = data?.image ?? "";
+        // If an image is selected, upload the image and set the new image source
+        var image = data?.image ?? "";
 
-      if (
-        profile_pic &&
-        profile_pic.size > 0 &&
-        profile_pic.size <= SiteConfig.maxFileSize
-      ) {
-        const uploadRes = await upload(profile_pic);
-        if (uploadRes.error) {
-          toast({
-            title: "Upload Failed",
-            description:
-              "Failed to upload the profile picture. Please try again. Max image size is 1.5MB",
-            variant: "destructive",
-          });
-          setLoading(false);
-          return;
+        if (
+          profile_pic &&
+          profile_pic.size > 0 &&
+          profile_pic.size <= SiteConfig.maxFileSize
+        ) {
+          const uploadRes = await upload(profile_pic);
+          if (uploadRes.error) {
+            toast({
+              title: "Upload Failed",
+              description:
+                "Failed to upload the profile picture. Please try again. Max image size is 1.5MB",
+              variant: "destructive",
+            });
+            setLoading(false);
+            return;
+          }
+
+          image = uploadRes.data.fileUrl;
         }
 
-        image = uploadRes.data.fileUrl;
-      }
-
-      const reqBod = Object.assign(
-        data,
-        Object.assign(employeeData, { image })
-      );
-      try {
-        const apiRes = await fetch(
-          `/api/employee/update-personal-info/${data.employee_id}`,
-          {
-            method: "PATCH",
-            body: JSON.stringify(reqBod),
-          }
+        const reqBod = Object.assign(
+          data,
+          Object.assign(employeeData, { image })
         );
+        try {
+          const apiRes = await fetch(
+            `/api/employee/update-personal-info/${data.employee_id}`,
+            {
+              method: "PATCH",
+              body: JSON.stringify(reqBod),
+            }
+          );
 
-        if (apiRes.ok) {
-          // Close dialog, show toast, refresh parent ssc
-          toast({
-            title: "Update Successful",
-            className: ToastSuccess,
-          });
-          // if (onSuccess) onSuccess(data.data.department_id);
+          if (apiRes.ok) {
+            // Close dialog, show toast, refresh parent ssc
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
+            // if (onSuccess) onSuccess(data.data.department_id);
 
-          router.refresh();
-          setOpen(false);
-        } else {
-          // show a failure dialog
-          const res = await apiRes.json();
+            router.refresh();
+            setOpen(false);
+          } else {
+            // show a failure dialog
+            const res = await apiRes.json();
 
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+          }
+        } catch (err) {
+          // console.error("Failed to update employee personal information.", err);
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }
-      } catch (err) {
-        // console.error("Failed to update employee personal information.", err);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-      setLoading(false);
     },
     [data, router, toast]
   );

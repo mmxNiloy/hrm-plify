@@ -43,129 +43,138 @@ export default function EducationalInfoEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const transcript = fd.get("transcript") as File | undefined;
-      const certificate = fd.get("certificate") as File | undefined;
-
-      setLoading(true);
-      // Request api here
-
-      var transcript_link = data?.transcript_link ?? "";
-      var certificate_link = data?.certificate_link ?? "";
-
-      const uploadTasks = [];
-      if (transcript && transcript.size > 0 && !transcriptError)
-        uploadTasks.push(upload(transcript));
-      else {
-        uploadTasks.push(
-          new Promise<{
-            data: {
-              message: string;
-              fileUrl: string;
-            };
-            error?: undefined;
-          }>((resolve, reject) => {
-            resolve({
-              data: {
-                message: "Default Transcript",
-                fileUrl: transcript_link,
-              },
-            });
-          })
-        );
-      }
-      if (certificate && certificate.size > 0 && !certError)
-        uploadTasks.push(upload(certificate));
-      else {
-        uploadTasks.push(
-          new Promise<{
-            data: {
-              message: string;
-              fileUrl: string;
-            };
-            error?: undefined;
-          }>((resolve, reject) => {
-            resolve({
-              data: {
-                message: "Default Certificate",
-                fileUrl: certificate_link,
-              },
-            });
-          })
-        );
-      }
-
-      const [trnsc, cert] = await Promise.all(uploadTasks);
-      if (trnsc.data) transcript_link = trnsc.data.fileUrl;
-      else {
-        toast({
-          title: "Failed to upload",
-          description: `Failed to upload the transcript file, please try again later. Max file size 1.5MB. Error encountered: ${trnsc.error.message}`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-      if (cert.data) certificate_link = cert.data.fileUrl;
-      else {
-        toast({
-          title: "Failed to upload",
-          description: `Failed to upload the certificate file, please try again later. Max file size 1.5MB. Error encountered: ${cert.error.message}`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      const educationalDetails = {
-        employee_id: Number.parseInt(`${employee_id}`),
-        institution_name: fd.get("institution_name") as string,
-        qualification: fd.get("qualification") as string,
-        subject: fd.get("subject") as string | null,
-        passing_year: fd.get("passing_year") as string | null,
-        grade: fd.get("grade") as string | null,
-        transcript_link,
-        certificate_link,
-      };
-
-      const reqBod = data
-        ? Object.assign(data, educationalDetails)
-        : educationalDetails;
-
       try {
-        const apiRes = await fetch(`/api/employee/educational-info`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const fd = new FormData(e.currentTarget);
+        const transcript = fd.get("transcript") as File | undefined;
+        const certificate = fd.get("certificate") as File | undefined;
 
-        if (apiRes.ok) {
-          // Close dialog, show toast, refresh parent ssc
+        setLoading(true);
+        // Request api here
+
+        var transcript_link = data?.transcript_link ?? "";
+        var certificate_link = data?.certificate_link ?? "";
+
+        const uploadTasks = [];
+        if (transcript && transcript.size > 0 && !transcriptError)
+          uploadTasks.push(upload(transcript));
+        else {
+          uploadTasks.push(
+            new Promise<{
+              data: {
+                message: string;
+                fileUrl: string;
+              };
+              error?: undefined;
+            }>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default Transcript",
+                  fileUrl: transcript_link,
+                },
+              });
+            })
+          );
+        }
+        if (certificate && certificate.size > 0 && !certError)
+          uploadTasks.push(upload(certificate));
+        else {
+          uploadTasks.push(
+            new Promise<{
+              data: {
+                message: string;
+                fileUrl: string;
+              };
+              error?: undefined;
+            }>((resolve, reject) => {
+              resolve({
+                data: {
+                  message: "Default Certificate",
+                  fileUrl: certificate_link,
+                },
+              });
+            })
+          );
+        }
+
+        const [trnsc, cert] = await Promise.all(uploadTasks);
+        if (trnsc.data) transcript_link = trnsc.data.fileUrl;
+        else {
           toast({
-            title: "Update Successful",
-            className: ToastSuccess,
+            title: "Failed to upload",
+            description: `Failed to upload the transcript file, please try again later. Max file size 1.5MB. Error encountered: ${trnsc.error.message}`,
+            variant: "destructive",
           });
-          // if (onSuccess) onSuccess(data.data.department_id);
+          setLoading(false);
+          return;
+        }
+        if (cert.data) certificate_link = cert.data.fileUrl;
+        else {
+          toast({
+            title: "Failed to upload",
+            description: `Failed to upload the certificate file, please try again later. Max file size 1.5MB. Error encountered: ${cert.error.message}`,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
 
-          router.refresh();
-          setOpen(false);
-        } else {
-          // show a failure dialog
-          const res = await apiRes.json();
+        const educationalDetails = {
+          employee_id: Number.parseInt(`${employee_id}`),
+          institution_name: fd.get("institution_name") as string,
+          qualification: fd.get("qualification") as string,
+          subject: fd.get("subject") as string | null,
+          passing_year: fd.get("passing_year") as string | null,
+          grade: fd.get("grade") as string | null,
+          transcript_link,
+          certificate_link,
+        };
 
+        const reqBod = data
+          ? Object.assign(data, educationalDetails)
+          : educationalDetails;
+
+        try {
+          const apiRes = await fetch(`/api/employee/educational-info`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
+          });
+
+          if (apiRes.ok) {
+            // Close dialog, show toast, refresh parent ssc
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
+            // if (onSuccess) onSuccess(data.data.department_id);
+
+            router.refresh();
+            setOpen(false);
+          } else {
+            // show a failure dialog
+            const res = await apiRes.json();
+
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+          }
+        } catch (err) {
+          // console.error("Failed to update employee personal information.", err);
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }
-      } catch (err) {
-        // console.error("Failed to update employee personal information.", err);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-      setLoading(false);
     },
     [certError, data, employee_id, router, toast, transcriptError]
   );

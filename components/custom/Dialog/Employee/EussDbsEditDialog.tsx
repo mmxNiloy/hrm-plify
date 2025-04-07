@@ -46,114 +46,123 @@ export default function EussDbsEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const euss_doc = fd.get("euss_doc") as File | undefined;
-      const dbs_doc = fd.get("dbs_doc") as File | undefined;
-
-      setLoading(true);
-
-      if (eussDocError || dbsDocError) {
-        toast({
-          title: "File too large",
-          description:
-            "Attached document exceeds file limit. File(s) will not be uploaded.",
-          className: ToastWarn,
-        });
-      }
-
-      const [eussDocUpload, dbsDocUpload] = await Promise.all([
-        euss_doc && !eussDocError
-          ? upload(euss_doc)
-          : new Promise<IUploadResponse>((resolve, reject) => {
-              resolve({
-                data: {
-                  message: "Default EUSS doc link",
-                  fileUrl: data?.euss_doc ?? "",
-                },
-              });
-            }),
-        dbs_doc && !dbsDocError
-          ? upload(dbs_doc)
-          : new Promise<IUploadResponse>((resolve, reject) => {
-              resolve({
-                data: {
-                  message: "Default DBS doc link",
-                  fileUrl: data?.dbs_doc ?? "",
-                },
-              });
-            }),
-      ]);
-
-      const combinedDetails = {
-        id: 0,
-        employee_id: Number.parseInt(`${employee_id}`),
-        // EUSS Fields
-        euss_time_linit_ref_num: fd.get("euss_time_linit_ref_num") as string,
-        euss_issue_date: fd.get("euss_issue_date")
-          ? new Date(fd.get("euss_issue_date") as string)
-          : null,
-        euss_expiry_date: fd.get("euss_expiry_date")
-          ? new Date(fd.get("euss_expiry_date") as string)
-          : null,
-        euss_doc: eussDocUpload.data?.fileUrl ?? data?.euss_doc ?? "",
-        euss_remarks: (fd.get("euss_remarks") as string | null) ?? "",
-        euss_is_current: fd.get("euss_is_current")
-          ? fd.get("euss_is_current") === "yes"
-            ? 1
-            : 0
-          : 0,
-        // DBS Fields
-        dbs_ref_no: fd.get("dbs_ref_no") as string,
-        nationality: fd.get("nationality") as string,
-        dbs_issue_date: fd.get("dbs_issue_date")
-          ? new Date(fd.get("dbs_issue_date") as string)
-          : null,
-        dbs_expiry_date: fd.get("dbs_expiry_date")
-          ? new Date(fd.get("dbs_expiry_date") as string)
-          : null,
-        dbs_doc: dbsDocUpload.data?.fileUrl ?? data?.dbs_doc ?? "",
-        dbs_type: (fd.get("dbs_type") as string | null) ?? "",
-        dbs_is_current: fd.get("dbs_is_current")
-          ? fd.get("dbs_is_current") === "yes"
-            ? 1
-            : 0
-          : 0,
-      } as IEmployeeEussDbsData;
-
-      const reqBod = data
-        ? Object.assign(data, combinedDetails)
-        : combinedDetails;
-
       try {
-        const apiRes = await fetch(`/api/employee/euss-dbs-info`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const fd = new FormData(e.currentTarget);
+        const euss_doc = fd.get("euss_doc") as File | undefined;
+        const dbs_doc = fd.get("dbs_doc") as File | undefined;
 
-        if (apiRes.ok) {
+        setLoading(true);
+
+        if (eussDocError || dbsDocError) {
           toast({
-            title: "Update Successful",
-            className: ToastSuccess,
+            title: "File too large",
+            description:
+              "Attached document exceeds file limit. File(s) will not be uploaded.",
+            className: ToastWarn,
+          });
+        }
+
+        const [eussDocUpload, dbsDocUpload] = await Promise.all([
+          euss_doc && !eussDocError
+            ? upload(euss_doc)
+            : new Promise<IUploadResponse>((resolve, reject) => {
+                resolve({
+                  data: {
+                    message: "Default EUSS doc link",
+                    fileUrl: data?.euss_doc ?? "",
+                  },
+                });
+              }),
+          dbs_doc && !dbsDocError
+            ? upload(dbs_doc)
+            : new Promise<IUploadResponse>((resolve, reject) => {
+                resolve({
+                  data: {
+                    message: "Default DBS doc link",
+                    fileUrl: data?.dbs_doc ?? "",
+                  },
+                });
+              }),
+        ]);
+
+        const combinedDetails = {
+          id: 0,
+          employee_id: Number.parseInt(`${employee_id}`),
+          // EUSS Fields
+          euss_time_linit_ref_num: fd.get("euss_time_linit_ref_num") as string,
+          euss_issue_date: fd.get("euss_issue_date")
+            ? new Date(fd.get("euss_issue_date") as string)
+            : null,
+          euss_expiry_date: fd.get("euss_expiry_date")
+            ? new Date(fd.get("euss_expiry_date") as string)
+            : null,
+          euss_doc: eussDocUpload.data?.fileUrl ?? data?.euss_doc ?? "",
+          euss_remarks: (fd.get("euss_remarks") as string | null) ?? "",
+          euss_is_current: fd.get("euss_is_current")
+            ? fd.get("euss_is_current") === "yes"
+              ? 1
+              : 0
+            : 0,
+          // DBS Fields
+          dbs_ref_no: fd.get("dbs_ref_no") as string,
+          nationality: fd.get("nationality") as string,
+          dbs_issue_date: fd.get("dbs_issue_date")
+            ? new Date(fd.get("dbs_issue_date") as string)
+            : null,
+          dbs_expiry_date: fd.get("dbs_expiry_date")
+            ? new Date(fd.get("dbs_expiry_date") as string)
+            : null,
+          dbs_doc: dbsDocUpload.data?.fileUrl ?? data?.dbs_doc ?? "",
+          dbs_type: (fd.get("dbs_type") as string | null) ?? "",
+          dbs_is_current: fd.get("dbs_is_current")
+            ? fd.get("dbs_is_current") === "yes"
+              ? 1
+              : 0
+            : 0,
+        } as IEmployeeEussDbsData;
+
+        const reqBod = data
+          ? Object.assign(data, combinedDetails)
+          : combinedDetails;
+
+        try {
+          const apiRes = await fetch(`/api/employee/euss-dbs-info`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
           });
 
-          router.refresh();
-          setOpen(false);
-        } else {
-          const res = await apiRes.json();
+          if (apiRes.ok) {
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
+
+            router.refresh();
+            setOpen(false);
+          } else {
+            const res = await apiRes.json();
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+          }
+        } catch (err) {
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }
-      } catch (err) {
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-
-      setLoading(false);
     },
     [data, dbsDocError, employee_id, eussDocError, router, toast]
   );

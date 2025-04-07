@@ -43,119 +43,128 @@ export default function VisaBrpEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const fImg = fd.get("visa_brp_photo_front_image") as File | undefined;
-      const bImg = fd.get("visa_brp_photo_back_image") as File | undefined;
-
-      setLoading(true);
-
-      const { visa_brp_photo_front, visa_brp_photo_back } = data ?? {
-        visa_brp_photo_front: "",
-        visa_brp_photo_back: "",
-      };
-
-      const [fImgUpload, bImgUpload] = await Promise.all([
-        fImg && fImg.size <= SiteConfig.maxFileSize
-          ? upload(fImg)
-          : new Promise<{
-              data: {
-                message: string;
-                fileUrl: string;
-              };
-              error: undefined;
-            }>((resolve, reject) => {
-              resolve({
-                data: {
-                  message: "Default Front Image Link",
-                  fileUrl: visa_brp_photo_front ?? "",
-                },
-                error: undefined,
-              });
-            }),
-        bImg && bImg.size <= SiteConfig.maxFileSize
-          ? upload(bImg)
-          : new Promise<{
-              data: {
-                message: string;
-                fileUrl: string;
-              };
-              error?: Error;
-            }>((resolve, reject) => {
-              resolve({
-                data: {
-                  message: "Default Back Image Link",
-                  fileUrl: visa_brp_photo_back ?? "",
-                },
-                error: undefined,
-              });
-            }),
-      ]);
-
-      if (fImgUpload.error || bImgUpload.error) {
-        toast({
-          title: "Upload failed",
-          description: `Failed to upload image. Error encountered: ${
-            fImgUpload.error?.message ?? bImgUpload.error?.message
-          }`,
-          variant: "destructive",
-        });
-
-        setLoading(false);
-        return;
-      }
-
-      const visaBrpDetails = {
-        employee_id: Number.parseInt(`${employee_id}`),
-        visa_brp_number: fd.get("visa_brp_number") as string,
-        issue_date: fd.get("issue_date")
-          ? new Date(fd.get("issue_date") as string)
-          : null,
-        expiry_date: fd.get("expiry_date")
-          ? new Date(fd.get("expiry_date") as string)
-          : null,
-        issued_by: fd.get("issued_by") as string | null,
-        country_of_residence: fd.get("country_of_residence") as string | null,
-        nationality: fd.get("nationality") as string,
-        visa_brp_photo_front: fImgUpload.data.fileUrl,
-        visa_brp_photo_back: bImgUpload.data.fileUrl,
-        remarks: fd.get("remarks") as string | null,
-        iscurrent: fd.get("iscurrent") ? Number(fd.get("iscurrent")) : 0,
-      };
-
-      const reqBod = data
-        ? Object.assign(data, visaBrpDetails)
-        : visaBrpDetails;
-
       try {
-        const apiRes = await fetch(`/api/employee/visa-brp-info`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const fd = new FormData(e.currentTarget);
+        const fImg = fd.get("visa_brp_photo_front_image") as File | undefined;
+        const bImg = fd.get("visa_brp_photo_back_image") as File | undefined;
 
-        if (apiRes.ok) {
+        setLoading(true);
+
+        const { visa_brp_photo_front, visa_brp_photo_back } = data ?? {
+          visa_brp_photo_front: "",
+          visa_brp_photo_back: "",
+        };
+
+        const [fImgUpload, bImgUpload] = await Promise.all([
+          fImg && fImg.size <= SiteConfig.maxFileSize
+            ? upload(fImg)
+            : new Promise<{
+                data: {
+                  message: string;
+                  fileUrl: string;
+                };
+                error: undefined;
+              }>((resolve, reject) => {
+                resolve({
+                  data: {
+                    message: "Default Front Image Link",
+                    fileUrl: visa_brp_photo_front ?? "",
+                  },
+                  error: undefined,
+                });
+              }),
+          bImg && bImg.size <= SiteConfig.maxFileSize
+            ? upload(bImg)
+            : new Promise<{
+                data: {
+                  message: string;
+                  fileUrl: string;
+                };
+                error?: Error;
+              }>((resolve, reject) => {
+                resolve({
+                  data: {
+                    message: "Default Back Image Link",
+                    fileUrl: visa_brp_photo_back ?? "",
+                  },
+                  error: undefined,
+                });
+              }),
+        ]);
+
+        if (fImgUpload.error || bImgUpload.error) {
           toast({
-            title: "Update Successful",
-            className: ToastSuccess,
+            title: "Upload failed",
+            description: `Failed to upload image. Error encountered: ${
+              fImgUpload.error?.message ?? bImgUpload.error?.message
+            }`,
+            variant: "destructive",
           });
 
-          router.refresh();
-          setOpen(false);
-        } else {
-          const res = await apiRes.json();
+          setLoading(false);
+          return;
+        }
+
+        const visaBrpDetails = {
+          employee_id: Number.parseInt(`${employee_id}`),
+          visa_brp_number: fd.get("visa_brp_number") as string,
+          issue_date: fd.get("issue_date")
+            ? new Date(fd.get("issue_date") as string)
+            : null,
+          expiry_date: fd.get("expiry_date")
+            ? new Date(fd.get("expiry_date") as string)
+            : null,
+          issued_by: fd.get("issued_by") as string | null,
+          country_of_residence: fd.get("country_of_residence") as string | null,
+          nationality: fd.get("nationality") as string,
+          visa_brp_photo_front: fImgUpload.data.fileUrl,
+          visa_brp_photo_back: bImgUpload.data.fileUrl,
+          remarks: fd.get("remarks") as string | null,
+          iscurrent: fd.get("iscurrent") ? Number(fd.get("iscurrent")) : 0,
+        };
+
+        const reqBod = data
+          ? Object.assign(data, visaBrpDetails)
+          : visaBrpDetails;
+
+        try {
+          const apiRes = await fetch(`/api/employee/visa-brp-info`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
+          });
+
+          if (apiRes.ok) {
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
+
+            router.refresh();
+            setOpen(false);
+          } else {
+            const res = await apiRes.json();
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+          }
+        } catch (err) {
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }
-      } catch (err) {
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-
-      setLoading(false);
     },
     [data, employee_id, router, toast]
   );

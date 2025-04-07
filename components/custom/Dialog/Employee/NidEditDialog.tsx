@@ -43,85 +43,94 @@ export default function NidEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
-      const doc = fd.get("document") as File | undefined;
+      try {
+        const fd = new FormData(e.currentTarget);
+        const doc = fd.get("document") as File | undefined;
 
-      setLoading(true);
+        setLoading(true);
 
-      if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
-        toast({
-          title: "File too large",
-          description: `Cannot upload this file. The file exceeds the permissible limit: ${
-            SiteConfig.maxFileSize / 1e5
-          }MB`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      var document_link = data?.document ?? "";
-      if (doc && !docError) {
-        const docUpload = await upload(doc);
-        if (docUpload.error) {
+        if ((doc?.size ?? 0) > SiteConfig.maxFileSize) {
           toast({
-            title: "Upload Failed",
-            description: `Failed to upload NID document. Please try again later. Errors encountered: ${docUpload.error.message}`,
+            title: "File too large",
+            description: `Cannot upload this file. The file exceeds the permissible limit: ${
+              SiteConfig.maxFileSize / 1e5
+            }MB`,
             variant: "destructive",
           });
-
           setLoading(false);
           return;
         }
 
-        document_link = docUpload.data.fileUrl;
-      }
+        var document_link = data?.document ?? "";
+        if (doc && !docError) {
+          const docUpload = await upload(doc);
+          if (docUpload.error) {
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload NID document. Please try again later. Errors encountered: ${docUpload.error.message}`,
+              variant: "destructive",
+            });
 
-      const nidDetails = {
-        employee_id: Number.parseInt(`${employee_id}`),
-        nid_number: fd.get("nid_number") as string,
-        issue_date: new Date(fd.get("issue_date") as string),
-        expiry_date: new Date(fd.get("expiry_date") as string),
-        nationality: fd.get("nationality") as string,
-        document: document_link,
-        country_of_residence: fd.get("country_of_residence") as string,
-        remark: (fd.get("remark") as string | null) ?? "",
-        isCurrent: (fd.get("isCurrent") as "yes" | "no") === "yes" ? 1 : 0,
-      } as IEmployeeNid;
+            setLoading(false);
+            return;
+          }
 
-      const reqBod = data ? Object.assign(data, nidDetails) : nidDetails;
+          document_link = docUpload.data.fileUrl;
+        }
 
-      // Request api here
-      try {
-        const apiRes = await fetch(`/api/employee/nid-info`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const nidDetails = {
+          employee_id: Number.parseInt(`${employee_id}`),
+          nid_number: fd.get("nid_number") as string,
+          issue_date: new Date(fd.get("issue_date") as string),
+          expiry_date: new Date(fd.get("expiry_date") as string),
+          nationality: fd.get("nationality") as string,
+          document: document_link,
+          country_of_residence: fd.get("country_of_residence") as string,
+          remark: (fd.get("remark") as string | null) ?? "",
+          isCurrent: (fd.get("isCurrent") as "yes" | "no") === "yes" ? 1 : 0,
+        } as IEmployeeNid;
 
-        if (apiRes.ok) {
-          // Close dialog, show toast, refresh parent ssc
-          toast({
-            title: "Update Successful",
-            className: ToastSuccess,
+        const reqBod = data ? Object.assign(data, nidDetails) : nidDetails;
+
+        // Request api here
+        try {
+          const apiRes = await fetch(`/api/employee/nid-info`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
           });
-          router.refresh();
-          setOpen(false);
-        } else {
-          // show a failure dialog
-          const res = await apiRes.json();
+
+          if (apiRes.ok) {
+            // Close dialog, show toast, refresh parent ssc
+            toast({
+              title: "Update Successful",
+              className: ToastSuccess,
+            });
+            router.refresh();
+            setOpen(false);
+          } else {
+            // show a failure dialog
+            const res = await apiRes.json();
+            toast({
+              title: "Update Failed",
+              description: JSON.stringify(res.message),
+              variant: "destructive",
+            });
+          }
+        } catch (err) {
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }
-      } catch (err) {
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Update Failed",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
       }
-      setLoading(false);
     },
     [data, docError, employee_id, router, toast]
   );

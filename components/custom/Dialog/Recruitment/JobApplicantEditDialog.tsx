@@ -52,78 +52,87 @@ export default function JobApplicantEditDialog({
       e.preventDefault();
       e.stopPropagation();
 
-      const fd = new FormData(e.currentTarget);
+      try {
+        const fd = new FormData(e.currentTarget);
 
-      const resume_cv_document = fd.get("resume_cv_document") as
-        | File
-        | undefined;
-      const cover_letter_document = fd.get("cover_letter_document") as
-        | File
-        | undefined;
+        const resume_cv_document = fd.get("resume_cv_document") as
+          | File
+          | undefined;
+        const cover_letter_document = fd.get("cover_letter_document") as
+          | File
+          | undefined;
 
-      setLoading(true);
+        setLoading(true);
 
-      const [resumeCvDocUpload, coverLetterDocUpload] = await Promise.all([
-        resume_cv_document && !rcError
-          ? upload(resume_cv_document)
-          : new Promise<IUploadResponse>((resolve, reject) => {
-              resolve({
-                data: {
-                  message: "Default CV/Resume doc link",
-                  fileUrl: data?.cv_url ?? "",
-                },
-              });
-            }),
-        cover_letter_document && !clError
-          ? upload(cover_letter_document)
-          : new Promise<IUploadResponse>((resolve, reject) => {
-              resolve({
-                data: {
-                  message: "Default cover letter doc link",
-                  fileUrl: data?.cover_letter_url ?? "",
-                },
-              });
-            }),
-      ]);
+        const [resumeCvDocUpload, coverLetterDocUpload] = await Promise.all([
+          resume_cv_document && !rcError
+            ? upload(resume_cv_document)
+            : new Promise<IUploadResponse>((resolve, reject) => {
+                resolve({
+                  data: {
+                    message: "Default CV/Resume doc link",
+                    fileUrl: data?.cv_url ?? "",
+                  },
+                });
+              }),
+          cover_letter_document && !clError
+            ? upload(cover_letter_document)
+            : new Promise<IUploadResponse>((resolve, reject) => {
+                resolve({
+                  data: {
+                    message: "Default cover letter doc link",
+                    fileUrl: data?.cover_letter_url ?? "",
+                  },
+                });
+              }),
+        ]);
 
-      const jobApp: IJobApplicant = {
-        id: data?.id ?? 0,
-        job_id: job.id,
-        company_id: job.company_id,
-        first_name: fd.get("first_name") as string,
-        last_name: fd.get("last_name") as string,
-        middle_name: fd.get("middle_name") as string,
-        email: fd.get("email") as string,
-        cv_url: resumeCvDocUpload.data?.fileUrl ?? data?.cv_url ?? "",
-        cover_letter_url:
-          coverLetterDocUpload.data?.fileUrl ?? data?.cover_letter_url ?? "",
-        uni_key: "",
-        last_date: new Date(job.lastDate),
-      };
+        const jobApp: IJobApplicant = {
+          id: data?.id ?? 0,
+          job_id: job.id,
+          company_id: job.company_id,
+          first_name: fd.get("first_name") as string,
+          last_name: fd.get("last_name") as string,
+          middle_name: fd.get("middle_name") as string,
+          email: fd.get("email") as string,
+          cv_url: resumeCvDocUpload.data?.fileUrl ?? data?.cv_url ?? "",
+          cover_letter_url:
+            coverLetterDocUpload.data?.fileUrl ?? data?.cover_letter_url ?? "",
+          uni_key: "",
+          last_date: new Date(job.lastDate),
+        };
 
-      // Create the job
-      const result = await createJobApplication(jobApp);
+        // Create the job
+        const result = await createJobApplication(jobApp);
 
-      if (result.error) {
+        if (result.error) {
+          toast({
+            title: "Failed to apply for the job!",
+            description: "Please try again later",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Application Submission Successful!",
+            description:
+              "We've received your application. We shall review your application and reach you as soon as possible. Thank you.",
+            className: ToastSuccess,
+          });
+
+          setOpen(false);
+          setLoading(false);
+          router.refresh();
+        }
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
         toast({
-          title: "Failed to apply for the job!",
-          description: "Please try again later",
+          title: "Something went wrong!",
+          description: (error as Error).message,
           variant: "destructive",
         });
-      } else {
-        toast({
-          title: "Application Submission Successful!",
-          description:
-            "We've received your application. We shall review your application and reach you as soon as possible. Thank you.",
-          className: ToastSuccess,
-        });
-
-        setOpen(false);
-        setLoading(false);
-        router.refresh();
       }
-
-      setLoading(false);
     },
     [
       clError,

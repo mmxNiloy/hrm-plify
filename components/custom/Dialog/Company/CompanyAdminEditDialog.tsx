@@ -54,12 +54,22 @@ export default function CompanyAdminEditDialog({
         user_id: data?.user_id,
       };
 
+      const editData = {
+        company_id: Number.parseInt(`${companyId}`),
+        first_name: fd.get("fname"),
+        last_name: fd.get("lname"),
+        middle_name: fd.get("mname"),
+        email: fd.get("email"),
+        company_role_id: 3,
+        user_id: data?.user_id,
+      };
+
       setLoading(true);
 
       try {
         const apiRes = await fetch(`/api/company/assign-admin`, {
           method: data ? "PATCH" : "POST",
-          body: JSON.stringify(userData),
+          body: JSON.stringify(data ? editData : userData),
         });
 
         if (apiRes.ok) {
