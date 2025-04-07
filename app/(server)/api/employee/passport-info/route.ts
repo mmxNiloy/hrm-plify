@@ -56,6 +56,11 @@ export async function PATCH(req: NextRequest) {
 
   const data = (await req.json()) as IEmployeePassportDetail;
 
+  console.log(
+    "[PATCH] > Update Passport > Update Passport Request Body >",
+    data
+  );
+
   try {
     const apiRes = await fetch(
       `${process.env.API_BASE_URL}/employee/update-passport-data/`,

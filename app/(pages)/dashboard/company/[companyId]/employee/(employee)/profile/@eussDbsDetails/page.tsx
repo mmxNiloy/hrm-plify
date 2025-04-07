@@ -60,7 +60,7 @@ export default async function EussDetailsSlot({
           </p>
           {/* {updateAccess && (
           )} */}
-          <EussDbsEditDialog data={euss} employee_id={employeeId} />
+          <EussDbsEditDialog data={euss} employee_id={empId} />
         </div>
         <EussFormFragment readOnly data={euss} />
       </div>
