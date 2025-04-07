@@ -10,9 +10,6 @@ import { ISearchParams, ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { StaticDataTable } from "@/components/ui/data-table";
 import { AttendanceReportDataTableColumns } from "@/components/custom/DataTable/Columns/Attendance/AttendanceReportDataTableColumns";
-import { Button } from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
 import { getAbsentReports } from "@/app/(server)/actions/getAbsentReport";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
@@ -20,18 +17,19 @@ import AbsentReportGenerator from "@/components/custom/PDF/AbsentReportGenerator
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { ESortFilter } from "@/schema/enum/sort-filter";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 function getFilters(searchParams: ISearchParams) {
   return {
-    employee_id: Math.max(
-      0,
-      Number.parseInt((searchParams.employee as string | undefined) ?? "0")
-    ),
-    from_date: searchParams.datepicker_from_date as string | undefined,
-    end_date: searchParams.datepicker_to_date as string | undefined,
-    sort: (searchParams.sort as string | undefined) ?? "DESC",
+    employee_ids:
+      (searchParams.employees as string | undefined)
+        ?.split(",")
+        .map((id) => Number.parseInt(id)) ?? [],
+    from_date: searchParams.fromDate as string | undefined,
+    end_date: searchParams.toDate as string | undefined,
+    sort: (searchParams.sort as ESortFilter | undefined) ?? ESortFilter.DESC,
   };
 }
 

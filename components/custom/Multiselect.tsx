@@ -198,6 +198,17 @@ export const MultiSelect = React.forwardRef<
       }
     };
 
+    const filterByLabel = React.useCallback(
+      (value: string, search: string) => {
+        return options
+          .find((item) => item.value === value)
+          ?.label.includes(search)
+          ? 1
+          : 0;
+      },
+      [options]
+    );
+
     return (
       <Popover
         open={isPopoverOpen}
@@ -297,7 +308,7 @@ export const MultiSelect = React.forwardRef<
           )}
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
-          <Command>
+          <Command filter={filterByLabel}>
             <CommandInput
               placeholder="Search..."
               onKeyDown={handleInputKeyDown}

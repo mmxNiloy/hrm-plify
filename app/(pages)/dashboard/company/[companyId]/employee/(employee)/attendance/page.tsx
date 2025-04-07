@@ -22,6 +22,7 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AttendanceReportGenerator from "@/components/custom/PDF/AttendanceReportGenerator";
 import { TPermission } from "@/schema/Permissions";
 import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/AttendanceBulkUpdateDialog";
+import { ESortFilter } from "@/schema/enum/sort-filter";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -30,10 +31,15 @@ function getFilters(
   employee: IEmployeeWithUserMetadata
 ) {
   return {
-    employee_id: employee.employee_id,
-    from_date: searchParams.datepicker_from_date as string | undefined,
-    end_date: searchParams.datepicker_to_date as string | undefined,
-    sort: (searchParams.sort as string | undefined) ?? "DESC",
+    employee_ids: [
+      ...((searchParams.employees as string | undefined)
+        ?.split(",")
+        .map((id) => Number.parseInt(id)) ?? []),
+      employee.employee_id,
+    ],
+    from_date: searchParams.fromDate as string | undefined,
+    end_date: searchParams.toDate as string | undefined,
+    sort: (searchParams.sort as ESortFilter | undefined) ?? ESortFilter.DESC,
   };
 }
 

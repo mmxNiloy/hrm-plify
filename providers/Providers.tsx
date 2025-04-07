@@ -2,6 +2,7 @@
 
 import { Toaster } from "@/components/ui/toaster";
 import TailwindIndicator from "@/providers/TailwindIndicator";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 interface Props {
@@ -13,7 +14,7 @@ export function Providers({ children }: Props) {
     // <UserContextProvider>
     <ThemeProvider attribute="class" defaultTheme="light">
       {/* <LanguageContextProvider> */}
-      {children}
+      <NuqsAdapter>{children}</NuqsAdapter>
       <Toaster />
       {/* <TailwindIndicator /> */}
       {/* </LanguageContextProvider> */}

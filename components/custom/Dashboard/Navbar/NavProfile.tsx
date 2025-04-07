@@ -30,7 +30,7 @@ export default function NavProfile({
         <div className="bg-accent rounded-md flex flex-col gap-2 p-2">
           <div className="flex gap-1">
             {/* Avatar */}
-            <GradientBorderContainer className="rounded-full">
+            <GradientBorderContainer className="rounded-full size-fit">
               <AvatarPicker
                 readOnly
                 src={employeeData?.image}
