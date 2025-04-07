@@ -62,10 +62,7 @@ export async function PATCH(req: NextRequest) {
       }
     );
 
-    const responseText = await apiRes.text();
-    console.log("Response found", responseText);
-
-    const data = JSON.parse(responseText);
+    const data = await apiRes.json();
     return NextResponse.json(data, { status: apiRes.status });
   } catch (err) {
     console.error("Failed to update company user", err);
