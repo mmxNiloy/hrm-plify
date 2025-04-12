@@ -27,6 +27,7 @@ import CompanyCreationDialog from "@/components/custom/Dialog/Company/CompanyCre
 import { Metadata } from "next";
 import { getUserData } from "@/app/(server)/actions/getUserData";
 import SiteConfig from "@/utils/SiteConfig";
+import ChangePasswordDialog from "@/components/custom/Dialog/ChangePasswordDialog";
 
 enum ProfileStep {
   ROLE = 1,
@@ -258,10 +259,10 @@ export default async function ProfilePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 sm:px-6 lg:px-8 py-4">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 px-4 sm:px-6 lg:px-8 py-4">
             <div className="border relative rounded-md">
               {!user.usercompany && (
-                <div className="absolute inset-0 bg-muted/50 backdrop-blur flex flex-col gap-2 items-center justify-center p-4 text-center">
+                <div className="absolute z-10 inset-0 bg-muted/50 backdrop-blur flex flex-col gap-2 items-center justify-center p-4 text-center">
                   <p className="text-base sm:text-lg font-semibold">
                     You are not affiliated with a company yet.
                   </p>
@@ -275,7 +276,7 @@ export default async function ProfilePage() {
                   </div>
                 </div>
               )}
-              <div className="p-4 flex flex-col gap-4">
+              <div className="p-4 flex flex-col gap-4 -z-10">
                 <p className="text-lg sm:text-xl font-semibold flex gap-2 items-center">
                   <Icons.company className="size-5" />
                   My Company
@@ -368,6 +369,8 @@ export default async function ProfilePage() {
                     placeholder="Date of Joining"
                   />
                 </div>
+
+                <ChangePasswordDialog />
               </div>
             </div>
           </div>
