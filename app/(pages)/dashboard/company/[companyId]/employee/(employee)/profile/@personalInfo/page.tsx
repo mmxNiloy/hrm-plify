@@ -15,6 +15,7 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
 import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
 import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
+import ChangePasswordDialog from "@/components/custom/Dialog/ChangePasswordDialog";
 
 export default async function PersonalInfoSlot({
   params,
@@ -82,7 +83,10 @@ export default async function PersonalInfoSlot({
         </p>
         {/* {updateAccess && 
         } */}
-        <EmployeeDetailsEditDialog data={personalInfo.data} />
+        <div className="flex flex-col sm:flex-row gap-2">
+          <EmployeeDetailsEditDialog data={personalInfo.data} />
+          <ChangePasswordDialog />
+        </div>
       </div>
       <EmployeeDetailsFormFragment data={personalInfo.data} readOnly />
 

@@ -50,19 +50,6 @@ export default function AuthCard() {
       </CardHeader>
       <CardContent className="w-72 sm:w-96 md:w-[32rem]">
         <LoginForm />
-
-        {/* <p className="text-center mt-4 mb-2 font-semibold text-lg text-secondary-foreground">
-          Don&apos;t have an account?
-        </p>
-        <Link href={"#book-a-demo-form"} passHref target="_blank">
-          <Button
-            // onClick={handleRegFormSlide}
-            type="button"
-            className="gap-2 w-full font-semibold text-lg rounded-md bg-blue-500 hover:bg-blue-400 text-white"
-          >
-            Book a Demo
-          </Button>
-        </Link> */}
       </CardContent>
     </Card>
   ) : (

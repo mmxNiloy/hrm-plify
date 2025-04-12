@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useToast } from "@/components/ui/use-toast";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
@@ -114,16 +115,24 @@ export default function LoginForm() {
         />
       </div>
 
-      <div className="flex flex-row gap-2 items-center">
-        <Checkbox
-          disabled={loading}
-          id="remember-me-checkbox"
-          name="remember-me"
-          className="bg-white border-none ring-2 ring-gray-600"
-        />
-        <Label htmlFor="remember-me-checkbox" className="text-sm">
-          Remember me
-        </Label>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-row gap-2 items-center">
+          <Checkbox
+            disabled={loading}
+            id="remember-me-checkbox"
+            name="remember-me"
+            className="bg-white border-none ring-2 ring-gray-600"
+          />
+          <Label htmlFor="remember-me-checkbox" className="text-sm">
+            Remember me
+          </Label>
+        </div>
+
+        <Link href={"/account-recovery"} passHref>
+          <Button type="button" variant={"link"}>
+            Forget password?
+          </Button>
+        </Link>
       </div>
 
       <Button
