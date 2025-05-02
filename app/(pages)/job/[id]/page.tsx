@@ -2,7 +2,6 @@
 import { getJobListing } from "@/app/(server)/actions/getJobListing";
 import JobApplicantEditDialog from "@/components/custom/Dialog/Recruitment/JobApplicantEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import Navbar from "@/components/custom/Navbar/Navbar";
 import TextCapsule from "@/components/custom/TextCapsule";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,6 @@ export default async function JobByIdPage({ params }: Props) {
   if (error) {
     return (
       <main>
-        {/* <Navbar /> */}
         <ErrorFallbackCard error={error} />
       </main>
     );
@@ -38,7 +36,6 @@ export default async function JobByIdPage({ params }: Props) {
   if (!Boolean(data)) {
     return (
       <main>
-        {/* <Navbar /> */}
         <div className="container w-full h-screen flex flex-col gap-2 items-center justify-center">
           <Icons.squirrel className="size-32" />
           <p className="text-lg font-semibold">
@@ -60,7 +57,6 @@ export default async function JobByIdPage({ params }: Props) {
     // Unpublished job listing
     return (
       <main>
-        <Navbar />
         <div className="container w-full h-screen flex flex-col gap-2 items-center justify-center">
           <Icons.squirrel className="size-32" />
           <p>Oops! The requested job is not published yet!</p>
@@ -107,8 +103,6 @@ export default async function JobByIdPage({ params }: Props) {
 
   return (
     <main>
-      <Navbar />
-
       {/* Job listing inactive message */}
       {data.status == 0 && (
         <div className="bg-red-500 items-center justify-center text-white text-lg font-semibold flex gap-2">
