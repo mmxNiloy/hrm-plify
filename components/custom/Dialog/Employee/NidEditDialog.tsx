@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import NidFormFragment from "../../Form/Fragment/Employee/NidFormFragment";
-import { upload } from "@/app/(server)/actions/upload";
+import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
 
 export default function NidEditDialog({
@@ -63,19 +63,30 @@ export default function NidEditDialog({
 
         var document_link = data?.document ?? "";
         if (doc && !docError) {
-          const docUpload = await upload(doc);
-          if (docUpload.error) {
-            toast({
-              title: "Upload Failed",
-              description: `Failed to upload NID document. Please try again later. Errors encountered: ${docUpload.error.message}`,
-              variant: "destructive",
-            });
-
-            setLoading(false);
-            return;
+          const fd = new FormData();
+          fd.append("file", doc);
+          // Upload the logo
+          const docUpload = await fetch("/api/upload", {
+            method: "POST",
+            body: fd,
+          });
+          if (!docUpload.ok) {
+            const result = docUpload.headers
+              .get("Content-Type")
+              ?.includes("json")
+              ? await docUpload.json()
+              : await docUpload.text();
+            if (doc.size > 0) {
+              toast({
+                title: "Upload Failed",
+                description: `Failed to upload the logo. Cause: ${result}`,
+                variant: "destructive",
+              });
+            }
+          } else {
+            const res = (await docUpload.json()) as IUploadResult;
+            document_link = res.fileUrl;
           }
-
-          document_link = docUpload.data.fileUrl;
         }
 
         const nidDetails = {

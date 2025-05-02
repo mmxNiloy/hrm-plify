@@ -22,7 +22,7 @@ import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
 import CompanyDocumentFormFragment from "../../../Form/Fragment/Company/CompanyDocumentFormFragment";
 import { useToast } from "@/components/ui/use-toast";
-import { upload } from "@/app/(server)/actions/upload";
+import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import { setSourceMapsEnabled } from "process";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
@@ -77,18 +77,30 @@ export default function CompanyDocumentEditDialog({
         }
 
         if (docFile && !docError) {
-          const docUpload = await upload(docFile);
-          if (docUpload.error) {
-            toast({
-              title: "Failed to upload the document",
-              description: docUpload.error.message,
-              variant: "destructive",
-            });
-            setLoading(false);
-            return;
+          const fd = new FormData();
+          fd.append("file", docFile);
+          // Upload the logo
+          const docUpload = await fetch("/api/upload", {
+            method: "POST",
+            body: fd,
+          });
+          if (!docUpload.ok) {
+            const result = docUpload.headers
+              .get("Content-Type")
+              ?.includes("json")
+              ? await docUpload.json()
+              : await docUpload.text();
+            if (docFile.size > 0) {
+              toast({
+                title: "Upload Failed",
+                description: `Failed to upload the logo. Cause: ${result}`,
+                variant: "destructive",
+              });
+            }
+          } else {
+            const res = (await docUpload.json()) as IUploadResult;
+            docLink = res.fileUrl;
           }
-
-          docLink = docUpload.data.fileUrl;
         }
 
         doc.doc_link = docLink;

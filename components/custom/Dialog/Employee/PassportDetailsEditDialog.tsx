@@ -21,7 +21,7 @@ import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import { upload } from "@/app/(server)/actions/upload";
+import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
 
 export default function PassportDetailsEditDialog({
@@ -65,18 +65,30 @@ export default function PassportDetailsEditDialog({
         // Request API here
         var document_link = data?.document ?? "";
         if (doc && !docError) {
-          const uploadRes = await upload(doc);
-          if (uploadRes.error) {
-            toast({
-              title: "Failed to upload",
-              description: `Failed to upload the document. Please try again later. Error encountered: ${uploadRes.error.message}`,
-              variant: "destructive",
-            });
-            setLoading(false);
-            return;
+          const fd = new FormData();
+          fd.append("file", doc);
+          // Upload the logo
+          const docUpload = await fetch("/api/upload", {
+            method: "POST",
+            body: fd,
+          });
+          if (!docUpload.ok) {
+            const result = docUpload.headers
+              .get("Content-Type")
+              ?.includes("json")
+              ? await docUpload.json()
+              : await docUpload.text();
+            if (doc.size > 0) {
+              toast({
+                title: "Upload Failed",
+                description: `Failed to upload the logo. Cause: ${result}`,
+                variant: "destructive",
+              });
+            }
+          } else {
+            const res = (await docUpload.json()) as IUploadResult;
+            document_link = res.fileUrl;
           }
-
-          document_link = uploadRes.data.fileUrl;
         }
 
         const passportDetails = {

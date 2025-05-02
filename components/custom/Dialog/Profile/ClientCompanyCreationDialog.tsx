@@ -28,7 +28,7 @@ import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfi
 import { IUser } from "@/schema/UserSchema";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { upload } from "@/app/(server)/actions/upload";
+import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
 
 export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
@@ -64,15 +64,29 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
         var logoUrl = "";
         if (logoFile && logoFile.size <= SiteConfig.maxFileSize) {
           // Upload the logo
-          const logoUpload = await upload(logoFile);
-          if (logoUpload.error) {
-            toast({
-              title: "Upload Failed",
-              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
-              variant: "destructive",
-            });
+          const fd = new FormData();
+          fd.append("file", logoFile);
+          // Upload the logo
+          const logoUpload = await fetch("/api/upload", {
+            method: "POST",
+            body: fd,
+          });
+          if (!logoUpload.ok) {
+            const result = logoUpload.headers
+              .get("Content-Type")
+              ?.includes("json")
+              ? await logoUpload.json()
+              : await logoUpload.text();
+            if (logoFile.size > 0) {
+              toast({
+                title: "Upload Failed",
+                description: `Failed to upload the logo. Cause: ${result}`,
+                variant: "destructive",
+              });
+            }
           } else {
-            logoUrl = logoUpload.data.fileUrl;
+            const res = (await logoUpload.json()) as IUploadResult;
+            logoUrl = res.fileUrl;
           }
         }
 

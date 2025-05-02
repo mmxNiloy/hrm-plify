@@ -1,8 +1,20 @@
-import { upload } from "@/app/(server)/actions/upload";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { IDProps } from "../../../apiParams";
 import SiteConfig from "@/utils/SiteConfig";
+import { IUploadResult } from "@/app/(server)/actions/upload";
+
+async function uploadFile(file: File, session: string) {
+  const fd = new FormData();
+  fd.append("file", file);
+  return await fetch(`${process.env.API_BASE_URL}/upload`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+    method: "POST",
+    body: fd,
+  });
+}
 
 export async function POST(req: NextRequest, { params }: IDProps) {
   const fd = await req.formData();
@@ -65,9 +77,14 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
       );
     }
 
+    const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
     var uploadRes = undefined;
     if (logo && logo.size <= SiteConfig.maxFileSize) {
-      uploadRes = await upload(logo);
+      const mRes = await uploadFile(logo, session?.value ?? "");
+      if (mRes.ok) {
+        const data = (await mRes.json()) as IUploadResult;
+        uploadRes = data.fileUrl;
+      }
     }
 
     // request body as raw json
@@ -78,13 +95,12 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
       contact_number: contact_number as string,
       founded_year: Number.parseInt(founded_year as string),
       website: website as string,
-      logo: uploadRes?.data?.fileUrl ?? logoUrl ?? "",
+      logo: uploadRes ?? logoUrl ?? "",
       is_active: is_active === "yes" ? 1 : 0,
       email,
     };
 
     // Check if the user is logged in
-    const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
     if (!session || session.value.length < 1) {
       return NextResponse.json(
         { message: "Session expired. Login again." },
