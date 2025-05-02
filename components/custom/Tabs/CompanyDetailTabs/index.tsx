@@ -113,10 +113,10 @@ export default function CompanyDetailTabs({
         >
           <Icons.chevronLeft className="size-4 sm:size-5" />
         </Button>
-        <TabsList className="flex-1 bg-background border md:border-none justify-start gap-1 sm:gap-2 p-1 sm:p-2 min-w-0 overflow-x-auto h-fit">
+        <TabsList className="flex-1 bg-background border md:border-none justify-center gap-1 sm:gap-2 p-1 sm:p-2 min-w-0 overflow-x-auto h-fit">
           {tabList.map((tab) => (
             <TabsTrigger
-              className="text-sm sm:text-base px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none rounded-none data-[state=active]:shadow-none data-[state=active]:md:border-b-2 data-[state=active]:border-t-2 data-[state=active]:border-indigo-400 whitespace-nowrap"
+              className="text-sm sm:text-base px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none rounded-none data-[state=active]:shadow-none data-[state=active]:md:border-b-2 data-[state=active]:border-t-2 data-[state=active]:md:border-t-0 data-[state=active]:border-indigo-400 whitespace-nowrap"
               value={tab.value}
               key={tab.value}
             >
