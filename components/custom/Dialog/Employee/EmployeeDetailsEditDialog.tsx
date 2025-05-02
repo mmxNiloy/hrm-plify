@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import EmployeeDetailsFormFragment from "../../Form/Fragment/Employee/EmployeeDetailsFormFragment";
 import { ToastSuccess } from "@/styles/toast.tailwind";
-import { upload } from "@/app/(server)/actions/upload";
+import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
 
 export default function EmployeeDetailsEditDialog({
@@ -68,19 +68,30 @@ export default function EmployeeDetailsEditDialog({
           profile_pic.size > 0 &&
           profile_pic.size <= SiteConfig.maxFileSize
         ) {
-          const uploadRes = await upload(profile_pic);
-          if (uploadRes.error) {
-            toast({
-              title: "Upload Failed",
-              description:
-                "Failed to upload the profile picture. Please try again. Max image size is 1.5MB",
-              variant: "destructive",
-            });
-            setLoading(false);
-            return;
+          const fd = new FormData();
+          fd.append("file", profile_pic);
+          // Upload the logo
+          const profilePicUpload = await fetch("/api/upload", {
+            method: "POST",
+            body: fd,
+          });
+          if (!profilePicUpload.ok) {
+            const result = profilePicUpload.headers
+              .get("Content-Type")
+              ?.includes("json")
+              ? await profilePicUpload.json()
+              : await profilePicUpload.text();
+            if (profile_pic.size > 0) {
+              toast({
+                title: "Upload Failed",
+                description: `Failed to upload the logo. Cause: ${result}`,
+                variant: "destructive",
+              });
+            }
+          } else {
+            const res = (await profilePicUpload.json()) as IUploadResult;
+            image = res.fileUrl;
           }
-
-          image = uploadRes.data.fileUrl;
         }
 
         const reqBod = Object.assign(

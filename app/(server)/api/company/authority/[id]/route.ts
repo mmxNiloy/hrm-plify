@@ -1,15 +1,27 @@
-import { upload } from "@/app/(server)/actions/upload";
 import { ICompanyAuthorizedDetailsBase } from "@/schema/CompanySchema";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { IDProps } from "../../../apiParams";
 import SiteConfig from "@/utils/SiteConfig";
+import { IUploadResult } from "@/app/(server)/actions/upload";
 
 interface IReqBody extends ICompanyAuthorizedDetailsBase {
   endpoint: string;
   document?: File;
   type: "Authorised Personnel" | "Key Contact" | "Level 1 User";
   is_same_as_key_contact: boolean;
+}
+
+async function uploadFile(file: File, session: string) {
+  const fd = new FormData();
+  fd.append("file", file);
+  return await fetch(`${process.env.API_BASE_URL}/upload`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+    method: "POST",
+    body: fd,
+  });
 }
 
 export async function POST(req: NextRequest, { params }: IDProps) {
@@ -45,10 +57,16 @@ export async function POST(req: NextRequest, { params }: IDProps) {
     );
   }
 
+  const token = session.value;
+
   // try to upload the document here
   var uploadRes = undefined;
   if (reqBod.document) {
-    uploadRes = await upload(reqBod.document);
+    const mRes = await uploadFile(reqBod.document, token);
+    if (mRes.ok) {
+      const data = (await mRes.json()) as IUploadResult;
+      uploadRes = data.fileUrl;
+    }
   }
 
   try {
@@ -61,7 +79,7 @@ export async function POST(req: NextRequest, { params }: IDProps) {
           Authorization: `Bearer ${session.value}`,
         },
         body: JSON.stringify(
-          Object.assign(reqBod, { doc_link: uploadRes?.data?.fileUrl ?? "" })
+          Object.assign(reqBod, { doc_link: uploadRes ?? "" })
         ),
       }
     );
@@ -99,14 +117,21 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
     );
   }
 
+  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
+
+  const token = session?.value ?? "";
+
   // try to upload the document here
   var uploadRes = undefined;
   if (reqBod.document) {
-    uploadRes = await upload(reqBod.document);
+    const mRes = await uploadFile(reqBod.document, token);
+    if (mRes.ok) {
+      const data = (await mRes.json()) as IUploadResult;
+      uploadRes = data.fileUrl;
+    }
   }
 
   // Check if the user is logged in
-  const session = (await cookies()).get(process.env.COOKIE_SESSION_KEY!);
   if (!session || session.value.length < 1) {
     return NextResponse.json(
       { message: "Session expired. Login again." },
@@ -124,7 +149,7 @@ export async function PUT(req: NextRequest, { params }: IDProps) {
           Authorization: `Bearer ${session.value}`,
         },
         body: JSON.stringify(
-          Object.assign(reqBod, { doc_link: uploadRes?.data?.fileUrl ?? "" })
+          Object.assign(reqBod, { doc_link: uploadRes ?? "" })
         ),
       }
     );

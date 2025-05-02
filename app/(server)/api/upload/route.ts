@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const fd = req.body;
+    const fd = await req.formData();
 
     const session =
       (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
@@ -16,8 +16,11 @@ export async function POST(req: NextRequest) {
     });
 
     if (result.ok) {
+      const mRes = await result.json();
+      console.debug("Upload route result >", mRes);
+
       return NextResponse.json(
-        { message: "Upload successful." },
+        mRes,
         { status: 201 }
       );
     }
