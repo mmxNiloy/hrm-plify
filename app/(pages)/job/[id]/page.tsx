@@ -2,14 +2,11 @@
 import { getJobListing } from "@/app/(server)/actions/getJobListing";
 import JobApplicantEditDialog from "@/components/custom/Dialog/Recruitment/JobApplicantEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import JobListingFormFragment from "@/components/custom/Form/Fragment/Recruitment/JobListingFormFragment";
 import Navbar from "@/components/custom/Navbar/Navbar";
 import TextCapsule from "@/components/custom/TextCapsule";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
-import { ButtonSuccess } from "@/styles/button.tailwind";
 import { stringToColor } from "@/utils/Misc";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -32,7 +29,7 @@ export default async function JobByIdPage({ params }: Props) {
   if (error) {
     return (
       <main>
-        <Navbar />
+        {/* <Navbar /> */}
         <ErrorFallbackCard error={error} />
       </main>
     );
@@ -41,7 +38,7 @@ export default async function JobByIdPage({ params }: Props) {
   if (!Boolean(data)) {
     return (
       <main>
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="container w-full h-screen flex flex-col gap-2 items-center justify-center">
           <Icons.squirrel className="size-32" />
           <p className="text-lg font-semibold">
