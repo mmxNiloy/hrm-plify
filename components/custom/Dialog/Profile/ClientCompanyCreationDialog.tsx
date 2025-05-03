@@ -30,6 +30,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
+import uploadFile from "@/utils/uploadFile";
 
 export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
   const router = useRouter();
@@ -64,28 +65,15 @@ export default function ClientCompanyCreationDialog({ user }: { user: IUser }) {
         var logoUrl = "";
         if (logoFile && logoFile.size <= SiteConfig.maxFileSize) {
           // Upload the logo
-          const fd = new FormData();
-          fd.append("file", logoFile);
-          // Upload the logo
-          const logoUpload = await fetch("/api/upload", {
-            method: "POST",
-            body: fd,
-          });
+          const logoUpload = await uploadFile(logoFile);
           if (!logoUpload.ok) {
-            const result = logoUpload.headers
-              .get("Content-Type")
-              ?.includes("json")
-              ? await logoUpload.json()
-              : await logoUpload.text();
-            if (logoFile.size > 0) {
-              toast({
-                title: "Upload Failed",
-                description: `Failed to upload the logo. Cause: ${result}`,
-                variant: "destructive",
-              });
-            }
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+              variant: "destructive",
+            });
           } else {
-            const res = (await logoUpload.json()) as IUploadResult;
+            const res = logoUpload.data;
             logoUrl = res.fileUrl;
           }
         }
