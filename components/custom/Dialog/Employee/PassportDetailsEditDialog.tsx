@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
+import uploadFile from "@/utils/uploadFile";
 
 export default function PassportDetailsEditDialog({
   employee_id,
@@ -65,28 +66,16 @@ export default function PassportDetailsEditDialog({
         // Request API here
         var document_link = data?.document ?? "";
         if (doc && !docError) {
-          const fd = new FormData();
-          fd.append("file", doc);
           // Upload the logo
-          const docUpload = await fetch("/api/upload", {
-            method: "POST",
-            body: fd,
-          });
+          const docUpload = await uploadFile(doc);
           if (!docUpload.ok) {
-            const result = docUpload.headers
-              .get("Content-Type")
-              ?.includes("json")
-              ? await docUpload.json()
-              : await docUpload.text();
-            if (doc.size > 0) {
-              toast({
-                title: "Upload Failed",
-                description: `Failed to upload the logo. Cause: ${result}`,
-                variant: "destructive",
-              });
-            }
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${docUpload.error.message}`,
+              variant: "destructive",
+            });
           } else {
-            const res = (await docUpload.json()) as IUploadResult;
+            const res = docUpload.data;
             document_link = res.fileUrl;
           }
         }

@@ -27,9 +27,8 @@ import React, { useCallback, useState } from "react";
 import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfileFormFragment";
 import { cn } from "@/lib/utils";
 import refreshUserCookie from "@/app/(server)/actions/refreshUserCookie";
-import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
-import { headers } from "next/headers";
+import uploadFile from "@/utils/uploadFile";
 
 export default function CompanyCreationDialog({
   asClient = false,
@@ -71,28 +70,16 @@ export default function CompanyCreationDialog({
         }
 
         if (logoFile && !imageFileError) {
-          const fd = new FormData();
-          fd.append("file", logoFile);
-          // Upload the logo
-          const logoUpload = await fetch("/api/upload", {
-            method: "POST",
-            body: fd,
-          });
+          const logoUpload = await uploadFile(logoFile);
+
           if (!logoUpload.ok) {
-            const result = logoUpload.headers
-              .get("Content-Type")
-              ?.includes("json")
-              ? await logoUpload.json()
-              : await logoUpload.text();
-            if (logoFile.size > 0) {
-              toast({
-                title: "Upload Failed",
-                description: `Failed to upload the logo. Cause: ${result}`,
-                variant: "destructive",
-              });
-            }
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${logoUpload.error.message}`,
+              variant: "destructive",
+            });
           } else {
-            const res = (await logoUpload.json()) as IUploadResult;
+            const res = logoUpload.data;
             logoUrl = res.fileUrl;
           }
         }

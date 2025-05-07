@@ -22,6 +22,7 @@ import EmployeeDetailsFormFragment from "../../Form/Fragment/Employee/EmployeeDe
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
+import uploadFile from "@/utils/uploadFile";
 
 export default function EmployeeDetailsEditDialog({
   data,
@@ -68,28 +69,16 @@ export default function EmployeeDetailsEditDialog({
           profile_pic.size > 0 &&
           profile_pic.size <= SiteConfig.maxFileSize
         ) {
-          const fd = new FormData();
-          fd.append("file", profile_pic);
           // Upload the logo
-          const profilePicUpload = await fetch("/api/upload", {
-            method: "POST",
-            body: fd,
-          });
+          const profilePicUpload = await uploadFile(profile_pic);
           if (!profilePicUpload.ok) {
-            const result = profilePicUpload.headers
-              .get("Content-Type")
-              ?.includes("json")
-              ? await profilePicUpload.json()
-              : await profilePicUpload.text();
-            if (profile_pic.size > 0) {
-              toast({
-                title: "Upload Failed",
-                description: `Failed to upload the logo. Cause: ${result}`,
-                variant: "destructive",
-              });
-            }
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload the logo. Cause: ${profilePicUpload.error.message}`,
+              variant: "destructive",
+            });
           } else {
-            const res = (await profilePicUpload.json()) as IUploadResult;
+            const res = profilePicUpload.data;
             image = res.fileUrl;
           }
         }

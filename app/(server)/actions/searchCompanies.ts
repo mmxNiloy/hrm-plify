@@ -13,13 +13,12 @@ export async function searchCompanies({
   page?: number;
   limit?: number;
 }) {
-  if (companyName.length < 3) {
-    return { data: [] };
-  }
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
   const req = fetch(
-    `${process.env.API_BASE_URL}/companies/search?name=${companyName}&page=${page}&limit=${limit}`,
+    `${process.env.API_BASE_URL}/companies/search?name=${
+      companyName.length < 3 ? "" : companyName
+    }&page=${page}&limit=${limit}`,
     {
       headers: {
         Authorization: `Bearer ${session}`,
