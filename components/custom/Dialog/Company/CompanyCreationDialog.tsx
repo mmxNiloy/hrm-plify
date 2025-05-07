@@ -27,9 +27,7 @@ import React, { useCallback, useState } from "react";
 import CompanyProfileFormFragment from "../../Form/Fragment/Company/CompanyProfileFormFragment";
 import { cn } from "@/lib/utils";
 import refreshUserCookie from "@/app/(server)/actions/refreshUserCookie";
-import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
-import { headers } from "next/headers";
 import uploadFile from "@/utils/uploadFile";
 
 export default function CompanyCreationDialog({

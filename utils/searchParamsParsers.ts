@@ -7,7 +7,9 @@ import {
   parseAsIsoDate,
   parseAsString,
   parseAsStringEnum,
-} from "nuqs";
+  createSerializer,
+  createSearchParamsCache,
+} from "nuqs/server";
 import { toYYYYMMDD } from "./Misc";
 
 export const parseAsDateString = createParser({
@@ -44,4 +46,10 @@ export const searchParamsParsers = {
   limit: parseAsIndex.withDefault(5).withOptions({
     shallow: false,
   }),
+  search: parseAsString.withDefault("").withOptions({
+    shallow: false,
+  }),
 };
+
+export const searchParamsCache = createSearchParamsCache(searchParamsParsers);
+export const serialize = createSerializer(searchParamsParsers);

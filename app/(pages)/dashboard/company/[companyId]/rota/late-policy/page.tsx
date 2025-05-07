@@ -73,7 +73,9 @@ export default async function RotaLatePolicyPage({
   if (company.error || paginatedLatePolicies.error || companyExtra.error) {
     return (
       <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">Off Days</p>
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Late Policy
+        </p>
         <ErrorFallbackCard
           error={
             company.error ?? paginatedLatePolicies.error ?? companyExtra.error
