@@ -49,6 +49,11 @@ export default function EmployeeDashboardSidebar({
         icon: <Icons.userEdit />,
         hidden: !pathname.includes("edit"),
       },
+      {
+        href: `/dashboard/company/${company.company_id}/employee/ex`,
+        title: "Ex-Employees",
+        icon: <Icons.employees />,
+      },
     ],
     [company.company_id, pathname]
   );
