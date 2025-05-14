@@ -1,5 +1,5 @@
 "use server";
-import React from "react";
+import React, { Suspense } from "react";
 import { CompanyByIDPageProps } from "../../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
@@ -9,19 +9,43 @@ import ChangeOfCircumstancesDataTable from "@/components/custom/DataTable/Compan
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import { SearchParams } from "nuqs";
+import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
+import EmployeeCombobox from "@/components/custom/Select/EmployeeCombobox";
+import { DataTableSkeleton } from "@/components/ui/data-table";
+import { ChangeOfCircumstancesDataTableColumns } from "@/components/custom/DataTable/Columns/Company/ChangeOfCircumstancesDataTableColumns";
+
+interface IChangeOfCircumstancesPageProps {
+  params: Promise<{ companyId: string }>;
+  searchParams: Promise<SearchParams>;
+}
 
 export default async function ChangeOfCircumstancesPage({
   params,
-}: CompanyByIDPageProps) {
-  // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
+  searchParams,
+}: IChangeOfCircumstancesPageProps) {
+  const [sParams, mParams, mCookies] = await Promise.all([
+    searchParams,
+    params,
+    cookies(),
+  ]);
 
-  if (company.error) {
+  searchParamsCache.parse(sParams);
+  const key = serialize({ ...sParams });
+
+  const user = JSON.parse(
+    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+  ) as IUser;
+
+  const cId = Number.parseInt(mParams.companyId);
+
+  const [company, companyExtra] = await Promise.all([
+    getCompanyData(cId),
+    getCompanyExtraData(cId),
+  ]);
+
+  if (company.error || companyExtra.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Change of Circumstances</p>
@@ -41,14 +65,17 @@ export default async function ChangeOfCircumstancesPage({
           user={user}
         />
 
-        <div className="flex flex-row gap-4">
-          <FindChangeOfCircumstancesByIDDialog />
-
-          <ChangeOfCircumstancesCreationDialog />
-        </div>
+        <EmployeeCombobox employees={companyExtra.data.employees} />
       </div>
 
-      <ChangeOfCircumstancesDataTable />
+      <Suspense
+        key={key}
+        fallback={
+          <DataTableSkeleton columns={ChangeOfCircumstancesDataTableColumns} />
+        }
+      >
+        <ChangeOfCircumstancesDataTable />
+      </Suspense>
     </main>
   );
 }

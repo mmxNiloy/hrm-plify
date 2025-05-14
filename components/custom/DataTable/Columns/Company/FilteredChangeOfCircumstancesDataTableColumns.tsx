@@ -13,7 +13,7 @@ export const FilteredChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfC
         <SortableHeader name="Updated Date" column={column} />
       ),
       cell: ({ row }) => (
-        <>{row.original.updated_date.toLocaleDateString("en-GB")}</>
+        <>{row.original.created_at.toLocaleDateString("en-GB")}</>
       ),
     },
     {

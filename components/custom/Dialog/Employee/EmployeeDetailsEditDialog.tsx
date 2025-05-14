@@ -23,6 +23,7 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { IUploadResult, upload } from "@/app/(server)/actions/upload";
 import SiteConfig from "@/utils/SiteConfig";
 import uploadFile from "@/utils/uploadFile";
+import createChangeOfCircumstances from "@/app/(server)/actions/change-of-circumstances/create-change-of-circumstances.controller";
 
 export default function EmployeeDetailsEditDialog({
   data,
@@ -88,15 +89,33 @@ export default function EmployeeDetailsEditDialog({
           Object.assign(employeeData, { image })
         );
         try {
-          const apiRes = await fetch(
-            `/api/employee/update-personal-info/${data.employee_id}`,
-            {
+          const [apiRes, coc] = await Promise.allSettled([
+            fetch(`/api/employee/update-personal-info/${data.employee_id}`, {
               method: "PATCH",
               body: JSON.stringify(reqBod),
-            }
-          );
+            }),
+            createChangeOfCircumstances({
+              employee_id: data.employee_id,
+              oldValue: data,
+              newValue: reqBod,
+            }),
+          ]);
 
-          if (apiRes.ok) {
+          console.debug("Change of circumstances data", coc);
+
+          if (coc.status === "rejected") {
+            toast({
+              title: "Failed to record the change of circumstances",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Recorded the change of circumstanecs",
+              className: ToastSuccess,
+            });
+          }
+
+          if (apiRes.status === "fulfilled") {
             // Close dialog, show toast, refresh parent ssc
             toast({
               title: "Update Successful",
@@ -107,12 +126,8 @@ export default function EmployeeDetailsEditDialog({
             router.refresh();
             setOpen(false);
           } else {
-            // show a failure dialog
-            const res = await apiRes.json();
-
             toast({
               title: "Update Failed",
-              description: JSON.stringify(res.message),
               variant: "destructive",
             });
           }

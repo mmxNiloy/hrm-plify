@@ -23,6 +23,7 @@ import { ICompany, IDepartment } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import ServiceDetailsFormFragmentClient from "../../Form/Fragment/Employee/ServiceDetailsFormFragmentClient";
 import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
+import createChangeOfCircumstances from "@/app/(server)/actions/change-of-circumstances/create-change-of-circumstances.controller";
 
 interface Props {
   data: IEmployeeWithPersonalInfo;
@@ -77,15 +78,26 @@ export default function ServiceInformationEditDialog({
       setLoading(true);
       // Request api here
       try {
-        const apiRes = await fetch(
-          `/api/employee/update-personal-info/${data.employee_id}`,
-          {
+        const [apiRes, coc] = await Promise.allSettled([
+          fetch(`/api/employee/update-personal-info/${data.employee_id}`, {
             method: "PATCH",
             body: JSON.stringify(reqBod),
-          }
-        );
+          }),
+          createChangeOfCircumstances({
+            employee_id: data.employee_id,
+            newValue: reqBod,
+            oldValue: data,
+          }),
+        ]);
 
-        if (apiRes.ok) {
+        if (coc.status === "rejected") {
+          toast({
+            title: "Failed to record the change of circumstances",
+            variant: "destructive",
+          });
+        }
+
+        if (apiRes.status === "fulfilled") {
           // Close dialog, show toast, refresh parent ssc
           toast({
             title: "Update Successful",
@@ -96,12 +108,8 @@ export default function ServiceInformationEditDialog({
           router.refresh();
           setOpen(false);
         } else {
-          // show a failure dialog
-          const res = await apiRes.json();
-
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }

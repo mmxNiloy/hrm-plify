@@ -44,6 +44,11 @@ export default function EmployeeDashboardSidebar({
         icon: <Icons.files />,
       },
       {
+        href: `/dashboard/company/${company.company_id}/employee/change-of-circumstances`,
+        title: "Change of Circumstances",
+        icon: <Icons.history />,
+      },
+      {
         href: "#",
         title: "Edit Employee",
         icon: <Icons.userEdit />,

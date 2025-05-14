@@ -29,17 +29,15 @@ export default function EditEmployeeInfoByUserIdPageLayout({
       <div className="col-span-full">{children}</div>
       {/* TabList */}
       <Tabs className="col-span-full" defaultValue="personal-info">
-        <TabsList className="w-full">
-          <TabsTrigger value="personal-info">Personal Information</TabsTrigger>
-          <TabsTrigger value="educational-info">
-            Educational Information
-          </TabsTrigger>
+        <TabsList className="w-full h-fit flex-col xl:flex-row xl:flex sm:grid sm:grid-cols-4 sm:gap-2">
+          <TabsTrigger value="personal-info">Personal Info</TabsTrigger>
+          <TabsTrigger value="educational-info">Education</TabsTrigger>
           <TabsTrigger value="passport-info">Passport & VISA</TabsTrigger>
           <TabsTrigger value="euss-dbs-info">EUSS & DBS</TabsTrigger>
-          <TabsTrigger value="nid-info">NID Information</TabsTrigger>
-          <TabsTrigger value="contact-info">Contact Information</TabsTrigger>
+          <TabsTrigger value="nid-info">NID</TabsTrigger>
+          <TabsTrigger value="contact-info">Contact</TabsTrigger>
           <TabsTrigger value="emergency-contact-info">
-            Emergency Contact Information
+            Emergency Contact
           </TabsTrigger>
         </TabsList>
 

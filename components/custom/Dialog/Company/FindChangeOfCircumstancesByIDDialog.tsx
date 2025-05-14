@@ -132,7 +132,7 @@ export default function FindChangeOfCircumstancesByIDDialog() {
               { length: employeeID.length > 0 ? 5 : 0 },
               (_) => {
                 return {
-                  updated_date: new Date("2024-08-14"),
+                  created_at: new Date("2024-08-14"),
                   employment_type: employmentType,
                   employee_id: employeeID.substring(
                     employeeID.indexOf("(") + 1,

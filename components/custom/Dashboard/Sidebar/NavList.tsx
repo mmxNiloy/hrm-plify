@@ -17,7 +17,7 @@ export default function NavList({ items }: INavAccordionProps) {
   }, [closeDrawer]);
 
   return (
-    <div className="flex flex-col gap-2 md:gap-4 p-2 md:p-4">
+    <div className="flex flex-col gap-2 md:gap-4 p-2">
       {items.map((item, idx) => {
         if (item.hidden) return null;
 
