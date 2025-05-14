@@ -126,12 +126,14 @@ export default async function EmployeeAttendancePage({
         />
 
         <div className="flex flex-col sm:flex-row gap-4">
-          {updateAccess && (
-            <AttendanceBulkUpdateDialog
-              company_id={companyId}
-              employees={companyExtraData.data.employees}
-            />
-          )}
+          {updateAccess &&
+            (user.user_roles?.roles.role_name === "Super Admin" ||
+              user.user_roles?.roles.role_name === "Admin") && (
+              <AttendanceBulkUpdateDialog
+                company_id={companyId}
+                employees={companyExtraData.data.employees}
+              />
+            )}
           <AttendanceReportGenerator company={company.data} filters={filters} />
           <AttendanceReportFilterPopover
             asEmployee
@@ -144,7 +146,12 @@ export default async function EmployeeAttendancePage({
         data={reports.data.data.map((item) => ({
           ...item,
           company_id: companyId,
-          updateAccess: updateAccess ? true : false,
+          updateAccess:
+            updateAccess &&
+            (user.user_roles?.roles.role_name === "Super Admin" ||
+              user.user_roles?.roles.role_name === "Admin")
+              ? true
+              : false,
         }))}
         columns={AttendanceReportDataTableColumns}
         pageCount={reports.data.total_page}

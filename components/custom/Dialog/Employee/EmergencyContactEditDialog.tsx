@@ -20,6 +20,7 @@ import { IEmployeeEmergencyContact } from "@/schema/EmployeeSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import createChangeOfCircumstances from "@/app/(server)/actions/change-of-circumstances/create-change-of-circumstances.controller";
 
 export default function EmergencyContactEditDialog({
   employee_id,
@@ -57,12 +58,26 @@ export default function EmergencyContactEditDialog({
       setLoading(true);
       // Request api here
       try {
-        const apiRes = await fetch(`/api/employee/emergency-contact`, {
-          method: data ? "PATCH" : "POST",
-          body: JSON.stringify(reqBod),
-        });
+        const [apiRes, coc] = await Promise.allSettled([
+          fetch(`/api/employee/emergency-contact`, {
+            method: data ? "PATCH" : "POST",
+            body: JSON.stringify(reqBod),
+          }),
+          createChangeOfCircumstances({
+            employee_id,
+            newValue: reqBod,
+            oldValue: data ?? {},
+          }),
+        ]);
 
-        if (apiRes.ok) {
+        if (coc.status === "rejected") {
+          toast({
+            title: "Failed to record the change of circumstances",
+            variant: "destructive",
+          });
+        }
+
+        if (apiRes.status === "fulfilled") {
           // Close dialog, show toast, refresh parent ssc
           toast({
             title: "Update Successful",
@@ -71,11 +86,8 @@ export default function EmergencyContactEditDialog({
           router.refresh();
           setOpen(false);
         } else {
-          // show a failure dialog
-          const res = await apiRes.json();
           toast({
             title: "Update Failed",
-            description: JSON.stringify(res.message),
             variant: "destructive",
           });
         }

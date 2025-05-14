@@ -21,6 +21,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import { upload } from "@/app/(server)/actions/upload";
+import createChangeOfCircumstances from "@/app/(server)/actions/change-of-circumstances/create-change-of-circumstances.controller";
 
 export default function EducationalInfoEditDialog({
   employee_id,
@@ -134,12 +135,31 @@ export default function EducationalInfoEditDialog({
           : educationalDetails;
 
         try {
-          const apiRes = await fetch(`/api/employee/educational-info`, {
-            method: data ? "PATCH" : "POST",
-            body: JSON.stringify(reqBod),
-          });
+          const [apiRes, coc] = await Promise.allSettled([
+            fetch(`/api/employee/educational-info`, {
+              method: data ? "PATCH" : "POST",
+              body: JSON.stringify(reqBod),
+            }),
+            createChangeOfCircumstances({
+              employee_id,
+              newValue: reqBod,
+              oldValue: data ?? {},
+            }),
+          ]);
 
-          if (apiRes.ok) {
+          if (coc.status === "rejected") {
+            toast({
+              title: "Failed to record the change of circumstances",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Recorded the change of circumstanecs",
+              className: ToastSuccess,
+            });
+          }
+
+          if (apiRes.status === "fulfilled") {
             // Close dialog, show toast, refresh parent ssc
             toast({
               title: "Update Successful",
@@ -150,12 +170,8 @@ export default function EducationalInfoEditDialog({
             router.refresh();
             setOpen(false);
           } else {
-            // show a failure dialog
-            const res = await apiRes.json();
-
             toast({
               title: "Update Failed",
-              description: JSON.stringify(res.message),
               variant: "destructive",
             });
           }

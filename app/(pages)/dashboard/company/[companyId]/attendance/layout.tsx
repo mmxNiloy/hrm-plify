@@ -51,7 +51,7 @@ export default async function AttendanceDashboardPageLayout({
 
   return (
     <div>
-      <AttendanceDashboardSidebar company={company.data} />
+      <AttendanceDashboardSidebar user={user} company={company.data} />
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

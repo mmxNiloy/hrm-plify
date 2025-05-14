@@ -28,6 +28,10 @@ export const parseAsDateString = createParser({
 });
 
 export const searchParamsParsers = {
+  employee: parseAsInteger.withDefault(0).withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
   employees: parseAsArrayOf(parseAsInteger).withDefault([]).withOptions({
     shallow: false,
   }),

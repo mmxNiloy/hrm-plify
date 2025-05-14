@@ -34,13 +34,13 @@ export default function EditEmployeeInfoByUserIdPageLayout({
             value="personal-info"
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
           >
-            Personal Information
+            Personal Info
           </TabsTrigger>
           <TabsTrigger
             value="educational-info"
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
           >
-            Educational Information
+            Education
           </TabsTrigger>
           <TabsTrigger
             value="passport-info"
@@ -58,13 +58,13 @@ export default function EditEmployeeInfoByUserIdPageLayout({
             value="nid-info"
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
           >
-            NID Information
+            NID
           </TabsTrigger>
           <TabsTrigger
             value="contact-info"
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
           >
-            Contact Information
+            Contact
           </TabsTrigger>
           <TabsTrigger
             value="emergency-contact-info"
