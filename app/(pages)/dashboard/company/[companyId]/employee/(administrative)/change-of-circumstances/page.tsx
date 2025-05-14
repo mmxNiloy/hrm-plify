@@ -1,10 +1,7 @@
 "use server";
 import React, { Suspense } from "react";
-import { CompanyByIDPageProps } from "../../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import FindChangeOfCircumstancesByIDDialog from "@/components/custom/Dialog/Company/FindChangeOfCircumstancesByIDDialog";
-import ChangeOfCircumstancesCreationDialog from "@/components/custom/Dialog/Company/ChangeOfCircumstancesCreationDialog";
 import ChangeOfCircumstancesDataTable from "@/components/custom/DataTable/Company/Employee/ChangeOfCircumstancesDataTable";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";

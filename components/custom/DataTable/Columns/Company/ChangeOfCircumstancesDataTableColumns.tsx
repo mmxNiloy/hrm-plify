@@ -2,7 +2,6 @@
 import { SortableHeader } from "@/components/ui/data-table";
 import { IChangeOfCircumstances } from "@/schema/EmployeeSchema";
 import { ColumnDef } from "@tanstack/react-table";
-import ChangeOfCircumstancesEditDialog from "../../../Dialog/Company/CahangeOfCircumstacesEditDialog";
 import { getFullNameOfUser } from "@/utils/Misc";
 
 export const ChangeOfCircumstancesDataTableColumns: ColumnDef<IChangeOfCircumstances>[] =
