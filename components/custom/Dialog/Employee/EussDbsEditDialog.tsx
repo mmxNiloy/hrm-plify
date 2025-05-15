@@ -120,7 +120,56 @@ export default function EussDbsEditDialog({
               ? 1
               : 0
             : 0,
-        } as IEmployeeEussDbsData;
+        };
+
+        const newValue = {
+          euss_time_linit_ref_num:
+            combinedDetails.euss_time_linit_ref_num || "",
+          euss_issue_date: combinedDetails.euss_issue_date
+            ? combinedDetails.euss_issue_date.toISOString().split("T")[0]
+            : "",
+          euss_expiry_date: combinedDetails.euss_expiry_date
+            ? combinedDetails.euss_expiry_date.toISOString().split("T")[0]
+            : "",
+          euss_doc: combinedDetails.euss_doc || "",
+          euss_remarks: combinedDetails.euss_remarks || "",
+          euss_is_current: combinedDetails.euss_is_current || 0,
+          dbs_ref_no: combinedDetails.dbs_ref_no || "",
+          nationality: combinedDetails.nationality || "",
+          dbs_issue_date: combinedDetails.dbs_issue_date
+            ? combinedDetails.dbs_issue_date.toISOString().split("T")[0]
+            : "",
+          dbs_expiry_date: combinedDetails.dbs_expiry_date
+            ? combinedDetails.dbs_expiry_date.toISOString().split("T")[0]
+            : "",
+          dbs_doc: combinedDetails.dbs_doc || "",
+          dbs_type: combinedDetails.dbs_type || "",
+          dbs_is_current: combinedDetails.dbs_is_current || 0,
+        };
+
+        const oldValue: typeof newValue = {
+          euss_time_linit_ref_num: data?.euss_time_linit_ref_num || "",
+          euss_issue_date: data?.euss_issue_date
+            ? new Date(data?.euss_issue_date).toISOString().split("T")[0]
+            : "",
+          euss_expiry_date: data?.euss_expiry_date
+            ? new Date(data?.euss_expiry_date).toISOString().split("T")[0]
+            : "",
+          euss_doc: data?.euss_doc || "",
+          euss_remarks: data?.euss_remarks || "",
+          euss_is_current: data?.euss_is_current || 0,
+          dbs_ref_no: data?.dbs_ref_no || "",
+          nationality: data?.nationality || "",
+          dbs_issue_date: data?.dbs_issue_date
+            ? new Date(data?.dbs_issue_date).toISOString().split("T")[0]
+            : "",
+          dbs_expiry_date: data?.dbs_expiry_date
+            ? new Date(data?.dbs_expiry_date).toISOString().split("T")[0]
+            : "",
+          dbs_doc: data?.dbs_doc || "",
+          dbs_type: data?.dbs_type || "",
+          dbs_is_current: data?.dbs_is_current || 0,
+        };
 
         const reqBod = data
           ? Object.assign(data, combinedDetails)
@@ -134,8 +183,8 @@ export default function EussDbsEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id,
-              newValue: reqBod,
-              oldValue: data ?? {},
+              newValue,
+              oldValue,
             }),
           ]);
 

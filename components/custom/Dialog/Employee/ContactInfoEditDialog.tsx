@@ -86,6 +86,23 @@ export default function ContactInfoEditDialog({
           proof_address_doc_link: document_link,
         };
 
+        const newValue = {
+          postcode: contactInfo.postcode,
+          address_line: contactInfo.address_line,
+          additional_address_1: contactInfo.additional_address_1,
+          additional_address_2: contactInfo.additional_address_2,
+          country: contactInfo.country,
+          proof_address_doc_link: contactInfo.proof_address_doc_link,
+        };
+
+        const oldValue: typeof newValue = {
+          postcode: data?.postcode ?? "",
+          address_line: data?.address_line ?? "",
+          additional_address_1: data?.additional_address_1 ?? "",
+          additional_address_2: data?.additional_address_2 ?? "",
+          country: data?.country ?? "",
+          proof_address_doc_link: data?.proof_address_doc_link ?? "",
+        };
         const reqBod = data
           ? Object.assign(data, contactInfo)
           : { employee_id: employeeId, ...contactInfo };
@@ -100,8 +117,8 @@ export default function ContactInfoEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id: reqBod.employee_id,
-              newValue: reqBod,
-              oldValue: data ?? {},
+              newValue,
+              oldValue,
             }),
           ]);
 

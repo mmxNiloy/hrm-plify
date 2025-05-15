@@ -26,7 +26,11 @@ export default async function createChangeOfCircumstances({
   newValue,
   oldValue,
 }: ICreateChangeOfCircumstancesProps) {
-  console.debug("Trying to change circumstances...");
+  console.log("[Server] Create CoC Data >", {
+    employee_id,
+    newValue,
+    oldValue,
+  });
   return await requestAPI<TCreateChangeOfCircumstancesResponseProps>({
     endpoint: ["companies", "change-of-circumstances", "add", employee_id].join(
       "/"
@@ -34,8 +38,8 @@ export default async function createChangeOfCircumstances({
     method: "POST",
     authenticate: true,
     body: JSON.stringify({
-      old: flattenObject(oldValue),
-      new: flattenObject(newValue),
+      oldValue,
+      newValue,
     }),
   });
 }

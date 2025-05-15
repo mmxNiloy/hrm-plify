@@ -89,7 +89,33 @@ export default function NidEditDialog({
           country_of_residence: fd.get("country_of_residence") as string,
           remark: (fd.get("remark") as string | null) ?? "",
           isCurrent: (fd.get("isCurrent") as "yes" | "no") === "yes" ? 1 : 0,
-        } as IEmployeeNid;
+        };
+
+        const newValue = {
+          document: nidDetails.document,
+          nid_number: nidDetails.nid_number,
+          issue_date: nidDetails.issue_date.toISOString().split("T")[0],
+          expiry_date: nidDetails.expiry_date.toISOString().split("T")[0],
+          nationality: nidDetails.nationality,
+          country_of_residence: nidDetails.country_of_residence,
+          remark: nidDetails.remark,
+          isCurrent: nidDetails.isCurrent,
+        };
+
+        const oldValue: typeof newValue = {
+          document: data?.document ?? "",
+          nid_number: data?.nid_number ?? "",
+          issue_date: data?.issue_date
+            ? new Date(data?.issue_date).toISOString().split("T")[0]
+            : "",
+          expiry_date: data?.expiry_date
+            ? new Date(data?.expiry_date).toISOString().split("T")[0]
+            : "",
+          nationality: data?.nationality ?? "",
+          country_of_residence: data?.country_of_residence ?? "",
+          remark: data?.remark ?? "",
+          isCurrent: data?.isCurrent ?? 0,
+        };
 
         const reqBod = data ? Object.assign(data, nidDetails) : nidDetails;
 
@@ -102,8 +128,8 @@ export default function NidEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id,
-              newValue: reqBod,
-              oldValue: data ?? {},
+              newValue,
+              oldValue,
             }),
           ]);
 

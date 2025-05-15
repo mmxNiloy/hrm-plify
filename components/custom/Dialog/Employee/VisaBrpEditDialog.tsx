@@ -124,6 +124,40 @@ export default function VisaBrpEditDialog({
           iscurrent: fd.get("iscurrent") ? Number(fd.get("iscurrent")) : 0,
         };
 
+        const newValue = {
+          visa_brp_number: visaBrpDetails.visa_brp_number,
+          issue_date: visaBrpDetails.issue_date
+            ? visaBrpDetails.issue_date.toISOString().split("T")[0]
+            : "",
+          expiry_date: visaBrpDetails.expiry_date
+            ? visaBrpDetails.expiry_date.toISOString().split("T")[0]
+            : "",
+          issued_by: visaBrpDetails.issued_by,
+          country_of_residence: visaBrpDetails.country_of_residence,
+          nationality: visaBrpDetails.nationality,
+          remarks: visaBrpDetails.remarks,
+          iscurrent: visaBrpDetails.iscurrent,
+          visa_brp_photo_front: visaBrpDetails.visa_brp_photo_front,
+          visa_brp_photo_back: visaBrpDetails.visa_brp_photo_back,
+        };
+
+        const oldValue: typeof newValue = {
+          visa_brp_number: data?.visa_brp_number ?? "",
+          issue_date: data?.issue_date
+            ? new Date(data?.issue_date).toISOString().split("T")[0]
+            : "",
+          expiry_date: data?.expiry_date
+            ? new Date(data?.expiry_date).toISOString().split("T")[0]
+            : "",
+          issued_by: data?.issued_by ?? "",
+          country_of_residence: data?.country_of_residence ?? "",
+          nationality: data?.nationality ?? "",
+          visa_brp_photo_front: data?.visa_brp_photo_front ?? "",
+          visa_brp_photo_back: data?.visa_brp_photo_back ?? "",
+          remarks: data?.remarks ?? "",
+          iscurrent: data?.iscurrent ?? 0,
+        };
+
         const reqBod = data
           ? Object.assign(data, visaBrpDetails)
           : visaBrpDetails;
@@ -136,8 +170,8 @@ export default function VisaBrpEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id,
-              newValue: reqBod,
-              oldValue: data ?? {},
+              newValue,
+              oldValue,
             }),
           ]);
 

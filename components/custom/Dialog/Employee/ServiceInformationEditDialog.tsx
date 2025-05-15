@@ -53,7 +53,7 @@ export default function ServiceInformationEditDialog({
       const fd = new FormData(e.currentTarget);
 
       var emp_type_id = fd.get("emp_type_id") as string | undefined;
-      var etid = undefined;
+      var etid = 0;
       if (emp_type_id) etid = Number.parseInt(emp_type_id);
 
       const serviceDetails = {
@@ -71,6 +71,54 @@ export default function ServiceInformationEditDialog({
         emp_type_id: etid,
       };
 
+      const newValue = {
+        job_title: serviceDetails.job_title,
+        employment_type:
+          employmentTypes.find((et) => et.emp_type_id == etid)
+            ?.employment_type ?? "",
+        date_of_joining: serviceDetails.date_of_joining,
+        date_of_confirmaton: serviceDetails.date_of_confirmaton,
+        contract_start_date: serviceDetails.contract_start_date,
+        contract_end_date: serviceDetails.contract_end_date,
+        first_name: serviceDetails.first_name,
+        middle_name: serviceDetails.middle_name,
+        last_name: serviceDetails.last_name,
+        department:
+          departments.find(
+            (dpt) => dpt.department_id == serviceDetails.department_id
+          )?.dpt_name ?? "",
+        designation:
+          designations.find(
+            (dsg) => dsg.designation_id == serviceDetails.designation_id
+          )?.designation_name ?? "",
+      };
+
+      const oldValue: typeof newValue = {
+        first_name: data?.users.first_name ?? "",
+        middle_name: data?.users.middle_name ?? "",
+        last_name: data?.users.last_name ?? "",
+        job_title: data?.job_title ?? "",
+        department:
+          departments.find((dpt) => dpt.department_id == data?.department_id)
+            ?.dpt_name ?? "",
+        designation:
+          designations.find((dsg) => dsg.designation_id == data?.designation_id)
+            ?.designation_name ?? "",
+        employment_type: data?.emp_type?.employment_type ?? "",
+        date_of_joining: data?.date_of_joining
+          ? new Date(data?.date_of_joining).toISOString().split("T")[0]
+          : "",
+        date_of_confirmaton: data?.date_of_confirmaton
+          ? new Date(data?.date_of_confirmaton).toISOString().split("T")[0]
+          : "",
+        contract_start_date: data?.contract_start_date
+          ? new Date(data?.contract_start_date).toISOString().split("T")[0]
+          : "",
+        contract_end_date: data?.contract_end_date
+          ? new Date(data?.contract_end_date).toISOString().split("T")[0]
+          : "",
+      };
+
       const reqBod = Object.assign({ ...data }, serviceDetails);
 
       // console.log("Request body", reqBod);
@@ -85,10 +133,12 @@ export default function ServiceInformationEditDialog({
           }),
           createChangeOfCircumstances({
             employee_id: data.employee_id,
-            newValue: reqBod,
-            oldValue: data,
+            newValue,
+            oldValue,
           }),
         ]);
+
+        console.debug("Service details changed", { coc, newValue, oldValue });
 
         if (coc.status === "rejected") {
           toast({
@@ -122,7 +172,7 @@ export default function ServiceInformationEditDialog({
       }
       setLoading(false);
     },
-    [data, router, toast]
+    [data, departments, designations, employmentTypes, router, toast]
   );
 
   return (
