@@ -59,6 +59,23 @@ export default function EmployeeDetailsEditDialog({
           is_foreign: Boolean(fd.get("is_foreign") as string),
         };
 
+        // Get all default data
+        const oldData = {
+          first_name: data.users.first_name ?? "",
+          image: data.image ?? "",
+          middle_name: data.users.middle_name ?? "",
+          last_name: data.users.last_name ?? "",
+          date_of_birth: data.date_of_birth ?? "",
+          gender: data.gender ?? "",
+          ni_num: data.ni_num ?? "",
+          nationality: data.nationality ?? "",
+          marital_status: data.marital_status ?? "",
+          email: data.users.email ?? "",
+          contact_number: data.contact_number ?? "",
+          alternative_number: data.alternative_number ?? "",
+          is_foreign: data.is_foreign ?? false,
+        };
+
         setLoading(true);
         // Request api here
 
@@ -84,10 +101,8 @@ export default function EmployeeDetailsEditDialog({
           }
         }
 
-        const reqBod = Object.assign(
-          data,
-          Object.assign(employeeData, { image })
-        );
+        const newEmp = Object.assign(employeeData, { image });
+        const reqBod = Object.assign(data, newEmp);
         try {
           const [apiRes, coc] = await Promise.allSettled([
             fetch(`/api/employee/update-personal-info/${data.employee_id}`, {
@@ -96,12 +111,16 @@ export default function EmployeeDetailsEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id: data.employee_id,
-              oldValue: data,
-              newValue: reqBod,
+              oldValue: oldData,
+              newValue: newEmp,
             }),
           ]);
 
-          console.debug("Change of circumstances data", coc);
+          console.debug("Change of circumstances data", {
+            coc,
+            oldData,
+            newEmp,
+          });
 
           if (coc.status === "rejected") {
             toast({

@@ -130,6 +130,26 @@ export default function EducationalInfoEditDialog({
           certificate_link,
         };
 
+        const newValue = {
+          institution_name: educationalDetails.institution_name,
+          qualification: educationalDetails.qualification,
+          subject: educationalDetails.subject,
+          passing_year: educationalDetails.passing_year,
+          grade: educationalDetails.grade,
+          transcript_link: educationalDetails.transcript_link,
+          certificate_link: educationalDetails.certificate_link,
+        };
+
+        const oldValue: typeof newValue = {
+          institution_name: data?.institution_name ?? "",
+          qualification: data?.qualification ?? "",
+          subject: data?.subject ?? "",
+          passing_year: data?.passing_year ?? "",
+          grade: data?.grade ?? "",
+          transcript_link: data?.transcript_link ?? "",
+          certificate_link: data?.certificate_link ?? "",
+        };
+
         const reqBod = data
           ? Object.assign(data, educationalDetails)
           : educationalDetails;
@@ -142,8 +162,8 @@ export default function EducationalInfoEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id,
-              newValue: reqBod,
-              oldValue: data ?? {},
+              newValue,
+              oldValue,
             }),
           ]);
 

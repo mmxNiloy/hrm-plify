@@ -627,6 +627,50 @@ export const RTWListBGroup2Options: string[] = [
   "A Positive Verification Notice issued by the Home Office Employer Checking Service to the employer or prospective employer, which indicates that the named person may stay in the UK and is permitted to do the work in question.",
 ];
 
+export function makeVarNameHumanReadable(varName: string) {
+  if (!varName) return "";
+
+  // Split on underscores (snake_case)
+  const segments = varName.split("_").filter((segment) => segment.length > 0);
+
+  // Split each segment on camelCase/PascalCase and numbers
+  const words = segments.flatMap((segment) => {
+    const result: string[] = [];
+    let currentWord = "";
+    let prevIsUpper = false;
+    let prevIsDigit = false;
+
+    for (let i = 0; i < segment.length; i++) {
+      const char = segment[i];
+      const isUpper = /[A-Z]/.test(char);
+      const isDigit = /\d/.test(char);
+
+      if (
+        (isUpper && !prevIsUpper && currentWord) || // Start of new uppercase word
+        (isDigit && !prevIsDigit && currentWord) || // Start of number
+        (!isDigit && prevIsDigit && currentWord) // End of number
+      ) {
+        result.push(currentWord);
+        currentWord = char;
+      } else {
+        currentWord += char;
+      }
+
+      prevIsUpper = isUpper;
+      prevIsDigit = isDigit;
+    }
+
+    if (currentWord) result.push(currentWord);
+    return result;
+  });
+
+  // Capitalize each word and join with spaces
+  return words
+    .map((word) => toCapCase(word))
+    .filter((word) => word.length > 0)
+    .join(" ");
+}
+
 export function withPrecision({
   num,
   precision = 2,

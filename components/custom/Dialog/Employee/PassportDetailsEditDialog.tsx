@@ -91,6 +91,28 @@ export default function PassportDetailsEditDialog({
           remark: fd.get("remark") as string,
         };
 
+        const newValue = {
+          document: passportDetails.document,
+          passport_number: passportDetails.passport_number,
+          issue_date: passportDetails.issue_date,
+          expiry_date: passportDetails.expiry_date,
+          place_of_birth: passportDetails.place_of_birth,
+          remark: passportDetails.remark,
+        };
+
+        const oldValue: typeof newValue = {
+          document: data?.document ?? "",
+          passport_number: data?.passport_number ?? "",
+          issue_date: data?.issue_date
+            ? new Date(data?.issue_date).toISOString().split("T")[0]
+            : "",
+          expiry_date: data?.expiry_date
+            ? new Date(data?.expiry_date).toISOString().split("T")[0]
+            : "",
+          place_of_birth: data?.place_of_birth ?? "",
+          remark: data?.remark ?? "",
+        };
+
         const reqBod = data
           ? Object.assign(data, passportDetails)
           : passportDetails;
@@ -102,8 +124,8 @@ export default function PassportDetailsEditDialog({
             }),
             createChangeOfCircumstances({
               employee_id,
-              newValue: reqBod,
-              oldValue: data,
+              newValue,
+              oldValue,
             }),
           ]);
 

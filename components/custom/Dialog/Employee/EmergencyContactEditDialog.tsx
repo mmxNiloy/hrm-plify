@@ -51,6 +51,22 @@ export default function EmergencyContactEditDialog({
         address: fd.get("address") as string | null,
       };
 
+      const newValue = {
+        address: emergencyContactDetails.address,
+        email: emergencyContactDetails.email,
+        contact_name: emergencyContactDetails.contact_name,
+        relationship: emergencyContactDetails.relationship,
+        phone_number: emergencyContactDetails.phone_number,
+      };
+
+      const oldValue: typeof newValue = {
+        address: data?.address ?? "",
+        email: data?.email ?? "",
+        contact_name: data?.contact_name ?? "",
+        relationship: data?.relationship ?? "",
+        phone_number: data?.phone_number ?? "",
+      };
+
       const reqBod = data
         ? Object.assign(data, emergencyContactDetails)
         : emergencyContactDetails;
@@ -65,8 +81,8 @@ export default function EmergencyContactEditDialog({
           }),
           createChangeOfCircumstances({
             employee_id,
-            newValue: reqBod,
-            oldValue: data ?? {},
+            newValue,
+            oldValue,
           }),
         ]);
 
