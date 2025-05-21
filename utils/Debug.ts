@@ -20,11 +20,19 @@ export async function withError<T>(response: Promise<Response>) {
       return {
         error: new Object({
           message: error.message,
-        }) as { message: string },
+          name: "",
+          cause: "",
+          stack: "",
+        }) as {
+          message: string;
+          name: string;
+          cause: string;
+          stack: string;
+        },
       };
     else
       return {
-        error: { message: "Unknown Error" },
+        error: { message: "Unknown Error", name: "", cause: "", stack: "" },
       };
   }
 }
@@ -43,6 +51,9 @@ export async function withTextDataError(response: Promise<Response>) {
     return {
       error: {
         message: apiError.message ?? apiError.error ?? JSON.stringify(apiError),
+        name: "",
+        cause: "",
+        stack: "",
       },
     };
   } catch (error) {
@@ -50,11 +61,19 @@ export async function withTextDataError(response: Promise<Response>) {
       return {
         error: new Object({
           message: error.message,
-        }) as { message: string },
+          name: "",
+          cause: "",
+          stack: "",
+        }) as {
+          message: string;
+          name: string;
+          cause: string;
+          stack: string;
+        },
       };
     else
       return {
-        error: { message: "Unknown Error" },
+        error: { message: "Unknown Error", name: "", cause: "", stack: "" },
       };
   }
 }
