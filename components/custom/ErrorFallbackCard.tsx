@@ -8,7 +8,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SiteConfig from "@/utils/SiteConfig";
 
-export default function ErrorFallbackCard({ error }: { error?: Error }) {
+export default function ErrorFallbackCard({
+  error,
+}: {
+  error?:
+    | { message: string; name?: string; cause?: string; stack?: string }
+    | Error;
+}) {
   const pathname = usePathname();
   const mailSubject = encodeURIComponent(`${SiteConfig.siteName} > Bug Report`);
   const mailBody = encodeURIComponent(
