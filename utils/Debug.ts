@@ -9,16 +9,22 @@ export async function withError<T>(response: Promise<Response>) {
 
     const apiError = await apiRes.json();
 
-    return {
-      error: new Error(apiError.message, {
+    throw new Error(
+      apiError.message ?? apiError.error ?? JSON.stringify(apiError),
+      {
         cause: JSON.stringify(apiError),
-      }),
-    };
+      }
+    );
   } catch (error) {
-    if (error instanceof Error) return { error };
+    if (error instanceof Error)
+      return {
+        error: new Object({
+          message: error.message,
+        }) as { message: string },
+      };
     else
       return {
-        error: new Error("Unknown Error"),
+        error: { message: "Unknown Error" },
       };
   }
 }
@@ -35,15 +41,20 @@ export async function withTextDataError(response: Promise<Response>) {
     const apiError = await apiRes.json();
 
     return {
-      error: new Error(apiError.message, {
-        cause: JSON.stringify(apiError),
-      }),
+      error: {
+        message: apiError.message ?? apiError.error ?? JSON.stringify(apiError),
+      },
     };
   } catch (error) {
-    if (error instanceof Error) return { error };
+    if (error instanceof Error)
+      return {
+        error: new Object({
+          message: error.message,
+        }) as { message: string },
+      };
     else
       return {
-        error: new Error("Unknown Error"),
+        error: { message: "Unknown Error" },
       };
   }
 }

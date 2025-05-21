@@ -26,7 +26,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-sunday",
     header: ({ column }) => <SortableHeader name="Sunday" column={column} />,
     cell: ({ row }) =>
-      row.original.sunday == 0 ? (
+      row.original.sunday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
@@ -36,7 +36,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-monday",
     header: ({ column }) => <SortableHeader name="Monday" column={column} />,
     cell: ({ row }) =>
-      row.original.monday == 0 ? (
+      row.original.monday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
@@ -46,7 +46,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-tuesday",
     header: ({ column }) => <SortableHeader name="Tuesday" column={column} />,
     cell: ({ row }) =>
-      row.original.tuesday == 0 ? (
+      row.original.tuesday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
@@ -56,7 +56,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-wednesday",
     header: ({ column }) => <SortableHeader name="Wednesday" column={column} />,
     cell: ({ row }) =>
-      row.original.wednesday == 0 ? (
+      row.original.wednesday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
@@ -66,7 +66,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-thursday",
     header: ({ column }) => <SortableHeader name="Thursday" column={column} />,
     cell: ({ row }) =>
-      row.original.thursday == 0 ? (
+      row.original.thursday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
@@ -76,7 +76,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-friday",
     header: ({ column }) => <SortableHeader name="Friday" column={column} />,
     cell: ({ row }) =>
-      row.original.friday == 0 ? (
+      row.original.friday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
@@ -86,7 +86,7 @@ export const OffDaysDataTableColumns: ColumnDef<Props>[] = [
     id: "shift-day-saturday",
     header: ({ column }) => <SortableHeader name="Saturday" column={column} />,
     cell: ({ row }) =>
-      row.original.saturday == 0 ? (
+      row.original.saturday == 1 ? (
         <Icons.cross className="text-red-500" />
       ) : (
         <Icons.check className="text-green-500" />
