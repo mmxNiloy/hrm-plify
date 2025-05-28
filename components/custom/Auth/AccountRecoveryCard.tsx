@@ -218,7 +218,7 @@ export default function AccountRecoveryCard() {
                     </FormControl>
                     <FormDescription>
                       Please enter the email associated with your{" "}
-                      {SiteConfig.siteName} HR account
+                      {SiteConfig.appName} account
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

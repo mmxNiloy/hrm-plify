@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default async function PrivacyPolicyPage() {
   return (
@@ -11,7 +12,7 @@ export default async function PrivacyPolicyPage() {
         <div className="rounded-lg shadow-md p-6 md:p-8 flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
           <p className="text-gray-700 font-bold">
-            Revolo HR Privacy Policy V1.1.1
+            {SiteConfig.appName} Privacy Policy V1.1.1
           </p>
           <p className="text-gray-700 italic">
             Effective Date: {new Date("03-02-2025").toLocaleDateString("en-GB")}
@@ -20,13 +21,14 @@ export default async function PrivacyPolicyPage() {
           {/* Introduction */}
           <section className="flex flex-col gap-2">
             <p className="text-gray-700 leading-relaxed">
-              <strong>Revolo HR</strong> (“<strong>we</strong>,&quot; “
-              <strong>us</strong>,&quot; or “<strong>our</strong>&quot;) is
+              <strong>{SiteConfig.appName}</strong> (“<strong>we</strong>,&quot;
+              “<strong>us</strong>,&quot; or “<strong>our</strong>&quot;) is
               committed to respecting and protecting your privacy. This{" "}
               <strong>Privacy Policy</strong> explains how we collect, use,
               store, and share personal data when you use the{" "}
-              <strong>Revolo HR</strong> (“<strong>Software</strong>&quot; or “
-              <strong>Service</strong>&quot;) and outlines your rights under the{" "}
+              <strong>{SiteConfig.appName}</strong> (“<strong>Software</strong>
+              &quot; or “<strong>Service</strong>&quot;) and outlines your
+              rights under the{" "}
               <strong>General Data Protection Regulation (GDPR)</strong> and
               other applicable data protection laws. By accessing or using the{" "}
               <strong>Software</strong>, you agree to the terms of this{" "}
@@ -38,10 +40,10 @@ export default async function PrivacyPolicyPage() {
           <section className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold">1. Who We Are</h2>
             <p className="text-gray-700 leading-relaxed">
-              <strong>Revolo HR</strong> is a human resources (HR) management
-              platform that enables organizations to handle employee data,
-              manage HR tasks, and streamline workforce processes. We act as a{" "}
-              <strong>data processor</strong> on behalf of our clients (the
+              <strong>{SiteConfig.appName}</strong> is a human resources (HR)
+              management platform that enables organizations to handle employee
+              data, manage HR tasks, and streamline workforce processes. We act
+              as a <strong>data processor</strong> on behalf of our clients (the
               employers who use our <strong>Service</strong> to manage their
               workforce) and may also act as a <strong>data controller</strong>{" "}
               for certain types of data (e.g., user account data or data we
@@ -54,10 +56,10 @@ export default async function PrivacyPolicyPage() {
               <br />
               <strong>Email:</strong>{" "}
               <a
-                href="mailto:info@revolohr.com"
+                href={`mailto:info@${SiteConfig.appName}.com`}
                 className="text-blue-600 hover:underline"
               >
-                info@revolohr.com
+                info@${SiteConfig.appName}.com
               </a>
             </p>
           </section>
@@ -85,7 +87,7 @@ export default async function PrivacyPolicyPage() {
               </li>
             </ul>
             <p className="text-gray-700 leading-relaxed">
-              Where <strong>Revolo HR</strong> provides the{" "}
+              Where <strong>{SiteConfig.appName}</strong> provides the{" "}
               <strong>Software</strong> to an organization (the “
               <strong>Client</strong>&quot;), the <strong>Client</strong> is the{" "}
               <strong>data controller</strong> with respect to employee and HR
@@ -292,8 +294,8 @@ export default async function PrivacyPolicyPage() {
                 disclose personal data if required to do so by law or if we
                 believe in good faith that such action is necessary to comply
                 with legal processes, enforce our agreements, or protect the
-                rights, property, or safety of <strong>Revolo HR</strong>, our
-                users, or others.
+                rights, property, or safety of{" "}
+                <strong>{SiteConfig.appName}</strong>, our users, or others.
               </li>
             </ul>
           </section>
@@ -437,10 +439,10 @@ export default async function PrivacyPolicyPage() {
             <p className="mt-2 text-gray-700">
               <strong>Email:</strong>{" "}
               <a
-                href="mailto:info@revolohr.com"
+                href={`mailto:info@${SiteConfig.appName}.com`}
                 className="text-blue-600 hover:underline"
               >
-                info@revolohr.com
+                info@${SiteConfig.appName}.com
               </a>
             </p>
           </section>

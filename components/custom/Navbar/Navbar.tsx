@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/drawer";
 import { usePathname } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import SiteConfig from "@/utils/SiteConfig";
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
 
@@ -162,7 +163,7 @@ export default function Navbar() {
             <DrawerHeader>
               <DrawerTitle>Menu</DrawerTitle>
               <DrawerDescription className="sr-only">
-                Revolo HR | Navigation Menu
+                {SiteConfig.appName} | Navigation Menu
               </DrawerDescription>
             </DrawerHeader>
             <ScrollArea className="flex-grow">

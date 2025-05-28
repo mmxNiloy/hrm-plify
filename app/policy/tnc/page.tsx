@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default async function TermsAndConditionsPage() {
   return (
@@ -13,7 +14,7 @@ export default async function TermsAndConditionsPage() {
             Terms and Conditions
           </h1>
           <p className="text-gray-700 font-bold">
-            Revolo HR Software Terms and Conditions
+            {SiteConfig.appName} Software Terms and Conditions
           </p>
 
           {/* Introduction and Acceptance of Terms */}
@@ -22,9 +23,9 @@ export default async function TermsAndConditionsPage() {
               1. Introduction and Acceptance of Terms
             </h2>
             <p className="text-gray-700 leading-relaxed">
-              Welcome to <strong>Revolo HR</strong> (the “
+              Welcome to <strong>{SiteConfig.appName}</strong> (the “
               <strong>Software</strong>&quot;), owned and operated by{" "}
-              <strong>RevoloConsultancy Int.</strong> (“<strong>we</strong>
+              <strong>{SiteConfig.appName} Int.</strong> (“<strong>we</strong>
               ,&quot; “<strong>us</strong>,&quot; or “<strong>our</strong>
               &quot;). By creating an account, accessing, or using our{" "}
               <strong>Software</strong>, you agree to be bound by these{" "}
@@ -64,7 +65,7 @@ export default async function TermsAndConditionsPage() {
               <li>
                 <strong>“Client&quot; or “You&quot;:</strong> The individual,
                 company, or organization that registers for and/or uses the{" "}
-                <strong>Revolo HR Software</strong>.
+                <strong>{SiteConfig.appName} Software</strong>.
               </li>
               <li>
                 <strong>“Users&quot;:</strong> Employees, contractors,
@@ -203,8 +204,9 @@ export default async function TermsAndConditionsPage() {
             </h2>
             <ul className="list-decimal ml-6 text-gray-700">
               <li>
-                <strong>Ownership:</strong> <strong>Revolo HR</strong> and/or
-                its licensors retain all rights, title, and interest in the{" "}
+                <strong>Ownership:</strong>{" "}
+                <strong>{SiteConfig.appName}</strong> and/or its licensors
+                retain all rights, title, and interest in the{" "}
                 <strong>Software</strong>, including but not limited to any
                 updates, enhancements, and related documentation. These{" "}
                 <strong>Terms</strong> do not grant you ownership of any
@@ -220,9 +222,10 @@ export default async function TermsAndConditionsPage() {
               </li>
               <li>
                 <strong>Trademarks:</strong> All trademarks, service marks, and
-                trade names associated with <strong>Revolo HR</strong> are owned
-                by us or our licensors. You must not use these marks without our
-                prior written consent.
+                trade names associated with{" "}
+                <strong>{SiteConfig.appName}</strong> are owned by us or our
+                licensors. You must not use these marks without our prior
+                written consent.
               </li>
             </ul>
           </section>
@@ -375,10 +378,10 @@ export default async function TermsAndConditionsPage() {
             <h2 className="text-2xl font-bold">12. Indemnification</h2>
             <p className="text-gray-700 leading-relaxed">
               You agree to indemnify, defend, and hold harmless{" "}
-              <strong>Revolo HR</strong>, its affiliates, and their respective
-              officers, directors, employees, and agents from any claims,
-              liabilities, damages, losses, or expenses (including legal fees)
-              arising out of or related to:
+              <strong>{SiteConfig.appName}</strong>, its affiliates, and their
+              respective officers, directors, employees, and agents from any
+              claims, liabilities, damages, losses, or expenses (including legal
+              fees) arising out of or related to:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700">
               <li>
@@ -505,18 +508,18 @@ export default async function TermsAndConditionsPage() {
             <h2 className="text-2xl font-bold">17. Contact Us</h2>
             <p className="text-gray-700 leading-relaxed">
               For questions about these <strong>Terms</strong> or any issues
-              regarding the <strong>Revolo HR Software</strong>, please contact
-              us at:
+              regarding the <strong>{SiteConfig.appName} Software</strong>,
+              please contact us at:
             </p>
             <p className="mt-2 text-gray-700">
-              <strong>Revolo HR</strong>
+              <strong>{SiteConfig.appName}</strong>
               <br />
               <strong>Email:</strong>{" "}
               <a
-                href="mailto:info@revolohr.com"
+                href={`mailto:info@${SiteConfig.appName}.com`}
                 className="text-blue-600 hover:underline"
               >
-                info@revolohr.com
+                info@{SiteConfig.appName}.com
               </a>
             </p>
             <p className="mt-2 text-gray-700">

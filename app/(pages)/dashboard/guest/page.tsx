@@ -15,7 +15,7 @@ import React from "react";
 export async function generateMetadata(): Promise<Metadata> {
   // const user = await getUserData();
   return {
-    title: `${SiteConfig.siteName} | Welcome`,
+    title: `${SiteConfig.appName} | Welcome`,
   };
 }
 

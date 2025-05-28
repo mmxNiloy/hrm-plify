@@ -20,38 +20,30 @@ export default function Footer() {
       <footer className="w-full md:w-11/12 lg:w-10/12 grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-2 sm:rounded-t-[4rem] md:rounded-t-[4.5rem] lg:rounded-t-[4.75rem] xl:rounded-t-[4.875rem] md:pt-16 pt-4 md:px-16 px-4 pb-8 from-[#017bce]/[0.078] to-[#019e8f]/[0.078] bg-gradient-to-t">
         <div className="flex flex-col gap-2 items-center justify-center md:items-start">
           <Image
-            src={"/site-logo-horizontal.svg"}
+            src={"/nest-hrm-logo.png"}
             priority
             unoptimized
             height={0}
             width={0}
             className="w-24 sm:w-32 md:w-56 lg:w-64"
-            alt={`Revolo HR`}
+            alt={SiteConfig.appName}
           />
           <p className="font-bold text-sm md:text-lg lg:text-3xl text-start">
             {SiteConfig.siteDescription}
           </p>
           <div className="flex gap-1 items-center justify-center md:justify-start">
             {/* <p className="text">Find us on</p> */}
-            <Link
-              href={"https://www.linkedin.com/company/revolo-hr/"}
-              target="_blank"
-              passHref
-            >
+            <Link href={"#"} target="_blank" passHref>
               <Button variant={"ghost"} size={"icon"}>
                 <Icons.linkedin />
               </Button>
             </Link>
-            <Link href={"https://x.com/REVOLOHR"} target="_blank" passHref>
+            <Link href={"#"} target="_blank" passHref>
               <Button variant={"ghost"} size={"icon"}>
                 <Icons.x />
               </Button>
             </Link>
-            <Link
-              href={"https://www.facebook.com/people/Revolo-Hr/61573811489863/"}
-              target="_blank"
-              passHref
-            >
+            <Link href={"#"} target="_blank" passHref>
               <Button variant={"ghost"} size={"icon"}>
                 <Icons.fb />
               </Button>
@@ -143,8 +135,7 @@ export default function Footer() {
         <span className="col-span-full h-px bg-muted-foreground/60" />
         <div className="flex flex-col md:flex-row items-center justify-between col-span-full gap-2 md:gap-0">
           <p className="text-xs md:text-sm text-center md:text-left">
-            © {new Date().getFullYear()} {SiteConfig.siteName} Consultancy
-            International Limited.
+            © {new Date().getFullYear()} {SiteConfig.appName}.
           </p>
           <p
             className={`${

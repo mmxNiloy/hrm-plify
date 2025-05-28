@@ -110,7 +110,7 @@ export default function CompanySearchCommandCard({
         </div>
       </Link>
       <Link
-        href={`${company.website}?_ref=${SiteConfig.siteName}HRMS&_clickId=${
+        href={`${company.website}?_ref=${SiteConfig.appName}&_clickId=${
           SiteConfig.siteName
         }-${Date.now()}`}
         target="_blank"

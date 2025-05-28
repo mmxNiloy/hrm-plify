@@ -12,7 +12,7 @@ import React from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${SiteConfig.siteName} | Dashboard | Super Admin`,
+    title: `${SiteConfig.appName} | Dashboard | Super Admin`,
   };
 }
 

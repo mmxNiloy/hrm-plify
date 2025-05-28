@@ -153,7 +153,7 @@ export default function CompanyDashboardSidebar({
   return (
     <>
       <NavDrawer
-        description={`${SiteConfig.siteName} | ${company.company_name}`}
+        description={`${SiteConfig.appName} | ${company.company_name}`}
       >
         <NavAccordion
           items={CompanyDashboardSidebarItems}

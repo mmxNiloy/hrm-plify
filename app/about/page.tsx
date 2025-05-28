@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedText from "@/components/custom/AnimatedText";
+import SiteConfig from "@/utils/SiteConfig";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -82,18 +83,19 @@ export default function AboutPage() {
           </div>
           <p className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg lg:w-2/3 text-justify">
             {/* <AnimatedText> */}
-            At RevoloHR, we saw a major problem—businesses struggling with
-            compliance-related challenges, facing stress, fines, and even losing
-            their ability to sponsor skilled workers due to complex Home Office
-            regulations. We knew there had to be a better way. That&apos;s why
-            we created RevoloHR a powerful, user-friendly HR software designed
-            to take the hassle out of compliance. Our mission is simple: to help
-            businesses navigate sponsorship and HR regulations effortlessly,
-            reducing risks and ensuring they stay fully compliant. With
-            RevoloHR, companies can manage their HR processes with confidence,
-            knowing they have the right tools to protect their workforce and
-            their business. Join us in making compliance simple, stress-free,
-            and efficient.
+            At {SiteConfig.appName}, we saw a major problem—businesses
+            struggling with compliance-related challenges, facing stress, fines,
+            and even losing their ability to sponsor skilled workers due to
+            complex Home Office regulations. We knew there had to be a better
+            way. That&apos;s why we created {SiteConfig.appName} a powerful,
+            user-friendly HR software designed to take the hassle out of
+            compliance. Our mission is simple: to help businesses navigate
+            sponsorship and HR regulations effortlessly, reducing risks and
+            ensuring they stay fully compliant. With
+            {SiteConfig.appName}, companies can manage their HR processes with
+            confidence, knowing they have the right tools to protect their
+            workforce and their business. Join us in making compliance simple,
+            stress-free, and efficient.
             {/* </AnimatedText> */}
           </p>
         </div>
@@ -112,12 +114,12 @@ export default function AboutPage() {
           </div>
           <p className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg lg:w-2/3 text-justify">
             {/* <AnimatedText> */}
-            At RevoloHR, we make HR compliance simple and efficient for
-            businesses of all sizes. Our software is designed to streamline HR
-            operations, reduce compliance risks, and ensure that companies meet
-            UK Home Office regulations with ease. From managing employee records
-            to tracking sponsorships, we provide businesses with the tools they
-            need to stay compliant—without the administrative hassle.
+            At {SiteConfig.appName}, we make HR compliance simple and efficient
+            for businesses of all sizes. Our software is designed to streamline
+            HR operations, reduce compliance risks, and ensure that companies
+            meet UK Home Office regulations with ease. From managing employee
+            records to tracking sponsorships, we provide businesses with the
+            tools they need to stay compliant—without the administrative hassle.
             {/* </AnimatedText> */}
           </p>
         </div>

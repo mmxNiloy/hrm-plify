@@ -67,8 +67,7 @@ export default function PricingPage() {
   const additionalConsiderations = [
     {
       title: "Customised Quotes",
-      description:
-        "For businesses with specific compliance needs, Revolo HR offers tailored pricing.",
+      description: `For businesses with specific compliance needs, ${SiteConfig.appName} offers tailored pricing.`,
       gradient: "from-[#017bce]/20 to-[#019e8f]/20",
       textColor: "#017bce",
     },
@@ -293,11 +292,11 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Why Choose RevoloHR Section */}
+      {/* Why Choose this App Section */}
       <section className="additional-section w-full sm:w-11/12 py-4 sm:py-8 items-center justify-center flex flex-col">
         <div className="flex flex-col gap-0.5 mb-4 sm:mb-8 items-center w-fit">
           <p className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-extrabold">
-            <AnimatedText className="bg-clip-text from-[#e51cd8] to-[#635be8] bg-gradient-to-br text-transparent">{`Why Choose ${SiteConfig.siteName} HR?`}</AnimatedText>
+            <AnimatedText className="bg-clip-text from-[#e51cd8] to-[#635be8] bg-gradient-to-br text-transparent">{`Why Choose ${SiteConfig.appName}?`}</AnimatedText>
           </p>
           <span className="h-1 rounded-full w-full from-[#f5561c] to-[#bd1cc2] bg-gradient-to-br" />
         </div>

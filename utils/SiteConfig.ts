@@ -1,5 +1,6 @@
 const SiteConfig = {
-  siteName: "Revolo",
+  siteName: "Nest",
+  appName: "Nest HRM",
   siteDescription: "Control Compliance, Delete Stress",
   currentVersion: "1.4.0",
   maxFileSize: 5e6,

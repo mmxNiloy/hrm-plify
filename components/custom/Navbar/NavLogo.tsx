@@ -14,7 +14,7 @@ export default function NavLogo({
   return (
     <Link href={href ?? "/"} className="flex gap-1 items-center justify-center">
       <Image
-        src={"/site-logo-horizontal.svg"}
+        src={"/nest-hrm-logo.png"}
         priority
         unoptimized
         height={0}
@@ -27,7 +27,7 @@ export default function NavLogo({
             ? "w-20 sm:w-24 md:w-32"
             : "w-32 sm:w-40 md:w-64"
         )}
-        alt={`Revolo HR`}
+        alt={SiteConfig.appName}
       />
     </Link>
   );

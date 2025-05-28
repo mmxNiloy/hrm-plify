@@ -21,7 +21,7 @@ export async function generateMetadata({
   companyId = Number.parseInt(`${companyId}`);
   const company = await getCompanyDetails(companyId);
   return {
-    title: `${SiteConfig.siteName} | ${
+    title: `${SiteConfig.appName} | ${
       company.data?.company_name ?? "Company Dashboard"
     } | Job Applicants`,
   };

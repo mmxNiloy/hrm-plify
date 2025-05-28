@@ -10,7 +10,7 @@ import SiteConfig from "@/utils/SiteConfig";
 
 export default function ErrorFallbackCard({ error }: { error?: any }) {
   const pathname = usePathname();
-  const mailSubject = encodeURIComponent(`${SiteConfig.siteName} > Bug Report`);
+  const mailSubject = encodeURIComponent(`${SiteConfig.appName} > Bug Report`);
   const mailBody = encodeURIComponent(
     `A bug has been found in the following route: ${pathname}
     Error encountered: ${error?.name}

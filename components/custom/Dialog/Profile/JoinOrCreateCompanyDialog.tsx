@@ -43,7 +43,7 @@ export default function JoinOrCreateCompanyDialog({
             Welcome, {getFullNameOfUser(user)}
           </DialogTitle>
           <DialogDescription className="text-sm sm:text-base">
-            Looks like you have yet to join a company. {SiteConfig.siteName}{" "}
+            Looks like you have yet to join a company. {SiteConfig.appName}{" "}
             offers robust solutions for your HR management needs. To use all of
             our features, join a company or create your own organization and
             start managing today.
@@ -56,7 +56,7 @@ export default function JoinOrCreateCompanyDialog({
               Create a Company
             </p>
             <p className="bg-clip-text drop-shadow-lg text-sm sm:text-base flex-grow">
-              Simplify your HR management tasks with {SiteConfig.siteName}.
+              Simplify your HR management tasks with {SiteConfig.appName}.
               Create a profile for your organization to get started.
             </p>
             <div className="rounded-full shadow-xl drop-shadow-lg self-start">
@@ -72,7 +72,7 @@ export default function JoinOrCreateCompanyDialog({
             </p>
             <p className="bg-clip-text drop-shadow-lg text-sm sm:text-base flex-grow">
               Does your organization use our solutions? Join your colleagues and
-              streamline your managerial tasks today with {SiteConfig.siteName}.
+              streamline your managerial tasks today with {SiteConfig.appName}.
             </p>
             <JoinCompanyPopover user={user} className="self-start w-auto" />
           </div>

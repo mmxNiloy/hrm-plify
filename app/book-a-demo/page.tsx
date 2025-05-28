@@ -139,7 +139,7 @@ export default function BookADemoPage() {
             <AnimatedText>See It in Action - Book Your Demo Today</AnimatedText>
           </p>
           <p className="text-center font-semibold text-xs sm:text-sm md:text-base lg:text-xl subheader opacity-0 translate-y-5">
-            Get a front-row seat to how {SiteConfig.siteName} HR transforms your
+            Get a front-row seat to how {SiteConfig.appName} transforms your
             work.
           </p>
         </div>

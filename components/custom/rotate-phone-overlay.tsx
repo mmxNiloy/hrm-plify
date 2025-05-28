@@ -59,7 +59,7 @@ export default function RotatePhoneOverlay() {
       <h4 className="font-bold text-2xl text-center">
         Please Rotate Your Phone.
         <br />
-        {SiteConfig.siteName} HR works best on wide screen devices.
+        {SiteConfig.appName} works best on wide screen devices.
       </h4>
 
       <div className="flex gap-4">

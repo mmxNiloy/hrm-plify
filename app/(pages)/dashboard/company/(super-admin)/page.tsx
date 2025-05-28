@@ -23,7 +23,7 @@ import React from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${SiteConfig.siteName} | Companies | Super Admin`,
+    title: `${SiteConfig.appName} | Companies | Super Admin`,
   };
 }
 

@@ -1,4 +1,4 @@
-# ${SiteConfig.siteName} - Deadline: 05-Nov-2024
+# ${SiteConfig.appName} - Deadline: 05-Nov-2024
 
 ## Tasks
 

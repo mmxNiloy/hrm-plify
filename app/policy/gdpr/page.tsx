@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SiteConfig from "@/utils/SiteConfig";
 
 export default async function GDPRPolicyPage() {
   return (
@@ -10,18 +11,20 @@ export default async function GDPRPolicyPage() {
       <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="rounded-lg shadow-md p-6 md:p-8 flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-gray-900">GDPR Policy</h1>
-          <p className="text-gray-700 font-bold">Revolo HR GDPR Policy</p>
+          <p className="text-gray-700 font-bold">
+            {SiteConfig.appName} GDPR Policy
+          </p>
 
           {/* Introduction */}
           <section className="flex flex-col gap-2">
             <h2 className="text-2xl font-semibold">1. Introduction</h2>
             <p className="text-gray-700 leading-relaxed">
-              Revolo HR (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is
-              committed to safeguarding the personal data entrusted to us by our
-              clients, employees, contractors, and any other individuals whose
-              personal data we handle. This <strong>GDPR Policy</strong>{" "}
-              outlines how we collect, process, store, and protect personal
-              data, ensuring compliance with:
+              {SiteConfig.appName} (&quot;we,&quot; &quot;us,&quot; or
+              &quot;our&quot;) is committed to safeguarding the personal data
+              entrusted to us by our clients, employees, contractors, and any
+              other individuals whose personal data we handle. This{" "}
+              <strong>GDPR Policy</strong> outlines how we collect, process,
+              store, and protect personal data, ensuring compliance with:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700">
               <li>
@@ -47,9 +50,9 @@ export default async function GDPRPolicyPage() {
             <h3 className="text-lg font-medium mb-2">2.1 Scope</h3>
             <p className="text-gray-700 leading-relaxed">
               This policy applies to all processing activities involving
-              personal data carried out by Revolo HR, including those performed
-              by employees, contractors, and third-party service providers
-              acting on our behalf.
+              personal data carried out by {SiteConfig.appName}, including those
+              performed by employees, contractors, and third-party service
+              providers acting on our behalf.
             </p>
             <h3 className="text-lg font-medium mt-4 mb-2">2.2 Purpose</h3>
             <ul className="list-disc ml-6 text-gray-700">
@@ -81,15 +84,16 @@ export default async function GDPRPolicyPage() {
               3.1 Data Controller vs. Data Processor
             </h3>
             <p className="text-gray-700 leading-relaxed">
-              <strong>Data Controller:</strong> Revolo HR acts as a{" "}
+              <strong>Data Controller:</strong> {SiteConfig.appName} acts as a{" "}
               <strong>Data Controller</strong> when determining the purposes and
               means of processing personal data for our own business operations
               (e.g., user account data for customer support or billing).
               <br />
-              <strong>Data Processor:</strong> Revolo HR acts as a{" "}
+              <strong>Data Processor:</strong> {SiteConfig.appName} acts as a{" "}
               <strong>Data Processor</strong> when our clients (employers using
-              the Revolo HR platform) determine the purposes and means of
-              processing personal data (e.g., employee data in the platform).
+              the {SiteConfig.appName} platform) determine the purposes and
+              means of processing personal data (e.g., employee data in the
+              platform).
             </p>
             <h3 className="text-lg font-medium mt-4 mb-2">
               3.2 Data Protection Officer (DPO) or Responsible Person
@@ -99,19 +103,19 @@ export default async function GDPRPolicyPage() {
               regularly. For any questions or concerns about this Policy or our
               data handling practices, please contact:{" "}
               <a
-                href="mailto:info@revolohr.com"
+                href={`mailto:info@${SiteConfig.appName}.com`}
                 className="text-blue-600 hover:underline"
               >
-                info@revolohr.com
+                info@${SiteConfig.appName}.com
               </a>
             </p>
             <h3 className="text-lg font-medium mt-4 mb-2">
               3.3 All Employees and Contractors
             </h3>
             <p className="text-gray-700 leading-relaxed">
-              All individuals working for or on behalf of Revolo HR are
-              responsible for following this Policy and related procedures. They
-              must complete data protection training and understand their
+              All individuals working for or on behalf of {SiteConfig.appName}{" "}
+              are responsible for following this Policy and related procedures.
+              They must complete data protection training and understand their
               obligations under the <strong>GDPR</strong>.
             </p>
           </section>
@@ -122,9 +126,9 @@ export default async function GDPRPolicyPage() {
               4. Lawful Basis for Processing
             </h2>
             <p className="text-gray-700 leading-relaxed">
-              Revolo HR processes personal data lawfully, fairly, and in a
-              transparent manner. We rely on one or more of the following lawful
-              bases under the <strong>UK GDPR</strong>:
+              {SiteConfig.appName} processes personal data lawfully, fairly, and
+              in a transparent manner. We rely on one or more of the following
+              lawful bases under the <strong>UK GDPR</strong>:
             </p>
             <ul className="list-decimal ml-6 mt-2 text-gray-700">
               <li>
@@ -144,10 +148,11 @@ export default async function GDPRPolicyPage() {
               </li>
               <li>
                 <strong>Legitimate Interests:</strong> Where processing is
-                necessary for legitimate interests pursued by Revolo HR or a
-                third party, provided these interests are not overridden by the
-                rights and freedoms of the data subject (e.g., fraud prevention,
-                improving software functionality).
+                necessary for legitimate interests pursued by{" "}
+                {SiteConfig.appName} or a third party, provided these interests
+                are not overridden by the rights and freedoms of the data
+                subject (e.g., fraud prevention, improving software
+                functionality).
               </li>
             </ul>
           </section>
@@ -247,9 +252,9 @@ export default async function GDPRPolicyPage() {
                 legal and contractual obligations.
               </li>
               <li>
-                Where Revolo HR acts as a <strong>Data Processor</strong>,
-                retention periods may be determined by the client (
-                <strong>Data Controller</strong>).
+                Where {SiteConfig.appName} acts as a{" "}
+                <strong>Data Processor</strong>, retention periods may be
+                determined by the client (<strong>Data Controller</strong>).
               </li>
             </ul>
             <h3 className="text-lg font-medium mt-4 mb-2">
@@ -324,9 +329,9 @@ export default async function GDPRPolicyPage() {
           <section className="flex flex-col gap-2">
             <h2 className="text-2xl font-semibold">10. Security Measures</h2>
             <p className="text-gray-700 leading-relaxed">
-              Revolo HR employs technical and organisational measures to protect
-              personal data against unauthorised access, accidental loss, or
-              destruction, including:
+              {SiteConfig.appName} employs technical and organisational measures
+              to protect personal data against unauthorised access, accidental
+              loss, or destruction, including:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700">
               <li>
@@ -408,20 +413,21 @@ export default async function GDPRPolicyPage() {
             </h3>
             <ul className="list-disc ml-6 text-gray-700">
               <li>
-                Where Revolo HR acts as <strong>Data Controller</strong>, please
-                contact us at{" "}
+                Where {SiteConfig.appName} acts as{" "}
+                <strong>Data Controller</strong>, please contact us at{" "}
                 <a
-                  href="mailto:info@revolohr.com"
+                  href={`mailto:info@${SiteConfig.appName}.com`}
                   className="text-blue-600 hover:underline"
                 >
-                  info@revolohr.com
+                  info@${SiteConfig.appName}.com
                 </a>
                 .
               </li>
               <li>
-                Where Revolo HR acts as a <strong>Data Processor</strong>, data
-                subjects should direct their requests to the{" "}
-                <strong>Data Controller</strong> (the employer/client).
+                Where {SiteConfig.appName} acts as a{" "}
+                <strong>Data Processor</strong>, data subjects should direct
+                their requests to the <strong>Data Controller</strong> (the
+                employer/client).
               </li>
             </ul>
           </section>
@@ -432,8 +438,8 @@ export default async function GDPRPolicyPage() {
               12. Training and Awareness
             </h2>
             <p className="text-gray-700 leading-relaxed">
-              All Revolo HR employees and contractors handling personal data
-              receive regular training on:
+              All {SiteConfig.appName} employees and contractors handling
+              personal data receive regular training on:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700">
               <li>GDPR principles and obligations</li>
@@ -456,8 +462,8 @@ export default async function GDPRPolicyPage() {
               <li>
                 In the event of a personal data breach (accidental or unlawful
                 destruction, loss, alteration, unauthorised disclosure of, or
-                access to personal data), Revolo HR will promptly assess the
-                risk to individuals’ rights and freedoms.
+                access to personal data), {SiteConfig.appName} will promptly
+                assess the risk to individuals’ rights and freedoms.
               </li>
               <li>
                 If a breach is notifiable, we will inform the{" "}
@@ -532,14 +538,14 @@ export default async function GDPRPolicyPage() {
               please contact:
             </p>
             <p className="mt-2 text-gray-700">
-              <strong>Revolo HR</strong>
+              <strong>{SiteConfig.appName}</strong>
               <br />
               Email:{" "}
               <a
-                href="mailto:info@revolohr.com"
+                href={`mailto:info@${SiteConfig.appName}.com`}
                 className="text-blue-600 hover:underline"
               >
-                info@revolohr.com
+                info@${SiteConfig.appName}.com
               </a>
             </p>
             <p className="mt-2 text-gray-700">

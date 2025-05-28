@@ -14,7 +14,7 @@ export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
   return {
-    title: `${SiteConfig.siteName} | Employee Profile`,
+    title: `${SiteConfig.appName} | Employee Profile`,
   };
 }
 

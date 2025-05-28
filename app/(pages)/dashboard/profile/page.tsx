@@ -73,7 +73,7 @@ function getProfileCompletion(user: IUser) {
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getUserData();
   return {
-    title: `${SiteConfig.siteName} | ${
+    title: `${SiteConfig.appName} | ${
       user ? getFullNameOfUser(user) : "User Profile"
     }`,
   };
