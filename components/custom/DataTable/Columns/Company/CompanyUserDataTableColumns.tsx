@@ -32,7 +32,9 @@ export const CompanyUserDataTableColumns: ColumnDef<ICompanyUser>[] = [
   },
   {
     id: "middle_name",
-    header: ({ column }) => <SortableHeader column={column} name="Last name" />,
+    header: ({ column }) => (
+      <SortableHeader column={column} name="Middle name" />
+    ),
     cell: ({ row }) => row.original.users.middle_name,
   },
   {

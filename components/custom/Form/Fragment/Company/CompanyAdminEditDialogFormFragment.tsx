@@ -66,11 +66,8 @@ export default function CompanyAdminEditDialogFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label className={RequiredAsterisk} htmlFor="middle-name-input">
-          Middle Name
-        </Label>
+        <Label htmlFor="middle-name-input">Middle Name</Label>
         <Input
-          required
           defaultValue={data?.users.middle_name}
           id="middle-name-input"
           name="mname"
