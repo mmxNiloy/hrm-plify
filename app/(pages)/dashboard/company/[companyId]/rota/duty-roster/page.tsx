@@ -112,7 +112,7 @@ export default async function RotaDutyRosterPage({
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent="Rota"
+          parent="Shift"
           title="Duty Roster"
         />
 

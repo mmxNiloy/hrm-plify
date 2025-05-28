@@ -57,7 +57,7 @@ export default function Home() {
     { title: "Effortless Onboarding & Offboarding", description: "" },
     { title: "Powerful Reporting & Analytics", description: "" },
     { title: "Sponsorship Tracking", description: "" },
-    { title: "Rota and Holiday Managment", description: "" },
+    { title: "Shift and Holiday Managment", description: "" },
     { title: "Right to Work Checks", description: "" },
   ];
 

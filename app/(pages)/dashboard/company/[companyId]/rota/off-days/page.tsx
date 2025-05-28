@@ -90,7 +90,7 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent="Rota"
+          parent="Shift"
           title="Off Days"
         />
 

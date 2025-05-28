@@ -70,7 +70,7 @@ export default function SuperAdminNavMenu() {
               </MenubarSub>
 
               <Link href={`/dashboard/rota`}>
-                <MenubarItem className="cursor-pointer">Rota</MenubarItem>
+                <MenubarItem className="cursor-pointer">Shift</MenubarItem>
               </Link>
 
               <Link href={`/dashboard/holiday`}>

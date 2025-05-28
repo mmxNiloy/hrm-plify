@@ -72,7 +72,7 @@ export default async function RotaShiftManagementPage({
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent="Rota"
+          parent="Shift"
           title="Shift Management"
         />
 

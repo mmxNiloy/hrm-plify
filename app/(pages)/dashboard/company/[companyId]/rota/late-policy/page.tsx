@@ -94,7 +94,7 @@ export default async function RotaLatePolicyPage({
         <MyBreadcrumbs
           company={company.data}
           user={user}
-          parent="Rota"
+          parent="Shift"
           title="Late Policy"
         />
 

@@ -29,7 +29,7 @@ const moduleList: string[] = [
   "Attendance Management",
   "Settings",
   "Organization",
-  "Rota",
+  "Shift",
   "Role Management",
   "Organogram Chart",
   "Documents",

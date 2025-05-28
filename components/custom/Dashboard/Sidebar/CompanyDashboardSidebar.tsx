@@ -109,7 +109,7 @@ export default function CompanyDashboardSidebar({
           },
           {
             href: `/dashboard/company/${company.company_id}/rota`,
-            title: "Rota",
+            title: "Shift",
             icon: <Icons.cycle />,
           },
           {

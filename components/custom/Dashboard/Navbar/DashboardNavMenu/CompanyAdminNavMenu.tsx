@@ -80,7 +80,7 @@ export default function CompanyAdminNavMenu({
               </MenubarSub>
 
               <Link href={`/dashboard/company/${company.company_id}/rota`}>
-                <MenubarItem className="cursor-pointer">Rota</MenubarItem>
+                <MenubarItem className="cursor-pointer">Shift</MenubarItem>
               </Link>
 
               <Link href={`/dashboard/company/${company.company_id}/holiday`}>
