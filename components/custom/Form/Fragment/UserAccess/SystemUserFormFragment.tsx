@@ -112,10 +112,9 @@ export default function SystemUserFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label className={RequiredAsterisk}>Middle Name</Label>
+        <Label>Middle Name</Label>
         <Input
           id={"middle-name-input"}
-          required
           readOnly={readOnly}
           disabled={disabled}
           key={`middle-name-${data?.middle_name}`}
