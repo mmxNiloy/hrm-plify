@@ -74,14 +74,4 @@ export const CompanyUserDataTableColumns: ColumnDef<ICompanyUser>[] = [
         </Link>
       )),
   },
-  {
-    id: "delete-action",
-    cell: ({ row }) =>
-      row.original.readOnly || !row.original.users.employee_data ? null : (
-        <EmployeeDeleteAlertDialog
-          asIcon
-          user_company_id={row.original.user_company_id}
-        />
-      ),
-  },
 ];

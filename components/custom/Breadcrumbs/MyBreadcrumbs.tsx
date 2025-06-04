@@ -1,3 +1,6 @@
+"use server";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -13,25 +16,31 @@ import { IUser } from "@/schema/UserSchema";
 import React from "react";
 
 interface Props {
-  company: ICompany;
-  user: IUser;
+  companyId: string;
   title?: string;
   parent?: string;
   grandParent?: string;
 }
 
-export default function MyBreadcrumbs({
-  company,
-  user,
+export default async function MyBreadcrumbs({
+  companyId,
   title,
   parent,
   grandParent,
 }: Props) {
+  const [user, companyData] = await Promise.all([
+    getCurrentUser(),
+    getCompanyData(companyId),
+  ]);
+
+  if (companyData.error) return null;
+
+  const company = companyData.data;
   return (
     <Breadcrumb>
-      <BreadcrumbList className="flex flex-wrap gap-1 sm:gap-2 text-sm sm:text-base">
-        {(user.user_roles?.roles.role_name === "Super Admin" ||
-          user.user_roles?.roles.role_name === "Admin") && (
+      <BreadcrumbList className="flex flex-wrap gap-1 text-xs">
+        {(user?.user_roles?.roles.role_name === "Super Admin" ||
+          user?.user_roles?.roles.role_name === "Admin") && (
           <>
             <BreadcrumbItem className="hidden md:block">
               <BreadcrumbLink
@@ -41,7 +50,7 @@ export default function MyBreadcrumbs({
                 Dashboard
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block size-5" />
+            <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem className="hidden md:block">
               <BreadcrumbLink
                 className="line-clamp-1 text-ellipsis max-w-[8rem] sm:max-w-[10rem] md:max-w-[12rem]"
@@ -51,7 +60,7 @@ export default function MyBreadcrumbs({
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbEllipsis className="md:hidden" />
-            <BreadcrumbSeparator className="size-4 sm:size-5" />
+            <BreadcrumbSeparator />
           </>
         )}
         <BreadcrumbItem
@@ -69,7 +78,7 @@ export default function MyBreadcrumbs({
         </BreadcrumbItem>
         {grandParent && (
           <>
-            <BreadcrumbSeparator className="hidden md:block size-4 sm:size-5" />
+            <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem className="hidden md:block">
               <BreadcrumbLink
                 className="line-clamp-1 text-ellipsis max-w-[10rem] sm:max-w-[12rem] md:max-w-[16rem]"
@@ -82,7 +91,7 @@ export default function MyBreadcrumbs({
         )}
         {parent && (
           <>
-            <BreadcrumbSeparator className="hidden md:block size-5" />
+            <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem>
               <BreadcrumbLink
                 className="line-clamp-1 text-ellipsis max-w-[10rem] sm:max-w-[12rem] md:max-w-[16rem]"
@@ -95,7 +104,7 @@ export default function MyBreadcrumbs({
         )}
         {title && (
           <>
-            <BreadcrumbSeparator className="size-4 sm:size-5" />
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="line-clamp-1 text-ellipsis max-w-[10rem] sm:max-w-[12rem] md:max-w-[16rem]">
                 {title}

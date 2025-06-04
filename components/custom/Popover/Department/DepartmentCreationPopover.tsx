@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 export default function DepartmentCreationPopover({
   company_id,
 }: {
-  company_id: number;
+  company_id: string;
 }) {
   const { toast } = useToast();
   const router = useRouter();

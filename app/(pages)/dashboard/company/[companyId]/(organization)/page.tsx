@@ -1,7 +1,6 @@
 "use server";
-import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
-import React from "react";
+import React, { Suspense } from "react";
 import { CompanyByIDPageProps } from "../PageProps";
 import { redirect } from "next/navigation";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
@@ -16,10 +15,13 @@ import Icons from "@/components/ui/icons";
 import Link from "next/link";
 import { toHTTPSString } from "@/utils/Misc";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import CompanyAuthorityTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyAuthorityTab";
-import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/CompanyDocumentsTab";
 import SiteConfig from "@/utils/SiteConfig";
 import { shortenText } from "@/utils/Text";
+import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
+import CompanyAuthorityTab from "./(ui)/features/tabs/company-authority-tab";
+import CompanyAuthorityTabSkeleton from "./(ui)/components/company-authority/company-authority-tab-skeleton";
+import CompanyDocumentFormFragmentSkeleton from "./(ui)/components/company-document/company-document-form-fragment-skeleton";
+import CompanyDocumentsTab from "./(ui)/features/tabs/company-documents-tab";
 
 interface Props extends CompanyByIDPageProps {
   readOnly?: boolean;
@@ -30,8 +32,8 @@ interface Props extends CompanyByIDPageProps {
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const prms = await params;
+  var companyId = prms.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -40,12 +42,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CompanyByIDPage({
-  params,
-  readOnly,
-  parent,
-  title,
-}: Props) {
+export default async function CompanyByIDPage({ params }: Props) {
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
     mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
@@ -56,13 +53,13 @@ export default async function CompanyByIDPage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
+  const [prms, user] = await Promise.all([params, getCurrentUser()]);
+  var companyId = prms.companyId;
+  const company = await getCompanyDetails(companyId);
 
-  var company = await getCompanyDetails(companyId);
+  if (!user) {
+    redirect("/login?_ref=token-expired");
+  }
 
   if (
     user.user_roles?.roles.role_name !== "Super Admin" &&
@@ -156,7 +153,7 @@ export default async function CompanyByIDPage({
       </div>
 
       <Tabs defaultValue="auth" className="w-full">
-        <TabsList className="w-full h-full flex flex-wrap justify-center gap-2 md:gap-4 bg-gray-100 p-2 rounded-lg">
+        <TabsList className="w-full h-fit flex flex-wrap justify-center gap-2 md:gap-4 bg-gray-100 p-2 rounded-lg">
           <TabsTrigger
             value="auth"
             className="flex-1 md:flex-none text-center min-w-[150px]"
@@ -172,19 +169,15 @@ export default async function CompanyByIDPage({
         </TabsList>
 
         <TabsContent value="auth" className="mt-4">
-          <CompanyAuthorityTab
-            readOnly
-            data={company.data}
-            company_id={company.data.company_id}
-          />
+          <Suspense fallback={<CompanyAuthorityTabSkeleton />}>
+            <CompanyAuthorityTab readOnly companyId={companyId} />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="docs" className="mt-4">
-          <CompanyDocumentsTab
-            readOnly
-            data={company.data.company_docs_db}
-            company_id={0}
-          />
+          <Suspense fallback={<CompanyDocumentFormFragmentSkeleton />}>
+            <CompanyDocumentsTab readOnly companyId={companyId} />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </main>

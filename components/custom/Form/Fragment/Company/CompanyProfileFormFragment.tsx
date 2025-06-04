@@ -1,6 +1,6 @@
 "use client";
 
-import getCurrentUser from "@/app/(server)/actions/getCurrentUser";
+import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
@@ -34,7 +34,7 @@ export default function CompanyProfileFormFragment({
   asClient = false,
   onSizeExceeded,
 }: Props) {
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const getUserData = useCallback(async () => {

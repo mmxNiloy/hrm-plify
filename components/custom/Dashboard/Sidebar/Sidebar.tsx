@@ -68,7 +68,7 @@ const SidebarViewport = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     className={cn(
-      "w-full float-right transition-all duration-100 px-4 py-8 peer-data-[position-state=left-open]/sidebar:md:w-3/4 peer-data-[position-state=left-open]/sidebar:2xl:w-4/5 peer-data-[position-state=left-closed]/sidebar:md:w-[95vw] peer-data-[position-state=left-closed]/sidebar:2xl:w-[94vw] peer-data-[position-state=right-open]/sidebar:md:mr-64 peer-data-[position-state=right-closed]/sidebar:md:mr-16",
+      "flex w-full min-h-[calc(100vh-4.125rem)] float-right transition-all duration-100 px-4 py-8 peer-data-[position-state=left-open]/sidebar:md:w-3/4 peer-data-[position-state=left-open]/sidebar:2xl:w-4/5 peer-data-[position-state=left-closed]/sidebar:md:w-[95vw] peer-data-[position-state=left-closed]/sidebar:2xl:w-[94vw] peer-data-[position-state=right-open]/sidebar:md:mr-64 peer-data-[position-state=right-closed]/sidebar:md:mr-16",
       className
     )}
     ref={ref}

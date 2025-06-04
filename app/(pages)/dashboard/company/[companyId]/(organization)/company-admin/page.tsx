@@ -14,12 +14,13 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const prms = await params;
+  var companyId = prms.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -44,11 +45,12 @@ export default async function CompanyAdminPage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
+  const [prms, user] = await Promise.all([params, getCurrentUser()]);
+  var companyId = prms.companyId;
+
+  if (!user) {
+    redirect("/login?_ref=token-expired");
+  }
 
   if (
     user.user_roles?.roles.role_name !== "Admin" &&

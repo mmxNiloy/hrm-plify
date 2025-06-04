@@ -4,7 +4,7 @@ import { ICompanyUser } from "@/schema/UserSchema";
 import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
-export default async function getCompanyAdmin(company_id: number) {
+export default async function getCompanyAdmin(company_id: string) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 

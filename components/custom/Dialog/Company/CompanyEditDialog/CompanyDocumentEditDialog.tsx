@@ -22,8 +22,6 @@ import { DialogContentWidth } from "@/styles/dialog.tailwind";
 import React, { useCallback, useState } from "react";
 import CompanyDocumentFormFragment from "../../../Form/Fragment/Company/CompanyDocumentFormFragment";
 import { useToast } from "@/components/ui/use-toast";
-import { IUploadResult, upload } from "@/app/(server)/actions/upload";
-import { setSourceMapsEnabled } from "process";
 import { useRouter } from "next/navigation";
 import { ToastSuccess } from "@/styles/toast.tailwind";
 import SiteConfig from "@/utils/SiteConfig";

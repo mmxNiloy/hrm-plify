@@ -11,6 +11,7 @@ import { ICompanyExtraData } from "@/schema/CompanySchema";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { IJobListing } from "@/schema/JobSchema";
 import { ToastSuccess } from "@/styles/toast.tailwind";
+import extractMarkdown from "@/utils/extract-markdown";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,8 +38,10 @@ export const JobListingDataTableColumns: ColumnDef<Props>[] = [
       <SortableHeader column={column} name="Job Description" />
     ),
     cell: ({ row }) => (
-      <div className="w-72 text-ellipsis line-clamp-3">
-        <Markdown className="prose text-xs">{row.original.desc}</Markdown>
+      <div className="w-72 text-ellipsis">
+        <Markdown className="prose text-xs line-clamp-3 text-ellipsis">
+          {extractMarkdown(row.original.desc ?? "")}
+        </Markdown>
       </div>
     ),
   },

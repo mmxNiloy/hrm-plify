@@ -1,13 +1,24 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import { Button } from "../ui/button";
 import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
 import Icons from "../ui/icons";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-export default function AccessDenied() {
+const AccessDenied = React.forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
-    <main className="w-full h-[80vh] flex flex-col items-center justify-center">
+    <div
+      className={cn(
+        "w-full h-[80vh] flex flex-col items-center justify-center",
+        className
+      )}
+      {...props}
+      ref={ref}
+    >
       <Image
         src={"/access-denied.svg"}
         height={512}
@@ -27,6 +38,10 @@ export default function AccessDenied() {
           </Button>
         </Link>
       </div>
-    </main>
+    </div>
   );
-}
+});
+
+AccessDenied.displayName = "AccessDenied";
+
+export default AccessDenied;

@@ -5,7 +5,7 @@ import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
-export async function getCompanyDetails(company_id: number) {
+export async function getCompanyDetails(company_id: string) {
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
 

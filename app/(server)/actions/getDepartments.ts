@@ -9,7 +9,7 @@ export async function getDepartments({
   page,
   limit,
 }: {
-  company_id: number;
+  company_id: string;
   page: number;
   limit: number;
 }) {

@@ -36,6 +36,7 @@ import html2canvas from "html2canvas";
 import { useToast } from "@/components/ui/use-toast";
 import SiteConfig from "@/utils/SiteConfig";
 import { Input } from "@/components/ui/input";
+import extractMarkdown from "@/utils/extract-markdown";
 
 interface Props {
   data: IJobApplicant;
@@ -426,7 +427,7 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
               }}
               className={"prose max-w-full"}
             >
-              {offerLetter}
+              {extractMarkdown(offerLetter ?? "")}
             </Markdown>
           </div>
         </div>

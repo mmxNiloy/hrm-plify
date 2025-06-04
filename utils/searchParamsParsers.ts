@@ -46,12 +46,19 @@ export const searchParamsParsers = {
     }),
   page: parseAsIndex.withDefault(1).withOptions({
     shallow: false,
+    throttleMs: 1000,
   }),
-  limit: parseAsIndex.withDefault(5).withOptions({
+  limit: parseAsIndex.withDefault(10).withOptions({
     shallow: false,
+    throttleMs: 1000,
   }),
   search: parseAsString.withDefault("").withOptions({
     shallow: false,
+    throttleMs: 1000,
+  }),
+  filters: parseAsString.withDefault("").withOptions({
+    shallow: false,
+    throttleMs: 1000,
   }),
 };
 

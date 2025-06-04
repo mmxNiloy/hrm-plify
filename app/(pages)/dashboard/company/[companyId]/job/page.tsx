@@ -1,5 +1,5 @@
 "use server";
-import React from "react";
+import React, { Suspense } from "react";
 import { CompanyByIDPageProps } from "../PageProps";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -12,12 +12,14 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { Skeleton } from "@/components/ui/skeleton";
+import JobStatsSkeleton from "@/components/custom/Dashboard/Job/job-stats-skeleton";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const prms = await params;
+  var companyId = prms.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -29,37 +31,23 @@ export async function generateMetadata({
 export default async function JobDashboardPage({
   params,
 }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
+  const prms = await params;
+  var companyId = prms.companyId;
 
-  if (company.error) {
-    return (
-      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Job & Recruitment Dashboard
-        </p>
-        <ErrorFallbackCard error={company.error} />
-      </main>
-    );
-  }
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">
         Job & Recruitment Dashboard
       </p>
 
-      <MyBreadcrumbs
-        company={company.data}
-        user={user}
-        title="Job & Recruitment"
-      />
+      <Suspense fallback={<Skeleton className="h-4 w-3/5" />}>
+        <MyBreadcrumbs companyId={companyId} title="Job & Recruitment" />
+      </Suspense>
 
       <div className="grid lg:grid-cols-2 gap-2">
-        <JobDashboardStatisticsCard />
+        <Suspense fallback={<JobStatsSkeleton />}>
+          <JobDashboardStatisticsCard companyId={companyId} />
+        </Suspense>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           <p className="text-bold col-span-full">Work In Progress (WIP)</p>
