@@ -20,7 +20,7 @@ import { shortenText } from "@/utils/Text";
 import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import CompanyAuthorityTab from "./(ui)/features/tabs/company-authority-tab";
 import CompanyAuthorityTabSkeleton from "./(ui)/components/company-authority/company-authority-tab-skeleton";
-import CompanyDocumentFormFragmentSkeleton from "./(ui)/components/company-document/company-document-form-fragment-skeleton";
+import CompanyDocumentFormSkeleton from "./(ui)/components/company-document/company-document-form-skeleton";
 import CompanyDocumentsTab from "./(ui)/features/tabs/company-documents-tab";
 
 interface Props extends CompanyByIDPageProps {
@@ -175,7 +175,7 @@ export default async function CompanyByIDPage({ params }: Props) {
         </TabsContent>
 
         <TabsContent value="docs" className="mt-4">
-          <Suspense fallback={<CompanyDocumentFormFragmentSkeleton />}>
+          <Suspense fallback={<CompanyDocumentFormSkeleton />}>
             <CompanyDocumentsTab readOnly companyId={companyId} />
           </Suspense>
         </TabsContent>

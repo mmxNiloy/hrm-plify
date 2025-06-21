@@ -149,7 +149,7 @@ export function DataTable<TData, TValue>({
     <div className="flex flex-1 flex-col space-y-4">
       <div className="relative flex flex-1">
         <div className="absolute bottom-0 left-0 right-0 top-0 flex overflow-scroll rounded-md border md:overflow-auto">
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-auto">
             <Table className="relative">
               <TableHeader className="bg-site-gradient-lmr">
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -199,11 +199,10 @@ export function DataTable<TData, TValue>({
                 )}
               </TableBody>
             </Table>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+            {/* <ScrollBar orientation="horizontal" /> */}
+          </div>
         </div>
       </div>
-
       <div className="flex flex-col items-center justify-end gap-2 space-x-2 py-2 sm:flex-row">
         <div className="flex flex-col sm:flex-row w-full items-center justify-between">
           <div className="flex-1 text-sm text-muted-foreground">
@@ -233,7 +232,7 @@ export function DataTable<TData, TValue>({
                 }}
               >
                 <SelectTrigger className="h-8 w-[70px]">
-                  <SelectValue placeholder={paginationState.pageSize} />
+                  <SelectValue placeholder={"10"} />
                 </SelectTrigger>
                 <SelectContent side="top">
                   {pageSizeOptions.map((pageSize) => (

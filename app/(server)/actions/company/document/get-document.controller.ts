@@ -7,6 +7,6 @@ export default async function getDocument(docId: string) {
   return await executeRequest<ICompanyDoc>({
     method: "GET",
     authenticate: true,
-    endpoint: ["company", "document", docId].join("/"),
+    endpoint: ["v2", "company", "document", docId].join("/"),
   });
 }

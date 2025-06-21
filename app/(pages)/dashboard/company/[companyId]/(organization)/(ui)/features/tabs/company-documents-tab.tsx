@@ -6,6 +6,10 @@ import CompanyDocumentEditDialog from "../../components/company-document/company
 import { CompanyDocumentDataTableColumns } from "../table/columns";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { DataTableError } from "@/components/ui/data-table/data-table-error";
+import { Button } from "@/components/ui/button";
+import { FilePlus2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ButtonGradient } from "@/styles/button.tailwind";
 
 export default async function CompanyDocumentsTab({
   companyId,
@@ -26,11 +30,14 @@ export default async function CompanyDocumentsTab({
     <div className="flex flex-col gap-4 p-4 md:p-6 lg:p-8 border rounded-md">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <p className="text-lg font-semibold">Company Documents</p>
-        {!readOnly && (
+        {readOnly && (
           <CompanyDocumentEditDialog
-            company_id={company.data.company_id}
-            type="create"
-          />
+            companyId={companyId}
+            className={cn(ButtonGradient, "[&_svg]:size-4")}
+          >
+            <FilePlus2 />
+            Create
+          </CompanyDocumentEditDialog>
         )}
       </div>
 

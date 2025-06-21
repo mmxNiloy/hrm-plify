@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
-export default function CompanyDocumentFormFragmentSkeleton() {
+export default function CompanyDocumentFormSkeleton() {
   return (
     <>
       <div className="flex flex-col gap-2">

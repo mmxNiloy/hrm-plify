@@ -9,6 +9,7 @@ import CompanyDashboardSidebar from "@/components/custom/Dashboard/Sidebar/Compa
 import EmployeeHomeSidebar from "@/components/custom/Dashboard/Sidebar/EmployeeHomeSidebar";
 import { notFound } from "next/navigation";
 import { TPermission } from "@/schema/Permissions";
+import SuperAdminDashboardLayout from "../(super-admin)/layout";
 
 export default async function ProfileLayout({ children }: LayoutProps) {
   const mCookies = await cookies();
@@ -24,12 +25,7 @@ export default async function ProfileLayout({ children }: LayoutProps) {
     user.user_roles?.roles.role_name === "Admin" ||
     user.user_roles?.roles.role_name === "Super Admin"
   ) {
-    return (
-      <div>
-        <SuperAdminSidebar permissions={permissions} user={user} />
-        <SidebarViewport>{children}</SidebarViewport>
-      </div>
-    );
+    return <SuperAdminDashboardLayout>{children}</SuperAdminDashboardLayout>;
   } else if (user.user_roles?.roles.role_name === "Company Admin") {
     return (
       <div>

@@ -1,30 +1,33 @@
 "use server";
+import React, { Suspense } from "react";
+import EmploymentTypeCreateDialog from "./components/employment-type-create-dialog";
+import { FilePlus2 } from "lucide-react";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
+import EmploymentTypeTable from "./features/employment-type-table";
+import { Metadata } from "next";
+import SiteConfig from "@/utils/SiteConfig";
+import { SearchParams } from "nuqs";
+import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
+import { cn } from "@/lib/utils";
+import { ButtonGradient } from "@/styles/button.tailwind";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 
-import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
-import { EmploymentTypeDataTableColumns } from "@/components/custom/DataTable/Columns/EmploymentTypeDataTableColumns";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import EmploymentTypeEditPopover from "@/components/custom/Popover/Company/EmploymentTypeEditPopover";
-import {
-  Breadcrumb,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { DataTable } from "@/components/ui/data-table";
-import React from "react";
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: SiteConfig.title.employmentType,
+    description: SiteConfig.siteDescription,
+  };
+}
 
-export default async function EmploymentTypePage() {
-  const empTypes = await getAllEmploymentTypes();
+export default async function EmploymentTypePage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const sParams = await searchParams;
 
-  if (empTypes.error) {
-    return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Employment Types</p>
-        <ErrorFallbackCard error={empTypes.error} />
-      </main>
-    );
-  }
+  searchParamsCache.parse(sParams);
+  const key = serialize(sParams);
 
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
@@ -32,22 +35,21 @@ export default async function EmploymentTypePage() {
         Employment Types
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <Breadcrumb>
-          <BreadcrumbList className="text-sm sm:text-base">
-            <BreadcrumbLink href=".">Dashboard</BreadcrumbLink>
-            <BreadcrumbSeparator />
-            <BreadcrumbPage>Employment Types</BreadcrumbPage>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs title="Employment Type" />
 
-        <div className="w-full sm:w-auto">
-          <EmploymentTypeEditPopover />
-        </div>
+        <EmploymentTypeCreateDialog
+          size={"sm"}
+          className={cn(ButtonGradient, "gap-1 [&_svg]:size-4 text-sm")}
+        >
+          <FilePlus2 /> Create Employment Type
+        </EmploymentTypeCreateDialog>
       </div>
-      <DataTable
-        data={empTypes.data}
-        columns={EmploymentTypeDataTableColumns}
-      />
+      <Suspense
+        key={key}
+        fallback={<DataTableSkeleton rows={10} columns={4} />}
+      >
+        <EmploymentTypeTable />
+      </Suspense>
     </main>
   );
 }

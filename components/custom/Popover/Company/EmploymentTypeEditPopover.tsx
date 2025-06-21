@@ -17,7 +17,6 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import AnimatedTrigger from "../AnimatedTrigger";
-import SiteConfig from "@/utils/SiteConfig";
 
 interface Props {
   data?: IEmploymentType;

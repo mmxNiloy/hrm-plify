@@ -95,7 +95,7 @@ export default async function ProfilePage() {
   const isProfileIncomplete = profileStatus & 0x07ff;
 
   return (
-    <main className="container mx-auto flex flex-col gap-4 px-2 py-4 sm:px-6 lg:px-8">
+    <main className="flex-1 flex flex-col gap-4">
       <JoinOrCreateCompanyDialog
         defaultOpen={!hasCompany && !isAdmin}
         user={user}

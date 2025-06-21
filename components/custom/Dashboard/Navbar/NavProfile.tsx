@@ -1,28 +1,28 @@
-"use client";
+"use server";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { ICompany } from "@/schema/CompanySchema";
 import { IUser } from "@/schema/UserSchema";
-import { useTheme } from "next-themes";
 import React from "react";
 import TextCapsule from "../../TextCapsule";
 import { logout } from "@/app/(server)/actions/logout";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
-import { IEmployee, IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
+import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import GradientBorderContainer from "@/components/ui/gradient-border-container";
+import ThemeSwitch from "./theme-switch";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 
-export default function NavProfile({
+export default async function NavProfile({
   user,
   employeeData,
-  company,
 }: {
   user: IUser;
   employeeData?: IEmployeeWithUserMetadata;
-  company?: ICompany;
 }) {
-  const { theme, setTheme } = useTheme();
+  const company = await getCompanyData(
+    user.usercompany?.company_id.toString() ?? "0"
+  );
+
   return (
     <>
       <div className="w-64">
@@ -47,8 +47,10 @@ export default function NavProfile({
                   : ""
               } ${user.last_name}`}</p>
               <p className="text-start text-xs">{user.email}</p>
-              {company && (
-                <p className="text-start text-xs">{company.company_name}</p>
+              {company.data && (
+                <p className="text-start text-xs">
+                  {company.data.company_name}
+                </p>
               )}
 
               <TextCapsule className="bg-green-500 text-xs">
@@ -61,13 +63,7 @@ export default function NavProfile({
 
       <div className="flex items-center justify-between">
         <Label htmlFor="theme-switch">Dark mode</Label>
-        <Switch
-          id="theme-switch"
-          defaultChecked={theme === "dark"}
-          onCheckedChange={() => {
-            setTheme(theme === "dark" ? "light" : "dark");
-          }}
-        />
+        <ThemeSwitch />
       </div>
 
       <form action={logout} method="POST">

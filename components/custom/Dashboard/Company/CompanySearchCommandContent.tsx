@@ -4,16 +4,31 @@ import React from "react";
 import CompanySearchCommandCard from "./CompanySearchCommandCard";
 import { searchCompanies } from "@/app/(server)/actions/searchCompanies";
 import { searchParamsCache } from "@/utils/searchParamsParsers";
+import { getCompanies } from "@/app/(server)/actions/company/get-companies.controller";
+import { DataTableError } from "@/components/ui/data-table/data-table-error";
 
 export default async function CompanySearchCommandContent() {
   const search = searchParamsCache.get("search") ?? "";
+  const isActive = searchParamsCache.get("companyStatus");
 
-  const companiesData = await searchCompanies({
-    companyName: search,
+  const companiesData = await getCompanies({
+    search,
     page: 1,
     limit: 12,
+    isActive,
   });
-  const companies = companiesData.data ?? [];
+
+  console.log("Companies Data:", companiesData);
+
+  if (companiesData.error) {
+    return (
+      <div className="flex-1">
+        <DataTableError errorMessage="Failed to load companies. Please try again later." />
+      </div>
+    );
+  }
+
+  const companies = companiesData.payload;
 
   if (companies.length < 1) {
     return (

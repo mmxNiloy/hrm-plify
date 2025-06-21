@@ -9,6 +9,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { SearchParams } from "nuqs";
 import React from "react";
+import CompanyStatusFilter from "./components/company-status-filter";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -43,7 +44,15 @@ export default async function DashboardPage({
       </div>
 
       <div className="flex flex-col gap-2 sm:gap-3">
-        <Label className="text-base sm:text-lg">Please Select a Company</Label>
+        <div className="flex flex-row items-center justify-between gap-3 sm:gap-4 flex-wrap">
+          <Label className="text-sm text-muted-foreground">
+            Please Select a Company
+          </Label>
+
+          {/* Company filter by status */}
+          <CompanyStatusFilter />
+        </div>
+
         <CompanySearchCommand searchParams={sParams} />
       </div>
     </main>

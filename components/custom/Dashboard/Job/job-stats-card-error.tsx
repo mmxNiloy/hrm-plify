@@ -23,19 +23,24 @@ export default function JobStatsCardError() {
   }, [router]);
 
   return (
-    <Card>
+    <Card className="flex flex-col flex-1">
       <CardHeader>
-        <CardTitle className="text-base">Job Statistics (WIP)</CardTitle>
+        <CardTitle className="text-base">Job Statistics</CardTitle>
         <Separator />
         <CardDescription className="sr-only">
           Job Dashboard Statistics Card
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex flex-col items-center justify-center w-full gap-4 aspect-[3/4] sm:aspect-[2]">
+      <CardContent className="flex flex-col items-center justify-center w-full gap-4 flex-1">
         <Icons.error className="text-red-500 size-16" />
         <p className="sm:text-lg text-red-500">Failed to load data...</p>
-        <Button variant={"outline"} disabled={loading} className="gap-1">
+        <Button
+          variant={"outline"}
+          disabled={loading}
+          className="gap-1"
+          onClick={handleRefresh}
+        >
           <Icons.resend />
           Try again
         </Button>

@@ -49,7 +49,7 @@ export default function CellActions({ data }: Props) {
         {data.updateAccess ? (
           <CompanyDocumentEditDialog
             data={data}
-            company_id={data.company_id}
+            companyId={data.company_id.toString()}
             variant={"ghost"}
             className="px-2 gap-2 justify-start w-full [&_svg]:size-4"
           >

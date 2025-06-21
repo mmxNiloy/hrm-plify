@@ -140,8 +140,8 @@ export default function CompanyProfileFormFragment({
           className={cn(
             "flex flex-col gap-2",
             asClient ||
-              (user?.user_roles?.roles.role_name !== "Super Admin" &&
-                user?.user_roles?.roles.role_name !== "Admin")
+              (user?.user_roles?.roles?.role_name !== "Super Admin" &&
+                user?.user_roles?.roles?.role_name !== "Admin")
               ? "hidden"
               : ""
           )}

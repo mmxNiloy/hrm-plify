@@ -23,10 +23,12 @@ export default async function CompanyByIdDashboardPageLayout({
   }
 
   return (
-    <div>
-      <CompanyDashboardSidebar user={user} company={company.data} />
+    <>
+      <main>
+        <CompanyDashboardSidebar user={user} company={company.data} />
 
-      <SidebarViewport>{children}</SidebarViewport>
-    </div>
+        <SidebarViewport>{children}</SidebarViewport>
+      </main>
+    </>
   );
 }

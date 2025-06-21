@@ -1,12 +1,20 @@
+export interface IMeta {
+  pageCount: number;
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export interface IResponseBase {
   error: boolean;
   message: string | string[];
   statusCode: number;
   timestamp?: number;
   path?: string | string[] | Record<string, unknown>;
+  meta?: IMeta;
 }
 
-export interface IErrorResponse extends IResponseBase {
+export interface IErrorResponse extends Omit<IResponseBase, "meta"> {
   stack?: string;
 }
 
@@ -15,7 +23,7 @@ export interface IResponse<T = unknown> extends IResponseBase {
 }
 
 export interface IErrorResponseJSON
-  extends IResponse<undefined>,
+  extends Omit<IResponse<undefined>, "meta">,
     IErrorResponse {
   error: true;
 }
@@ -46,6 +54,7 @@ export class SuccessResponse<T = unknown> {
       path: options?.path ?? "",
       statusCode: options?.statusCode ?? 200,
       timestamp: Date.now(),
+      meta: options?.meta,
     };
   }
 
@@ -57,6 +66,7 @@ export class SuccessResponse<T = unknown> {
       path: this._options.path,
       statusCode: this._options.statusCode,
       timestamp: this._options.timestamp,
+      meta: this._options.meta,
     };
   }
 

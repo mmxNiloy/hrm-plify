@@ -37,7 +37,7 @@ export default async function executeRequest<T = unknown>(
     if (authenticate) {
       const session =
         (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-      console.debug("Session:", session);
+      // console.debug("Session:", session);
       if (!session || !session.length) {
         throw new Error("Token not found or has expired.", {
           cause: "Session not found or token expired. Please login again.",
@@ -56,9 +56,12 @@ export default async function executeRequest<T = unknown>(
         };
 
     const response = await fetch(
-      [process.env.API_BASE_URL, endpoint]
-        .join("/")
-        .concat(`?${query?.map((item) => item.join("=")).join("&")}`),
+      [process.env.API_BASE_URL, endpoint].join("/").concat(
+        `?${query
+          ?.filter((item) => item.length == 2)
+          .map((item) => item.join("="))
+          .join("&")}`
+      ),
       {
         method,
         headers: mHeaders,

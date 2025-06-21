@@ -14,6 +14,7 @@ import JobStatsCardError from "./job-stats-card-error";
 import JobStatisticsChart from "./job-statistics-chart";
 import { ChartData } from "chart.js";
 import { months } from "@/utils/Misc";
+import JobStatsCardEmpty from "./job-stats-card-empty";
 
 export default async function JobDashboardStatisticsCard({
   companyId,
@@ -27,6 +28,11 @@ export default async function JobDashboardStatisticsCard({
   }
 
   const stats = jobStats.payload;
+
+  if (!stats.length) {
+    return <JobStatsCardEmpty />;
+  }
+
   const dataMonths: string[] = stats.map((stat) => {
     return months[Number.parseInt(stat.month ?? "1") - 1].slice(0, 3);
   });

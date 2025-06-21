@@ -1,4 +1,4 @@
-export const DocumentTypes = [
+export const DocumentTypes: [string, ...string[]] = [
   "PAYEE And Account Reference Letter From HMRC",
   "Latest RTI from Accountant",
   "Employer Liability Insurance Certificate",
@@ -19,13 +19,20 @@ export const DocumentTypes = [
   "Others Document",
 ];
 
+export const SITE_NAME = "Revolo";
+
 const SiteConfig = {
-  siteName: "Revolo",
+  title: {
+    employmentType: `Employment Type | ${SITE_NAME}`,
+    sysUsers: `System Users | ${SITE_NAME}`,
+  },
+  siteName: SITE_NAME,
   siteDescription: "Control Compliance, Delete Stress",
   currentVersion: "1.4.0",
   maxFileSize: 5e6,
   featureFlags: {
     disableExperimentalUI: true,
+    defaultCollapse: false,
   },
   data: {
     documentTypes: DocumentTypes,
