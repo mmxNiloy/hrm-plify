@@ -7,12 +7,15 @@ import { useQueryState } from "nuqs";
 import React, { useMemo } from "react";
 
 export default function CompanyStatusFilter() {
-  const [isActive, setIsActive] = useQueryState(
-    "isActive",
+  const [companyStatus, setCompanyStatus] = useQueryState(
+    "companyStatus",
     searchParamsParsers.companyStatus
   );
 
-  const statusList: (typeof isActive)[] = useMemo(() => ["all", "1", "0"], []);
+  const statusList: (typeof companyStatus)[] = useMemo(
+    () => ["all", "1", "0"],
+    []
+  );
 
   return (
     <div className="flex border rounded-md border-blue-600 overflow-clip">
@@ -22,13 +25,13 @@ export default function CompanyStatusFilter() {
           size="sm"
           className={cn(
             "gap-1 min-w-24 h-6 [&_svg]:size-3 rounded-none",
-            isActive === status
+            companyStatus === status
               ? "bg-blue-400 hover:bg-blue-300 text-white"
               : "bg-transparent hover:bg-blue-200 text-blue-600"
           )}
-          onClick={() => setIsActive(status)}
+          onClick={() => setCompanyStatus(status)}
         >
-          {isActive === status && <Check className={cn("size-3")} />}
+          {companyStatus === status && <Check className={cn("size-3")} />}
           <span className="text-xs">
             {status === "all" ? "All" : status === "1" ? "Active" : "Inactive"}
           </span>

@@ -10,6 +10,8 @@ import SidebarFooterProfile from "./sidebar-footer-profile";
 import AppSidebarContent from "./app-sidebar-content";
 import AppSidebarHeader from "./app-sidebar-header";
 import AppSidebarHeaderLink from "./app-sidebar-link";
+import Link from "next/link";
+import AppSidebarBackLink from "./app-sidebar-backlink";
 
 interface Props {
   companyId?: string;
@@ -30,6 +32,9 @@ export default function AppSidebar({ companyId, navItems = [] }: Props) {
 
         <SidebarSeparator />
 
+        <AppSidebarBackLink />
+
+        <SidebarSeparator />
         {/* Sidebar Footer */}
         <Suspense fallback={<Skeleton className="w-full h-16" />}>
           <SidebarFooterProfile />

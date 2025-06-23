@@ -50,16 +50,16 @@ const FormSchema = z.object({
   email: z.string().email().optional(),
   logoFile: z
     .instanceof(File)
-    .refine((file) => file?.size !== 0, "Document File is required.")
     .refine(
-      (file) => file.size < SiteConfig.maxFileSize,
+      (file) => file?.size < SiteConfig.maxFileSize,
       `Maximum file size is ${Number.parseInt(
         (SiteConfig.maxFileSize / 1e6).toString()
       )} MB`
     )
     .refine((file) => {
-      return file.type.startsWith("image/");
-    }, "Unsupport file type. Only image files are allowed."),
+      return file?.type.startsWith("image/");
+    }, "Unsupport file type. Only image files are allowed.")
+    .optional(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -91,14 +91,16 @@ export default function CompanyProfileForm({
           const logoFile = values.logoFile;
           var logoUrl = "";
 
-          const logoUpload = await uploadFile(logoFile);
+          if (logoFile) {
+            const logoUpload = await uploadFile(logoFile);
 
-          if (!logoUpload.ok) {
-            toast.error("Failed to upload company logo!");
-          } else {
-            toast.success("Company logo uploaded!");
-            const res = logoUpload.data;
-            logoUrl = res.fileUrl;
+            if (!logoUpload.ok) {
+              toast.error("Failed to upload company logo!");
+            } else {
+              toast.success("Company logo uploaded!");
+              const res = logoUpload.data;
+              logoUrl = res.fileUrl;
+            }
           }
 
           const results = await createCompany({

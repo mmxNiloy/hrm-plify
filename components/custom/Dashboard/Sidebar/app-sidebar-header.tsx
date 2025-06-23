@@ -1,10 +1,5 @@
 "use server";
 import React from "react";
-import { SidebarHeader } from "@/components/ui/sidebar";
-import Link from "next/link";
-import Image from "next/image";
-import SiteConfig from "@/utils/SiteConfig";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { getCompany } from "@/app/(server)/actions/company/get-company.controller";
 import AppSidebarHeaderLink from "./app-sidebar-link";
 

@@ -60,7 +60,7 @@ export default function AppSidebarContent({
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <SidebarMenuSub>
+                      <SidebarMenuSub className="px-1">
                         {group.items.map((item) => {
                           if (item.hidden) return null;
 
@@ -69,8 +69,8 @@ export default function AppSidebarContent({
                               key={item.title}
                               hidden={item.hidden}
                             >
-                              <SidebarMenuSubButton asChild>
-                                <SidebarLink data={item} />
+                              <SidebarMenuSubButton className="px-1">
+                                <SidebarLink className="text-xs" data={item} />
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           );

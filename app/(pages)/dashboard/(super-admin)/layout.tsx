@@ -63,14 +63,6 @@ export default async function SuperAdminDashboardLayout({
     },
   ] satisfies INavItem[];
 
-  const navGroups: INavItem[] = [
-    {
-      title: "Menu",
-      href: "#",
-      items: navItems,
-    },
-  ];
-
   return (
     <SidebarProvider>
       <AppSidebar navItems={navItems} />

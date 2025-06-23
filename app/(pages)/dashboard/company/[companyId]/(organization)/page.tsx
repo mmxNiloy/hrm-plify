@@ -22,6 +22,8 @@ import CompanyAuthorityTab from "./(ui)/features/tabs/company-authority-tab";
 import CompanyAuthorityTabSkeleton from "./(ui)/components/company-authority/company-authority-tab-skeleton";
 import CompanyDocumentFormSkeleton from "./(ui)/components/company-document/company-document-form-skeleton";
 import CompanyDocumentsTab from "./(ui)/features/tabs/company-documents-tab";
+import getCurrentUserPermissions from "@/app/(server)/actions/user/get-current-user-permissions.controller";
+import { DataTableError } from "@/components/ui/data-table/data-table-error";
 
 interface Props extends CompanyByIDPageProps {
   readOnly?: boolean;
@@ -43,17 +45,18 @@ export async function generateMetadata({
 }
 
 export default async function CompanyByIDPage({ params }: Props) {
-  const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
+  const [prms, user, mPermissions] = await Promise.all([
+    params,
+    getCurrentUser(),
+    getCurrentUserPermissions(),
+  ]);
 
-  const readAccess = mPermissions.find((item) => item === "cmp_mgmt_read");
+  const readAccess = mPermissions?.find((item) => item === "cmp_mgmt_read");
+
   if (!readAccess) {
     return <AccessDenied />;
   }
 
-  const [prms, user] = await Promise.all([params, getCurrentUser()]);
   var companyId = prms.companyId;
   const company = await getCompanyDetails(companyId);
 
@@ -62,8 +65,8 @@ export default async function CompanyByIDPage({ params }: Props) {
   }
 
   if (
-    user.user_roles?.roles.role_name !== "Super Admin" &&
-    user.user_roles?.roles.role_name !== "Admin" &&
+    user.user_roles?.roles?.role_name !== "Super Admin" &&
+    user.user_roles?.roles?.role_name !== "Admin" &&
     user.usercompany?.company_id != Number.parseInt(`${companyId}`)
   ) {
     redirect(
@@ -75,7 +78,7 @@ export default async function CompanyByIDPage({ params }: Props) {
     return (
       <main className="container mx-auto flex flex-col gap-4 p-4">
         <p className="text-xl font-semibold">Company Details</p>
-        <ErrorFallbackCard error={company.error} />
+        <DataTableError errorMessage="Failed to load company data." />
       </main>
     );
   }

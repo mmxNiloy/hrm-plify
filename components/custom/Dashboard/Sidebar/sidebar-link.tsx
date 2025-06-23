@@ -10,9 +10,11 @@ import React from "react";
 export default function SidebarLink({
   data,
   asCollapsibleTrigger = false,
+  className,
 }: {
   data: INavItem;
   asCollapsibleTrigger?: boolean;
+  className?: string;
 }) {
   const pathname = usePathname();
   const ItemIcon = data.icon ? Icons[data.icon] : Icons.user;
@@ -28,7 +30,8 @@ export default function SidebarLink({
       <div
         data-disabled={data.disabled ? "true" : "false"}
         className={cn(
-          "flex-1 flex gap-1 items-center group/sidebar-link cursor-pointer hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground"
+          "flex-1 flex gap-1 items-center group/sidebar-link cursor-pointer hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground",
+          className
         )}
       >
         {data.icon && (
@@ -60,7 +63,8 @@ export default function SidebarLink({
       href={data.disabled ? "#" : data.href ?? "#"}
       data-disabled={data.disabled ? "true" : "false"}
       className={cn(
-        "flex gap-1 items-center group/sidebar-link hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground"
+        "flex-1 flex gap-1 items-center group/sidebar-link hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground",
+        className
       )}
     >
       {data.icon && (

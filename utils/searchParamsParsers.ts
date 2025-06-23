@@ -75,6 +75,18 @@ export const searchParamsParsers = {
       shallow: false,
       throttleMs: 1000,
     }),
+  companyProfileView: parseAsStringEnum([
+    "profile",
+    "authority",
+    "address",
+    "trade",
+    "documents",
+  ])
+    .withDefault("profile")
+    .withOptions({
+      shallow: false,
+      throttleMs: 300,
+    }),
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParsers);

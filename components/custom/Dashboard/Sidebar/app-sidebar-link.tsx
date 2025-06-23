@@ -22,7 +22,7 @@ export default function AppSidebarHeaderLink({
           unoptimized
           height={0}
           width={0}
-          className="w-full max-h-28 object-center object-contain"
+          className="w-full max-h-16 object-center object-contain"
           alt={altText}
         />
       </Link>
