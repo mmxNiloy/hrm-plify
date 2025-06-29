@@ -49,6 +49,8 @@ export interface IAttendanceReport {
   notes?: string;
   attendance_date: Date;
   employees: IEmployeeWithUserMetadata;
+  check_in_time?: Date;
+  check_out_time?: Date;
 }
 
 export interface IPaginatedAttendanceReport extends IPaginatedResponse {

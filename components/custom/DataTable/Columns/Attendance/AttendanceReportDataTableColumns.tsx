@@ -6,6 +6,7 @@ import { getFullNameOfUser } from "@/utils/Misc";
 import { IAttendanceReport } from "@/schema/AttendanceSchema";
 import { cn } from "@/lib/utils";
 import AttendanceUpdateDropdown from "@/components/custom/Dashboard/Employee/AttendanceUpdateDropdown";
+import { format } from "date-fns";
 
 interface Props extends IAttendanceReport {
   updateAccess?: boolean;
@@ -30,6 +31,22 @@ export const AttendanceReportDataTableColumns: ColumnDef<Props>[] = [
     header: ({ column }) => <SortableHeader column={column} name="Date" />,
     cell: ({ row }) =>
       new Date(row.original.attendance_date).toLocaleDateString("en-GB"),
+  },
+  {
+    accessorKey: "check_in_time",
+    header: ({ column }) => <SortableHeader column={column} name="Clock In" />,
+    cell: ({ row }) =>
+      row.original.check_in_time
+        ? format(new Date(row.original.check_in_time), "hh:mm:ss a")
+        : "N/A",
+  },
+  {
+    accessorKey: "check_out_time",
+    header: ({ column }) => <SortableHeader column={column} name="Clock Out" />,
+    cell: ({ row }) =>
+      row.original.check_out_time
+        ? format(new Date(row.original.check_out_time), "hh:mm:ss a")
+        : "N/A",
   },
   {
     accessorKey: "is_present",
