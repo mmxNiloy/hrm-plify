@@ -1,10 +1,12 @@
 "use server";
 
-import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import React from "react";
-import CompanyAuthorityEditDialog from "../../components/company-authority-edit-dialog";
-import CompanyAuthorityFormFragment from "../../components/company-authority-form-fragment";
+import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import getCompanyL1User from "@/app/(server)/actions/company/l1-user/get-company-l1-user.controller";
+import {
+  CompanyAuthorityEditDialog,
+  CompanyAuthorityFormFragment,
+} from "../../components/";
 
 interface Props {
   companyId: string;

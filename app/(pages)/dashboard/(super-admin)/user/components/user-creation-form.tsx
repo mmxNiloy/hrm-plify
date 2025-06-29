@@ -287,7 +287,6 @@ export default function SystemUserCreationForm({
             <Button
               type="button"
               disabled={loading}
-              className="rounded-full"
               variant={"destructive"}
               size="sm"
             >

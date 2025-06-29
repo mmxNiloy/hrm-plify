@@ -17,18 +17,14 @@ import Counter from "@/components/custom/Counter";
 import { getCompanyEmployeeStats } from "@/app/(server)/actions/getCompanyEmployeeStats";
 import { EmploymentTypeStatDataTableColumns } from "@/components/custom/DataTable/Columns/EmployeeTypeStatDataTableColumns";
 import SiteConfig from "@/utils/SiteConfig";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Employee Dashboard`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Employee Dashboard");
 }
 
 export default async function EmployeeDashboardPage({

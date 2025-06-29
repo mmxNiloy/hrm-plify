@@ -1,15 +1,21 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { EditIcon, EllipsisVertical, HistoryIcon, Trash } from "lucide-react";
+import {
+  EditIcon,
+  EllipsisVertical,
+  HistoryIcon,
+  Menu,
+  Trash,
+} from "lucide-react";
 import UserEditDialog from "../components/user-edit-dialog";
 import { IPermission, IUser } from "@/schema/UserSchema";
 import { cn } from "@/lib/utils";
 import UserDeleteAlertDialog from "../components/user-delete-alert-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface Props {
   data: IUser;
@@ -23,17 +29,17 @@ export default function CellActions({
   updateAccess = false,
 }: Props) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
           variant={"ghost"}
           size={"icon"}
           className="[&_svg]:size-4 size-6"
         >
-          <EllipsisVertical />
+          <Menu />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      </PopoverTrigger>
+      <PopoverContent className="w-40" align="end">
         <UserEditDialog
           disabled={!updateAccess}
           size="sm"
@@ -63,7 +69,7 @@ export default function CellActions({
           </span>
           {data.status === "active" ? "Delete" : "Recover"}
         </UserDeleteAlertDialog>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 }

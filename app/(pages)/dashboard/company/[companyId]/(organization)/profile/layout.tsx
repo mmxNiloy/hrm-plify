@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import AccessGuardProvider from "./(ui)/features/access-guard-provider";
+import { AccessGuardProvider } from "./(ui)/features/";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {

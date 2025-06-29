@@ -1,12 +1,4 @@
 "use server";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { DataTable } from "@/components/ui/data-table";

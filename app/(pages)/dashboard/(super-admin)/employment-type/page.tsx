@@ -11,12 +11,10 @@ import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
 import { cn } from "@/lib/utils";
 import { ButtonGradient } from "@/styles/button.tailwind";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import getSiteMetadata from "@/app/(server)/actions/site/get-site-metadata.controller";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: SiteConfig.title.employmentType,
-    description: SiteConfig.siteDescription,
-  };
+  return await getSiteMetadata("Employment Types");
 }
 
 export default async function EmploymentTypePage({

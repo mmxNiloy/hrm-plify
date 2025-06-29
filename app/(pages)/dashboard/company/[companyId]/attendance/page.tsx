@@ -20,20 +20,16 @@ import { TPermission } from "@/schema/Permissions";
 import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/AttendanceBulkUpdateDialog";
 import SiteConfig from "@/utils/SiteConfig";
 import { ESortFilter } from "@/schema/enum/sort-filter";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Attendance Report`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Attendance Report");
 }
 
 function getFilters(searchParams: ISearchParams) {

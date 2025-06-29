@@ -1,12 +1,12 @@
 "use server";
 
 import React from "react";
-import { CompanyByIDPageProps } from "../../../PageProps";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
 
 export default async function BreadcrumbsProvider({
   params,
-}: CompanyByIDPageProps) {
+}: CompanyIDURLParamSchema) {
   const mParams = await params;
   const companyId = mParams.companyId;
 

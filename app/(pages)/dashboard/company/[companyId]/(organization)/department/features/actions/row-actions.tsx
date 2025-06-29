@@ -1,27 +1,32 @@
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { IDepartment } from "@/schema/CompanySchema";
-import { EllipsisVertical } from "lucide-react";
+import { Menu } from "lucide-react";
 import React from "react";
-import DepartmentEditPopover from "../../components/department-edit-popover";
+import DepartmentEditDialog from "../../components/department-edit-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import DepartmentDeleteAlertDialog from "../../components/department-delete-alert-dialog";
 
-export default function RowActions({ data }: { data: IDepartment }) {
+interface Props {
+  data: IDepartment;
+  updateAccess?: boolean;
+}
+
+export default function RowActions({ data, updateAccess }: Props) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full">
-        <EllipsisVertical className="size-4" />
-      </DropdownMenuTrigger>
+    <Popover>
+      <PopoverTrigger disabled={!updateAccess}>
+        <Menu className="size-4" />
+      </PopoverTrigger>
 
-      <DropdownMenuContent>
-        <DropdownMenuItem asChild>
-          <DepartmentEditPopover data={data} />
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      {updateAccess && (
+        <PopoverContent align="end" className="w-40">
+          <DepartmentEditDialog data={data} />
+          <DepartmentDeleteAlertDialog departmentId={data.department_id} />
+        </PopoverContent>
+      )}
+    </Popover>
   );
 }

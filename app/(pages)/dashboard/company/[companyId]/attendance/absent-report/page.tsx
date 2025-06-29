@@ -18,6 +18,7 @@ import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
 import { ESortFilter } from "@/schema/enum/sort-filter";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -36,14 +37,9 @@ function getFilters(searchParams: ISearchParams) {
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Absent Report`,
-  };
+  const mParams = await params;
+  var companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Absent Report");
 }
 
 export default async function AbsentReportPage({

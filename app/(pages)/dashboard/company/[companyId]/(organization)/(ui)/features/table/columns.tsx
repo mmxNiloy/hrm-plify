@@ -14,24 +14,33 @@ interface Props extends ICompanyDoc {
 
 export const CompanyDocumentDataTableColumns: ColumnDef<Props>[] = [
   {
+    id: "ID",
     accessorKey: "doc_id",
     header: ({ column }) => (
       <SortableHeader column={column} name={"Document ID"} />
     ),
   },
   {
+    id: "Name",
     accessorKey: "doc_name",
     header: ({ column }) => (
       <SortableHeader column={column} name={"Document Name"} />
     ),
   },
   {
+    id: "Type",
     accessorKey: "doc_type",
     header: ({ column }) => (
       <SortableHeader column={column} name={"Document Type"} />
     ),
+    cell: ({ row }) => (
+      <span className="w-64 line-clamp-3 text-ellipsis">
+        {row.original.doc_type}
+      </span>
+    ),
   },
   {
+    id: "Updated At",
     accessorKey: "updated_at",
     header: ({ column }) => (
       <SortableHeader column={column} name={"Date Modified"} />

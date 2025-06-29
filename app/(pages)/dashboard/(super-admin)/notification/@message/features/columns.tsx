@@ -38,6 +38,11 @@ export const columns: ColumnDef<IContactDemo>[] = [
     id: "Message",
     accessorKey: "message",
     header: ({ column }) => <SortableHeader name="Message" column={column} />,
+    cell: ({ row }) => (
+      <p className="w-48 line-clamp-3 text-ellipsis overflow-clip">
+        {row.original.message}
+      </p>
+    ),
   },
   {
     id: "Creted At",

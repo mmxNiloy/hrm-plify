@@ -1,15 +1,13 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Edit, EllipsisVertical, ExternalLink, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { Menu } from "lucide-react";
 import { IContactDemo } from "@/schema/IContactDemoSchema";
 import DemoContactDeleteAlertDialog from "../components/demo-contact-delete-alert-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface Props {
   data: IContactDemo;
@@ -17,15 +15,19 @@ interface Props {
 
 export default function CellActions({ data }: Props) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant={"ghost"} size={"icon"}>
-          <EllipsisVertical />
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className="size-6 [&_svg]:size-4"
+        >
+          <Menu />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-40">
         <DemoContactDeleteAlertDialog id={data.id} />
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 }

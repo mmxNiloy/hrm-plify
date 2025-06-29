@@ -3,8 +3,10 @@
 import getCompanyAuthority from "@/app/(server)/actions/company/authority/get-company-authority.controller";
 import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import React from "react";
-import CompanyAuthorityEditDialog from "../../components/company-authority-edit-dialog";
-import CompanyAuthorityFormFragment from "../../components/company-authority-form-fragment";
+import {
+  CompanyAuthorityEditDialog,
+  CompanyAuthorityFormFragment,
+} from "../../components";
 
 interface Props {
   companyId: string;

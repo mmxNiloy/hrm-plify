@@ -1,3 +1,4 @@
+import { weekDays } from "@/utils/Misc";
 import { z } from "zod";
 
 export const CreateCompanySchema = z.object({
@@ -44,3 +45,69 @@ export const CompanyAddressSchema = z.object({
   city_county: z.string(),
   country: z.string(),
 });
+
+export const CompanyTradeDetailsSchema = z.object({
+  company_reg: z.string(),
+  type_of_company: z.string(),
+  trade_name: z.string(),
+  sector: z.string(),
+  org_email: z.string().email("Invalid email format"),
+  change_of_name_5: z.enum(["yes", "no"]).optional().default("no"),
+  faced_penalty_org: z.enum(["yes", "no"]).optional().default("no"),
+});
+
+export const TradingHourSchema = z.object({
+  day_name: z.enum(weekDays),
+  trade_status: z.coerce.number().min(0).max(1).optional().default(0),
+  opening_time: z.string().time().optional().default("00:00"),
+  closing_time: z.string().time().optional().default("23:59"),
+});
+
+export const UpdateTradingHoursSchema = z.object({
+  trading_hours: z.array(TradingHourSchema).refine((data) => {
+    const days = data.map((item) => item.day_name);
+    return (
+      new Set(days).size === 7 && days.every((day) => weekDays.includes(day))
+    );
+  }),
+});
+
+export const CompanyDocumentSchema = z.object({
+  doc_type: z.string(),
+  doc_name: z.string(),
+  doc_link: z.string().url("Invalid document link"),
+});
+
+export const UpdateCompanyDocumentSchema = CompanyDocumentSchema.partial();
+
+export const UpdateCompanyAdminSchema = z
+  .object({
+    email: z.string().email("Invalid email format"),
+    fname: z.string(),
+    mname: z.string(),
+    lname: z.string(),
+  })
+  .partial();
+
+export const CreateCompanyUserSchema = z.object({
+  fname: z.string(),
+  lname: z.string(),
+  mname: z.string().optional(),
+  email: z.string().email("Invalid email format"),
+  password: z
+    .string()
+    .refine(
+      (password) =>
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]).{8,128}$/.test(
+          password
+        ),
+      {
+        message:
+          "Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.",
+      }
+    ),
+});
+
+export const UpdateCompanyUserSchema = CreateCompanyUserSchema.omit({
+  password: true,
+}).partial();

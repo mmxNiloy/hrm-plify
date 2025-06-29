@@ -118,7 +118,7 @@ export default async function CompanyDashboardLayout({
     {
       href: "#",
       icon: "statGraph",
-      title: "Finance & Documents",
+      title: "Payroll",
       items: [
         {
           href: `/dashboard/company/${id}/payroll`,
@@ -126,14 +126,51 @@ export default async function CompanyDashboardLayout({
           icon: "money",
         },
         {
+          href: `/dashboard/company/${id}/payroll/salary-struct`,
+          title: "Salary Structure",
+          icon: "salary",
+        },
+        {
+          href: `/dashboard/company/${id}/payroll/pay-group`,
+          title: "Pay Group",
+          icon: "group",
+        },
+        {
+          href: `/dashboard/company/${id}/payroll/annual-pay`,
+          title: "Annual Pay",
+          icon: "money",
+        },
+        {
+          href: `/dashboard/company/${id}/payroll/payment-type`,
+          title: "Payment Type",
+          icon: "receipt",
+        },
+        {
+          href: `/dashboard/company/${id}/payroll/wage-payment-mode`,
+          title: "Wage Payment Mode",
+          icon: "category",
+        },
+      ],
+    },
+    {
+      href: "#",
+      icon: "dashboard",
+      title: "Miscellaneous",
+      items: [
+        {
+          href: `/dashboard/company/${id}/bank`,
+          title: "Bank",
+          icon: "lawBuilding",
+        },
+        {
+          href: `/dashboard/company/${id}/tax`,
+          title: "Tax",
+          icon: "files",
+        },
+        {
           href: `/dashboard/company/${id}/sponsor-compliance`,
           title: "Sponsor Compliance",
           icon: "pay",
-        },
-        {
-          href: `/dashboard/company/${id}/document`,
-          title: "Documents",
-          icon: "document",
         },
       ],
     },

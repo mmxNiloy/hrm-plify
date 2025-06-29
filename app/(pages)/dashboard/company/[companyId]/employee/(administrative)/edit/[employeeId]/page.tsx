@@ -9,18 +9,14 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { Metadata } from "next";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import SiteConfig from "@/utils/SiteConfig";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Edit Employee Data`,
-  };
+  const prms = await params;
+  const companyId = prms.companyId;
+  return await getCompanyMeta(companyId, "Edit Employee");
 }
 
 export default async function EditEmployeeInfoByUserIdPage({

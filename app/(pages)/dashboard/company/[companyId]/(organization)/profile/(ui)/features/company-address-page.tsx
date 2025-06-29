@@ -1,15 +1,14 @@
 "use server";
 
-import { getCompany } from "@/app/(server)/actions/company/get-company.controller";
 import getCurrentUserPermissions from "@/app/(server)/actions/user/get-current-user-permissions.controller";
 import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import React from "react";
-import CompanyProfileEditDialog from "../components/company-profile-edit-dialog";
-import CompanyProfileFormFragment from "../components/company-profile-form-fragment";
 import getCompanyAddress from "@/app/(server)/actions/company/address/get-company-address.controller";
-import CompanyAddressEditDialog from "../components/company-address-edit-dialog";
-import CompanyAddressFormFragment from "../components/company-address-form-fragment";
+import {
+  CompanyAddressEditDialog,
+  CompanyAddressFormFragment,
+} from "../components/";
 
 export default async function CompanyAddressPage({
   companyId,

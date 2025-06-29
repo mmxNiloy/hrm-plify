@@ -2,12 +2,11 @@
 import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
 import { SearchParams } from "nuqs";
 import React, { Suspense } from "react";
-import { CompanyByIDPageProps } from "../../../PageProps";
-import { Skeleton } from "@/components/ui/skeleton";
-import { CompanyAuthorityPage } from "../(ui)/features/authority";
 import { CompanyAddressPage } from "../(ui)/features";
+import { CompanyAddressPageSkeleton } from "../(ui)/components";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
 
-interface Props extends CompanyByIDPageProps {
+interface Props extends CompanyIDURLParamSchema {
   searchParams: Promise<SearchParams>;
 }
 
@@ -27,7 +26,7 @@ export default async function CompanyAddressSlot({
   const companyId = mParams.companyId;
 
   return (
-    <Suspense key={key} fallback={<Skeleton className="w-full flex-1" />}>
+    <Suspense key={key} fallback={<CompanyAddressPageSkeleton />}>
       <CompanyAddressPage companyId={companyId} />
     </Suspense>
   );

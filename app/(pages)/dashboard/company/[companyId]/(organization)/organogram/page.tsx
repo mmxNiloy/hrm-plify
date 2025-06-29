@@ -14,18 +14,14 @@ import OrgChartVersionSelect from "@/components/custom/Organogram/OrgChartVersio
 import OrgChartVersionCreationPopover from "@/components/custom/Popover/Organogram/OrgChartVersionCreationPopover";
 import { getAllOrganograms } from "@/app/(server)/actions/getAllOrganograms";
 import SiteConfig from "@/utils/SiteConfig";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Organogram Chart`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Organogram");
 }
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {

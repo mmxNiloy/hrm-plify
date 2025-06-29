@@ -5,6 +5,8 @@ import SortableHeader from "@/components/ui/data-table/sortable-header";
 import { IDepartment } from "@/schema/CompanySchema";
 import { ColumnDef } from "@tanstack/react-table";
 import RowActions from "../actions/row-actions";
+import TextCapsule from "@/components/custom/TextCapsule";
+import { cn } from "@/lib/utils";
 
 interface Props extends IDepartment {
   updateAccess?: boolean;
@@ -24,6 +26,18 @@ export const columns: ColumnDef<Props>[] = [
     ),
   },
   {
+    id: "Status",
+    accessorKey: "is_active",
+    header: "Status",
+    cell: ({ row }) => (
+      <TextCapsule
+        className={cn(row.original.is_active ? "bg-green-500" : "bg-red-500")}
+      >
+        {row.original.is_active ? "Active" : "Inactive"}
+      </TextCapsule>
+    ),
+  },
+  {
     id: "Last Modified",
     accessorKey: "updated_at",
     header: ({ column }) => (
@@ -38,9 +52,13 @@ export const columns: ColumnDef<Props>[] = [
     ),
   },
   {
-    id: "Edit Action",
+    id: "Actions",
     header: "Actions",
-    cell: ({ row }) =>
-      !row.original.updateAccess ? null : <RowActions data={row.original} />,
+    cell: ({ row }) => (
+      <RowActions
+        updateAccess={row.original.updateAccess}
+        data={row.original}
+      />
+    ),
   },
 ];

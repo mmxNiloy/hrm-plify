@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import DepartmentCreationPopover from "../../components/department-creation-popover";
+import DepartmentCreationDialog from "../../components/department-creation-dialog";
 import { TPermission } from "@/schema/Permissions";
 import { cookies } from "next/headers";
 
@@ -16,7 +16,7 @@ export default async function Actions({ companyId }: { companyId: string }) {
 
   return (
     <div className="w-full sm:w-auto">
-      <DepartmentCreationPopover company_id={companyId} />
+      <DepartmentCreationDialog company_id={companyId} />
     </div>
   );
 }

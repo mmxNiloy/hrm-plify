@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 import { INavItem } from "@/schema/SidebarSchema";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useCallback } from "react";
 
 export default function SidebarLink({
   data,
@@ -17,6 +17,22 @@ export default function SidebarLink({
   className?: string;
 }) {
   const pathname = usePathname();
+
+  const router = useRouter();
+
+  const handleRedirect = useCallback(() => {
+    if (
+      data.hidden ||
+      !data.href ||
+      data.href === "#" ||
+      data.disabled ||
+      asCollapsibleTrigger
+    )
+      return;
+
+    router.push(data.href);
+  }, [asCollapsibleTrigger, data.disabled, data.hidden, data.href, router]);
+
   const ItemIcon = data.icon ? Icons[data.icon] : Icons.user;
   if (data.hidden) return null;
 
@@ -59,11 +75,11 @@ export default function SidebarLink({
     );
   }
   return (
-    <Link
-      href={data.disabled ? "#" : data.href ?? "#"}
+    <span
+      onClick={handleRedirect}
       data-disabled={data.disabled ? "true" : "false"}
       className={cn(
-        "flex-1 flex gap-1 items-center group/sidebar-link hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground",
+        "cursor-pointer flex-1 flex gap-1 items-center group/sidebar-link hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground",
         className
       )}
     >
@@ -93,6 +109,6 @@ export default function SidebarLink({
       >
         &#8226;
       </span>
-    </Link>
+    </span>
   );
 }

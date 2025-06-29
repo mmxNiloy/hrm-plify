@@ -18,7 +18,7 @@ export default async function CompanySearchCommandContent() {
     isActive,
   });
 
-  console.log("Companies Data:", companiesData);
+  // console.log("Companies Data:", companiesData);
 
   if (companiesData.error) {
     return (

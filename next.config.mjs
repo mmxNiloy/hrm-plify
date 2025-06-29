@@ -3,6 +3,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        hostname: "revolohr.com",
+        pathname: "**",
+        protocol: "http",
+      },
+      {
+        hostname: "revolohr.com",
+        pathname: "**",
+        protocol: "https",
+      },
+      {
         hostname: "artemis-production.up.railway.app",
         pathname: "uploads/*",
         protocol: "http",

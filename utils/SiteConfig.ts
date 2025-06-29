@@ -16,7 +16,7 @@ export const DocumentTypes: [string, ...string[]] = [
   "Copy Of Health & Safety Star Rating",
   "Audited Annual Account (if you have)",
   "Regulatory body certificate if applicable to your business such as ACCA, FCA , OFCOM, IATA, ARLA",
-  "Others Document",
+  "Other Document",
 ];
 
 export const SITE_NAME = "Revolo";
@@ -27,6 +27,7 @@ const SiteConfig = {
     sysUsers: `System Users | ${SITE_NAME}`,
   },
   siteName: SITE_NAME,
+  appName: `${SITE_NAME} HR`,
   siteDescription: "Control Compliance, Delete Stress",
   currentVersion: "1.4.0",
   maxFileSize: 5e6,
@@ -38,5 +39,6 @@ const SiteConfig = {
     documentTypes: DocumentTypes,
   },
   defaultPageSize: 20,
+  deployUrl: "https://revolohr.com",
 };
 export default SiteConfig;

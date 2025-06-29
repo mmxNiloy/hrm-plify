@@ -19,18 +19,18 @@ import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getAttendanceOfEmployee } from "@/app/(server)/actions/getAttendanceOfEmployee";
 import AttendancePDFGenerator from "@/components/custom/Dashboard/Attendance/AttendancePDFGenerator";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Generate Attendance`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(
+    companyId,
+    "Generate Attendance",
+    "generate-attendance"
+  );
 }
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}

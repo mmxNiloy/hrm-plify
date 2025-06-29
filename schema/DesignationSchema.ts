@@ -1,3 +1,5 @@
+import { IDepartment } from "./CompanySchema";
+
 export interface IDesignation {
   created_at?: Date;
   updated_at?: Date;
@@ -5,4 +7,6 @@ export interface IDesignation {
   company_id: number;
   designation_id: number;
   dept_id?: number;
+  is_active?: boolean;
+  department: IDepartment;
 }

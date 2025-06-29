@@ -95,14 +95,17 @@ export function DataTable<TData, TValue>({
       arr.push({ id, value });
     });
 
-    return arr;
+    return arr.filter(
+      (item) =>
+        item.id && item.id.length > 0 && item.value && item.value.length > 0
+    );
   }, [filters]);
 
   // const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([]);
 
   // useEffect(() => {
-  //   setColumnFilters(memoColumnFilters);
-  // }, [memoColumnFilters]);
+  //   console.info("[Table] Column Filters", columnFilters);
+  // }, [columnFilters]);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 

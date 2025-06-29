@@ -111,7 +111,7 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
     const { label, placeholder, items, onValueChange, contentClassName } =
       props;
     const [selectedValue, setSelectedValue] = useState<string>(
-      ((props.defaultValue as string) ?? "").trim()
+      ((props.value as string) ?? (props.defaultValue as string) ?? "").trim()
     );
     const [open, setOpen] = useState<boolean>(false);
 

@@ -10,11 +10,10 @@ import { cookies } from "next/headers";
 import { SearchParams } from "nuqs";
 import React from "react";
 import CompanyStatusFilter from "./components/company-status-filter";
+import getSiteMetadata from "@/app/(server)/actions/site/get-site-metadata.controller";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `${SiteConfig.siteName} | Dashboard | Super Admin`,
-  };
+export async function generateMetadata() {
+  return await getSiteMetadata("Dashboard");
 }
 
 interface IDashboardPageProps {

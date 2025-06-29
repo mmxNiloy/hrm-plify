@@ -349,7 +349,6 @@ export default function CompanyProfileFormFragment({
             <DialogClose asChild>
               <Button
                 type="button"
-                disabled={updating}
                 variant={"destructive"}
                 className="gap-1"
                 size={"sm"}
@@ -360,22 +359,15 @@ export default function CompanyProfileFormFragment({
 
             <Button
               type="submit"
-              disabled={updating}
               variant="warning"
+              disabled={updating}
               className="shadow-sm hover:shadow-md"
               size={"sm"}
             >
-              {updating ? (
-                <>
-                  <Icons.update className="animate-spin ease-in-out" />
-                  {" Updating..."}
-                </>
-              ) : (
-                <>
-                  <Icons.update />
-                  {" Update"}
-                </>
-              )}
+              <Icons.update
+                className={cn(updating ? "animate-spin ease-in-out" : "")}
+              />
+              {updating ? "Updating..." : "Update"}
             </Button>
           </DialogFooter>
         )}

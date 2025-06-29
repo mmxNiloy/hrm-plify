@@ -16,7 +16,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteContactRequest } from "@/app/(server)/actions/deleteContactDemo";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 
 export default function DemoContactDeleteAlertDialog({ id }: { id: number }) {
@@ -39,9 +38,13 @@ export default function DemoContactDeleteAlertDialog({ id }: { id: number }) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <DropdownMenuItem className="text-destructive">
+        <Button
+          variant="ghost"
+          className="text-red-500 hover:text-red-500/90 w-full justify-start [&_svg]:size-4 text-xs px-2 gap-0.5"
+          size="sm"
+        >
           <Icons.trash className="mr-2 size-4" /> Delete
-        </DropdownMenuItem>
+        </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>

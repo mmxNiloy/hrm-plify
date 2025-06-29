@@ -10,7 +10,7 @@ import Icons from "@/components/ui/icons";
 
 interface Props extends IDesignation {
   updateAccess?: boolean;
-  departments: IDepartment[];
+  department: IDepartment[];
 }
 
 export const CompanyDesignationDataTableColumns: ColumnDef<Props>[] = [
@@ -24,7 +24,7 @@ export const CompanyDesignationDataTableColumns: ColumnDef<Props>[] = [
       <SortableHeader column={column} name="Department" />
     ),
     cell: ({ row }) =>
-      row.original.departments.find(
+      row.original.department.find(
         (item) => item.department_id === row.original.dept_id
       )?.dpt_name ?? (
         <TextCapsule className="bg-amber-500">
@@ -46,7 +46,7 @@ export const CompanyDesignationDataTableColumns: ColumnDef<Props>[] = [
           data={row.original}
           company_id={row.original.company_id}
           asIcon
-          departments={row.original.departments}
+          departments={row.original.department}
         />
       ),
   },

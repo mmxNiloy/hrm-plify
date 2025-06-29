@@ -5,8 +5,10 @@ import getCurrentUserPermissions from "@/app/(server)/actions/user/get-current-u
 import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import React from "react";
-import CompanyProfileEditDialog from "../components/company-profile-edit-dialog";
-import CompanyProfileFormFragment from "../components/company-profile-form-fragment";
+import {
+  CompanyProfileEditDialog,
+  CompanyProfileFormFragment,
+} from "../components/";
 
 export default async function CompanyProfilePage({
   companyId,

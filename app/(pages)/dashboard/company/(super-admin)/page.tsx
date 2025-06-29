@@ -12,11 +12,10 @@ import CompanyListTable from "./features/table/company-list-table";
 import CompanyCreationDialog from "./components/company-creation-dialog";
 import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import getSiteMetadata from "@/app/(server)/actions/site/get-site-metadata.controller";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `${SiteConfig.siteName} | Companies | Super Admin`,
-  };
+  return await getSiteMetadata("Companies");
 }
 
 export default async function CompanyDashboardPage({

@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import React, { HTMLAttributes, useCallback, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -16,24 +16,16 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { LoaderCircle, Trash2, XIcon } from "lucide-react";
+import deleteCompanyDocument from "@/app/(server)/actions/company/document/delete-company-document.controller";
 
-interface Props extends HTMLAttributes<HTMLButtonElement> {
+interface Props extends ButtonProps {
   document_id: number;
-  variant?:
-    | "link"
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | null
-    | undefined;
 }
 
 const CompanyDocumentDeleteAlertDialog = React.forwardRef<
   HTMLButtonElement,
   Props
->(({ document_id, className, variant = "default", ...props }, ref) => {
+>(({ document_id, className, variant = "default", size, ...props }, ref) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -45,12 +37,9 @@ const CompanyDocumentDeleteAlertDialog = React.forwardRef<
       e.stopPropagation();
       setLoading(true);
 
-      const apiRes = await fetch(`/api/company/document`, {
-        method: "DELETE",
-        body: JSON.stringify({ document_id }),
-      });
+      const apiRes = await deleteCompanyDocument(document_id.toString());
       setLoading(false);
-      if (apiRes.ok) {
+      if (!apiRes.error) {
         toast({
           title: "Document Update Successful",
           className: ToastSuccess,
@@ -73,6 +62,7 @@ const CompanyDocumentDeleteAlertDialog = React.forwardRef<
           variant={variant}
           className={className}
           ref={ref}
+          size={size}
           {...props}
         ></Button>
       </AlertDialogTrigger>

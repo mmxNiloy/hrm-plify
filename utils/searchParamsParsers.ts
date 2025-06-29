@@ -69,6 +69,10 @@ export const searchParamsParsers = {
     shallow: false,
     throttleMs: 1000,
   }),
+  status: parseAsStringEnum(["1", "0", "all"]).withDefault("1").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
   companyStatus: parseAsStringEnum(["1", "0", "all"])
     .withDefault("all")
     .withOptions({

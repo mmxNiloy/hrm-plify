@@ -4,22 +4,16 @@ import React from "react";
 import LogOutForm from "./logout-form";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import GradientBorderContainer from "@/components/ui/gradient-border-container";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
-import { ChevronsUpDown, User2, UserCircle2 } from "lucide-react";
+import { ChevronsUpDown, UserCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "../Navbar/theme-switch";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import TextCapsule from "../../TextCapsule";
-import { Label } from "@/components/ui/label";
 import SidebarFooterProfileContent from "./sidebar-footer-profile-content";
+import { ICompany } from "@/schema/CompanySchema";
 
 export default async function SidebarFooterProfile() {
   const [user, employeeData] = await Promise.all([
@@ -29,9 +23,25 @@ export default async function SidebarFooterProfile() {
 
   if (!user) return <LogOutForm />;
 
-  const company = await getCompanyData(
-    user.usercompany?.company_id.toString() ?? "0"
-  );
+  let companyData: ICompany | undefined = undefined;
+  try {
+    const company = await getCompanyData(
+      user.usercompany?.company_id.toString() ?? "0"
+    );
+
+    if (company.data) companyData = company.data;
+    else {
+      console.debug(
+        "[SidebarFooterProfile] Company not found. Error:",
+        company
+      );
+    }
+  } catch (error) {
+    console.debug(
+      "[SidebarFooterProfile] Failed to fetch company data. Error:",
+      error
+    );
+  }
 
   return (
     <DropdownMenu>
@@ -63,7 +73,7 @@ export default async function SidebarFooterProfile() {
 
       <SidebarFooterProfileContent
         user={user}
-        company={company.data}
+        company={companyData}
         employeeData={employeeData.data?.data}
       />
     </DropdownMenu>

@@ -2,11 +2,11 @@
 import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
 import { SearchParams } from "nuqs";
 import React, { Suspense } from "react";
-import { CompanyByIDPageProps } from "../../../PageProps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CompanyAuthorityPage } from "../(ui)/features";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
 
-interface Props extends CompanyByIDPageProps {
+interface Props extends CompanyIDURLParamSchema {
   searchParams: Promise<SearchParams>;
 }
 

@@ -67,7 +67,7 @@ export default function SidebarFooterProfileContent({
                 )}
 
                 <TextCapsule className="bg-green-500 text-xs">
-                  {user.user_roles?.roles.role_name ?? "Guest"}
+                  {user.user_roles?.roles?.role_name ?? "Guest"}
                 </TextCapsule>
               </div>
             </div>

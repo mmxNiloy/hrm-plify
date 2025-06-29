@@ -1,5 +1,8 @@
 "use client";
+import createCompanyDocument from "@/app/(server)/actions/company/document/create-company-document.controller";
+import updateCompanyDocument from "@/app/(server)/actions/company/document/update-company-document.controller";
 import { Button } from "@/components/ui/button";
+import { ComboBox } from "@/components/ui/combobox";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import {
   Form,
@@ -10,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Icons from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -21,13 +25,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { ICompanyDoc } from "@/schema/CompanySchema";
 import { ButtonSuccess, ButtonWarn } from "@/styles/button.tailwind";
 import SiteConfig from "@/utils/SiteConfig";
 import { IFormFragmentProps } from "@/utils/Types";
 import uploadFile from "@/utils/uploadFile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, LoaderCircle, RefreshCcw, XIcon } from "lucide-react";
+import {
+  Check,
+  ExternalLink,
+  LoaderCircle,
+  RefreshCcw,
+  XIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useTransition } from "react";
@@ -57,7 +68,8 @@ const FormSchema = z.object({
     .refine((file) => {
       const ext = file.name.split(".").pop() ?? "";
       return /pdf|docx|txt|xlsx|txt|png|bmp|jpg|jpeg/.test(ext);
-    }, "Unsupport document type. Allowed document types are: PDF, DOCX, XLSX, TXT, PNG, BMP, and JPG/JPEG."),
+    }, "Unsupport document type. Allowed document types are: PDF, DOCX, XLSX, TXT, PNG, BMP, and JPG/JPEG.")
+    .optional(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -78,7 +90,7 @@ export default function CompanyDocumentForm({
     disabled: disabled || readOnly,
   });
 
-  const [loading, startSubmit] = useTransition();
+  const [updating, startSubmit] = useTransition();
 
   const router = useRouter();
 
@@ -95,27 +107,38 @@ export default function CompanyDocumentForm({
           const docFile = values.doc_file;
           var docLink = data?.doc_link ?? "";
 
-          const docUpload = await uploadFile(docFile);
-          if (!docUpload.ok) {
-            toast.error("Document upload failed!");
-          } else {
-            toast.success("Document uploaded!");
-            const res = docUpload.data;
-            docLink = res.fileUrl;
+          if (docFile) {
+            const docUpload = await uploadFile(docFile);
+            if (!docUpload.ok) {
+              toast.error("Document upload failed!");
+            } else {
+              toast.success("Document uploaded!");
+              const res = docUpload.data;
+              docLink = res.fileUrl;
+            }
+
+            doc.doc_link = docLink;
           }
 
-          doc.doc_link = docLink;
+          let operation;
+          if (data) {
+            operation = updateCompanyDocument(data.doc_id.toString(), {
+              ...values,
+              doc_link: docLink,
+            });
+          } else {
+            operation = createCompanyDocument(companyId, {
+              ...values,
+              doc_link: docLink,
+            });
+          }
 
-          const apiRes = await fetch(`/api/company/document`, {
-            method: data ? "PATCH" : "POST",
-            body: JSON.stringify(doc),
-          });
+          const apiRes = await operation;
 
-          if (apiRes.ok) {
-            if (onSuccess) onSuccess();
-
+          if (!apiRes.error) {
             toast.success(`Document ${data ? "updated" : "added"}!`);
             router.refresh();
+            if (onSuccess) onSuccess();
           } else {
             toast.error(`Document ${data ? "update" : "creation"} failed!`);
           }
@@ -132,94 +155,89 @@ export default function CompanyDocumentForm({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         encType="multipart/form-data"
-        className="overflow-x-clip overflow-y-scroll px-2 gap-4 grid grid-cols-1 md:grid-cols-2"
       >
-        <FormField
-          control={form.control}
-          name="doc_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Document Name</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="What's your document name?" />
-              </FormControl>
-              <FormDescription>
-                Enter your document name. EG: Financial Document
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="doc_type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Document Type</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={(val) => field.onChange(val)}
-                  value={field.value}
-                >
-                  <SelectTrigger id="doc-type-select">
-                    <SelectValue placeholder="Select a document type" />
-                  </SelectTrigger>
-
-                  <SelectContent className="max-w-xs px-2">
-                    <SelectGroup>
-                      <SelectLabel>Document Type</SelectLabel>
-                      {docTypes.map((dt) => (
-                        <React.Fragment key={dt}>
-                          <SelectItem value={dt}>{dt}</SelectItem>
-                          <SelectSeparator />
-                        </React.Fragment>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>Select a document type.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="doc_file"
-          render={({ field }) => (
-            <FormItem className="col-span-full">
-              <FormLabel>Document File</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files?.item(0);
-
-                    field.onChange(file);
-                  }}
-                />
-              </FormControl>
-              <FormDescription>Upload your document.</FormDescription>
-              {data?.doc_link && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+          <FormField
+            control={form.control}
+            name="doc_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Document Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="What's your document name?" {...field} />
+                </FormControl>
                 <FormDescription>
-                  <Link href={data.doc_link} target="_blank">
-                    View existing document
-                  </Link>
+                  Enter your document name. EG: Financial Document
                 </FormDescription>
-              )}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="doc_type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Document Type</FormLabel>
+                <FormControl>
+                  <ComboBox
+                    className="w-full"
+                    placeholder="Select a document type"
+                    items={docTypes}
+                    onValueChange={(val) => field.onChange(val)}
+                    value={field.value}
+                  />
+                </FormControl>
+                <FormDescription>Select a document type.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="doc_file"
+            render={({ field }) => (
+              <FormItem className="col-span-full">
+                <FormLabel>Document File</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files?.item(0);
+
+                      field.onChange(file);
+                    }}
+                  />
+                </FormControl>
+                <FormDescription>Upload your document.</FormDescription>
+                {data?.doc_link && (
+                  <Link href={data.doc_link} target="_blank" passHref>
+                    <Button
+                      type="button"
+                      variant={"ghost"}
+                      size="sm"
+                      className="gap-1 [&_svg]:size-4"
+                    >
+                      <ExternalLink /> View existing document
+                    </Button>
+                  </Link>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <DialogFooter className="col-span-full">
           <DialogClose asChild>
             <Button
-              disabled={loading}
+              autoFocus
+              type="button"
+              disabled={updating}
               variant={"destructive"}
-              className="rounded-full gap-1"
+              className="gap-1 shadow-sm hover:shadow-md"
               size={"sm"}
             >
               <XIcon /> Cancel
@@ -227,24 +245,16 @@ export default function CompanyDocumentForm({
           </DialogClose>
 
           <Button
-            disabled={loading}
-            className={data ? ButtonWarn : ButtonSuccess}
+            type="submit"
+            variant="warning"
+            disabled={updating}
+            className="shadow-sm hover:shadow-md gap-1"
             size={"sm"}
           >
-            {loading ? (
-              <>
-                <LoaderCircle className="animate-spin ease-in-out" />
-                Updating...
-              </>
-            ) : data ? (
-              <>
-                <RefreshCcw /> Update
-              </>
-            ) : (
-              <>
-                <Check /> Submit
-              </>
-            )}
+            <Icons.update
+              className={cn(updating ? "animate-spin ease-in-out" : "")}
+            />
+            {updating ? "Updating..." : "Update"}
           </Button>
         </DialogFooter>
       </form>

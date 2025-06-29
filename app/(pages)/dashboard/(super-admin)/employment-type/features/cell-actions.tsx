@@ -1,35 +1,34 @@
 "use client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Edit, EllipsisVertical, HistoryIcon, Trash } from "lucide-react";
+import { Edit, EllipsisVertical, HistoryIcon, Menu, Trash } from "lucide-react";
 import EmploymentTypeEditDialog from "../components/employment-type-edit-dialog";
 import { IEmploymentType } from "@/schema/EmploymentTypeSchema";
 import EmploymentTypeToggleAlertDialog from "../components/employment-type-toggle-alert-dialog";
 import { cn } from "@/lib/utils";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface Props {
   data: IEmploymentType;
 }
 
 export default function CellActions({ data }: Props) {
-  // TODO: Add state management here for on-success dismiss.
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
           variant={"ghost"}
           size={"icon"}
           className="[&_svg]:size-4 rounded-full size-6"
         >
-          <EllipsisVertical />
+          <Menu />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-40">
         <EmploymentTypeEditDialog
           size="sm"
           data={data}
@@ -56,7 +55,7 @@ export default function CellActions({ data }: Props) {
           </span>
           {data.isActive ? "Delete" : "Recover"}
         </EmploymentTypeToggleAlertDialog>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 }

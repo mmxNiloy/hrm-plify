@@ -173,6 +173,7 @@ export interface IDepartment {
   created_at?: Date;
   updated_at?: Date;
   dpt_name: string;
+  is_active?: boolean;
 }
 
 export interface IPaginatedDepartment extends IPaginatedResponse {

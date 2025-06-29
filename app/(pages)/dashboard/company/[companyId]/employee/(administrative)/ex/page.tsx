@@ -18,20 +18,16 @@ import EmployeeOnboardingDialogWrapper from "@/components/custom/Dialog/Company/
 import { CompanyByIDPageProps } from "../../../PageProps";
 import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
 import SiteConfig from "@/utils/SiteConfig";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Employees`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Ex-Employees");
 }
 
 export default async function ExEmployeePage({ params, searchParams }: Props) {

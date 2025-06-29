@@ -1,16 +1,9 @@
 "use server";
 
-import { getCompany } from "@/app/(server)/actions/company/get-company.controller";
 import getCurrentUserPermissions from "@/app/(server)/actions/user/get-current-user-permissions.controller";
-import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
-import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import React, { Suspense } from "react";
-import CompanyProfileEditDialog from "../../components/company-profile-edit-dialog";
-import CompanyProfileFormFragment from "../../components/company-profile-form-fragment";
-import getCompanyAuthority from "@/app/(server)/actions/company/authority/get-company-authority.controller";
-import { Skeleton } from "@/components/ui/skeleton";
 import CompanyAuthorizedPersonnelCard from "./company-authorized-personnel-card";
-import CompanyAuthorityFormSkeleton from "../../components/company-authority-form-skeleton";
+import { CompanyAuthorityFormSkeleton } from "../../components";
 import CompanyKeyContactCard from "./company-key-contact-card";
 import CompanyL1UserCard from "./company-l1-user-card";
 

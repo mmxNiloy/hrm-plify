@@ -1,7 +1,6 @@
 "use server";
-import { getDepartments } from "@/app/(server)/actions/getDepartments";
+import getDepartments from "@/app/(server)/actions/company/department/get-departments.controller";
 import AccessDenied from "@/components/custom/AccessDenied";
-import { StaticDataTable } from "@/components/ui/data-table";
 import { DataTable } from "@/components/ui/data-table/data-table";
 import { DataTableError } from "@/components/ui/data-table/data-table-error";
 import { TPermission } from "@/schema/Permissions";
@@ -29,25 +28,32 @@ export default async function DepartmentTable({
 
   const page = searchParamsCache.get("page") ?? 1;
   const limit = searchParamsCache.get("limit") ?? 10;
+  const search = searchParamsCache.get("search") ?? "";
+  const isActive = searchParamsCache.get("status") ?? "all";
 
   const paginatedDepartments = await getDepartments({
-    company_id: companyId,
+    companyId,
     page,
     limit,
+    search,
+    isActive,
   });
 
   if (paginatedDepartments.error) {
-    return <DataTableError />;
+    return <DataTableError errorMessage="Failed to fetch departments." />;
   }
+
+  const departments = paginatedDepartments.payload;
+  const meta = paginatedDepartments.meta!;
 
   return (
     <DataTable
-      data={paginatedDepartments.data.data.map((item) => ({
+      data={departments.map((item) => ({
         ...item,
-        updateAccess: updateAccess ? true : false,
+        updateAccess: !!updateAccess,
       }))}
-      totalItems={paginatedDepartments.data.data_count}
-      pageCount={paginatedDepartments.data.total_page}
+      totalItems={meta.total}
+      pageCount={meta.pageCount}
       columns={columns}
     />
   );
