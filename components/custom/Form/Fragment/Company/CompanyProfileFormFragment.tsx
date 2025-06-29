@@ -86,7 +86,7 @@ export default function CompanyProfileFormFragment({
             )}
           />
 
-          {readOnly && (
+          {/* {readOnly && (
             <Link
               target="_blank"
               passHref
@@ -104,7 +104,7 @@ export default function CompanyProfileFormFragment({
                 Find
               </Button>
             </Link>
-          )}
+          )} */}
         </div>
       </div>
 

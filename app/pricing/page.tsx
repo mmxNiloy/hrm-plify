@@ -14,51 +14,39 @@ export default function PricingPage() {
   // Features for each plan
   const features = [
     {
-      title: "Access to compliance software",
+      title: "Core HR Software Platform",
       plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
-      title: "Sponsorship tracking",
+      title: "Attendance & Leave Management",
       plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
-      title: "Basic email support",
+      title: "Centralized Employee Records",
       plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
-      title: "HR compliance consultation",
-      plans: {
-        essential: "no",
-        professional: "Quarterly HR compliance consultation",
-        enterprise: "Monthly HR compliance consultation",
-      },
+      title: "Basic Email Support",
+      plans: { essential: "yes", professional: "yes", enterprise: "yes" },
     },
     {
-      title: "Assistance with Home Office audits",
+      title: "Performance Management Module",
       plans: { essential: "no", professional: "yes", enterprise: "yes" },
     },
     {
-      title: "Priority email & phone support",
+      title: "Priority Email & Phone Support",
       plans: { essential: "no", professional: "yes", enterprise: "yes" },
     },
     {
-      title: "Dedicated HR advisor",
+      title: "Dedicated HR Partner",
       plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
     {
-      title: "Customized compliance strategy",
+      title: "Advanced Reporting & Analytics",
       plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
     {
-      title: "Employee visa sponsorship review",
-      plans: { essential: "no", professional: "no", enterprise: "yes" },
-    },
-    {
-      title: "Priority escalation handling",
-      plans: { essential: "no", professional: "no", enterprise: "yes" },
-    },
-    {
-      title: "Recruitment assistance",
+      title: "Recruitment Management",
       plans: { essential: "no", professional: "no", enterprise: "yes" },
     },
   ];
@@ -194,10 +182,10 @@ export default function PricingPage() {
             Essential
           </h2>
           <p className="text-lg sm:text-xl font-semibold text-[#017bce] text-center">
-            £100/month
+            ৳3,000 /month
           </p>
           <p className="text-gray-600 text-sm sm:text-base text-center">
-            Up to 10 employees
+            For teams getting started with structured HR.
           </p>
           <div className="flex flex-col gap-2 sm:gap-3">
             {features.map((feature, index) => (
@@ -222,10 +210,10 @@ export default function PricingPage() {
             Professional
           </h2>
           <p className="text-lg sm:text-xl font-semibold text-[#635be8] text-center">
-            £150/month
+            ৳6,000 /month
           </p>
           <p className="text-gray-600 text-sm sm:text-base text-center">
-            Up to 20 employees
+            For growing businesses focused on performance.
           </p>
           <div className="flex flex-col gap-2 sm:gap-3">
             {features.map((feature, index) => (
@@ -261,10 +249,10 @@ export default function PricingPage() {
             Enterprise
           </h2>
           <p className="text-lg sm:text-xl font-semibold text-[#f5561c] text-center">
-            £250/month
+            ৳10,000 /month
           </p>
           <p className="text-gray-600 text-sm sm:text-base text-center">
-            Up to 50 employees
+            The complete solution for total management control.
           </p>
           <div className="flex flex-col gap-2 sm:gap-3">
             {features.map((feature, index) => (

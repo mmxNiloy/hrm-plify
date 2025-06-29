@@ -74,13 +74,14 @@ export default function CompanyDocumentFormFragment({
         >
           Document Type
         </Label>
-        <Select
+        <Input
           required
           name="doc_type"
           defaultValue={data?.doc_type ?? undefined}
+          placeholder="eg: Financial Document"
           disabled={readOnly || disabled}
-        >
-          <SelectTrigger className="rounded-full" id="doc-type-select">
+        />
+        {/* <SelectTrigger className="rounded-full" id="doc-type-select">
             <SelectValue placeholder="Select a document type" />
           </SelectTrigger>
 
@@ -94,7 +95,7 @@ export default function CompanyDocumentFormFragment({
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
 
       <div className="flex flex-col gap-2">

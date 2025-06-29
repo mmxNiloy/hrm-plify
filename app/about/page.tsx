@@ -66,7 +66,7 @@ export default function AboutPage() {
   return (
     <main
       ref={container}
-      className="flex flex-col gap-8 md:gap-12 min-h-screen items-center py-6 md:py-8 xl:-mt-[8rem]"
+      className="flex flex-col gap-8 md:gap-12 min-h-screen items-center py-6 md:py-8 xl:-mt-24"
     >
       {/* Our Story Section */}
       <section className="w-11/12 flex items-center justify-center min-h-[40vh] sm:min-h-[50vh] md:min-h-[70vh] overflow-clip rounded-[3.25rem] from-[#f5561c]/[0.102] to-[#bd1cc2]/[0.052] bg-gradient-to-bl relative lg:pt-20">
@@ -83,19 +83,33 @@ export default function AboutPage() {
           </div>
           <p className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg lg:w-2/3 text-justify">
             {/* <AnimatedText> */}
-            At {SiteConfig.appName}, we saw a major problem—businesses
-            struggling with compliance-related challenges, facing stress, fines,
-            and even losing their ability to sponsor skilled workers due to
-            complex Home Office regulations. We knew there had to be a better
-            way. That&apos;s why we created {SiteConfig.appName} a powerful,
-            user-friendly HR software designed to take the hassle out of
-            compliance. Our mission is simple: to help businesses navigate
-            sponsorship and HR regulations effortlessly, reducing risks and
-            ensuring they stay fully compliant. With
-            {SiteConfig.appName}, companies can manage their HR processes with
-            confidence, knowing they have the right tools to protect their
-            workforce and their business. Join us in making compliance simple,
-            stress-free, and efficient.
+            In Bangladesh, we invest lakhs to upgrade our machinery for a 10%
+            boost in production. But what if the most powerful machine in your
+            factory isn&apos;t made of steel?
+            <br />
+            <br />
+            We are talking about the human machine. Your workforce. But even the
+            most powerful machine fails without a solid foundation. And that
+            foundation begins with the most basic discipline: being present.
+            <br />
+            <br />
+            Before you can manage performance, you must manage presence.
+            Unplanned leave, inaccurate attendance, and manual tracking create
+            chaos and disrupt your entire production line. This is the core
+            challenge {SiteConfig.appName} is built to solve, from the ground
+            up.
+            <br />
+            <br />
+            We provide a rock-solid framework for attendance and leave
+            management, eliminating errors and ensuring your workforce is
+            reliable. Once that foundation of discipline is set, our performance
+            management tools help you set goals, track progress, and transform
+            that reliability into measurable output.
+            <br />
+            <br />
+            Stop letting attendance issues undermine your operations. Build a
+            reliable foundation with ${SiteConfig.appName}, then unleash the
+            real power in your business.
             {/* </AnimatedText> */}
           </p>
         </div>
@@ -114,12 +128,10 @@ export default function AboutPage() {
           </div>
           <p className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg lg:w-2/3 text-justify">
             {/* <AnimatedText> */}
-            At {SiteConfig.appName}, we make HR compliance simple and efficient
-            for businesses of all sizes. Our software is designed to streamline
-            HR operations, reduce compliance risks, and ensure that companies
-            meet UK Home Office regulations with ease. From managing employee
-            records to tracking sponsorships, we provide businesses with the
-            tools they need to stay compliant—without the administrative hassle.
+            At {SiteConfig.appName}, we simplify your HR. Our software
+            streamlines everything from daily attendance and leave tracking to
+            performance management, giving you the tools to manage your team
+            effectively and focus on growth.
             {/* </AnimatedText> */}
           </p>
         </div>

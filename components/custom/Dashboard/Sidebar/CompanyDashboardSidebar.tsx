@@ -129,11 +129,11 @@ export default function CompanyDashboardSidebar({
             title: "Payroll Management",
             icon: <Icons.money />,
           },
-          {
-            href: `/dashboard/company/${company.company_id}/sponsor-compliance`,
-            title: "Sponsor Compliance",
-            icon: <Icons.pay />,
-          },
+          // {
+          //   href: `/dashboard/company/${company.company_id}/sponsor-compliance`,
+          //   title: "Sponsor Compliance",
+          //   icon: <Icons.pay />,
+          // },
           {
             href: `/dashboard/company/${company.company_id}/document`,
             title: "Documents",

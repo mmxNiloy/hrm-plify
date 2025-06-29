@@ -72,49 +72,49 @@ export const StaffReportDataTableColumns: ColumnDef<IEmployeeWithUserMetadata>[]
       ),
       cell: ({ row }) => row.original.nationality,
     },
-    {
-      accessorKey: "ni_num",
-      header: ({ column }) => (
-        <SortableHeader name="NI Number" column={column} />
-      ),
-      cell: ({ row }) => row.original.ni_num,
-    },
-    {
-      accessorKey: "emp_passport",
-      header: ({ column }) => (
-        <SortableHeader name="Passport Number" column={column} />
-      ),
-      cell: ({ row }) => row.original.emp_passport?.passport_number,
-    },
-    {
-      accessorKey: "visa_brp",
-      header: ({ column }) => (
-        <SortableHeader name="VISA/BRP Number" column={column} />
-      ),
-      cell: ({ row }) => row.original.visa_brp?.visa_brp_number,
-    },
-    {
-      id: "visa_brp-issue-date",
-      header: ({ column }) => (
-        <SortableHeader name="VISA/BRP Issued" column={column} />
-      ),
-      cell: ({ row }) =>
-        row.original.visa_brp?.issue_date
-          ? new Date(row.original.visa_brp.issue_date).toLocaleDateString(
-              "en-GB"
-            )
-          : "N/A",
-    },
-    {
-      id: "visa_brp-expiry-date",
-      header: ({ column }) => (
-        <SortableHeader name="VISA/BRP Expires" column={column} />
-      ),
-      cell: ({ row }) =>
-        row.original.visa_brp?.expiry_date
-          ? new Date(row.original.visa_brp.expiry_date).toLocaleDateString(
-              "en-GB"
-            )
-          : "N/A",
-    },
+    // {
+    //   accessorKey: "ni_num",
+    //   header: ({ column }) => (
+    //     <SortableHeader name="NI Number" column={column} />
+    //   ),
+    //   cell: ({ row }) => row.original.ni_num,
+    // },
+    // {
+    //   accessorKey: "emp_passport",
+    //   header: ({ column }) => (
+    //     <SortableHeader name="Passport Number" column={column} />
+    //   ),
+    //   cell: ({ row }) => row.original.emp_passport?.passport_number,
+    // },
+    // {
+    //   accessorKey: "visa_brp",
+    //   header: ({ column }) => (
+    //     <SortableHeader name="VISA/BRP Number" column={column} />
+    //   ),
+    //   cell: ({ row }) => row.original.visa_brp?.visa_brp_number,
+    // },
+    // {
+    //   id: "visa_brp-issue-date",
+    //   header: ({ column }) => (
+    //     <SortableHeader name="VISA/BRP Issued" column={column} />
+    //   ),
+    //   cell: ({ row }) =>
+    //     row.original.visa_brp?.issue_date
+    //       ? new Date(row.original.visa_brp.issue_date).toLocaleDateString(
+    //           "en-GB"
+    //         )
+    //       : "N/A",
+    // },
+    // {
+    //   id: "visa_brp-expiry-date",
+    //   header: ({ column }) => (
+    //     <SortableHeader name="VISA/BRP Expires" column={column} />
+    //   ),
+    //   cell: ({ row }) =>
+    //     row.original.visa_brp?.expiry_date
+    //       ? new Date(row.original.visa_brp.expiry_date).toLocaleDateString(
+    //           "en-GB"
+    //         )
+    //       : "N/A",
+    // },
   ];

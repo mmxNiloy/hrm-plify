@@ -33,21 +33,21 @@ export default function EmployeeDashboardSidebar({
         title: "All Employees",
         icon: <Icons.employees />,
       },
-      {
-        href: `/dashboard/company/${company.company_id}/employee/migrant`,
-        title: "Migrant Employees",
-        icon: <Icons.users />,
-      },
+      // {
+      //   href: `/dashboard/company/${company.company_id}/employee/migrant`,
+      //   title: "Migrant Employees",
+      //   icon: <Icons.users />,
+      // },
       {
         href: `/dashboard/company/${company.company_id}/employee/staff-report`,
         title: "Staff Report",
         icon: <Icons.files />,
       },
-      {
-        href: `/dashboard/company/${company.company_id}/employee/change-of-circumstances`,
-        title: "Change of Circumstances",
-        icon: <Icons.history />,
-      },
+      // {
+      //   href: `/dashboard/company/${company.company_id}/employee/change-of-circumstances`,
+      //   title: "Change of Circumstances",
+      //   icon: <Icons.history />,
+      // },
       {
         href: "#",
         title: "Edit Employee",

@@ -34,12 +34,12 @@ export default function SponsorComplianceDashboardSidebar({
         icon: <Icons.employees />,
         target: "_blank",
       },
-      {
-        href: `/dashboard/company/${company.company_id}/employee/migrant`,
-        title: "Migrant Employees",
-        icon: <Icons.employee />,
-        target: "_blank",
-      },
+      // {
+      //   href: `/dashboard/company/${company.company_id}/employee/migrant`,
+      //   title: "Migrant Employees",
+      //   icon: <Icons.employee />,
+      //   target: "_blank",
+      // },
       {
         href: `/dashboard/company/${company.company_id}/sponsor-compliance/right-to-work`,
         title: "Right to Work Checks",

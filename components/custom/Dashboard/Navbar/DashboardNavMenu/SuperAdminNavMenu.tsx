@@ -113,12 +113,12 @@ export default function SuperAdminNavMenu() {
         </MenubarContent>
       </MenubarMenu>
 
-      <MenubarMenu>
+      {/* <MenubarMenu>
         <MenubarTrigger>Compliance & Planning</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>Sponsor Compliance</MenubarItem>
         </MenubarContent>
-      </MenubarMenu>
+      </MenubarMenu> */}
     </Menubar>
   );
 }

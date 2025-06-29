@@ -27,24 +27,24 @@ export default function Home() {
   // For what makes us different section
   const ourSpecialties: IFeatureItem[] = [
     {
-      title: "Avoid Costly Civil Penalties",
+      title: "Avoid Costly Labour Law Penalties",
       description:
-        "Our software ensures thorough right-to-work checks, safeguarding your company from illegal working penalties.",
+        "Boost Workforce Productivity Unlock the true potential of your team. Our software provides the structure for setting clear goals and tracking performance, turning your workforce into a highly productive engine for growth.",
     },
     {
       title: "Prevent Sponsorship License Revocation/Suspension",
       description:
-        "Stay ahead of Home Office regulations with our automated compliance tools, minimizing the risk of license downgrades, suspensions, or revocations.",
+        "Enhance Team Reliability Build a disciplined and dependable team you can count on. Our precise attendance and leave management tools ensure your operations run smoothly and predictably every single day.",
     },
     {
       title: "Eliminate Business Sanctions",
       description:
-        "Maintain a spotless compliance record and avoid being banned from sponsoring migrant workers with our proactive monitoring and reporting features.",
+        "Streamline Daily Operations Replace endless paperwork and spreadsheets with smart automation. We handle the routine administrative tasks, freeing up your managers to lead, motivate, and focus on what truly matters.",
     },
     {
       title: "One Software, Complete UK Home Office Compliance",
       description:
-        "Don't leave your business vulnerable. Our all-in-one HR software provides the tools and insights you need to confidently navigate the complexities of UK immigration and employment law.",
+        "Gain Clear Management Insight Make smarter, data-driven decisions about your people. Our all-in-one platform gives you a complete view of your workforce, from attendance patterns to performance metrics, all in one place.",
     },
   ];
 
@@ -56,9 +56,9 @@ export default function Home() {
     { title: "Employee Self-Service & HR Efficiency", description: "" },
     { title: "Effortless Onboarding & Offboarding", description: "" },
     { title: "Powerful Reporting & Analytics", description: "" },
-    { title: "Sponsorship Tracking", description: "" },
+    // { title: "Sponsorship Tracking", description: "" },
     { title: "Shift and Holiday Managment", description: "" },
-    { title: "Right to Work Checks", description: "" },
+    // { title: "Right to Work Checks", description: "" },
   ];
 
   useGSAP(
@@ -243,7 +243,7 @@ export default function Home() {
       </section>
 
       {/* Section 2: Client Trust and Showcase */}
-      <section className="flex flex-col gap-4 w-full px-4 sm:px-0 items-center">
+      <section className="hidden flex-col gap-4 w-full px-4 sm:px-0 items-center">
         <p className="mt-8 sm:mt-12 md:mt-16 text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-center">
           <AnimatedText>Companies that trust us with HR</AnimatedText>
         </p>

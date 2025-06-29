@@ -50,7 +50,7 @@ export default function CompanyTradeFormFragment({
             id="company-reg-input"
           />
 
-          {readOnly && (
+          {/* {readOnly && (
             <Link
               target="_blank"
               passHref
@@ -68,7 +68,7 @@ export default function CompanyTradeFormFragment({
                 Find
               </Button>
             </Link>
-          )}
+          )} */}
         </div>
       </div>
 

@@ -31,7 +31,7 @@ export default function Footer() {
           <p className="font-bold text-sm md:text-lg lg:text-3xl text-start">
             {SiteConfig.siteDescription}
           </p>
-          <div className="flex gap-1 items-center justify-center md:justify-start">
+          <div className="hidden gap-1 items-center justify-center md:justify-start">
             {/* <p className="text">Find us on</p> */}
             <Link href={"#"} target="_blank" passHref>
               <Button variant={"ghost"} size={"icon"}>
@@ -53,6 +53,7 @@ export default function Footer() {
 
         {/* Footer navigation */}
         <div className="grid grid-cols-3 text-center md:text-start gap-2 md:gap-4">
+          <span></span>
           <div className="flex flex-col">
             <p className="font-bold text-sm md:text-lg">Product</p>
             <Link href={"/features"} className="text-xs md:text-sm" passHref>
@@ -99,7 +100,7 @@ export default function Footer() {
               </Button>
             </Link>
           </div>
-          <div className="flex flex-col">
+          <div className="hidden flex-col">
             <p className="font-bold text-sm md:text-lg md:invisible">Policy</p>
             <Link
               href={"/policy/privacy"}

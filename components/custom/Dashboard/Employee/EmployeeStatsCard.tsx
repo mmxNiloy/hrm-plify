@@ -33,13 +33,13 @@ const empStats = {
       borderColor: ["rgba(7, 79, 245, 1)"],
       borderWidth: 1,
     },
-    {
-      label: "Migrant Employees",
-      data: [5, 6, 6, 6, 6, 7],
-      backgroundColor: ["rgba(98, 24, 168, 0.2)"],
-      borderColor: ["rgba(98, 24, 168, 1)"],
-      borderWidth: 1,
-    },
+    // {
+    //   label: "Migrant Employees",
+    //   data: [5, 6, 6, 6, 6, 7],
+    //   backgroundColor: ["rgba(98, 24, 168, 0.2)"],
+    //   borderColor: ["rgba(98, 24, 168, 1)"],
+    //   borderWidth: 1,
+    // },
     {
       label: "New Hires",
       data: [0, 1, 5, 0, 0, 2],
