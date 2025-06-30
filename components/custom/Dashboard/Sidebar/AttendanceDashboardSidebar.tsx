@@ -35,6 +35,11 @@ export default function AttendanceDashboardSidebar({
           user.user_roles?.roles.role_name !== "Super Admin" &&
           user.user_roles?.roles.role_name !== "Admin",
       },
+      {
+        href: `/dashboard/company/${company.company_id}/attendance/device`,
+        icon: <Icons.fingerprint />,
+        title: "Fingerprint Devices",
+      },
     ],
     [company.company_id, user.user_roles?.roles.role_name]
   );

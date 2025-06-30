@@ -1,6 +1,7 @@
 "use client";
 
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import TailwindIndicator from "@/providers/TailwindIndicator";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -16,6 +17,7 @@ export function Providers({ children }: Props) {
       {/* <LanguageContextProvider> */}
       <NuqsAdapter>{children}</NuqsAdapter>
       <Toaster />
+      <SonnerToaster />
       {/* <TailwindIndicator /> */}
       {/* </LanguageContextProvider> */}
     </ThemeProvider>

@@ -141,6 +141,7 @@ import {
   Copy,
   Save,
   ImageDown,
+  Fingerprint,
 } from "lucide-react";
 import React from "react";
 
@@ -921,6 +922,7 @@ const TwitterXIcon = React.forwardRef<SVGElement, SVGAttributes>(
 TwitterXIcon.displayName = "TwitterXIcon";
 
 const Icons = {
+  fingerprint: Fingerprint,
   x: TwitterXIcon,
   siteSparkle: SiteSparkle,
   instagram: InstagramIcon,
