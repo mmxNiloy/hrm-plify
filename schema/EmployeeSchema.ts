@@ -32,6 +32,8 @@ export interface IEmployee {
   contract_end_date?: Date;
   date_of_confirmaton?: Date;
   date_of_joining?: Date;
+
+  status: "ACTIVE" | "LEAVE" | "TERMINATED" | "RESIGNED" | "RETIRED";
 }
 
 export interface IEmployeeWithPersonalInfo extends IEmployee {
@@ -202,4 +204,6 @@ export interface IEmployeeWithUserMetadata extends IEmployee {
   is_root?: boolean;
 
   num_vacant?: number;
+
+  emp_type?: IEmploymentType;
 }

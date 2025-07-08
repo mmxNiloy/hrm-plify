@@ -72,10 +72,19 @@ export default function CompanyAuthorityFormFragment({
 }: Props) {
   const [updating, startUpdate] = useTransition();
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
     disabled: readOnly || updating,
-    defaultValues: { ...data, doc_link: data?.doc_link || undefined },
+    defaultValues: {
+      fname: data?.fname ?? "",
+      lname: data?.lname ?? "",
+      designation: data?.designation ?? "",
+      phone_no: data?.phone_no ?? "",
+      email: data?.email ?? "",
+      offence_history: data?.offence_history ?? "",
+      override: data?.is_same_as_key_contact ?? false,
+      doc_link: data?.doc_link || undefined,
+    },
   });
 
   const docFile = form.watch("docFile");

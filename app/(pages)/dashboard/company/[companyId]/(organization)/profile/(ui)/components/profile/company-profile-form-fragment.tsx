@@ -75,9 +75,19 @@ export default function CompanyProfileFormFragment({
 }: Props) {
   const [updating, startUpdate] = useTransition();
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
-    defaultValues: { ...data, logo: data.logo || undefined },
+    defaultValues: {
+      company_name: data.company_name,
+      industry: data.industry ?? "",
+      headquarters: data.headquarters,
+      founded_year: data.founded_year,
+      website: data.website,
+      email: data.email,
+      contact_number: data.contact_number,
+      is_active: data.is_active,
+      logo: data.logo || undefined,
+    },
     disabled: updating || readOnly,
   });
 
@@ -206,7 +216,7 @@ export default function CompanyProfileFormFragment({
                   <FormControl>
                     <RadioGroup
                       disabled={field.disabled}
-                      value={field.value > 0 ? "active" : "inactive"}
+                      value={(field.value ?? 0) > 0 ? "active" : "inactive"}
                       onValueChange={(val) => {
                         if (val === "active") field.onChange(1);
                         else field.onChange(0);

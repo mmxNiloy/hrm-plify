@@ -51,7 +51,7 @@ export default function DataTableFilterFormDialog({
     })
   );
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       filter_value: filterMap.get(data.id) ?? "",

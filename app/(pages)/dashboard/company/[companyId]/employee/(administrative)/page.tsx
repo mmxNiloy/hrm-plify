@@ -1,27 +1,16 @@
 "use server";
 import React from "react";
-import { CompanyByIDPageProps } from "../../PageProps";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
-import { DataTable } from "@/components/ui/data-table";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { TPermission } from "@/schema/Permissions";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import Icons from "@/components/ui/icons";
 import Link from "next/link";
 import Counter from "@/components/custom/Counter";
-import { getCompanyEmployeeStats } from "@/app/(server)/actions/getCompanyEmployeeStats";
-import { EmploymentTypeStatDataTableColumns } from "@/components/custom/DataTable/Columns/EmployeeTypeStatDataTableColumns";
-import SiteConfig from "@/utils/SiteConfig";
 import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
+import getEmployeeStats from "@/app/(server)/actions/company/employee/get-employee-stats.controller";
 
 export async function generateMetadata({
   params,
-}: CompanyByIDPageProps): Promise<Metadata> {
+}: CompanyIDURLParamSchema): Promise<Metadata> {
   const mParams = await params;
   const companyId = mParams.companyId;
   return await getCompanyMeta(companyId, "Employee Dashboard");
@@ -29,64 +18,26 @@ export async function generateMetadata({
 
 export default async function EmployeeDashboardPage({
   params,
-}: CompanyByIDPageProps) {
-  const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
+}: CompanyIDURLParamSchema) {
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
-  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
-  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+  // const data = await getEmployeeStats(companyId);
 
-  // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-
-  const [company, companyExtraData, stats] = await Promise.all([
-    getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getCompanyEmployeeStats(companyId),
-  ]);
-
-  if (company.error || companyExtraData.error || stats.error) {
-    return (
-      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Employee Dashboard
-        </p>
-        <ErrorFallbackCard
-          error={company.error ?? companyExtraData.error ?? stats.error}
-        />
-      </main>
-    );
-  }
+  // const stats = data.payload;
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Employee Dashboard
-      </p>
-
-      <MyBreadcrumbs
-        company={company.data}
-        user={user}
-        title={"Employee Dashboard"}
-      />
-
+    <>
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">Statistics</p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center *:w-full *:sm:min-w-40 *:md:min-w-64">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center *:w-full *:sm:min-w-40 *:md:min-w-64">
         <Link href={"./employee/all"}>
           <div className="flex flex-col gap-2 p-4 rounded-md from-teal-500/80 to-indigo-600 hover:from-sky-400/80 hover:to-indigo-500 bg-gradient-to-br text-white">
             <div className="flex gap-2 text-xl font-semibold">
               <Icons.employees />
               Active Employees
             </div>
-            <Counter value={stats.data.totalEmployees} className="text-end" />
+            <Counter value={stats?.totalEmployees ?? 0} className="text-end" />
           </div>
         </Link>
         <Link href={"./employee/migrant"}>
@@ -95,7 +46,10 @@ export default async function EmployeeDashboardPage({
               <Icons.users />
               Migrant Employees
             </div>
-            <Counter value={stats.data.foreignEmployees} className="text-end" />
+            <Counter
+              value={stats?.foreignEmployees ?? 0}
+              className="text-end"
+            />
           </div>
         </Link>
         <Link href={"./employee/staff-report"}>
@@ -106,12 +60,7 @@ export default async function EmployeeDashboardPage({
             </div>
           </div>
         </Link>
-      </div>
-
-      <DataTable
-        data={stats.data.empTypeCounts}
-        columns={EmploymentTypeStatDataTableColumns}
-      />
-    </main>
+      </div> */}
+    </>
   );
 }

@@ -25,43 +25,39 @@ export default function EditEmployeeInfoByUserIdPageLayout({
   nidDetails,
 }: Props) {
   return (
-    <main className="container grid grid-cols-2 gap-2">
-      <div className="col-span-full">{children}</div>
-      {/* TabList */}
-      <Tabs className="col-span-full" defaultValue="personal-info">
-        <TabsList className="w-full h-fit flex-col xl:flex-row xl:flex sm:grid sm:grid-cols-4 sm:gap-2">
-          <TabsTrigger value="personal-info">Personal Info</TabsTrigger>
-          <TabsTrigger value="educational-info">Education</TabsTrigger>
-          <TabsTrigger value="passport-info">Passport & VISA</TabsTrigger>
-          <TabsTrigger value="euss-dbs-info">EUSS & DBS</TabsTrigger>
-          <TabsTrigger value="nid-info">NID</TabsTrigger>
-          <TabsTrigger value="contact-info">Contact</TabsTrigger>
-          <TabsTrigger value="emergency-contact-info">
-            Emergency Contact
-          </TabsTrigger>
-        </TabsList>
+    <Tabs className="col-span-full" defaultValue="personal-info">
+      <TabsList className="w-full h-fit flex-col xl:flex-row xl:flex sm:grid sm:grid-cols-4 sm:gap-2">
+        <TabsTrigger value="personal-info">Personal Info</TabsTrigger>
+        <TabsTrigger value="educational-info">Education</TabsTrigger>
+        <TabsTrigger value="passport-info">Passport & VISA</TabsTrigger>
+        <TabsTrigger value="euss-dbs-info">EUSS & DBS</TabsTrigger>
+        <TabsTrigger value="nid-info">NID</TabsTrigger>
+        <TabsTrigger value="contact-info">Contact</TabsTrigger>
+        <TabsTrigger value="emergency-contact-info">
+          Emergency Contact
+        </TabsTrigger>
+      </TabsList>
 
-        <TabsContent value="personal-info">{personalInfo}</TabsContent>
+      <TabsContent value="personal-info">{personalInfo}</TabsContent>
 
-        <TabsContent value="educational-info">{educationalInfo}</TabsContent>
+      <TabsContent value="educational-info">{educationalInfo}</TabsContent>
 
-        <TabsContent value="passport-info">
-          <div className="flex flex-col gap-4">
-            {passportInfo}
-            {visaBrpDetails}
-          </div>
-        </TabsContent>
+      <TabsContent value="passport-info">
+        <div className="flex flex-col gap-4">
+          {passportInfo}
+          {visaBrpDetails}
+        </div>
+      </TabsContent>
 
-        <TabsContent value="euss-dbs-info">{eussDbsDetails}</TabsContent>
+      <TabsContent value="euss-dbs-info">{eussDbsDetails}</TabsContent>
 
-        <TabsContent value="nid-info">{nidDetails}</TabsContent>
+      <TabsContent value="nid-info">{nidDetails}</TabsContent>
 
-        <TabsContent value="contact-info">{contactInfo}</TabsContent>
+      <TabsContent value="contact-info">{contactInfo}</TabsContent>
 
-        <TabsContent value="emergency-contact-info">
-          {emergencyContactInfo}
-        </TabsContent>
-      </Tabs>
-    </main>
+      <TabsContent value="emergency-contact-info">
+        {emergencyContactInfo}
+      </TabsContent>
+    </Tabs>
   );
 }

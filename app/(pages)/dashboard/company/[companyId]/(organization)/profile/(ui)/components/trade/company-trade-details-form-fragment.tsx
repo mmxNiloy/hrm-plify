@@ -67,9 +67,17 @@ export default function CompanyTradeDetailsFormFragment({
 }: Props) {
   const [updating, startUpdate] = useTransition();
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
-    defaultValues: data,
+    defaultValues: {
+      company_reg: data?.company_reg ?? "",
+      type_of_company: data?.type_of_company ?? "",
+      trade_name: data?.trade_name ?? "",
+      sector: data?.sector ?? "",
+      org_email: data?.org_email ?? "",
+      change_of_name_5: data?.change_of_name_5 ?? "no",
+      faced_penalty_org: data?.faced_penalty_org ?? "no",
+    },
     disabled: updating || readOnly,
   });
 

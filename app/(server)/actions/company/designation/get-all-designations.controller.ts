@@ -1,7 +1,7 @@
 "use server";
 
-import { IDepartment } from "@/schema/CompanySchema";
 import executeRequest from "../../network/request-builder.service";
+import { IDesignation } from "@/schema/DesignationSchema";
 
 interface InputProps {
   companyId: string;
@@ -12,7 +12,7 @@ export default async function getAllDesignations({
   companyId,
   isActive = "1",
 }: InputProps) {
-  return await executeRequest<IDepartment[]>({
+  return await executeRequest<IDesignation[]>({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "designation", "all", "company", companyId].join("/"),

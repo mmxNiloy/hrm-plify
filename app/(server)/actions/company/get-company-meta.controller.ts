@@ -28,7 +28,7 @@ export default async function getCompanyMeta(
   });
 
   const meta = result.payload;
-  console.log("Meta", meta);
+  // console.log("Meta", meta);
 
   if (result.error || !meta) {
     return await getSiteMetadata(pageName);

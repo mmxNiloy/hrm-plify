@@ -3,12 +3,12 @@ import DashboardNavbar from "@/components/custom/Dashboard/Navbar/DashboardNavba
 import AppSidebar from "@/components/custom/Dashboard/Sidebar/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
-import { CompanyByIDPageProps } from "./PageProps";
 import { INavItem } from "@/schema/SidebarSchema";
 import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
 
-interface LayoutProps extends CompanyByIDPageProps {
+interface LayoutProps extends CompanyIDURLParamSchema {
   children: React.ReactNode;
 }
 export default async function CompanyDashboardLayout({

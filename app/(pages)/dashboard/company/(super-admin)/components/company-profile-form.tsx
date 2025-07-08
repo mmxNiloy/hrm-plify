@@ -42,7 +42,7 @@ interface Props extends IFormFragmentProps<ICompany> {
 const FormSchema = z.object({
   company_name: z.string(),
   industry: z.string(),
-  is_active: z.coerce.number().nonnegative().max(1).default(0),
+  is_active: z.number().nonnegative().max(1).optional().default(0),
   headquarters: z.string(),
   contact_number: z.string(),
   founded_year: z.number().nonnegative(),
@@ -72,11 +72,18 @@ export default function CompanyProfileForm({
   asClient = false,
   onSuccess,
 }: Props) {
-  const form = useForm<FormType>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm({
     defaultValues: {
-      ...data,
+      company_name: data?.company_name ?? "",
+      industry: data?.industry ?? "",
+      headquarters: data?.headquarters ?? "",
+      founded_year: data?.founded_year ?? 0,
+      website: data?.website ?? "",
+      email: data?.email ?? "",
+      contact_number: data?.contact_number ?? "",
+      is_active: data?.is_active ?? 0,
     },
+    resolver: zodResolver(FormSchema),
     disabled: readOnly || disabled,
   });
 

@@ -52,10 +52,10 @@ export default function CompanyTradingHoursFormFragment({
 }: Props) {
   const [updating, startUpdate] = useTransition();
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      trading_hours: data,
+      trading_hours: data ?? [],
     },
     disabled: readOnly,
   });
@@ -128,7 +128,7 @@ export default function CompanyTradingHoursFormFragment({
                     <FormItem>
                       <FormLabel>Trade Status</FormLabel>
                       <Select
-                        defaultValue={field.value.toString()}
+                        defaultValue={(field.value ?? 0).toString()}
                         onValueChange={(val) =>
                           field.onChange(Number.parseInt(val))
                         }

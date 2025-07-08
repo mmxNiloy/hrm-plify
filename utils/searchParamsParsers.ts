@@ -1,3 +1,4 @@
+import { IEmployee } from "@/schema/EmployeeSchema";
 import { ESortFilter } from "@/schema/enum/sort-filter";
 import {
   createParser,
@@ -12,6 +13,8 @@ import {
   parseAsBoolean,
 } from "nuqs/server";
 import { toYYYYMMDD } from "./Misc";
+
+type EmployeeStatus = IEmployee["status"];
 
 export const parseAsDateString = createParser({
   parse(queryValue) {
@@ -90,6 +93,18 @@ export const searchParamsParsers = {
     .withOptions({
       shallow: false,
       throttleMs: 300,
+    }),
+  isForeign: parseAsStringEnum(["0", "1", "all"]).withDefault("0").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  employeeStatus: parseAsArrayOf<EmployeeStatus>(
+    parseAsStringEnum(["ACTIVE", "LEAVE", "TERMINATED", "RESIGNED", "RETIRED"])
+  )
+    .withDefault(["ACTIVE"])
+    .withOptions({
+      shallow: false,
+      throttleMs: 1000,
     }),
 };
 

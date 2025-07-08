@@ -42,9 +42,16 @@ export default function CompanyAddressFormFragment({
 }: Props) {
   const [updating, startUpdate] = useTransition();
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
-    defaultValues: data,
+    defaultValues: {
+      postcode: data?.postcode ?? "",
+      address_line_1: data?.address_line_1 ?? "",
+      address_line_2: data?.address_line_2 ?? "",
+      address_line_3: data?.address_line_3 ?? "",
+      city_county: data?.city_county ?? "",
+      country: data?.country ?? "",
+    },
     disabled: readOnly || updating,
   });
 

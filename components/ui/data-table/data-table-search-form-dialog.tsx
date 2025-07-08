@@ -46,7 +46,7 @@ export default function DataTableSearchFormDialog() {
     })
   );
 
-  const form = useForm<FormType>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       search_value: searchQuery,
