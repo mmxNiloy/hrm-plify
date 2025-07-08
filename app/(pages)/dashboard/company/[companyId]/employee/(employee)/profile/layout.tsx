@@ -42,7 +42,7 @@ export default function EditEmployeeInfoByUserIdPageLayout({
           >
             Education
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value="passport-info"
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
           >
@@ -53,7 +53,7 @@ export default function EditEmployeeInfoByUserIdPageLayout({
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
           >
             EUSS & DBS
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger
             value="nid-info"
             className="data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 rounded-none"
@@ -78,14 +78,14 @@ export default function EditEmployeeInfoByUserIdPageLayout({
 
         <TabsContent value="educational-info">{educationalInfo}</TabsContent>
 
-        <TabsContent value="passport-info">
+        {/* <TabsContent value="passport-info">
           <div className="flex flex-col gap-4">
             {passportInfo}
             {visaBrpDetails}
           </div>
         </TabsContent>
 
-        <TabsContent value="euss-dbs-info">{eussDbsDetails}</TabsContent>
+        <TabsContent value="euss-dbs-info">{eussDbsDetails}</TabsContent> */}
 
         <TabsContent value="nid-info">{nidDetails}</TabsContent>
 

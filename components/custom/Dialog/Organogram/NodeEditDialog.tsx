@@ -196,7 +196,7 @@ export default function NodeEditDialog({
           user_id: -1,
           employee_code: "vacant",
           company_id: 0,
-          ni_num: "",
+          // ni_num: "",
           department_id: 0,
           designation_id: desig.designation_id,
           is_vacant: true,

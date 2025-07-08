@@ -40,12 +40,12 @@ export const CompanyContractAgreementDataTableColumns: ColumnDef<IContractAgreem
         <SortableHeader name="Nationality" column={column} />
       ),
     },
-    {
-      accessorKey: "ni_number",
-      header: ({ column }) => (
-        <SortableHeader name="NI Number" column={column} />
-      ),
-    },
+    // {
+    //   accessorKey: "ni_number",
+    //   header: ({ column }) => (
+    //     <SortableHeader name="NI Number" column={column} />
+    //   ),
+    // },
     {
       accessorKey: "visa_expired",
       header: ({ column }) => (

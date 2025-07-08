@@ -67,7 +67,7 @@ export default function CompanyAuthorityTab({
       </div>
 
       {/* Level 1 User Section */}
-      <div className="flex flex-col gap-3 sm:gap-4">
+      {/* <div className="flex flex-col gap-3 sm:gap-4">
         <div className="col-span-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <p className="text-base sm:text-lg md:text-xl font-semibold">
             Level 1 User
@@ -89,7 +89,7 @@ export default function CompanyAuthorityTab({
           data={data?.company_l1_user}
           readOnly
         />
-      </div>
+      </div> */}
     </div>
   );
 }

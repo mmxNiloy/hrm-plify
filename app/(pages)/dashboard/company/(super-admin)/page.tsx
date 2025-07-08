@@ -109,7 +109,8 @@ export default async function CompanyDashboardPage({
       </div>
 
       <StaticDataTable
-        data={paginatedCompanies.data}
+        //@ts-ignore
+        data={paginatedCompanies.payload}
         columns={CompanyDataTableColumns}
         pageCount={paginatedCompanies.total_page}
       />

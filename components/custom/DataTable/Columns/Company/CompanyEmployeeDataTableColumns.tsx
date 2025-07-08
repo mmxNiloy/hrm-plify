@@ -48,10 +48,10 @@ export const CompanyEmployeeDataTableColumns: ColumnDef<IEmployee>[] = [
       <SortableHeader name="Nationality" column={column} />
     ),
   },
-  {
-    accessorKey: "ni_number",
-    header: ({ column }) => <SortableHeader name="NI Number" column={column} />,
-  },
+  // {
+  //   accessorKey: "ni_number",
+  //   header: ({ column }) => <SortableHeader name="NI Number" column={column} />,
+  // },
   {
     accessorKey: "visa_expired",
     header: ({ column }) => (
@@ -134,10 +134,10 @@ export const column_skeletons: ColumnDef<IEmployee>[] = [
       <SortableHeader name="Nationality" column={column} />
     ),
   },
-  {
-    accessorKey: "ni_number",
-    header: ({ column }) => <SortableHeader name="NI Number" column={column} />,
-  },
+  // {
+  //   accessorKey: "ni_number",
+  //   header: ({ column }) => <SortableHeader name="NI Number" column={column} />,
+  // },
   {
     accessorKey: "visa_expired",
     header: ({ column }) => (

@@ -50,7 +50,7 @@ export default function EmployeeDetailsEditDialog({
           last_name: fd.get("last_name") as string,
           date_of_birth: fd.get("date_of_birth") as string, // you can convert to Date if needed
           gender: fd.get("gender") as string,
-          ni_num: fd.get("ni_num") as string,
+          // ni_num: fd.get("ni_num") as string,
           nationality: fd.get("nationality") as string,
           marital_status: fd.get("marital_status") as string,
           email: fd.get("email") as string,
@@ -67,7 +67,7 @@ export default function EmployeeDetailsEditDialog({
           last_name: data.users.last_name ?? "",
           date_of_birth: data.date_of_birth ?? "",
           gender: data.gender ?? "",
-          ni_num: data.ni_num ?? "",
+          // ni_num: data.ni_num ?? "",
           nationality: data.nationality ?? "",
           marital_status: data.marital_status ?? "",
           email: data.users.email ?? "",

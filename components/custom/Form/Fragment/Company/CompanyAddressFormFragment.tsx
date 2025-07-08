@@ -91,43 +91,20 @@ export default function CompanyAddressFormFragment({
           className={cn(
             readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
           )}
-          htmlFor="city-county-input"
+          htmlFor="city-input"
         >
-          City/County
+          City
         </Label>
         <Input
           required
-          key={`city-county-${data?.city_county}`}
+          key={`city-${data?.city_county}`}
           className="rounded-full"
           readOnly={readOnly}
           disabled={disabled}
-          placeholder="City or County"
+          placeholder="City"
           defaultValue={data?.city_county ?? ""}
           name="city_county"
-          id="city-county-input"
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <Label
-          className={cn(
-            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
-          )}
-          htmlFor="country-input"
-        >
-          Country
-        </Label>
-        <ComboBox
-          key={`country-${data?.country}`}
-          required
-          items={countryNames}
-          className="rounded-full"
-          readOnly={readOnly}
-          disabled={readOnly}
-          placeholder="Country"
-          defaultValue={data?.country ?? ""}
-          name="country"
-          id="country-input"
+          id="city-input"
         />
       </div>
     </>

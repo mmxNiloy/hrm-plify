@@ -27,24 +27,24 @@ export default function Home() {
   // For what makes us different section
   const ourSpecialties: IFeatureItem[] = [
     {
-      title: "Avoid Costly Labour Law Penalties",
+      title: "Boost Workforce Productivity",
       description:
-        "Boost Workforce Productivity Unlock the true potential of your team. Our software provides the structure for setting clear goals and tracking performance, turning your workforce into a highly productive engine for growth.",
+        "Unlock the true potential of your team. Our software provides the structure for setting clear goals and tracking performance, turning your workforce into a highly productive engine for growth.",
     },
     {
-      title: "Prevent Sponsorship License Revocation/Suspension",
+      title: "Enhance Team Reliability",
       description:
-        "Enhance Team Reliability Build a disciplined and dependable team you can count on. Our precise attendance and leave management tools ensure your operations run smoothly and predictably every single day.",
+        "Build a disciplined and dependable team you can count on. Our precise attendance and leave management tools ensure your operations run smoothly and predictably every single day.",
     },
     {
-      title: "Eliminate Business Sanctions",
+      title: "Streamline Daily Operations",
       description:
-        "Streamline Daily Operations Replace endless paperwork and spreadsheets with smart automation. We handle the routine administrative tasks, freeing up your managers to lead, motivate, and focus on what truly matters.",
+        "Replace endless paperwork and spreadsheets with smart automation. We handle the routine administrative tasks, freeing up your managers to lead, motivate, and focus on what truly matters.",
     },
     {
-      title: "One Software, Complete UK Home Office Compliance",
+      title: "Gain Clear Management Insight",
       description:
-        "Gain Clear Management Insight Make smarter, data-driven decisions about your people. Our all-in-one platform gives you a complete view of your workforce, from attendance patterns to performance metrics, all in one place.",
+        "Make smarter, data-driven decisions about your people. Our all-in-one platform gives you a complete view of your workforce, from attendance patterns to performance metrics, all in one place.",
     },
   ];
 

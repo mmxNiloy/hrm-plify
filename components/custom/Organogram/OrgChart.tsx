@@ -119,7 +119,7 @@ export default function OrgChart({
           user_id: 0,
           employee_code: "",
           company_id: 0,
-          ni_num: "",
+          // ni_num: "",
           department_id: 0,
           designation_id: 0,
           is_vacant: false,

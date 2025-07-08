@@ -93,7 +93,7 @@ export default async function EmployeeDashboardPage({
             <Counter value={stats.data.totalEmployees} className="text-end" />
           </div>
         </Link>
-        <Link href={"./employee/migrant"}>
+        {/* <Link href={"./employee/migrant"}>
           <div className="flex flex-col gap-2 p-4 rounded-md from-lime-500/80 to-emerald-600 hover:from-lime-400/80 hover:to-emerald-500 bg-gradient-to-br text-white">
             <div className="flex gap-2 text-xl font-semibold">
               <Icons.users />
@@ -101,7 +101,7 @@ export default async function EmployeeDashboardPage({
             </div>
             <Counter value={stats.data.foreignEmployees} className="text-end" />
           </div>
-        </Link>
+        </Link> */}
         <Link href={"./employee/staff-report"}>
           <div className="flex flex-col h-full gap-2 p-4 rounded-md from-rose-500/80 to-amber-600 hover:rose-lime-400/80 hover:to-amber-500 bg-gradient-to-br text-white">
             <div className="flex gap-2 text-xl font-semibold">

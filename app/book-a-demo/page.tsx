@@ -155,7 +155,7 @@ export default function BookADemoPage() {
             <Label className={RequiredAsterisk}>First Name</Label>
             <Input
               required
-              placeholder="John"
+              placeholder="eg: Joy"
               name="first_name"
               className="h-12 sm:h-14 xl:h-16 px-4 rounded-xl drop-shadow-sm focus:drop-shadow-lg hover:drop-shadow-lg"
             />
@@ -165,7 +165,7 @@ export default function BookADemoPage() {
             <Label className={RequiredAsterisk}>Last Name</Label>
             <Input
               required
-              placeholder="Doe"
+              placeholder="eg: Baroi"
               name="last_name"
               className="h-12 sm:h-14 xl:h-16 px-4 rounded-xl drop-shadow-sm focus:drop-shadow-lg hover:drop-shadow-lg"
             />
@@ -186,7 +186,7 @@ export default function BookADemoPage() {
             <Label>Contact Number</Label>
             <Input
               type="tel"
-              placeholder="+4400 0000 0000"
+              placeholder="+88 01xxxx-yyyyy"
               name="contact_num"
               className="h-12 sm:h-14 xl:h-16 px-4 rounded-xl drop-shadow-sm focus:drop-shadow-lg hover:drop-shadow-lg"
             />

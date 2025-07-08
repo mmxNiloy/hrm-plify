@@ -74,9 +74,7 @@ export default function EmployeeOnboardingFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label className={RequiredAsterisk} htmlFor="middle-name-input">
-          Middle Name
-        </Label>
+        <Label htmlFor="middle-name-input">Middle Name</Label>
         <Input
           required
           id="middle-name-input"

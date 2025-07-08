@@ -31,7 +31,7 @@ export default function CompanyTradeFormFragment({
           )}
           htmlFor="company-reg-input"
         >
-          Registration No.
+          Trade License
         </Label>
 
         <div className="w-full flex relative items-center justify-center">
@@ -95,16 +95,8 @@ export default function CompanyTradeFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label
-          className={cn(
-            readOnly ? "" : "after:content-['*'] after:text-red-500 after:ml-1"
-          )}
-          htmlFor="trade-name-input"
-        >
-          Trade
-        </Label>
+        <Label htmlFor="trade-name-input">Trade</Label>
         <Input
-          required
           key={`company-trade-name-${data?.trade_name}`}
           className="rounded-full"
           readOnly={readOnly}

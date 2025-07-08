@@ -18,7 +18,7 @@ export interface IEmployee {
   image?: string;
   gender?: string;
   is_foreign?: boolean;
-  ni_num: string;
+  ni_num?: string;
   date_of_birth?: Date;
   marital_status?: string;
   nationality?: string;
@@ -69,7 +69,7 @@ export interface IContractAgreement {
   dob: Date;
   mobile: string;
   nationality: string;
-  ni_number: string;
+  ni_number?: string;
   visa_expired: Date;
   passport_number: string;
   address: string;

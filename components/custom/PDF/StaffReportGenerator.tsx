@@ -51,7 +51,7 @@ export default function StaffReportGenerator({
         "Joining Date",
         "Contact Number",
         "Nationality",
-        "NI Number",
+        // "NI Number",
         "Passport Number",
         "VISA/BRP Number",
         "VISA/BRP Issued",
@@ -78,7 +78,7 @@ export default function StaffReportGenerator({
           : "N/A",
         row.contact_number || "N/A",
         row.nationality || "N/A",
-        row.ni_num || "N/A",
+        // row.ni_num || "N/A",
         row.emp_passport?.passport_number || "N/A",
         row.visa_brp?.visa_brp_number || "N/A",
         row.visa_brp?.issue_date

@@ -39,6 +39,7 @@ export default function CompanyAddressEditDialog({
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
+      fd.set("country", "Bangladesh");
 
       setUpdating(true);
 

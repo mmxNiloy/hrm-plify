@@ -166,7 +166,7 @@ export default function EmployeeDetailsFormFragment({
         </Select>
       </div>
 
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         <Label htmlFor="ni-num-input">NI Number</Label>
         <Input
           key={`ni-num-${data?.ni_num}`}
@@ -177,7 +177,7 @@ export default function EmployeeDetailsFormFragment({
           placeholder="NI Number"
           name="ni_num"
         />
-      </div>
+      </div> */}
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="nationality-input">Nationality</Label>

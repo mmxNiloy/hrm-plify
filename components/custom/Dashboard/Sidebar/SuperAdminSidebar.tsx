@@ -51,11 +51,11 @@ export default function SuperAdminSidebar({
         title: "Notifications",
         icon: <Icons.bell />,
       },
-      {
-        href: "#",
-        title: "Analytics",
-        icon: <Icons.analytics />,
-      },
+      // {
+      //   href: "#",
+      //   title: "Analytics",
+      //   icon: <Icons.analytics />,
+      // },
     ],
     [permissions]
   );
