@@ -45,7 +45,7 @@ export default function CompanyTradeFormFragment({
             readOnly={readOnly}
             disabled={disabled}
             defaultValue={data?.company_reg ?? ""}
-            placeholder="Registration Number"
+            placeholder="Trade License"
             name="company_reg"
             id="company-reg-input"
           />
