@@ -1,12 +1,6 @@
-import { DataTableSkeleton } from "@/components/ui/data-table";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import React from "react";
-import { CompanyContractAgreementDataTableColumns } from "../../Columns/Company/CompanyContractAgreementDataTableColumns";
 
 export default function ContractAgreementDataTableSkeleton() {
-  return (
-    <DataTableSkeleton
-      columns={CompanyContractAgreementDataTableColumns}
-      showOptions
-    />
-  );
+  return <DataTableSkeleton />;
 }

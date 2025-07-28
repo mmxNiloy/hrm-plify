@@ -15,8 +15,8 @@ export default async function OtherDocumentNotificationsSlot({
   params,
 }: Props) {
   const sParams = await searchParams;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const { limit, page } = getPaginationParams(sParams, "euss");
 
   return (

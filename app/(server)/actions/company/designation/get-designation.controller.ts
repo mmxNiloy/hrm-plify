@@ -22,11 +22,11 @@ export default async function getDesignations({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "designation", "company", companyId].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-      ["search", search],
-      ["isActive", isActive],
-    ],
+    query: {
+      page,
+      limit,
+      search,
+      isActive,
+    },
   });
 }

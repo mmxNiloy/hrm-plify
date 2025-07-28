@@ -23,8 +23,8 @@ interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -50,8 +50,8 @@ export default async function HolidayTypesPage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const { limit, page } = getPaginationParams(await searchParams);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -60,7 +60,7 @@ export default async function HolidayTypesPage({
   const [company, holidayTypes] = await Promise.all([
     getCompanyData(companyId),
     getHolidayTypes({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
     }),
   ]);
 
@@ -81,14 +81,11 @@ export default async function HolidayTypesPage({
         Holiday Types
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Holiday"
-          title="Type"
-        />
+        <MyBreadcrumbs parent="Holiday" title="Type" />
 
-        {writeAccess && <HolidayTypeEditPopover company_id={companyId} />}
+        {writeAccess && (
+          <HolidayTypeEditPopover company_id={Number.parseInt(companyId)} />
+        )}
       </div>
 
       <DataTable

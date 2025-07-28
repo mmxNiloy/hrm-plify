@@ -18,11 +18,11 @@ export async function getCompanies({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "company"].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-      ["isActive", isActive],
-      ["search", search],
-    ],
+    query: {
+      page,
+      limit,
+      isActive,
+      search,
+    },
   });
 }

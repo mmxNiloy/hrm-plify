@@ -32,7 +32,9 @@ export default async function VisaBRPDetailSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const { data: visaBrp, error } = await getVisaBRPInfo(employeeId);
+  const { data: visaBrp, error } = await getVisaBRPInfo(
+    Number.parseInt(employeeId)
+  );
   if (error) {
     return (
       <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
@@ -49,7 +51,10 @@ export default async function VisaBRPDetailSlot({
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">VISA/BRP Information</p>
         {updateAccess && (
-          <VisaBrpEditDialog data={visaBrp} employee_id={employeeId} />
+          <VisaBrpEditDialog
+            data={visaBrp}
+            employee_id={Number.parseInt(employeeId)}
+          />
         )}
       </div>
       <VisaBrpFormFragment data={visaBrp} readOnly />

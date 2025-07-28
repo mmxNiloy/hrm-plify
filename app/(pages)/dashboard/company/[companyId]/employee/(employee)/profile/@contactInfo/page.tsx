@@ -31,8 +31,6 @@ export default async function ContactInfoSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const { companyId, employeeId } = await params;
-
   const emp = await getEmployeeData();
   const empId = emp.data?.data?.employee_id ?? 0;
   const { data: contactInfo, error } = await getContactInfo(

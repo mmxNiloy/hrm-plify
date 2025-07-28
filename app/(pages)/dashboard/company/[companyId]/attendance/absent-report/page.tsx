@@ -46,8 +46,8 @@ export default async function AbsentReportPage({
   params,
   searchParams,
 }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -57,9 +57,9 @@ export default async function AbsentReportPage({
 
   const [company, companyExtraData, reports] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     getAbsentReports({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       limit,
       page,
       filters,
@@ -98,7 +98,7 @@ export default async function AbsentReportPage({
       <StaticDataTable
         data={reports.data.data.map((item) => ({
           ...item,
-          company_id: companyId,
+          company_id: Number.parseInt(companyId),
         }))}
         pageCount={reports.data.total_page}
         columns={AttendanceReportDataTableColumns}

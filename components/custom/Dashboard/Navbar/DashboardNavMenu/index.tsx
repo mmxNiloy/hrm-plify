@@ -13,7 +13,7 @@ export default async function DashboardNavMenu({
   company?: ICompany;
   user: IUser;
 }) {
-  const role = user.user_roles?.roles.role_name;
+  const role = user.user_roles?.roles?.role_name;
 
   if (role === "Super Admin" || role === "Admin") {
     return <SuperAdminNavMenu />;

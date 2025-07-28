@@ -33,7 +33,7 @@ export default async function NidDetailsSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const { data: nid, error } = await getNIDInfo(employeeId);
+  const { data: nid, error } = await getNIDInfo(Number.parseInt(employeeId));
   if (error) {
     return (
       <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
@@ -49,7 +49,9 @@ export default async function NidDetailsSlot({
     <div className="grid grid-cols-2 gap-4 p-8 border rounded-md">
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">National ID Information</p>
-        {updateAccess && <NidEditDialog data={nid} employee_id={employeeId} />}
+        {updateAccess && (
+          <NidEditDialog data={nid} employee_id={Number.parseInt(employeeId)} />
+        )}
       </div>
       <NidFormFragment data={nid} readOnly />
     </div>

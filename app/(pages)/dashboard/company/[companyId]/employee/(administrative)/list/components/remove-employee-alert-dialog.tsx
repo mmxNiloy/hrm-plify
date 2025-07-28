@@ -72,7 +72,7 @@ const RemoveEmployeeAlertDialog = React.forwardRef<HTMLButtonElement, Props>(
           }
         });
       },
-      [router, data.employee_id, data.company_id]
+      [router, data.employee_id]
     );
 
     return (

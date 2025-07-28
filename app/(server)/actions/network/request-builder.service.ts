@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { ResponseBuilder } from "./ResponseBuilder";
+import { Primitive } from "zod";
 
 interface RequestBuilderProps extends RequestInit {
   method:
@@ -15,7 +16,7 @@ interface RequestBuilderProps extends RequestInit {
     | "OPTIONS";
   endpoint: string;
   authenticate?: boolean;
-  query?: string[][];
+  query?: Record<string, Primitive | Primitive[]>;
   asFormData?: boolean;
   headers?: Record<string, string>;
 }
@@ -55,13 +56,16 @@ export default async function executeRequest<T = unknown>(
           ...headers,
         };
 
+    const queryString = Object.entries(query ?? {})
+      .map(([key, val]) => {
+        if (Array.isArray(val))
+          return val.map((v) => `${key}=${v?.toString()}`).join("&");
+        return `${key}=${val?.toString()}`;
+      })
+      .join("&");
+
     const response = await fetch(
-      [process.env.API_BASE_URL, endpoint].join("/").concat(
-        `?${query
-          ?.filter((item) => item.length == 2)
-          .map((item) => item.join("="))
-          .join("&")}`
-      ),
+      [process.env.API_BASE_URL, endpoint].join("/").concat(`?${queryString}`),
       {
         method,
         headers: mHeaders,

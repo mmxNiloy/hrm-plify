@@ -30,8 +30,8 @@ export default async function CompanyLeaveReportPage({
   params,
   searchParams,
 }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const sParams = await searchParams;
   const { page, limit } = getPaginationParams(sParams);
 
@@ -57,12 +57,7 @@ export default async function CompanyLeaveReportPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Leave Report</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Leave"
-          title="Leave Balance"
-        />
+        <MyBreadcrumbs parent="Leave" title="Leave Balance" />
 
         <div className="flex flex-row gap-2 items-center justify-center">
           <Button

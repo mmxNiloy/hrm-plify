@@ -124,6 +124,7 @@ export default function OrgChart({
           designation_id: 0,
           is_vacant: false,
           is_root: true,
+          status: "ACTIVE",
         },
       };
       setLoading(false);

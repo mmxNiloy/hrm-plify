@@ -7,6 +7,8 @@ export default async function getAllEmploymentTypes(isActive = true) {
     method: "GET",
     endpoint: ["employment-type", "all"].join("/"),
     authenticate: true,
-    query: [["isActive", isActive ? "1" : "0"]],
+    query: {
+      isActive: isActive ? 1 : 0,
+    },
   });
 }

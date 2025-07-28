@@ -1,3 +1,4 @@
+"use client";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -8,15 +9,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { searchParamsParsers } from "@/utils/searchParamsParsers";
+import { useQueryState } from "nuqs";
 import React from "react";
 
 export default function EditEmployeeActions() {
+  const [view, setView] = useQueryState(
+    "employeeProfileView",
+    searchParamsParsers.employeeProfileView
+  );
+
   return (
     <div className="flex flex-col gap-3">
       <Label>View</Label>
-      <Select>
-        <SelectTrigger>
-          <SelectValue placeholder="Select a View" />
+      <Select value={view} onValueChange={(val) => setView(val as typeof view)}>
+        <SelectTrigger className="w-44">
+          <SelectValue placeholder="Personal Info" />
         </SelectTrigger>
 
         <SelectContent>

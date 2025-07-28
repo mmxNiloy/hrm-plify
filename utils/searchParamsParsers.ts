@@ -106,6 +106,24 @@ export const searchParamsParsers = {
       shallow: false,
       throttleMs: 1000,
     }),
+  employeeProfileView: parseAsStringEnum([
+    "personal-info",
+    "education",
+    "passport-info",
+    "euss",
+    "nid",
+    "contact",
+  ])
+    .withDefault("personal-info")
+    .withOptions({ shallow: false, throttleMs: 1000 }),
+  companySearch: parseAsString.withDefault("").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  bankSearch: parseAsString.withDefault("").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParsers);

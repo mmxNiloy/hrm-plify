@@ -22,9 +22,9 @@ export default async function EmployeeLeaveRequestPage({
   params,
   searchParams,
 }: Props) {
-  const sParams = await searchParams;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const [sParams, mParams] = await Promise.all([searchParams, params]);
+
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -35,13 +35,13 @@ export default async function EmployeeLeaveRequestPage({
   const [company, leaveTypes, employeeData, leaveRequests] = await Promise.all([
     getCompanyData(companyId),
     getCompanyLeaveTypes({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
     }),
     getEmployeeData(),
     getLeaveRequests({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
     }),
@@ -79,16 +79,12 @@ export default async function EmployeeLeaveRequestPage({
         Leave Requests
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          title="Leave Requests"
-        />
+        <MyBreadcrumbs title="Leave Requests" />
 
         {employeeData && (
           <LeaveRequestEditDialog
             employee_id={employeeData.data.data?.employee_id}
-            company_id={companyId}
+            company_id={Number.parseInt(companyId)}
             leaveTypes={leaveTypes.data}
           />
         )}

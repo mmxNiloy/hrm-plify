@@ -33,8 +33,8 @@ export default async function JobShortlistPageDataSlot({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const sParams = await searchParams;
   const { page, limit } = getPaginationParams(sParams);
@@ -44,7 +44,7 @@ export default async function JobShortlistPageDataSlot({
     getCompanyData(companyId),
     job_id == 0 || Number.isNaN(job_id)
       ? getCompanyShortlistedApplicants({
-          companyId,
+          companyId: Number.parseInt(companyId),
           page,
           limit,
         })

@@ -16,9 +16,9 @@ export async function getCompanyAdmins({ companyId, page, limit }: InputProps) {
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "company", companyId, "admin"].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-    ],
+    query: {
+      page,
+      limit,
+    },
   });
 }

@@ -31,7 +31,9 @@ export default async function ContactInfoSlot({
   ) as IUser;
   const { companyId, employeeId } = await params;
 
-  const { data: contactInfo, error } = await getContactInfo(employeeId);
+  const { data: contactInfo, error } = await getContactInfo(
+    Number.parseInt(employeeId)
+  );
 
   if (error) {
     return (
@@ -51,7 +53,10 @@ export default async function ContactInfoSlot({
       <div className="col-span-full w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Contact Information</p>
         {updateAccess && (
-          <ContactInfoEditDialog data={contactInfo} employeeId={employeeId} />
+          <ContactInfoEditDialog
+            data={contactInfo}
+            employeeId={Number.parseInt(employeeId)}
+          />
         )}
       </div>
       <ContactInfoFormFragment data={contactInfo} readOnly />

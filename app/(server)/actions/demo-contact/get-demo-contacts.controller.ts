@@ -17,10 +17,10 @@ export async function getDemoContacts({
     method: "GET",
     authenticate: true,
     endpoint: ["notification", "contact-demo"].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-      ["demoOnly", demoOnly.toString()],
-    ],
+    query: {
+      page,
+      limit,
+      demoOnly,
+    },
   });
 }

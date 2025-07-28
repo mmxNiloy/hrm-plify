@@ -105,9 +105,8 @@ const RangedDatePicker = React.forwardRef<HTMLInputElement, InputProps>(
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
-              initialFocus
               mode="range"
-              captionLayout="dropdown-buttons"
+              captionLayout="dropdown"
               defaultMonth={date?.from}
               selected={date}
               onSelect={(mDate) => {

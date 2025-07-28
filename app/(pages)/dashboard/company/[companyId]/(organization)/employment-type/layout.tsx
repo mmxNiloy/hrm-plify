@@ -1,17 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { Suspense } from "react";
-import StatusFilter from "@/components/custom/status-filter";
 
 interface Props {
   children: React.ReactNode;
   breadcrumbs: React.ReactNode;
-  actions: React.ReactNode;
 }
 
 export default function DesignationListPageLayout({
   children,
   breadcrumbs,
-  actions,
 }: Props) {
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">

@@ -61,6 +61,28 @@ export default async function SuperAdminDashboardLayout({
       title: "Analytics",
       icon: "analytics",
     },
+    {
+      href: "#",
+      title: "Banking",
+      icon: "lawBuilding",
+      items: [
+        {
+          href: "/dashboard/bank",
+          title: "Bank List",
+          icon: "lawBuilding",
+        },
+        {
+          href: "/dashboard/bank-account",
+          title: "Bank Account",
+          icon: "userCog",
+        },
+        {
+          href: "/dashboard/billing",
+          title: "Billing",
+          icon: "bankNote",
+        },
+      ],
+    },
   ] satisfies INavItem[];
 
   return (

@@ -29,7 +29,7 @@ export default async function EmergencyContactInfoSlot({
 
   const { employeeId, companyId } = await params;
   const { data: emergencyContact, error } = await getEmergencyContactInfo(
-    employeeId
+    Number.parseInt(employeeId)
   );
 
   if (error) {
@@ -50,7 +50,7 @@ export default async function EmergencyContactInfoSlot({
         {updateAccess && (
           <EmergencyContactEditDialog
             data={emergencyContact}
-            employee_id={employeeId}
+            employee_id={Number.parseInt(employeeId)}
           />
         )}
       </div>

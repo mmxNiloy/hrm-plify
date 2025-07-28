@@ -32,11 +32,8 @@ export default async function HolidayDashboardPageLayout({
     return <AccessDenied />;
   }
   // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyData(companyId);
 
   if (company.error) {

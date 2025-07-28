@@ -415,20 +415,21 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
             ref={contentRef}
             className="size-full rounded-md border p-2 overflow-y-scroll *:text-xs"
           >
-            <Markdown
-              components={{
-                img: ({ node, ...props }) => (
-                  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-                  <img
-                    className="max-w-full h-16 object-contain object-center rounded-md"
-                    {...props}
-                  />
-                ),
-              }}
-              className={"prose max-w-full"}
-            >
-              {extractMarkdown(offerLetter ?? "")}
-            </Markdown>
+            <div className="prose max-w-full">
+              <Markdown
+                components={{
+                  img: ({ node, ...props }) => (
+                    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+                    <img
+                      className="max-w-full h-16 object-contain object-center rounded-md"
+                      {...props}
+                    />
+                  ),
+                }}
+              >
+                {extractMarkdown(offerLetter ?? "")}
+              </Markdown>
+            </div>
           </div>
         </div>
 

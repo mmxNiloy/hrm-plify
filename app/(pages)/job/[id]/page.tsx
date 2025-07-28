@@ -189,9 +189,9 @@ export default async function JobByIdPage({ params }: Props) {
 
         {/* Job description */}
         <div className="border border-muted rounded-xl p-6 sm:p-10 md:p-12 lg:p-16 w-full">
-          <Markdown className={"prose"}>
-            {extractMarkdown(data.desc ?? "")}
-          </Markdown>
+          <div className="prose">
+            <Markdown>{extractMarkdown(data.desc ?? "")}</Markdown>
+          </div>
         </div>
       </div>
     </main>

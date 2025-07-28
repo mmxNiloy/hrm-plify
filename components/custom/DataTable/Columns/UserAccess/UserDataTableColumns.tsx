@@ -110,7 +110,7 @@ export const UserDataTableColumns: ColumnDef<Props>[] = [
     cell: ({ row }) => (
       <TextCapsule
         className={getRoleCapsuleColor(
-          row.original.user_roles?.roles.role_name
+          row.original.user_roles?.roles?.role_name
         )}
       >
         {row.original.user_roles?.roles?.role_name ?? "N/A"}

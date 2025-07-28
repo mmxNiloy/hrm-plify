@@ -32,7 +32,7 @@ export const CompanyAdminListDataTableColumns: ColumnDef<Props>[] = [
       !row.original.updateAccess ? null : (
         <CompanyAdminEditDialog
           data={row.original}
-          companyId={row.original.company_id}
+          companyId={row.original.company_id.toString()}
           asIcon
           asEdit
         />

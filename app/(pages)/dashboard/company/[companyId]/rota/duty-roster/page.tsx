@@ -26,8 +26,8 @@ interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -68,8 +68,8 @@ export default async function RotaDutyRosterPage({
   if (!readAccess) {
     return <AccessDenied />;
   }
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -79,9 +79,9 @@ export default async function RotaDutyRosterPage({
 
   const [company, companyExtraData, paginatedDutyRoster] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     getDutyRosters({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
       filters,
@@ -109,12 +109,7 @@ export default async function RotaDutyRosterPage({
         Duty Roster
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Rota"
-          title="Duty Roster"
-        />
+        <MyBreadcrumbs parent="Rota" title="Duty Roster" />
 
         <span className="flex-grow" />
 
@@ -130,7 +125,7 @@ export default async function RotaDutyRosterPage({
         <span className="flex-grow"></span>
         {writeAccess && (
           <DutyRosterEditDialog
-            company_id={companyId}
+            company_id={Number.parseInt(companyId)}
             {...companyExtraData.data}
             type="employee"
           />

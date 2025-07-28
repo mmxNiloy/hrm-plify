@@ -142,6 +142,7 @@ import {
   Save,
   ImageDown,
   LayoutDashboardIcon,
+  BanknoteArrowUp,
 } from "lucide-react";
 import React from "react";
 
@@ -1055,6 +1056,7 @@ const Icons = {
   list: List,
   chart: ChartArea,
   money: CircleDollarSign,
+  bankNote: BanknoteArrowUp,
   userCog: UserCog,
   receipt: Receipt,
   userSearch: UserSearch,

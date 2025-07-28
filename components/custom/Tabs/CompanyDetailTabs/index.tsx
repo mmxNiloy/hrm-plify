@@ -46,8 +46,7 @@ export default function CompanyDetailTabs({
         content: (
           <CompanyAuthorityTab
             id={company.company_authorised_details?.authorised_id}
-            companyId={company.company_id}
-            data={company}
+            companyId={company.company_id.toString()}
             readOnly={readOnly}
           />
         ),

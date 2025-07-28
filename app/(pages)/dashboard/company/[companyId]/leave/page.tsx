@@ -23,8 +23,8 @@ import SiteConfig from "@/utils/SiteConfig";
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -36,16 +36,16 @@ export async function generateMetadata({
 export default async function CompanyLeaveDashboardPage({
   params,
 }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
   const [holidays, company, leaveTypes] = await Promise.all([
-    getHolidays({ company_id: companyId }),
+    getHolidays({ company_id: Number.parseInt(companyId) }),
     getCompanyData(companyId),
     getCompanyLeaveTypes({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page: 1,
       limit: 5,
     }),
@@ -67,7 +67,7 @@ export default async function CompanyLeaveDashboardPage({
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">
         Leave Management Dashboard
       </p>
-      <MyBreadcrumbs company={company.data} user={user} title="Leave" />
+      <MyBreadcrumbs title="Leave" />
 
       {/* Show a summary of leaves in a card or something */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

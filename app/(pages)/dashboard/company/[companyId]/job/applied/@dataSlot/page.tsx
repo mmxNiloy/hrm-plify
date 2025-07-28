@@ -33,8 +33,8 @@ export default async function JobAppliedPageDataSlot({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const sParams = await searchParams;
   const { page, limit } = getPaginationParams(sParams);
@@ -45,7 +45,7 @@ export default async function JobAppliedPageDataSlot({
   if (job_id == 0 || Number.isNaN(job_id)) {
     // Get all applicant data here
     applicants = await getCompanyJobApplicants({
-      companyId,
+      companyId: Number.parseInt(companyId),
       page,
       limit,
     });

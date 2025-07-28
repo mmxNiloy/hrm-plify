@@ -298,7 +298,9 @@ export default function JobListingFormFragment({
       <div className="flex flex-col gap-2">
         <Label className="h-10">Preview</Label>
         <div className="h-[14.625rem] overflow-scroll border rounded-md p-2">
-          <Markdown className={"prose text-xs"}>{jobDesc}</Markdown>
+          <div className="prose text-xs">
+            <Markdown>{jobDesc}</Markdown>
+          </div>
         </div>
       </div>
     </>

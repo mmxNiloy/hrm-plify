@@ -39,9 +39,9 @@ export const JobListingDataTableColumns: ColumnDef<Props>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-72 text-ellipsis">
-        <Markdown className="prose text-xs line-clamp-3 text-ellipsis">
-          {extractMarkdown(row.original.desc ?? "")}
-        </Markdown>
+        <div className="prose text-xs line-clamp-3 text-ellipsis">
+          <Markdown>{extractMarkdown(row.original.desc ?? "")}</Markdown>
+        </div>
       </div>
     ),
   },

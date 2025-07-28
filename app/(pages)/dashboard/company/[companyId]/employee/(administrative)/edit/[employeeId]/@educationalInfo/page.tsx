@@ -3,12 +3,9 @@ import React from "react";
 import { EditEmployeeByIdProps } from "../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { IEmployeeEducationalDetail } from "@/schema/EmployeeSchema";
-import { redirect } from "next/navigation";
-import EducationalInfoDataTable from "@/components/custom/DataTable/Company/Employee/EducationalInfoDataTable";
 import EducationalInfoEditDialog from "@/components/custom/Dialog/Employee/EducationalInfoEditDialog";
 import { getEducationalInfo } from "@/app/(server)/actions/employee/getEducationalInfo";
-import { DataTable, StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import { EducationalInfoDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EducationalInfoDataTableColumns";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AccessDenied from "@/components/custom/AccessDenied";
@@ -34,7 +31,9 @@ export default async function EducationalInfoSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const { data: educationalInfo, error } = await getEducationalInfo(employeeId);
+  const { data: educationalInfo, error } = await getEducationalInfo(
+    Number.parseInt(employeeId)
+  );
 
   if (error) {
     return (
@@ -51,7 +50,11 @@ export default async function EducationalInfoSlot({
     <div className="flex flex-col gap-4 p-8 border rounded-md">
       <div className="w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Educational Information</p>
-        {writeAccess && <EducationalInfoEditDialog employee_id={employeeId} />}
+        {writeAccess && (
+          <EducationalInfoEditDialog
+            employee_id={Number.parseInt(employeeId)}
+          />
+        )}
       </div>
       <DataTable
         data={educationalInfo.map((item) => ({

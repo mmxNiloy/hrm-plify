@@ -104,7 +104,7 @@ export const columns: ColumnDef<Props>[] = [
     cell: ({ row }) => (
       <TextCapsule
         className={cn(
-          "w-16 text-white bg-gradient-to-br",
+          "text-white bg-gradient-to-br",
           row.original.status === "ACTIVE"
             ? "from-lime-500 to-green-600"
             : row.original.status === "LEAVE"

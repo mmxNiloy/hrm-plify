@@ -28,7 +28,6 @@ export default async function EmergencyContactInfoSlot({
   //   return <AccessDenied />;
   // }
 
-  const { employeeId, companyId } = await params;
   const emp = await getEmployeeData();
   const empId = emp.data?.data?.employee_id ?? 0;
   const { data: emergencyContact, error } = await getEmergencyContactInfo(

@@ -18,8 +18,8 @@ export async function getEmployeeData() {
   ) as IUser;
 
   if (
-    user.user_roles?.roles.role_name === "Admin" ||
-    user.user_roles?.roles.role_name === "Super Admin"
+    user.user_roles?.roles?.role_name === "Admin" ||
+    user.user_roles?.roles?.role_name === "Super Admin"
   ) {
     return { data: { role_name: user.user_roles.roles.role_name } };
   }
@@ -42,7 +42,7 @@ export async function getEmployeeData() {
   return {
     data: {
       data: data,
-      role_name: user.user_roles?.roles.role_name ?? "Guest",
+      role_name: user.user_roles?.roles?.role_name ?? "Guest",
     },
   };
 }

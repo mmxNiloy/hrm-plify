@@ -18,9 +18,9 @@ export default async function getCompanyDocuments({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "company", "document", companyId].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-    ],
+    query: {
+      page,
+      limit,
+    },
   });
 }

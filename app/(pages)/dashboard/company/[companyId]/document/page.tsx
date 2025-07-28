@@ -51,7 +51,7 @@ export default async function DocumentsPage({ params }: CompanyByIDPageProps) {
   return (
     <CompanyDocumentsTab
       readOnly={!updateAccess || !writeAccess}
-      company_id={companyId}
+      company_id={Number.parseInt(companyId)}
       data={companyDetails.data?.company_docs_db}
     />
   );

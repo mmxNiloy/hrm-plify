@@ -7,7 +7,7 @@ import DepartmentCreationPopover from "@/components/custom/Popover/Department/De
 export default function CompanyDepartmentsTab({
   company_id,
 }: {
-  company_id: number;
+  company_id: string;
 }) {
   const [newDeptId, setNewDeptId] = useState<number>(0);
 

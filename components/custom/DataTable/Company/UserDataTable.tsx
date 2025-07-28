@@ -1,7 +1,4 @@
-import {
-  DataTableSkeleton,
-  NetworkedDataTable,
-} from "@/components/ui/data-table";
+import { NetworkedDataTable } from "@/components/ui/data-table";
 import { CompanyUserDataTableColumns } from "../Columns/Company/CompanyUserDataTableColumns";
 import React from "react";
 

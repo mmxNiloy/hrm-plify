@@ -43,12 +43,11 @@ export default function BankEditPopover({
       setLoading(true);
 
       try {
-        const apData: IBank = {
+        const apData = {
           company_id,
-          bank_id: data?.bank_id ?? 1,
-          bank_name: (fd.get("bank_name") as string | undefined) ?? "",
-          bank_shortcode:
-            (fd.get("bank_shortcode") as string | undefined) ?? "",
+          id: data?.id ?? 1,
+          name: (fd.get("bank_name") as string | undefined) ?? "",
+          shortcode: (fd.get("bank_shortcode") as string | undefined) ?? "",
         };
 
         const apiRes = await fetch(`/api/company/bank`, {
@@ -116,20 +115,20 @@ export default function BankEditPopover({
               <Input
                 required
                 name="bank_name"
-                defaultValue={data?.bank_name}
+                defaultValue={data?.name}
                 placeholder="Bank Name"
-                key={`bank-name-${data?.bank_name}`}
+                key={`bank-name-${data?.name}`}
               />
             </div>
 
             <div className="flex flex-col gap-2 w-full">
               <Label className={RequiredAsterisk}>Short Code</Label>
               <Input
-                defaultValue={data?.bank_shortcode}
+                defaultValue={data?.shortcode}
                 name="bank_shortcode"
                 placeholder="Short Code"
                 required
-                key={`bank-shortcode-${data?.bank_shortcode}`}
+                key={`bank-shortcode-${data?.shortcode}`}
               />
             </div>
 

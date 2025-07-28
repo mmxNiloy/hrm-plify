@@ -28,10 +28,6 @@ export default async function VisaBRPDetailSlot({
   // if (!readAccess) {
   //   return <AccessDenied />;
   // }
-  const { employeeId, companyId } = await params;
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
 
   const emp = await getEmployeeData();
   const empId = emp.data?.data?.employee_id ?? 0;

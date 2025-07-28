@@ -44,7 +44,7 @@ export default async function PersonalInfoSlot({
   const [company, companyExtraData, personalInfo, empTypes] = await Promise.all(
     [
       getCompanyData(companyId),
-      getCompanyExtraData(companyId),
+      getCompanyExtraData(Number.parseInt(companyId)),
       getPersonalInfo(empId),
       getAllEmploymentTypes(),
     ]

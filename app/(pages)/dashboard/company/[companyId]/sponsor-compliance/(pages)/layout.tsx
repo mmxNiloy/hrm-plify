@@ -13,8 +13,8 @@ export default async function SponsorComplianceDashboardLayout({
   children,
   params,
 }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const company = await getCompanyData(companyId);
 

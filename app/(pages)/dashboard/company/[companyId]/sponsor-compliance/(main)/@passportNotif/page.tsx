@@ -16,11 +16,11 @@ export default async function PassportNotificationsSlot({
   params,
 }: Props) {
   const sParams = await searchParams;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const { limit, page } = getPaginationParams(sParams, "passport");
   const empDocs = await getCompanyEmployeeDocuments({
-    companyId,
+    companyId: Number.parseInt(companyId),
     page,
     limit,
     orderBy: "passport",

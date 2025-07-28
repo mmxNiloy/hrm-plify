@@ -19,8 +19,8 @@ import { EmployeeDataTableColumns } from "@/components/custom/DataTable/Columns/
 interface Props extends CompanyByIDPageProps {}
 
 export default async function UserAccessDashboardPage({ params }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
@@ -36,7 +36,7 @@ export default async function UserAccessDashboardPage({ params }: Props) {
   }
 
   const [empList, user, permissions, company] = await Promise.all([
-    await getCompanyEmployeesWithPermissions(companyId),
+    await getCompanyEmployeesWithPermissions(Number.parseInt(companyId)),
     await getUserData(),
     await getAllPermissions(),
     await getCompanyData(companyId),
@@ -82,11 +82,7 @@ export default async function UserAccessDashboardPage({ params }: Props) {
         Employee Access Management{" "}
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          title="Employee Access Management"
-          company={company.data}
-          user={user}
-        />
+        <MyBreadcrumbs title="Employee Access Management" />
       </div>
       <DataTable data={employees} columns={EmployeeDataTableColumns} />
     </main>

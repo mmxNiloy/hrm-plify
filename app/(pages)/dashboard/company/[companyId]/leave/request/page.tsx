@@ -23,8 +23,8 @@ interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -50,8 +50,8 @@ export default async function LeaveRequestPage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -67,12 +67,12 @@ export default async function LeaveRequestPage({
   const [company, leaveTypes, leaveRequests] = await Promise.all([
     getCompanyData(companyId),
     getCompanyLeaveTypes({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
     }),
     getLeaveRequests({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
     }),
@@ -97,12 +97,7 @@ export default async function LeaveRequestPage({
         Leave Requests
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Leave"
-          title="Leave Requests"
-        />
+        <MyBreadcrumbs parent="Leave" title="Leave Requests" />
       </div>
 
       <StaticDataTable

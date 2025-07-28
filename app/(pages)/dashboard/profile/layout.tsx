@@ -22,11 +22,11 @@ export default async function ProfileLayout({ children }: LayoutProps) {
   ) as IUser;
 
   if (
-    user.user_roles?.roles.role_name === "Admin" ||
-    user.user_roles?.roles.role_name === "Super Admin"
+    user.user_roles?.roles?.role_name === "Admin" ||
+    user.user_roles?.roles?.role_name === "Super Admin"
   ) {
     return <SuperAdminDashboardLayout>{children}</SuperAdminDashboardLayout>;
-  } else if (user.user_roles?.roles.role_name === "Company Admin") {
+  } else if (user.user_roles?.roles?.role_name === "Company Admin") {
     return (
       <div>
         <CompanyDashboardSidebar
@@ -36,7 +36,7 @@ export default async function ProfileLayout({ children }: LayoutProps) {
         <SidebarViewport>{children}</SidebarViewport>
       </div>
     );
-  } else if (user.user_roles?.roles.role_name === "Employee") {
+  } else if (user.user_roles?.roles?.role_name === "Employee") {
     return (
       <div>
         <EmployeeHomeSidebar company={user.usercompany?.companies!} />

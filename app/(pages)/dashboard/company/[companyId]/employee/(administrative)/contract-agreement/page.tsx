@@ -12,8 +12,8 @@ export default async function ContactAgreementPage({
   params,
 }: CompanyByIDPageProps) {
   // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -32,8 +32,6 @@ export default async function ContactAgreementPage({
       <p className="text-xl font-semibold">Contract Agreement</p>
       <div className="flex items-center justify-between">
         <MyBreadcrumbs
-          company={company.data}
-          user={user}
           parent="Employee Management"
           title="Contract Agreement"
         />

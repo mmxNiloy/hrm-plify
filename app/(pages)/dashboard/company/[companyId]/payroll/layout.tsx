@@ -34,8 +34,8 @@ export default async function PayrollDashboardLayout({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyData(companyId);
 
   if (company.error) {

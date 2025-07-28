@@ -37,4 +37,10 @@ export type TPermission =
   | "cmp_payroll_update"
   | "cmp_docs_create"
   | "cmp_docs_read"
-  | "cmp_docs_update";
+  | "cmp_docs_update"
+  | "sys_billing_create"
+  | "sys_billing_read"
+  | "sys_billing_update"
+  | "cmp_bank_create"
+  | "cmp_bank_read"
+  | "cmp_bank_update";

@@ -46,11 +46,11 @@ export default async function PersonalInfoSlot({
     employmentTypes,
     salaryStructure,
   ] = await Promise.all([
-    getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getPersonalInfo(employeeId),
+    getCompanyData(`${companyId}`),
+    getCompanyExtraData(Number.parseInt(companyId)),
+    getPersonalInfo(Number.parseInt(employeeId)),
     getAllEmploymentTypes(),
-    getEmployeeSalaryStructure(employeeId),
+    getEmployeeSalaryStructure(Number.parseInt(employeeId)),
   ]);
 
   if (
@@ -114,14 +114,14 @@ export default async function PersonalInfoSlot({
           <SalaryStructureEditDialog
             data={salaryStructure.data.data}
             employees={companyExtraData.data.employees}
-            currentEmployee={employeeId}
-            company_id={companyId}
+            currentEmployee={Number.parseInt(employeeId)}
+            company_id={Number.parseInt(companyId)}
           />
         )}
       </div>
       <SalaryStructureFormFragment
         data={salaryStructure.data.data}
-        currentEmployee={employeeId}
+        currentEmployee={Number.parseInt(employeeId)}
         employees={companyExtraData.data.employees}
         readOnly
       />

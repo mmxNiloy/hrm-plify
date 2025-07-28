@@ -117,6 +117,16 @@ export default function OrgChartReportGenerator({
     if (canvasRef && canvasRef.current) {
       const wrapperEl = canvasRef.current.getElement();
 
+      if (!wrapperEl) {
+        toast({
+          title: "Organogram element not found.",
+          description: "Please ensure the organogram is rendered correctly.",
+          className: ToastWarn,
+        });
+
+        return;
+      }
+
       setLoading(true);
       try {
         await generatePDFWithPDFLib(wrapperEl);

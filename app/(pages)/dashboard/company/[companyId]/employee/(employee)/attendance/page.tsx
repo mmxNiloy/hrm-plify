@@ -47,8 +47,8 @@ export default async function EmployeeAttendancePage({
   params,
   searchParams,
 }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const mCookies = await cookies();
   const user = JSON.parse(
     mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -67,7 +67,7 @@ export default async function EmployeeAttendancePage({
   const [employee, company, companyExtraData, sParams] = await Promise.all([
     getEmployeeData(),
     getCompanyDetails(companyId),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     searchParams,
   ]);
   const { limit, page } = getPaginationParams(sParams);
@@ -127,10 +127,10 @@ export default async function EmployeeAttendancePage({
 
         <div className="flex flex-col sm:flex-row gap-4">
           {updateAccess &&
-            (user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin") && (
+            (user.user_roles?.roles?.role_name === "Super Admin" ||
+              user.user_roles?.roles?.role_name === "Admin") && (
               <AttendanceBulkUpdateDialog
-                company_id={companyId}
+                company_id={Number.parseInt(companyId)}
                 employees={companyExtraData.data.employees}
               />
             )}
@@ -145,11 +145,11 @@ export default async function EmployeeAttendancePage({
       <StaticDataTable
         data={reports.data.data.map((item) => ({
           ...item,
-          company_id: companyId,
+          company_id: Number.parseInt(companyId),
           updateAccess:
             updateAccess &&
-            (user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin")
+            (user.user_roles?.roles?.role_name === "Super Admin" ||
+              user.user_roles?.roles?.role_name === "Admin")
               ? true
               : false,
         }))}

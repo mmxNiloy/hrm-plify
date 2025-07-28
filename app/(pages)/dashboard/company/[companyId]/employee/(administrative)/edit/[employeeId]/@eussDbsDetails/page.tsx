@@ -33,7 +33,9 @@ export default async function EussDetailsSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const { data: euss, error } = await getEussDBInfo(employeeId);
+  const { data: euss, error } = await getEussDBInfo(
+    Number.parseInt(employeeId)
+  );
 
   if (error) {
     return (
@@ -52,7 +54,10 @@ export default async function EussDetailsSlot({
         <div className="col-span-full w-full flex flex-row items-center justify-between">
           <p className="text-lg font-semibold">EUSS/Time Limit Information</p>
           {updateAccess && (
-            <EussDbsEditDialog data={euss} employee_id={employeeId} />
+            <EussDbsEditDialog
+              data={euss}
+              employee_id={Number.parseInt(employeeId)}
+            />
           )}
         </div>
         <EussFormFragment readOnly data={euss} />

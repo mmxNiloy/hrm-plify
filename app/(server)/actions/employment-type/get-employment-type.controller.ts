@@ -17,10 +17,10 @@ export default async function getEmploymentType({
     method: "GET",
     endpoint: "employment-type",
     authenticate: true,
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-      ["isActive", isActive ? "1" : "0"],
-    ],
+    query: {
+      page,
+      limit,
+      isActive: isActive ? 1 : 0,
+    },
   });
 }

@@ -48,9 +48,8 @@ export default async function AttendanceReportPage({
   params,
   searchParams,
 }: Props) {
-  const sParams = await searchParams;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const [sParams, mParams] = await Promise.all([searchParams, params]);
+  const companyId = mParams.companyId;
   const mCookies = await cookies();
   const user = JSON.parse(
     mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -70,9 +69,9 @@ export default async function AttendanceReportPage({
 
   const [company, companyExtraData, reports] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     getAttendanceReports({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       limit,
       page,
       filters,
@@ -110,17 +109,17 @@ export default async function AttendanceReportPage({
 
         <div className="flex flex-col sm:flex-row gap-4">
           {updateAccess &&
-            (user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin") && (
+            (user.user_roles?.roles?.role_name === "Super Admin" ||
+              user.user_roles?.roles?.role_name === "Admin") && (
               <AttendanceBulkUpdateDialog
-                company_id={companyId}
+                company_id={Number.parseInt(companyId)}
                 employees={companyExtraData.data.employees}
               />
             )}
           <AttendanceReportGenerator company={company.data} filters={filters} />
 
-          {(user.user_roles?.roles.role_name === "Super Admin" ||
-            user.user_roles?.roles.role_name === "Admin") && (
+          {(user.user_roles?.roles?.role_name === "Super Admin" ||
+            user.user_roles?.roles?.role_name === "Admin") && (
             <AttendanceReportFilterPopover {...companyExtraData.data} />
           )}
         </div>
@@ -129,11 +128,11 @@ export default async function AttendanceReportPage({
       <StaticDataTable
         data={reports.data.data.map((item) => ({
           ...item,
-          company_id: companyId,
+          company_id: Number.parseInt(companyId),
           updateAccess:
             updateAccess &&
-            (user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin")
+            (user.user_roles?.roles?.role_name === "Super Admin" ||
+              user.user_roles?.roles?.role_name === "Admin")
               ? true
               : false,
         }))}

@@ -31,8 +31,8 @@ export default async function SponsorComplianceDashboardLayout({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const company = await getCompanyData(companyId);
 
@@ -52,11 +52,7 @@ export default async function SponsorComplianceDashboardLayout({
         <main className="container flex flex-col gap-2">
           <p className="text-xl font-semibold">Sponsor Compliance</p>
           <div className="flex items-center justify-between">
-            <MyBreadcrumbs
-              company={company.data}
-              user={user}
-              title="Sponsor Compliance"
-            />
+            <MyBreadcrumbs title="Sponsor Compliance" />
 
             {/* Quick Nav */}
             {/* <div className="flex flex-row gap-2">

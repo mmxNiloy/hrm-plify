@@ -24,11 +24,11 @@ export default async function getEmployees({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "employee", "company", companyId].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-      ...employeeStatus.map((status) => ["status", status]),
-      ["isForeign", isForeign],
-    ],
+    query: {
+      page,
+      limit,
+      isForeign,
+      status: employeeStatus,
+    },
   });
 }

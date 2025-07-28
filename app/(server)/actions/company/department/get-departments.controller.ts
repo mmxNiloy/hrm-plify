@@ -22,11 +22,11 @@ export default async function getDepartments({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "department", "company", companyId].join("/"),
-    query: [
-      ["page", page.toString()],
-      ["limit", limit.toString()],
-      ["search", search],
-      ["isActive", isActive],
-    ],
+    query: {
+      page,
+      limit,
+      search,
+      isActive,
+    },
   });
 }

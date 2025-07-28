@@ -16,6 +16,8 @@ export default async function getAllDesignations({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "designation", "all", "company", companyId].join("/"),
-    query: [["isActive", isActive]],
+    query: {
+      isActive,
+    },
   });
 }

@@ -16,6 +16,8 @@ export default async function getAllDepartments({
     method: "GET",
     authenticate: true,
     endpoint: ["v2", "department", "all", "company", companyId].join("/"),
-    query: [["isActive", isActive]],
+    query: {
+      isActive,
+    },
   });
 }

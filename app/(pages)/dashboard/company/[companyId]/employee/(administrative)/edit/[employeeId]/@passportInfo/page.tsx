@@ -33,7 +33,9 @@ export default async function PassportInfoSlot({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const { data: passportInfo, error } = await getPassportInfo(employeeId);
+  const { data: passportInfo, error } = await getPassportInfo(
+    Number.parseInt(employeeId)
+  );
 
   if (error) {
     return (
@@ -52,7 +54,7 @@ export default async function PassportInfoSlot({
         <p className="text-lg font-semibold">Passport Information</p>
         {updateAccess && (
           <PassportDetailsEditDialog
-            employee_id={employeeId}
+            employee_id={Number.parseInt(employeeId)}
             data={passportInfo}
           />
         )}

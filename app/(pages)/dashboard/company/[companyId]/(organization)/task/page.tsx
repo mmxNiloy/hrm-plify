@@ -15,8 +15,8 @@ export default async function CompanyTasksDashboardPage({
   params,
 }: CompanyByIDPageProps) {
   // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -35,7 +35,7 @@ export default async function CompanyTasksDashboardPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Tasks</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs company={company.data} user={user} title="Tasks" />
+        <MyBreadcrumbs title="Tasks" />
 
         <div className="flex gap-4 items-center">
           {/* <TaskSearch /> */}
@@ -45,7 +45,7 @@ export default async function CompanyTasksDashboardPage({
         </div>
       </div>
 
-      <TasksDataTable company_id={companyId} />
+      {/* <TasksDataTable company_id={companyId} /> */}
     </main>
   );
 }

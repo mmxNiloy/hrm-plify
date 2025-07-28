@@ -12,6 +12,8 @@ export default async function getPermissions({ isActive }: FilterProps) {
     method: "GET",
     endpoint: "permission",
     authenticate: true,
-    query: [["isActive", isActive ? "1" : "0"]],
+    query: {
+      isActive: isActive ? 1 : 0,
+    },
   });
 }
