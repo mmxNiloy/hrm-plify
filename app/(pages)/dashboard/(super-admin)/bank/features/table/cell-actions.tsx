@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Edit, Menu, Trash2 } from "lucide-react";
+import { Edit, Eye, Menu, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import BankDeleteAlertDialog from "../../components/bank-delete-alert-dialog";
@@ -26,6 +26,16 @@ export default function CellActions({ bankId }: Props) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40" align="end">
+        <Link href={`/dashboard/bank-account/${bankId}`} passHref>
+          <Button
+            className="w-full justify-start [&_svg]:size-4 text-xs px-2 gap-0.5"
+            size="sm"
+            variant={"ghost"}
+          >
+            <Eye />
+            View Accounts
+          </Button>
+        </Link>
         <Link href={`/dashboard/bank/${bankId}`} passHref>
           <Button
             className="w-full justify-start [&_svg]:size-4 text-xs px-2 gap-0.5"

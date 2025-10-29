@@ -1,13 +1,12 @@
 "use server";
 
-import { BillingType, IBilling } from "@/schema/form/billing.schema";
 import executeRequest from "../network/request-builder.service";
 import { revalidatePath } from "next/cache";
 import z from "zod";
-import { BankSchema } from "@/schema/form/bank.schema";
+import { BankSchema, IBank } from "@/schema/form/bank.schema";
 
 export default async function createBank(data: z.infer<typeof BankSchema>) {
-  const result = await executeRequest<IBilling>({
+  const result = await executeRequest<IBank>({
     endpoint: "bank",
     authenticate: true,
     method: "POST",

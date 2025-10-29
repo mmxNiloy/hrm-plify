@@ -71,11 +71,11 @@ export default async function SuperAdminDashboardLayout({
           title: "Bank List",
           icon: "lawBuilding",
         },
-        {
-          href: "/dashboard/bank-account",
-          title: "Bank Account",
-          icon: "userCog",
-        },
+        // {
+        //   href: "/dashboard/bank-account",
+        //   title: "Bank Account",
+        //   icon: "userCog",
+        // },
         {
           href: "/dashboard/billing",
           title: "Billing",

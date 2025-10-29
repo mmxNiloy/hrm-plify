@@ -23,13 +23,59 @@ export interface IBank extends BankType {
   company_id?: number;
   author_id: number;
   name: string;
-  create_at: string;
+  created_at: string;
   updated_at: string;
 
   company?: ICompany;
   author: IUser;
 
-  _count: {
-    accounts: number;
-  };
+  accounts: IBankAccount[];
 }
+
+export const BankAccountSchema = z.object({
+  bank_id: z.coerce.number().positive(),
+  account_number: z
+    .string()
+    .min(8, "Account number must be at least 8 characters."),
+  account_type: z
+    .string()
+    .min(3, "Account name must be at least 3 characters."),
+  tag: z.string().optional(),
+  is_active: z.coerce.boolean().optional().default(true),
+  currency: z
+    .enum([
+      "USD",
+      "EUR",
+      "JPY",
+      "GBP",
+      "CNY",
+      "AUD",
+      "CAD",
+      "CHF",
+      "HKD",
+      "SGD",
+    ])
+    .optional()
+    .default("GBP"),
+});
+
+export const BankAccountUpdateSchema = BankAccountSchema.partial();
+
+export interface IBankAccount {
+  bank_id: number;
+  id: number;
+  account_number: string;
+  account_type: string;
+  tag: string;
+  is_active: boolean;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type CreateBankAccountDto = Omit<
+  IBankAccount,
+  "id" | "created_at" | "updated_at"
+>;
+
+export type UpdateBankAccountDto = Partial<CreateBankAccountDto>;
