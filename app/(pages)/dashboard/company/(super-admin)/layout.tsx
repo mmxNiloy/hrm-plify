@@ -1,10 +1,28 @@
-import React from "react";
-import SuperAdminDashboardLayout from "../../(super-admin)/layout";
+import React, { Suspense } from "react";
+import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import DashboardNavbar from "@/components/custom/Dashboard/Navbar/DashboardNavbar";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function SuperAdminCompanyDashboardLayout({
-  children,
-}: {
+interface Props {
   children: React.ReactNode;
-}) {
-  return <SuperAdminDashboardLayout>{children}</SuperAdminDashboardLayout>;
+  sidebar: React.ReactNode;
+}
+
+export default function SuperAdminDashboardLayout({
+  children,
+  sidebar,
+}: Props) {
+  return (
+    <SidebarProvider>
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
+
+      <main className="w-screen">
+        <DashboardNavbar />
+        <SidebarViewport>{children}</SidebarViewport>
+      </main>
+    </SidebarProvider>
+  );
 }

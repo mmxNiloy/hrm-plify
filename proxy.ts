@@ -3,7 +3,7 @@ import { validateSession } from "@/middlewares/validateSession";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const session = validateSession(req);
   const userRole = checkRole(req);
   const cks = await cookies();

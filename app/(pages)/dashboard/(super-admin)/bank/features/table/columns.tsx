@@ -8,6 +8,9 @@ import CellActions from "./cell-actions";
 
 interface ColumnType extends IBank {
   updateAccess?: boolean;
+  _count?: {
+    accounts: number;
+  };
 }
 
 export const columns: ColumnDef<ColumnType>[] = [
@@ -36,7 +39,7 @@ export const columns: ColumnDef<ColumnType>[] = [
     header: ({ column }) => (
       <SortableHeader column={column} name="Total Accounts" />
     ),
-    cell: ({ row }) => <span>{row.original._count.accounts}</span>,
+    cell: ({ row }) => <span>{row.original._count?.accounts ?? 0}</span>,
   },
   {
     id: "Last modified",

@@ -3,7 +3,7 @@ import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
 import { SearchParams } from "nuqs";
 import React, { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CompanyTradePage } from "../(ui)/features/";
+import { CompanyTradePage } from "../(ui)/features";
 import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
 
 interface Props extends CompanyIDURLParamSchema {
