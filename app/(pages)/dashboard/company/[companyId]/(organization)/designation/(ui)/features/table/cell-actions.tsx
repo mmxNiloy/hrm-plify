@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Popover,
   PopoverContent,
@@ -5,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { IDesignation } from "@/schema/DesignationSchema";
 import { Menu } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import {
   DesignationDeleteAlertDialog,
   DesignationEditDialog,
@@ -17,8 +19,9 @@ interface Props {
 }
 
 export default function CellActions({ data, updateAccess }: Props) {
+  const [open, setOpen] = useState<boolean>(false);
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger disabled={!updateAccess}>
         <Menu className="size-4" />
       </PopoverTrigger>
@@ -26,7 +29,10 @@ export default function CellActions({ data, updateAccess }: Props) {
       {updateAccess && (
         <PopoverContent align="end" className="w-40">
           <DesignationEditDialog data={data} />
-          <DesignationDeleteAlertDialog designationId={data.designation_id} />
+          <DesignationDeleteAlertDialog
+            onSuccess={() => setOpen(false)}
+            designationId={data.designation_id}
+          />
         </PopoverContent>
       )}
     </Popover>

@@ -1,6 +1,8 @@
+"use client";
+
 import { IDepartment } from "@/schema/CompanySchema";
 import { Menu } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import DepartmentEditDialog from "../../components/department-edit-dialog";
 import {
   Popover,
@@ -15,8 +17,10 @@ interface Props {
 }
 
 export default function RowActions({ data, updateAccess }: Props) {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger disabled={!updateAccess}>
         <Menu className="size-4" />
       </PopoverTrigger>
@@ -24,7 +28,10 @@ export default function RowActions({ data, updateAccess }: Props) {
       {updateAccess && (
         <PopoverContent align="end" className="w-40">
           <DepartmentEditDialog data={data} />
-          <DepartmentDeleteAlertDialog departmentId={data.department_id} />
+          <DepartmentDeleteAlertDialog
+            onSuccess={() => setOpen(false)}
+            departmentId={data.department_id}
+          />
         </PopoverContent>
       )}
     </Popover>

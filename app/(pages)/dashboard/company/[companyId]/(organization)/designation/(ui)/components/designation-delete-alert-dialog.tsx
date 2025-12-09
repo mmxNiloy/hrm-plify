@@ -19,9 +19,13 @@ import deleteDesignation from "@/app/(server)/actions/company/designation/delete
 
 interface Props {
   designationId: number;
+  onSuccess?: () => void;
 }
 
-export default function DesignationDeleteAlertDialog({ designationId }: Props) {
+export default function DesignationDeleteAlertDialog({
+  designationId,
+  onSuccess,
+}: Props) {
   const [updating, startUpdate] = useTransition();
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -37,13 +41,14 @@ export default function DesignationDeleteAlertDialog({ designationId }: Props) {
         }
 
         toast.success("Designation deleted!");
+        onSuccess?.();
         setOpen(false);
         router.refresh();
       } catch (error) {
         toast.error("Failed to delete the designation.");
       }
     });
-  }, [designationId, router]);
+  }, [designationId, router, onSuccess]);
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
@@ -62,7 +67,7 @@ export default function DesignationDeleteAlertDialog({ designationId }: Props) {
           <AlertDialogTitle>
             <span className="flex gap-1 items-center">
               <Trash2 />
-              Delete Department
+              Delete Designation
             </span>
           </AlertDialogTitle>
           <AlertDialogDescription>

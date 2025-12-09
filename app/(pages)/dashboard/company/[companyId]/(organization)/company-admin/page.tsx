@@ -45,16 +45,7 @@ export default async function CompanyAdminPage({
   );
 
   if (!readAccess) {
-    return (
-      <main className="flex-1 container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-            Company Admin
-          </p>
-        </div>
-        <AccessDenied />
-      </main>
-    );
+    return <AccessDenied />;
   }
 
   var companyId = mParams.companyId;
@@ -75,24 +66,8 @@ export default async function CompanyAdminPage({
   const key = serialize(sParams);
 
   return (
-    <main className="flex-1 container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Company Admin
-        </p>
-        {writeAccess && (
-          <div className="w-full sm:w-auto">
-            <CompanyAdminAssignDialog companyId={companyId} />
-          </div>
-        )}
-      </div>
-
-      <Suspense key={key} fallback={<DataTableSkeleton />}>
-        <CompanyAdminTable
-          updateAccess={!!updateAccess}
-          companyId={companyId}
-        />
-      </Suspense>
-    </main>
+    <Suspense key={key} fallback={<DataTableSkeleton />}>
+      <CompanyAdminTable updateAccess={!!updateAccess} companyId={companyId} />
+    </Suspense>
   );
 }
