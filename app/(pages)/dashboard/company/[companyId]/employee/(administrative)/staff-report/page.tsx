@@ -16,6 +16,8 @@ import StaffReportGenerator from "@/components/custom/PDF/StaffReportGenerator";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { notFound } from "next/navigation";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -34,10 +36,6 @@ export async function generateMetadata({
 
 export default async function StaffReportPage({ params, searchParams }: Props) {
   const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
-
   // TODO: Check Permissions here
   //   const readAccess = mPermissions.find((item) => item === "cmp_job_read");
   //   const writeAccess = mPermissions.find((item) => item === "cmp_job_create");
@@ -66,37 +64,16 @@ export default async function StaffReportPage({ params, searchParams }: Props) {
   ]);
 
   if (company.error || staffReports.error) {
-    return (
-      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Job Applications
-        </p>
-        <ErrorFallbackCard error={company.error || staffReports.error} />
-      </main>
-    );
+    return notFound();
   }
 
   //   console.log("Staff report found >", staffReports);
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Staff Report
-      </p>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Employee Dashboard" title="Staff Report" />
-
-        {/* Download PDF button here */}
-        <div className="w-full sm:w-auto">
-          <StaffReportGenerator company={company.data} />
-        </div>
-      </div>
-
-      <StaticDataTable
-        pageCount={staffReports.data.total_page}
-        data={staffReports.data.data}
-        columns={StaffReportDataTableColumns}
-      />
-    </main>
+    <DataTable
+      pageCount={staffReports.data.total_page}
+      data={staffReports.data.data}
+      columns={StaffReportDataTableColumns}
+    />
   );
 }

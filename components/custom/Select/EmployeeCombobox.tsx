@@ -1,5 +1,12 @@
 "use client";
 import { LabelledComboBox } from "@/components/ui/combobox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { getFullNameOfEmployee } from "@/utils/Misc";
 import { searchParamsParsers } from "@/utils/searchParamsParsers";
@@ -24,15 +31,33 @@ export default function EmployeeCombobox({
   );
 
   return (
-    <LabelledComboBox
-      className={className}
+    <Select
+      value={employeeQuery?.toString()}
       onValueChange={(val) => setEmployeeQuery(Number.parseInt(val))}
-      defaultValue={employeeQuery.toString()}
-      items={employees.map((emp) => ({
-        value: emp.employee_id.toString(),
-        label: getFullNameOfEmployee(emp),
-      }))}
-      label="Select an employee"
-    />
+    >
+      <SelectTrigger className="w-44">
+        <SelectValue defaultValue="Select Employee" className={className} />
+      </SelectTrigger>
+      <SelectContent>
+        {employees.length < 1 ? (
+          <SelectItem value="0" disabled>
+            No Results
+          </SelectItem>
+        ) : (
+          <SelectItem value="0" disabled>
+            Select Employee
+          </SelectItem>
+        )}
+        {employees.map((employee) => (
+          <SelectItem
+            key={employee.employee_id}
+            value={employee.employee_id.toString()}
+            className="capitalize"
+          >
+            {getFullNameOfEmployee(employee)}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function StatsSlot() {
+export default function page() {
   return null;
 }

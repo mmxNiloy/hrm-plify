@@ -45,22 +45,8 @@ export default async function ChangeOfCircumstancesPage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Change of Circumstances</p>
-      <div className="flex items-center justify-between">
-        <Suspense fallback={<Skeleton className="w-32 h-8" />}>
-          <MyBreadcrumbs
-            title="Change of Circumstances"
-            parent="Employee Management"
-          />
-        </Suspense>
-
-        <EmployeeCombobox employees={companyExtra.data.employees} />
-      </div>
-
-      <Suspense key={key} fallback={<DataTableSkeleton columns={8} />}>
-        <ChangeOfCircumstancesDataTable />
-      </Suspense>
-    </main>
+    <Suspense key={key} fallback={<DataTableSkeleton columns={8} />}>
+      <ChangeOfCircumstancesDataTable />
+    </Suspense>
   );
 }

@@ -22,15 +22,15 @@ export default async function EmployeeDashboardPage({
   const mParams = await params;
   const companyId = mParams.companyId;
 
-  // const data = await getEmployeeStats(companyId);
+  const data = await getEmployeeStats(companyId);
 
-  // const stats = data.payload;
+  const stats = data.payload;
 
   return (
     <>
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">Statistics</p>
 
-      {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center *:w-full *:sm:min-w-40 *:md:min-w-64">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center *:w-full *:sm:min-w-40 *:md:min-w-64">
         <Link href={"./employee/all"}>
           <div className="flex flex-col gap-2 p-4 rounded-md from-teal-500/80 to-indigo-600 hover:from-sky-400/80 hover:to-indigo-500 bg-gradient-to-br text-white">
             <div className="flex gap-2 text-xl font-semibold">
@@ -60,7 +60,7 @@ export default async function EmployeeDashboardPage({
             </div>
           </div>
         </Link>
-      </div> */}
+      </div>
     </>
   );
 }

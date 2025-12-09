@@ -42,9 +42,13 @@ import deleteDepartment from "@/app/(server)/actions/company/department/delete-d
 
 interface Props {
   departmentId: number;
+  onSuccess?: () => void;
 }
 
-export default function DepartmentDeleteAlertDialog({ departmentId }: Props) {
+export default function DepartmentDeleteAlertDialog({
+  departmentId,
+  onSuccess,
+}: Props) {
   const [updating, startUpdate] = useTransition();
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -60,13 +64,14 @@ export default function DepartmentDeleteAlertDialog({ departmentId }: Props) {
         }
 
         toast.success("Department deleted!");
+        onSuccess?.();
         setOpen(false);
         router.refresh();
       } catch (error) {
         toast.error("Failed to delete the department.");
       }
     });
-  }, [departmentId, router]);
+  }, [departmentId, router, onSuccess]);
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>

@@ -1,6 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { Suspense } from "react";
 import StatusFilter from "@/components/custom/status-filter";
+import { ActionsSkeleton } from "../department/features/actions";
 
 interface Props {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ export default function DesignationListPageLayout({
         <Suspense fallback={<Skeleton className="w-3/5 h-4" />}>
           {breadcrumbs}
         </Suspense>
-        {/* <Suspense fallback={<ActionsSkeleton />}>{actions}</Suspense> */}
+        <Suspense fallback={<ActionsSkeleton />}>{actions}</Suspense>
       </div>
       <div className="flex items-center sm:justify-end">
         <StatusFilter />
