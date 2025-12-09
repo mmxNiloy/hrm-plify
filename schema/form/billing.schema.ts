@@ -1,5 +1,5 @@
 import z from "zod";
-import { IBank } from "./bank.schema";
+import { IBank, IBankAccount } from "./bank.schema";
 import { ICompany } from "../CompanySchema";
 import { IUser } from "../UserSchema";
 
@@ -10,24 +10,24 @@ export const BillItemSchema = z.object({
   taxable_unit_price: z.coerce.number().positive(),
 });
 
+export const BillingStatusList: [string, ...string[]] = [
+  "UNPAID",
+  "PAID",
+  "PARTIALLY_PAID",
+  "CANCELLED",
+  "REFUNDED",
+  "RETURNED",
+  "OVERDUE",
+  "EXPIRED",
+];
+
 export const BillingSchema = z.object({
   company_id: z.coerce.number().positive(),
   recipient: z.string(),
   address: z.string(),
   bank_id: z.coerce.number().positive(),
-  status: z
-    .enum([
-      "UNPAID",
-      "PAID",
-      "PARTIALLY_PAID",
-      "CANCELLED",
-      "REFUNDED",
-      "RETURNED",
-      "OVERDUE",
-      "EXPIRED",
-    ])
-    .optional()
-    .default("UNPAID"),
+  account_id: z.coerce.number().positive(),
+  status: z.enum(BillingStatusList).optional().default("UNPAID"),
   items: z
     .array(BillItemSchema)
     .min(1, "Please add at least one item to the billing"),
@@ -43,6 +43,9 @@ export interface IBilling extends BillingType {
   created_at: string;
   updated_at: string;
   bank: IBank;
+  account_id: number;
   company: ICompany;
   author: IUser;
+
+  account?: IBankAccount;
 }

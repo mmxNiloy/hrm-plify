@@ -5,6 +5,8 @@ import React from "react";
 import BillingForm from "../components/billing-form";
 import { searchParamsCache } from "@/utils/searchParamsParsers";
 import { getCompanies } from "@/app/(server)/actions/company/get-companies.controller";
+import { IBank } from "@/schema/form/bank.schema";
+import getBanks from "@/app/(server)/actions/bank/get-banks.controller";
 
 interface Props {
   billId: string;
@@ -21,6 +23,7 @@ export default async function BillingDetailsPage({ billId, pageTitle }: Props) {
   }
 
   const companySearch = searchParamsCache.get("companySearch");
+  const bankSearch = searchParamsCache.get("bankSearch");
   const companySuggestions = await getCompanies({
     page: 1,
     limit: 5,
@@ -28,7 +31,21 @@ export default async function BillingDetailsPage({ billId, pageTitle }: Props) {
     isActive: "1",
   });
 
+  let banks: IBank[] = [];
+
+  const bankData = await getBanks({
+    page: 1,
+    limit: 5,
+    search: bankSearch,
+  });
+
+  if (!bankData.error) banks = bankData.payload;
+
   return (
-    <BillingForm companies={companySuggestions.payload ?? []} data={bill} />
+    <BillingForm
+      companies={companySuggestions.payload ?? []}
+      data={bill}
+      banks={banks}
+    />
   );
 }

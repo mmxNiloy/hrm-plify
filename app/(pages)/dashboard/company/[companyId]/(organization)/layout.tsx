@@ -157,11 +157,11 @@ export default async function CompanyDashboardLayout({
       icon: "dashboard",
       title: "Miscellaneous",
       items: [
-        {
-          href: `/dashboard/company/${id}/bank`,
-          title: "Bank",
-          icon: "lawBuilding",
-        },
+        // {
+        //   href: `/dashboard/company/${id}/bank`,
+        //   title: "Bank",
+        //   icon: "lawBuilding",
+        // },
         {
           href: `/dashboard/company/${id}/tax`,
           title: "Tax",

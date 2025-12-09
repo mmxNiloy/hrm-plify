@@ -12,20 +12,40 @@ import { CompanyBankDataTableColumns } from "@/components/custom/DataTable/Colum
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
 import { Skeleton } from "@/components/ui/skeleton";
+import getBanks from "@/app/(server)/actions/bank/get-banks.controller";
+import { SearchParams } from "nuqs";
+import { searchParamsCache } from "@/utils/searchParamsParsers";
 
-export default async function BankingPage({ params }: CompanyByIDPageProps) {
-  const [prms, user] = await Promise.all([params, getCurrentUser()]);
+interface Props extends CompanyByIDPageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function BankingPage({ params, searchParams }: Props) {
+  const [prms, user, sParams] = await Promise.all([
+    params,
+    getCurrentUser(),
+    searchParams,
+  ]);
   var companyId = prms.companyId;
-  const company = await getCompanyData(companyId);
 
-  // TODO: Hit the api and get actual employment types
-  const banks: IBank[] = [];
+  searchParamsCache.parse(sParams);
+  const bankSearch = searchParamsCache.get("bankSearch");
 
-  if (company.error) {
+  const [suggestedBanks, company, companyBanks] = await Promise.all([
+    getBanks({
+      search: bankSearch,
+    }),
+    getCompanyData(companyId),
+    getBanks({ company_id: companyId }),
+  ]);
+
+  if (company.error || suggestedBanks.error || companyBanks.error) {
     return (
       <main className="container flex flex-col gap-2">
         <p className="text-xl font-semibold">Banking</p>
-        <ErrorFallbackCard error={company.error} />
+        <ErrorFallbackCard
+          error={company.error ?? suggestedBanks.error ?? companyBanks.error}
+        />
       </main>
     );
   }
@@ -43,7 +63,10 @@ export default async function BankingPage({ params }: CompanyByIDPageProps) {
         <BankEditPopover company_id={company_id} />
       </div>
 
-      <DataTable data={banks} columns={CompanyBankDataTableColumns} />
+      <DataTable
+        data={companyBanks.payload ?? []}
+        columns={CompanyBankDataTableColumns}
+      />
     </main>
   );
 }

@@ -71,6 +71,8 @@ export interface IBankAccount {
   currency: string;
   created_at: string;
   updated_at: string;
+
+  bank?: IBank;
 }
 
 export type CreateBankAccountDto = Omit<

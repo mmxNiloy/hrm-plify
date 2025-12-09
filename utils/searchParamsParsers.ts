@@ -124,6 +124,10 @@ export const searchParamsParsers = {
     shallow: false,
     throttleMs: 1000,
   }),
+  selectedCompanyId: parseAsInteger.withDefault(0).withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParsers);
