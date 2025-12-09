@@ -24,12 +24,12 @@ import { ToastSuccess } from "@/styles/toast.tailwind";
 export default function CompanyAuthorityEditDialog({
   data,
   title = "Authorised Personnel",
-  company_id,
+  companyId,
   id,
 }: {
   data?: ICompanyAuthorizedDetailsBase;
   title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
-  company_id: number;
+  companyId: string;
   id?: number;
 }) {
   const { toast } = useToast();
@@ -45,7 +45,7 @@ export default function CompanyAuthorityEditDialog({
       e.preventDefault();
       e.stopPropagation();
       const fd = new FormData(e.currentTarget);
-      fd.append("company_id", `${company_id}`);
+      fd.append("company_id", `${companyId}`);
 
       if (docError) {
         fd.delete("document");
@@ -55,7 +55,7 @@ export default function CompanyAuthorityEditDialog({
 
       try {
         const apiRes = await fetch(
-          `/api/company/authority/${id ?? company_id}`,
+          `/api/company/authority/${id ?? companyId}`,
           {
             method: data ? "PUT" : "POST",
             body: fd,
@@ -90,7 +90,7 @@ export default function CompanyAuthorityEditDialog({
 
       setUpdating(false);
     },
-    [company_id, data, docError, id, router, toast]
+    [companyId, data, docError, id, router, toast]
   );
 
   return (

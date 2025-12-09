@@ -24,7 +24,7 @@ export default async function ServiceInformationEditDialogWrapper({
   ) as IUser;
 
   const [company, companyExtraData, empTypes] = await Promise.all([
-    getCompanyData(company_id),
+    getCompanyData(company_id.toString()),
     getCompanyExtraData(company_id),
     getAllEmploymentTypes(),
   ]);

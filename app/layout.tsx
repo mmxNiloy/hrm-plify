@@ -8,6 +8,7 @@ import VersionIndicator from "@/components/custom/VersionIndicator";
 import { Suspense } from "react";
 import Navbar from "@/components/custom/Navbar/Navbar";
 import Footer from "@/components/custom/Footer";
+import { Toaster } from "sonner";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -46,9 +47,11 @@ export default function RootLayout({
           </div>
         </Providers>
         {/* <div className="h-screen w-screen top-0 left-0 bottom-0 right-0 sticky bg-green-500/20 -z-10"></div> */}
-        <Suspense>
+        {/* <Suspense>
           <VersionIndicator />
-        </Suspense>
+        </Suspense> */}
+
+        <Toaster />
       </body>
     </html>
   );

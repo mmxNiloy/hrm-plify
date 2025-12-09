@@ -1,8 +1,9 @@
 export interface IBank {
-  bank_id: number;
+  id: number;
   company_id: number;
-  bank_name: string;
-  bank_shortcode?: string;
+  author_id: number;
+  name: string;
+  shortcode?: string;
   created_at?: Date;
   updated_at?: Date;
 }

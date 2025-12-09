@@ -26,9 +26,10 @@ export default function NavList({ items }: INavAccordionProps) {
             key={`nav-list-child-${idx}`}
             onClick={handleLinkClick}
             href={item.href}
+            className="text-sm"
           >
             {item.icon}
-            <span className="text-xs sm:text-sm lg:text-base transition-all group-data-[state=closed]/sidebar:hidden">
+            <span className="transition-all group-data-[state=closed]/sidebar:hidden">
               {item.title}
             </span>
           </SidebarLink>

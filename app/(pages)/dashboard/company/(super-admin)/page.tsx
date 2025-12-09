@@ -1,35 +1,34 @@
 "use server";
-import { getCompanies } from "@/app/(server)/actions/getCompanies";
 import AccessDenied from "@/components/custom/AccessDenied";
-import { CompanyDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyDataTableColumns";
-import CompanyCreationDialog from "@/components/custom/Dialog/Company/CompanyCreationDialog";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { StaticDataTable } from "@/components/ui/data-table";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import { TPermission } from "@/schema/Permissions";
-import { getPaginationParams } from "@/utils/Misc";
+import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
 import SiteConfig from "@/utils/SiteConfig";
-import { ISearchParamsProps } from "@/utils/Types";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import React from "react";
+import { SearchParams } from "nuqs";
+import React, { Suspense } from "react";
+import CompanyListTable from "./features/table/company-list-table";
+import CompanyCreationDialog from "./components/company-creation-dialog";
+import getCurrentUser from "@/app/(server)/actions/user/get-current-user.controller";
+import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
+import getSiteMetadata from "@/app/(server)/actions/site/get-site-metadata.controller";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `${SiteConfig.siteName} | Companies | Super Admin`,
-  };
+  return await getSiteMetadata("Companies");
 }
 
 export default async function CompanyDashboardPage({
   searchParams,
-}: ISearchParamsProps) {
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const sParams = await searchParams;
+  searchParamsCache.parse(searchParams);
+  const key = serialize(sParams);
+
+  const user = await getCurrentUser();
+
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
     mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
@@ -42,77 +41,28 @@ export default async function CompanyDashboardPage({
     return <AccessDenied />;
   }
 
-  const { limit, page } = getPaginationParams(await searchParams);
-  const { data: paginatedCompanies, error } = await getCompanies({
-    page,
-    limit,
-  });
-
-  if (error) {
-    return (
-      <main className="container mx-auto flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Company Management
-        </p>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-          <Breadcrumb>
-            <BreadcrumbList className="flex-wrap">
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/dashboard"
-                  className="text-sm sm:text-base"
-                >
-                  Dashboard
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-sm sm:text-base">
-                  Company Management
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-        <ErrorFallbackCard error={error} />
-      </main>
-    );
-  }
-
-  console.log("Super Admin > Companies > ", paginatedCompanies);
   return (
-    <main className="container mx-auto flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+    <main className="container mx-auto flex flex-col gap-4">
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">
         Company Management
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <Breadcrumb>
-          <BreadcrumbList className="flex-wrap">
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href="/dashboard"
-                className="text-sm sm:text-base"
-              >
-                Dashboard
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="text-sm sm:text-base">
-                Company Management
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <MyBreadcrumbs title="Company Management" />
 
-        {writeAccess && <CompanyCreationDialog asClient={false} />}
+        {writeAccess && (
+          <CompanyCreationDialog
+            asClient={false}
+            hasPermission={
+              user?.user_roles?.roles?.role_name === "Super Admin" ||
+              user?.user_roles?.roles?.role_name === "Admin"
+            }
+          />
+        )}
       </div>
 
-      <StaticDataTable
-        data={paginatedCompanies.data}
-        columns={CompanyDataTableColumns}
-        pageCount={paginatedCompanies.total_page}
-      />
+      <Suspense key={key} fallback={<DataTableSkeleton columns={10} />}>
+        <CompanyListTable />
+      </Suspense>
     </main>
   );
 }

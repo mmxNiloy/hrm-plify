@@ -1,55 +1,133 @@
 "use server";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import React from "react";
-import { CompanyByIDPageProps } from "../../../../PageProps";
-import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import { cookies } from "next/headers";
+import EmployeeDetailsEditDialog from "@/components/custom/Dialog/Employee/EmployeeDetailsEditDialog";
+import EmployeeDetailsFormFragment from "@/components/custom/Form/Fragment/Employee/EmployeeDetailsFormFragment";
+import ServiceDetailsFormFragment from "@/components/custom/Form/Fragment/Employee/ServiceDetailsFormFragment";
+import { getPersonalInfo } from "@/app/(server)/actions/employee/getPersonalInfo";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { Metadata } from "next";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
-import SiteConfig from "@/utils/SiteConfig";
+import ServiceInformationEditDialog from "@/components/custom/Dialog/Employee/ServiceInformationEditDialog";
+import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
+import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
+import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
+import SalaryStructureEditDialog from "@/components/custom/Dialog/Payroll/SalaryStructureEditDialog";
+import { getEmployeeSalaryStructure } from "@/app/(server)/actions/getEmployeeSalaryStructure";
+import SalaryStructureFormFragment from "@/components/custom/Form/Fragment/Payroll/SalaryStructureFormFragment";
+import getCurrentUserPermissions from "@/app/(server)/actions/user/get-current-user-permissions.controller";
 
-export async function generateMetadata({
-  params,
-}: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Edit Employee Data`,
-  };
+interface Props {
+  params: Promise<{
+    companyId: string;
+    employeeId: string;
+  }>;
 }
 
-export default async function EditEmployeeInfoByUserIdPage({
-  params,
-}: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
-  if (company.error) {
+export default async function PersonalInfoSlot({ params }: Props) {
+  const [mParams, mCookies, mPermissions] = await Promise.all([
+    params,
+    cookies(),
+    getCurrentUserPermissions(),
+  ]);
+
+  const readAccess = mPermissions?.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions?.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions?.find((item) => item === "cmp_emp_update");
+
+  if (!readAccess) {
+    return <AccessDenied />;
+  }
+
+  const { employeeId, companyId } = mParams;
+
+  const [
+    company,
+    companyExtraData,
+    personalInfo,
+    employmentTypes,
+    salaryStructure,
+  ] = await Promise.all([
+    getCompanyData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
+    getPersonalInfo(Number.parseInt(employeeId)),
+    getAllEmploymentTypes(),
+    getEmployeeSalaryStructure(Number.parseInt(employeeId)),
+  ]);
+
+  if (
+    company.error ||
+    companyExtraData.error ||
+    personalInfo.error ||
+    employmentTypes.error ||
+    salaryStructure.error
+  ) {
     return (
-      <div className="flex flex-col gap-2">
-        <p className="text-xl font-semibold">Employee Details</p>
-        <ErrorFallbackCard error={company.error} />
+      <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-row items-center justify-between">
+          <p className="text-lg font-semibold">Personal Information</p>
+        </div>
+        <ErrorFallbackCard
+          error={
+            company.error ??
+            companyExtraData.error ??
+            personalInfo.error ??
+            employmentTypes.error ??
+            salaryStructure.error
+          }
+        />
       </div>
     );
   }
+
+  const empTypes = employmentTypes.data.filter((item) => item.isActive);
+
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-xl font-semibold">Employee Details</p>
-      <div className="flex items-center justify-between">
-        <MyBreadcrumbs
-          title="Employee Management"
-          user={user}
-          company={company.data}
-        />
+    <div className="grid grid-cols-3 gap-4 p-8 border rounded-md">
+      <div className="col-span-full w-full flex flex-row items-center justify-between">
+        <p className="text-lg font-semibold">Personal Information</p>
+        {updateAccess && <EmployeeDetailsEditDialog data={personalInfo.data} />}
       </div>
+      <EmployeeDetailsFormFragment data={personalInfo.data} readOnly />
+
+      <div className="col-span-full w-full flex flex-row items-center justify-between">
+        <p className="text-lg font-semibold">Service Information</p>
+        {/* <CompanyProfileEditDialog data={data} /> */}
+        {updateAccess && (
+          <ServiceInformationEditDialog
+            company={company.data}
+            data={personalInfo.data}
+            departments={companyExtraData.data.departments}
+            designations={companyExtraData.data.designations}
+            employmentTypes={empTypes}
+          />
+        )}
+      </div>
+      <ServiceDetailsFormFragment
+        data={personalInfo.data}
+        employmentTypes={empTypes}
+        readOnly
+      />
+
+      <div className="col-span-full w-full flex flex-row items-center justify-between">
+        <p className="text-lg font-semibold">Salary Structure</p>
+        {/* <CompanyProfileEditDialog data={data} /> */}
+        {updateAccess && (
+          <SalaryStructureEditDialog
+            data={salaryStructure.data.data}
+            employees={companyExtraData.data.employees}
+            currentEmployee={Number.parseInt(employeeId)}
+            company_id={Number.parseInt(companyId)}
+          />
+        )}
+      </div>
+      <SalaryStructureFormFragment
+        data={salaryStructure.data.data}
+        currentEmployee={Number.parseInt(employeeId)}
+        employees={companyExtraData.data.employees}
+        readOnly
+      />
     </div>
   );
 }

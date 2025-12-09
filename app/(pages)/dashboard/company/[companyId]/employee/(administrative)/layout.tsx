@@ -1,53 +1,57 @@
-"use server";
-import { LayoutProps } from "@/utils/Types";
-import React from "react";
-import { CompanyByIDPageProps } from "../../PageProps";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import EmployeeDashboardSidebar from "@/components/custom/Dashboard/Sidebar/EmployeeDashboardSidebar";
+import DashboardNavbar from "@/components/custom/Dashboard/Navbar/DashboardNavbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import React, { Suspense } from "react";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { TPermission } from "@/schema/Permissions";
-import AccessDenied from "@/components/custom/AccessDenied";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface Props extends LayoutProps, CompanyByIDPageProps {}
+interface LayoutProps {
+  children: React.ReactNode;
+  breadcrumbs: React.ReactNode;
+  stats: React.ReactNode;
+  pageTitle: React.ReactNode;
+  actions: React.ReactNode;
+  sidebar: React.ReactNode;
+}
 
-export default async function EmployeeLayout({ children, params }: Props) {
-  const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
-
-  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
-
-  if (!readAccess) {
-    return <AccessDenied />;
-  }
-
-  // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
-
-  if (company.error) {
-    return (
-      <div className="flex flex-col gap-2">
-        <p className="text-xl font-semibold">Employee Management</p>
-        <ErrorFallbackCard error={company.error} />
-      </div>
-    );
-  }
-
+export default function EmployeeDashboardLayout({
+  children,
+  breadcrumbs,
+  stats,
+  pageTitle,
+  actions,
+  sidebar,
+}: LayoutProps) {
   return (
-    <div>
-      {/* Navbar has h-16 */}
-      <EmployeeDashboardSidebar company={company.data} />
+    <>
+      <SidebarProvider>
+        <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+          {sidebar}
+        </Suspense>
 
-      <SidebarViewport>{children}</SidebarViewport>
-    </div>
+        <main className="w-screen">
+          <DashboardNavbar />
+          <SidebarViewport>
+            <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+              {pageTitle}
+
+              <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
+                {breadcrumbs}
+              </Suspense>
+
+              <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
+                {actions}
+              </Suspense>
+
+              {children}
+
+              <Suspense fallback={<DataTableSkeleton columns={3} />}>
+                {stats}
+              </Suspense>
+            </main>
+          </SidebarViewport>
+        </main>
+      </SidebarProvider>
+    </>
   );
 }

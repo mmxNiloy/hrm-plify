@@ -1,35 +1,21 @@
-"use server";
-import React from "react";
-import { CompanyByIDPageProps } from "../../PageProps";
-import { LayoutProps } from "@/utils/Types";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import React, { Suspense } from "react";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import SponsorComplianceDashboardSidebar from "@/components/custom/Dashboard/Sidebar/SponsorComplianceDashboardSidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface Props extends CompanyByIDPageProps, LayoutProps {}
+interface Props {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+}
 
-export default async function SponsorComplianceDashboardLayout({
+export default function SponsorComplianceDashboardLayout({
   children,
-  params,
+  sidebar,
 }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-
-  const company = await getCompanyData(companyId);
-
-  if (company.error) {
-    return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Payroll</p>
-        <ErrorFallbackCard error={company.error} />
-      </main>
-    );
-  }
-
   return (
     <div>
-      <SponsorComplianceDashboardSidebar company={company.data} />
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
       <SidebarViewport>{children}</SidebarViewport>
     </div>
   );

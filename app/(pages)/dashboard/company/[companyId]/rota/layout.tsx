@@ -1,54 +1,18 @@
-"use server";
-import React from "react";
-import { CompanyByIDPageProps } from "../PageProps";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
-import { LayoutProps } from "@/utils/Types";
-import RotaDashboardSidebar from "@/components/custom/Dashboard/Sidebar/RotaDashboardSidebar";
+import React, { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { TPermission } from "@/schema/Permissions";
-import AccessDenied from "@/components/custom/AccessDenied";
 
-interface Props extends CompanyByIDPageProps, LayoutProps {}
+interface Props {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+}
 
-export default async function RotaDashboardPageLayout({
-  children,
-  params,
-}: Props) {
-  const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
-
-  const readAccess = mPermissions.find((item) => item === "cmp_rota_read");
-  const writeAccess = mPermissions.find((item) => item === "cmp_rota_create");
-  const updateAccess = mPermissions.find((item) => item === "cmp_rota_update");
-
-  if (!readAccess) {
-    return <AccessDenied />;
-  }
-  // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
-
-  if (company.error) {
-    return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Shift Management</p>
-        <ErrorFallbackCard error={company.error} />
-      </main>
-    );
-  }
-
+export default function RotaDashboardPageLayout({ children, sidebar }: Props) {
   return (
     <div>
-      <RotaDashboardSidebar company={company.data} />
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

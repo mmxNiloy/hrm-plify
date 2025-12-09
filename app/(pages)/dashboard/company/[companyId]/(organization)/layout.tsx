@@ -1,35 +1,26 @@
-"use server";
-import React from "react";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
-import { LayoutProps } from "@/utils/Types";
-import { CompanyByIDPageProps } from "../PageProps";
-import CompanyDashboardSidebar from "@/components/custom/Dashboard/Sidebar/CompanyDashboardSidebar";
+import DashboardNavbar from "@/components/custom/Dashboard/Navbar/DashboardNavbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import React, { Suspense } from "react";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface Props extends CompanyByIDPageProps, LayoutProps {}
-
-export default async function CompanyByIdDashboardPageLayout({
-  children,
-  params,
-}: Props) {
-  // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
-  if (company.error) {
-    return <ErrorFallbackCard error={company.error} />;
-  }
+interface Props {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+}
+export default function CompanyDashboardLayout({ children, sidebar }: Props) {
   return (
-    <div>
-      <CompanyDashboardSidebar user={user} company={company.data} />
+    <>
+      <SidebarProvider>
+        <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+          {sidebar}
+        </Suspense>
 
-      <SidebarViewport>{children}</SidebarViewport>
-    </div>
+        <main className="w-screen">
+          <DashboardNavbar />
+          <SidebarViewport>{children}</SidebarViewport>
+        </main>
+      </SidebarProvider>
+    </>
   );
 }

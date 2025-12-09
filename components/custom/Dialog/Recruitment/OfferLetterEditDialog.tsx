@@ -36,6 +36,7 @@ import html2canvas from "html2canvas";
 import { useToast } from "@/components/ui/use-toast";
 import SiteConfig from "@/utils/SiteConfig";
 import { Input } from "@/components/ui/input";
+import extractMarkdown from "@/utils/extract-markdown";
 
 interface Props {
   data: IJobApplicant;
@@ -414,20 +415,21 @@ We look forward to receiving your acceptance of this offer and welcoming you abo
             ref={contentRef}
             className="size-full rounded-md border p-2 overflow-y-scroll *:text-xs"
           >
-            <Markdown
-              components={{
-                img: ({ node, ...props }) => (
-                  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-                  <img
-                    className="max-w-full h-16 object-contain object-center rounded-md"
-                    {...props}
-                  />
-                ),
-              }}
-              className={"prose max-w-full"}
-            >
-              {offerLetter}
-            </Markdown>
+            <div className="prose max-w-full">
+              <Markdown
+                components={{
+                  img: ({ node, ...props }) => (
+                    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+                    <img
+                      className="max-w-full h-16 object-contain object-center rounded-md"
+                      {...props}
+                    />
+                  ),
+                }}
+              >
+                {extractMarkdown(offerLetter ?? "")}
+              </Markdown>
+            </div>
           </div>
         </div>
 

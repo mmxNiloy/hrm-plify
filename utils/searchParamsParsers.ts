@@ -1,3 +1,4 @@
+import { IEmployee } from "@/schema/EmployeeSchema";
 import { ESortFilter } from "@/schema/enum/sort-filter";
 import {
   createParser,
@@ -9,8 +10,11 @@ import {
   parseAsStringEnum,
   createSerializer,
   createSearchParamsCache,
+  parseAsBoolean,
 } from "nuqs/server";
 import { toYYYYMMDD } from "./Misc";
+
+type EmployeeStatus = IEmployee["status"];
 
 export const parseAsDateString = createParser({
   parse(queryValue) {
@@ -46,12 +50,83 @@ export const searchParamsParsers = {
     }),
   page: parseAsIndex.withDefault(1).withOptions({
     shallow: false,
+    throttleMs: 1000,
   }),
-  limit: parseAsIndex.withDefault(5).withOptions({
+  limit: parseAsIndex.withDefault(10).withOptions({
     shallow: false,
+    throttleMs: 1000,
   }),
   search: parseAsString.withDefault("").withOptions({
     shallow: false,
+    throttleMs: 1000,
+  }),
+  filters: parseAsString.withDefault("").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  demoOnly: parseAsInteger.withDefault(-1).withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  isActive: parseAsBoolean.withDefault(true).withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  status: parseAsStringEnum(["1", "0", "all"]).withDefault("1").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  companyStatus: parseAsStringEnum(["1", "0", "all"])
+    .withDefault("all")
+    .withOptions({
+      shallow: false,
+      throttleMs: 1000,
+    }),
+  companyProfileView: parseAsStringEnum([
+    "profile",
+    "authority",
+    "address",
+    "trade",
+    "documents",
+  ])
+    .withDefault("profile")
+    .withOptions({
+      shallow: false,
+      throttleMs: 300,
+    }),
+  isForeign: parseAsStringEnum(["0", "1", "all"]).withDefault("0").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  employeeStatus: parseAsArrayOf<EmployeeStatus>(
+    parseAsStringEnum(["ACTIVE", "LEAVE", "TERMINATED", "RESIGNED", "RETIRED"])
+  )
+    .withDefault(["ACTIVE"])
+    .withOptions({
+      shallow: false,
+      throttleMs: 1000,
+    }),
+  employeeProfileView: parseAsStringEnum([
+    "personal-info",
+    "education",
+    "passport-info",
+    "euss",
+    "nid",
+    "contact",
+  ])
+    .withDefault("personal-info")
+    .withOptions({ shallow: false, throttleMs: 1000 }),
+  companySearch: parseAsString.withDefault("").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  bankSearch: parseAsString.withDefault("").withOptions({
+    shallow: false,
+    throttleMs: 1000,
+  }),
+  selectedCompanyId: parseAsInteger.withDefault(0).withOptions({
+    shallow: false,
+    throttleMs: 1000,
   }),
 };
 

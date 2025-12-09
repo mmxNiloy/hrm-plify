@@ -10,18 +10,14 @@ import CompanyDocumentsTab from "@/components/custom/Tabs/CompanyDetailTabs/Comp
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Document Management`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Documents");
 }
 
 export default async function DocumentsPage({ params }: CompanyByIDPageProps) {
@@ -55,7 +51,7 @@ export default async function DocumentsPage({ params }: CompanyByIDPageProps) {
   return (
     <CompanyDocumentsTab
       readOnly={!updateAccess || !writeAccess}
-      company_id={companyId}
+      company_id={Number.parseInt(companyId)}
       data={companyDetails.data?.company_docs_db}
     />
   );

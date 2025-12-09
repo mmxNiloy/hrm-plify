@@ -24,7 +24,7 @@ export default async function CompanyNameInput({
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
 
-  const company = await getCompanyData(company_id);
+  const company = await getCompanyData(company_id.toString());
   return (
     <div className="flex flex-col gap-2">
       <Label

@@ -17,8 +17,8 @@ import SiteConfig from "@/utils/SiteConfig";
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -43,8 +43,8 @@ export default async function JobShortlistPage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -53,7 +53,7 @@ export default async function JobShortlistPage({
   const [company, allJobs] = await Promise.all([
     getCompanyData(companyId),
     getCompanyAllJobListingsMetadata({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page: 0,
       limit: 0,
     }),
@@ -76,12 +76,7 @@ export default async function JobShortlistPage({
         Shortlisted Applications
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Job & Recruitment"
-          title="Job Applications"
-        />
+        <MyBreadcrumbs parent="Job & Recruitment" title="Job Applications" />
 
         <CompanyJobListSelect jobs={allJobs.data.data} />
       </div>

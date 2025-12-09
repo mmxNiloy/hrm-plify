@@ -14,27 +14,23 @@ import OrgChartVersionSelect from "@/components/custom/Organogram/OrgChartVersio
 import OrgChartVersionCreationPopover from "@/components/custom/Popover/Organogram/OrgChartVersionCreationPopover";
 import { getAllOrganograms } from "@/app/(server)/actions/getAllOrganograms";
 import SiteConfig from "@/utils/SiteConfig";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Organogram Chart`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Organogram");
 }
 
 export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const [company, companyExtra, charts] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyExtraData(companyId),
-    getAllOrganograms(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
+    getAllOrganograms(Number.parseInt(companyId)),
   ]);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -59,7 +55,7 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
         Organogram Chart
       </p>
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs company={company.data} user={user} title="Organogram" />
+        <MyBreadcrumbs title="Organogram" />
 
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <OrgChartVersionSelect charts={charts.data} />
@@ -68,7 +64,7 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
             <div className="w-full sm:w-auto">
               <OrgChartVersionCreationPopover
                 charts={charts.data}
-                companyId={companyId}
+                companyId={Number.parseInt(companyId)}
               />
             </div>
           )}
@@ -80,7 +76,7 @@ export default async function OrganogramPage({ params }: CompanyByIDPageProps) {
         company={company.data}
         employees={companyExtra.data.employees}
         designations={companyExtra.data.designations}
-        companyId={companyId}
+        companyId={Number.parseInt(companyId)}
       />
     </main>
   );

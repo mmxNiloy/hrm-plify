@@ -2,8 +2,8 @@
 
 import { SortableHeader } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { IBank } from "@/schema/BankSchema";
 import BankEditPopover from "@/components/custom/Popover/Company/BankEditPopover";
+import { IBank } from "@/schema/form/bank.schema";
 
 export const CompanyBankDataTableColumns: ColumnDef<IBank>[] = [
   {
@@ -18,14 +18,14 @@ export const CompanyBankDataTableColumns: ColumnDef<IBank>[] = [
     accessorKey: "bank_shortcode",
     header: ({ column }) => <SortableHeader column={column} name="Bank" />,
   },
-  {
-    id: "action-edit",
-    cell: ({ row }) => (
-      <BankEditPopover
-        data={row.original}
-        company_id={row.original.company_id}
-        asIcon
-      />
-    ),
-  },
+  // {
+  //   id: "action-edit",
+  //   cell: ({ row }) => (
+  //     <BankEditPopover
+  //       data={row.original}
+  //       company_id={row.original.company_id}
+  //       asIcon
+  //     />
+  //   ),
+  // },
 ];

@@ -21,8 +21,8 @@ export async function generateMetadata({
 export default async function EditEmployeeInfoByUserIdPage({
   params,
 }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = (await params).companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -39,11 +39,7 @@ export default async function EditEmployeeInfoByUserIdPage({
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">Profile</p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          title={`${getFullNameOfUser(user)}'s Profile`}
-          user={user}
-          company={company.data}
-        />
+        <MyBreadcrumbs title={`${getFullNameOfUser(user)}'s Profile`} />
       </div>
     </main>
   );

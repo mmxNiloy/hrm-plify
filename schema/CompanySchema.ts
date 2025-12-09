@@ -23,6 +23,12 @@ export interface ICompany {
   is_featured?: boolean;
 }
 
+export interface IFavoriteCompany {
+  user_id: number;
+  company_id: number;
+  companies?: ICompany;
+}
+
 export interface ICompanyWithEmployeeMeta extends ICompany {
   total_employees: number;
   total_migrant_employees: number;
@@ -167,6 +173,7 @@ export interface IDepartment {
   created_at?: Date;
   updated_at?: Date;
   dpt_name: string;
+  is_active?: boolean;
 }
 
 export interface IPaginatedDepartment extends IPaginatedResponse {

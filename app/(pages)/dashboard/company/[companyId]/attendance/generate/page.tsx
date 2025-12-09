@@ -19,18 +19,18 @@ import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getAttendanceOfEmployee } from "@/app/(server)/actions/getAttendanceOfEmployee";
 import AttendancePDFGenerator from "@/components/custom/Dashboard/Attendance/AttendancePDFGenerator";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    } | Generate Attendance`,
-  };
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(
+    companyId,
+    "Generate Attendance",
+    "generate-attendance"
+  );
 }
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
@@ -65,14 +65,13 @@ export default async function GenerateAttendancePage({
     return <AccessDenied />;
   }
 
-  var companyId = mParams.companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
   const [company, companyExtraData, attendance] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     getAttendanceOfEmployee({ employeeId, limit, page, sort }),
   ]);
 
@@ -106,7 +105,7 @@ export default async function GenerateAttendancePage({
         <div className="flex flex-col sm:flex-row gap-4">
           <AttendanceBulkUpdateDialog
             asGenerator
-            company_id={companyId}
+            company_id={Number.parseInt(companyId)}
             employees={companyExtraData.data.employees}
           />
 
@@ -128,7 +127,7 @@ export default async function GenerateAttendancePage({
               (emp) => emp.employee_id == employeeId
             ),
             employee_id: employeeId,
-            company_id: companyId,
+            company_id: Number.parseInt(companyId),
           }))}
           pageCount={attendance.data.total_page}
           columns={AttendanceGenerationRecordDataTableColumns}

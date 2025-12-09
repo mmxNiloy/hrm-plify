@@ -1,16 +1,13 @@
 "use server";
-import React, { Suspense } from "react";
+import React from "react";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import ChangeOfCircumstancesDataTable from "@/components/custom/DataTable/Company/Employee/ChangeOfCircumstancesDataTable";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData";
 import { SearchParams } from "nuqs";
 import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
-import EmployeeCombobox from "@/components/custom/Select/EmployeeCombobox";
-import { DataTable, DataTableSkeleton } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import { ChangeOfCircumstancesDataTableColumns } from "@/components/custom/DataTable/Columns/Company/ChangeOfCircumstancesDataTableColumns";
 import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
 import getChangeOfCircumstances from "@/app/(server)/actions/change-of-circumstances/get-change-of-circumstances.controller";
@@ -40,7 +37,7 @@ export default async function EmployeeChangeOfCircumstancesPage({
   const cId = Number.parseInt(mParams.companyId);
 
   const [company, employee] = await Promise.all([
-    getCompanyData(cId),
+    getCompanyData(mParams.companyId),
     getEmployeeData(),
   ]);
 
@@ -72,8 +69,6 @@ export default async function EmployeeChangeOfCircumstancesPage({
         <MyBreadcrumbs
           title="Change of Circumstances"
           parent="Employee Management"
-          company={company.data}
-          user={user}
         />
 
         {/* <EmployeeCombobox employees={companyExtra.data.employees} /> */}

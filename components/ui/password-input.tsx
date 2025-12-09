@@ -47,6 +47,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           {...props}
         />
         <Button
+          tabIndex={-1}
           type="button"
           variant={"ghost"}
           onClick={() => setIsVisible((oldVal) => !oldVal)}

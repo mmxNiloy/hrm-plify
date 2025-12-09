@@ -1,35 +1,22 @@
 "use server";
-import React from "react";
-import { redirect } from "next/navigation";
-import { ICompany } from "@/schema/CompanySchema";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
-import { LayoutProps } from "@/utils/Types";
-import { CompanyByIDPageProps } from "../PageProps";
-import CompanyDashboardSidebar from "@/components/custom/Dashboard/Sidebar/CompanyDashboardSidebar";
+import React, { Suspense } from "react";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface Props extends CompanyByIDPageProps, LayoutProps {}
+interface Props {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+}
 
 export default async function CompanyDocumentsPageLayout({
   children,
-  params,
+  sidebar,
 }: Props) {
-  // Get company information
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  const company = await getCompanyData(companyId);
-  if (company.error) {
-    return <ErrorFallbackCard error={company.error} />;
-  }
   return (
     <div>
-      <CompanyDashboardSidebar user={user} company={company.data} />
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
 
       <SidebarViewport>{children}</SidebarViewport>
     </div>

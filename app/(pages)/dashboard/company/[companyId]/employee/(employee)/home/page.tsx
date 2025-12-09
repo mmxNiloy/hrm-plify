@@ -38,8 +38,8 @@ import SiteConfig from "@/utils/SiteConfig";
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -51,8 +51,8 @@ export async function generateMetadata({
 export default async function EditEmployeeInfoByUserIdPage({
   params,
 }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -67,14 +67,18 @@ export default async function EditEmployeeInfoByUserIdPage({
   ] = await Promise.all([
     getCompanyData(companyId),
     // didAttendToday(),
-    getHolidays({ company_id: companyId }),
+    getHolidays({ company_id: Number.parseInt(companyId) }),
     getEmployeeData(),
     getLeaveRequests({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page: 1,
       limit: 10,
     }),
-    getCompanyLeaveTypes({ company_id: companyId, page: 1, limit: 10 }),
+    getCompanyLeaveTypes({
+      company_id: Number.parseInt(companyId),
+      page: 1,
+      limit: 10,
+    }),
   ]);
 
   if (
@@ -104,11 +108,7 @@ export default async function EditEmployeeInfoByUserIdPage({
       {/* <AttendanceAlert attendanceResponse={attendance} /> */}
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">Dashboard</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs
-          title={`${getFullNameOfUser(user)}'s Dashboard`}
-          user={user}
-          company={company.data}
-        />
+        <MyBreadcrumbs title={`${getFullNameOfUser(user)}'s Dashboard`} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4">

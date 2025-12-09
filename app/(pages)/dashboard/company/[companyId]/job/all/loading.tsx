@@ -1,4 +1,4 @@
-import { DataTableSkeleton } from "@/components/ui/data-table";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import React from "react";
 import { JobsDataTableColumns } from "@/components/custom/DataTable/Columns/JobsDataTableColumns";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,7 +11,7 @@ export default function AllJobsPageSkeleton() {
 
       <div className="grid grid-cols-2 gap-2">
         <div className="col-span-full">
-          <DataTableSkeleton showOptions columns={JobsDataTableColumns} />
+          <DataTableSkeleton />
         </div>
       </div>
     </main>

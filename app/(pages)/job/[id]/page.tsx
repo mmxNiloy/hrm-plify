@@ -6,6 +6,7 @@ import TextCapsule from "@/components/custom/TextCapsule";
 import { AvatarPicker } from "@/components/ui/avatar-picker";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
+import extractMarkdown from "@/utils/extract-markdown";
 import { stringToColor } from "@/utils/Misc";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -118,7 +119,7 @@ export default async function JobByIdPage({ params }: Props) {
         {/* Company Name and logo here */}
         <div className="flex gap-2 items-center">
           <AvatarPicker
-            className="size-24 p-0"
+            className="size-24 p-0 shrink-0"
             readOnly
             src={data.company?.logo}
             skeleton={
@@ -137,53 +138,61 @@ export default async function JobByIdPage({ params }: Props) {
             }
           />
 
-          <div className="flex flex-col gap-2">
-            <h4 className="text-2xl font-bold">{data.company?.company_name}</h4>
+          <div className="flex flex-wrap flex-grow gap-4 items-center">
+            <div className="flex flex-col gap-2">
+              <h4 className="text-2xl font-bold">
+                {data.company?.company_name}
+              </h4>
 
-            <div className="flex gap-2 items-center">
-              {data.company?.headquarters && (
-                <TextCapsule
-                  title={`Headquarters at: ${data.company.headquarters}`}
-                  className="text-white bg-blue-500"
-                >
-                  <Icons.building />
-                  {data.company.headquarters}
-                </TextCapsule>
-              )}
-
-              {data.company?.contact_number && (
-                <Link href={`tel:${data.company.contact_number}`} passHref>
+              <div className="flex gap-2 items-center flex-wrap">
+                {data.company?.headquarters && (
                   <TextCapsule
-                    title={`Contact: ${data.company.contact_number}`}
-                    className="text-white bg-emerald-500"
+                    title={`Headquarters at: ${data.company.headquarters}`}
+                    className="text-white bg-blue-500"
                   >
-                    <Icons.phone />
-                    {data.company.contact_number}
+                    <Icons.building />
+                    {data.company.headquarters}
                   </TextCapsule>
-                </Link>
-              )}
+                )}
 
-              {data.company?.website && (
-                <Link href={`${data.company.website}`} passHref>
-                  <TextCapsule
-                    title={`Website: ${data.company.website}`}
-                    className="text-white bg-amber-500 hover:underline"
-                  >
-                    <Icons.externalLink />
-                    Visit Website
-                  </TextCapsule>
-                </Link>
-              )}
+                {data.company?.contact_number && (
+                  <Link href={`tel:${data.company.contact_number}`} passHref>
+                    <TextCapsule
+                      title={`Contact: ${data.company.contact_number}`}
+                      className="text-white bg-emerald-500"
+                    >
+                      <Icons.phone />
+                      {data.company.contact_number}
+                    </TextCapsule>
+                  </Link>
+                )}
+
+                {data.company?.website && (
+                  <Link href={`${data.company.website}`} passHref>
+                    <TextCapsule
+                      title={`Website: ${data.company.website}`}
+                      className="text-white bg-amber-500 hover:underline"
+                    >
+                      <Icons.externalLink />
+                      Visit Website
+                    </TextCapsule>
+                  </Link>
+                )}
+              </div>
             </div>
+
+            <span className="hidden md:block md:flex-grow" />
+
+            <JobApplicantEditDialog disabled={hasApplied} job={data} />
           </div>
-
-          <span className="flex-grow" />
-
-          <JobApplicantEditDialog disabled={hasApplied} job={data} />
         </div>
 
         {/* Job description */}
-        <Markdown className={"prose"}>{data.desc}</Markdown>
+        <div className="border border-muted rounded-xl p-6 sm:p-10 md:p-12 lg:p-16 w-full">
+          <div className="prose">
+            <Markdown>{extractMarkdown(data.desc ?? "")}</Markdown>
+          </div>
+        </div>
       </div>
     </main>
   );

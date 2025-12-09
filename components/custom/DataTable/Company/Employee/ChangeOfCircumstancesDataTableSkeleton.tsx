@@ -1,12 +1,6 @@
-import { DataTableSkeleton } from "@/components/ui/data-table";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import React from "react";
-import { ChangeOfCircumstancesDataTableColumns } from "../../Columns/Company/ChangeOfCircumstancesDataTableColumns";
 
 export default function ChangeOfCircumstancesDataTableSkeleton() {
-  return (
-    <DataTableSkeleton
-      columns={ChangeOfCircumstancesDataTableColumns}
-      showOptions
-    />
-  );
+  return <DataTableSkeleton />;
 }

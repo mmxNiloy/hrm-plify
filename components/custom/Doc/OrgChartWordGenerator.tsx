@@ -15,6 +15,7 @@ import {
   AlignmentType,
   HeadingLevel,
 } from "docx";
+import { toast } from "sonner";
 
 export default function OrgChartWordGenerator({
   canvasRef,
@@ -138,6 +139,11 @@ export default function OrgChartWordGenerator({
   const downloadItem = useCallback(async () => {
     if (canvasRef && canvasRef.current) {
       const wrapperEl = canvasRef.current.getElement();
+
+      if (!wrapperEl) {
+        toast.error("Organogram element not found.");
+        return;
+      }
 
       setLoading(true);
 

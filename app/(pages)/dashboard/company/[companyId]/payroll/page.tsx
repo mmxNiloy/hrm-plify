@@ -37,8 +37,8 @@ interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -56,8 +56,8 @@ export default async function PayRollManagementPage({
   const selectedEmployee = sParams.employee as string | undefined;
   const selectedDate = sParams.pay_period as string | undefined;
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -69,7 +69,7 @@ export default async function PayRollManagementPage({
       page,
       limit,
     }),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     getPayroll({
       company_id: companyId,
       employee_id: selectedEmployee,
@@ -102,10 +102,10 @@ export default async function PayRollManagementPage({
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">Payroll</p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs company={company.data} user={user} title="Payroll" />
+        <MyBreadcrumbs title="Payroll" />
 
         <PayrollEditDialog
-          company_id={companyId}
+          company_id={Number.parseInt(companyId)}
           employees={companyExtra.data.employees}
           departments={companyExtra.data.departments}
           designations={companyExtra.data.designations}

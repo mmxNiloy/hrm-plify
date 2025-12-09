@@ -18,8 +18,8 @@ import { ButtonBase, ButtonGradient } from "@/styles/button.tailwind";
 export default async function SCSponsorManagementDossier({
   params,
 }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -102,8 +102,6 @@ export default async function SCSponsorManagementDossier({
       </p>
 
       <MyBreadcrumbs
-        company={company.data}
-        user={user}
         parent={"Sponsor Compliance"}
         title={"Sponsor Management Dossier"}
       />

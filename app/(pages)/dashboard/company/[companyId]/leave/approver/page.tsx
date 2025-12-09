@@ -25,8 +25,8 @@ interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -52,8 +52,8 @@ export default async function CompanyLeaveApproverPage({
     return <AccessDenied />;
   }
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const { page, limit } = getPaginationParams(await searchParams);
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
@@ -61,9 +61,9 @@ export default async function CompanyLeaveApproverPage({
 
   const [company, companyExtraData, leaveApprovers] = await Promise.all([
     getCompanyData(companyId),
-    getCompanyExtraData(companyId),
+    getCompanyExtraData(Number.parseInt(companyId)),
     getLeaveApprovers({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
     }),
@@ -90,17 +90,12 @@ export default async function CompanyLeaveApproverPage({
         Leave Approvers
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Leave"
-          title="Leave Approvers"
-        />
+        <MyBreadcrumbs parent="Leave" title="Leave Approvers" />
 
         {writeAccess && (
           <LeaveApproverEditDialog
             employees={companyExtraData.data.employees}
-            company_id={companyId}
+            company_id={Number.parseInt(companyId)}
           />
         )}
       </div>

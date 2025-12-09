@@ -32,11 +32,11 @@ export default function AttendanceDashboardSidebar({
         icon: <Icons.fileCog />,
         title: "Generate Attendance",
         hidden:
-          user.user_roles?.roles.role_name !== "Super Admin" &&
-          user.user_roles?.roles.role_name !== "Admin",
+          user.user_roles?.roles?.role_name !== "Super Admin" &&
+          user.user_roles?.roles?.role_name !== "Admin",
       },
     ],
-    [company.company_id, user.user_roles?.roles.role_name]
+    [company.company_id, user.user_roles?.roles?.role_name]
   );
 
   return (

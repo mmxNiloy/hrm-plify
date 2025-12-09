@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 
-export const ButtonBase = cn("rounded-full gap-1");
+export const ButtonBase = cn(
+  "gap-1 drop-shadow-sm hover:drop-shadow-lg text-sm [&_svg]:size-5"
+);
 export const ButtonBlue = cn(
   ButtonBase,
   "bg-blue-500 hover:bg-blue-400 text-white"
@@ -15,5 +17,5 @@ export const ButtonSuccess = cn(
 );
 export const ButtonWarn = cn(
   ButtonBase,
-  "bg-amber-500 hover:bg-amber-400 text-white"
+  "bg-yellow-500 hover:bg-yellow-400 text-white"
 );

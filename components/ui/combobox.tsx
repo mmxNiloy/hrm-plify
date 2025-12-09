@@ -13,6 +13,7 @@ import {
 } from "./command";
 import { cn } from "@/lib/utils";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
@@ -27,7 +28,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
     const { label, placeholder, items, onValueChange, contentClassName } =
       props;
     const [selectedValue, setSelectedValue] = useState<string>(
-      ((props.defaultValue as string) ?? "").trim()
+      ((props.value as string) ?? (props.defaultValue as string) ?? "").trim()
     );
     const [open, setOpen] = useState<boolean>(false);
 
@@ -103,15 +104,17 @@ interface LabelledInputProps extends Omit<InputProps, "items"> {
   items: {
     label: string;
     value: string;
+    image?: string;
   }[];
+  onSearchChange?: (value: string) => void;
 }
 
 const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, onSearchChange, ...props }, ref) => {
     const { label, placeholder, items, onValueChange, contentClassName } =
       props;
     const [selectedValue, setSelectedValue] = useState<string>(
-      ((props.defaultValue as string) ?? "").trim()
+      ((props.value as string) ?? (props.defaultValue as string) ?? "").trim()
     );
     const [open, setOpen] = useState<boolean>(false);
 
@@ -120,6 +123,7 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger disabled={props.disabled || props.readOnly} asChild>
             <Button
+              disabled={props.disabled || props.readOnly}
               variant={"outline"}
               role="combobox"
               className={cn(className, "justify-between")}
@@ -170,10 +174,13 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
             )}
           >
             <Command className="max-h-72">
-              <CommandInput placeholder={placeholder ?? "Search..."} />
+              <CommandInput
+                onValueChange={onSearchChange}
+                placeholder={placeholder ?? "Search..."}
+              />
               <CommandList>
                 <CommandEmpty>No results.</CommandEmpty>
-                <CommandGroup>
+                <CommandGroup className="*:space-y-0.5">
                   {items.map((item, index) => (
                     <CommandItem
                       onSelect={() => {
@@ -184,10 +191,26 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
                       }}
                       key={`${item}-#${index}`}
                       value={item.value}
-                    >
-                      {selectedValue === item.value && (
-                        <Icons.check className="mr-2 size-4" />
+                      keywords={item.label.split(" ")}
+                      className={cn(
+                        item.value === selectedValue
+                          ? "border border-blue-500 border-dashed"
+                          : ""
                       )}
+                    >
+                      {/* {selectedValue === item.value && (
+                        <Icons.check className="mr-2 size-4" />
+                      )} */}
+                      {item.image && (
+                        <Avatar className="size-10 mr-4 bg-muted">
+                          <AvatarFallback>{item.label[0]}</AvatarFallback>
+                          <AvatarImage
+                            src={item.image}
+                            className="object-contain object-center"
+                          />
+                        </Avatar>
+                      )}
+
                       {item.label}
                     </CommandItem>
                   ))}

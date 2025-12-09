@@ -31,13 +31,14 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
       variant = "circle",
       skeleton,
       onSizeExceeded,
+      src = "",
       ...props
     },
     ref
   ) => {
     const [error, setError] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<File>();
-    const [imageURL, setImageURL] = useState<string | undefined>(props.src);
+    const [imageURL, setImageURL] = useState<string | undefined>(src);
     const { toast } = useToast();
 
     const handleImageSelect = useCallback(
@@ -72,7 +73,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, InputProps>(
 
     useEffect(() => {
       setError(false);
-    }, [props.src]);
+    }, [src]);
 
     return (
       <div

@@ -56,7 +56,7 @@ export default async function requestAPI<T = IResponseBase>({
     if (authenticate) {
       const session =
         (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";
-      console.debug("Session:", session);
+      // console.debug("Session:", session);
       if (!session || !session.length) {
         throw new Error("Token not found or has expired.", {
           cause: "Session not found or token expired. Please login again.",

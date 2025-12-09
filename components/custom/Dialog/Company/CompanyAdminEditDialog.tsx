@@ -28,7 +28,7 @@ export default function CompanyAdminEditDialog({
   asEdit,
 }: {
   data?: ICompanyUser;
-  companyId: number;
+  companyId: string;
   asIcon?: boolean;
   asEdit?: boolean;
 }) {
@@ -44,7 +44,7 @@ export default function CompanyAdminEditDialog({
 
       const fd = new FormData(e.currentTarget);
       const userData = {
-        company_id: Number.parseInt(`${companyId}`),
+        company_id: Number.parseInt(companyId),
         fname: fd.get("fname"),
         lname: fd.get("lname"),
         mname: fd.get("mname"),
@@ -55,7 +55,7 @@ export default function CompanyAdminEditDialog({
       };
 
       const editData = {
-        company_id: Number.parseInt(`${companyId}`),
+        company_id: Number.parseInt(companyId),
         first_name: fd.get("fname"),
         last_name: fd.get("lname"),
         middle_name: fd.get("mname"),

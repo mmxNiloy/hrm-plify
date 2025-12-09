@@ -46,7 +46,10 @@ export interface IUser extends IUserBase {
 }
 
 export interface IUserRoles {
-  roles: IRoles;
+  id: number;
+  user_id: number;
+  role_id: number;
+  roles?: IRoles;
 }
 
 export type TRole =

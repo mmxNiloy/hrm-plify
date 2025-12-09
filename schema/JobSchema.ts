@@ -48,3 +48,11 @@ export interface IJobApplicant {
 export interface IPaginatedJobApplicants extends IPaginatedResponse {
   data: IJobApplicant[];
 }
+
+export interface IJobStat {
+  company_id: number;
+  job_status: string;
+  month: string;
+  year: string;
+  total: string;
+}

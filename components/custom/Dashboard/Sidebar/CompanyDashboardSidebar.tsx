@@ -44,8 +44,8 @@ export default function CompanyDashboardSidebar({
             title: "Company Admin",
             icon: <Icons.adminUser />,
             hidden: !(
-              user.user_roles?.roles.role_name === "Super Admin" ||
-              user.user_roles?.roles.role_name === "Admin"
+              user.user_roles?.roles?.role_name === "Super Admin" ||
+              user.user_roles?.roles?.role_name === "Admin"
             ),
           },
           {
@@ -142,7 +142,7 @@ export default function CompanyDashboardSidebar({
         ],
       },
     ],
-    [company.company_id, user.user_roles?.roles.role_name]
+    [company.company_id, user.user_roles?.roles?.role_name]
   );
 
   const CompanyDashboardSidebarItemsDefaultValues = useMemo(

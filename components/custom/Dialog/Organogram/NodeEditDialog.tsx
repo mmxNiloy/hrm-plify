@@ -201,6 +201,7 @@ export default function NodeEditDialog({
           designation_id: desig.designation_id,
           is_vacant: true,
           num_vacant: nVac,
+          status: "ACTIVE",
         };
 
         chNode = [newVacantNode];

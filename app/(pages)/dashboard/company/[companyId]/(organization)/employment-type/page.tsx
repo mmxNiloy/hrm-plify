@@ -1,56 +1,34 @@
 "use server";
-import React from "react";
-import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable } from "@/components/ui/data-table";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { CompanyEmploymentTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyEmploymentTypeDataTableColumns";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import { cookies } from "next/headers";
-import { IUser } from "@/schema/UserSchema";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import getAllEmploymentTypes from "@/app/(server)/actions/getAllEmploymentTypes";
+import React, { Suspense } from "react";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
+import EmploymentTypeTable from "./features/employment-type-table";
+import { Metadata } from "next";
+import SiteConfig from "@/utils/SiteConfig";
+import { SearchParams } from "nuqs";
+import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
-export default async function EmploymentTypePage({
+export async function generateMetadata({
   params,
-}: CompanyByIDPageProps) {
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const [company, employments] = await Promise.all([
-    getCompanyData(companyId),
-    getAllEmploymentTypes(),
-  ]);
+}: CompanyIDURLParamSchema): Promise<Metadata> {
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Employment Types");
+}
+export default async function EmploymentTypePage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const sParams = await searchParams;
 
-  if (company.error || employments.error) {
-    return (
-      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Company Employment Types
-        </p>
-
-        <ErrorFallbackCard error={company.error ?? employments.error} />
-      </main>
-    );
-  }
+  searchParamsCache.parse(sParams);
+  const key = serialize(sParams);
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Company Employment Types
-      </p>
-
-      <MyBreadcrumbs
-        title="Employment Type"
-        company={company.data}
-        user={user}
-      />
-
-      <DataTable
-        data={employments.data.filter((item) => item.isActive)}
-        columns={CompanyEmploymentTypeDataTableColumns}
-      />
-    </main>
+    <Suspense key={key} fallback={<DataTableSkeleton rows={10} columns={4} />}>
+      <EmploymentTypeTable />
+    </Suspense>
   );
 }

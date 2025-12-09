@@ -2,12 +2,10 @@
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import React, { RefObject, useCallback, useState } from "react";
-import { OrgChartProps } from "../Organogram/OrgChartProps";
 import jsPDF from "jspdf";
 import { toPng } from "html-to-image";
 import { OrganizationChart } from "primereact/organizationchart";
 import { ICompany } from "@/schema/CompanySchema";
-import { PDFDocument, rgb } from "pdf-lib";
 import { toast } from "@/components/ui/use-toast";
 import { ToastSuccess, ToastWarn } from "@/styles/toast.tailwind";
 
@@ -20,124 +18,178 @@ export default function OrgChartReportGenerator({
 }) {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const generatePDFWithPDFLib = useCallback(
+  const generatePDFWithJsPDF = useCallback(
     async (wrapperEl: HTMLDivElement) => {
       try {
-        // Dynamically calculate content dimensions
-        const boundingBox = wrapperEl.getBoundingClientRect();
-        const padding = 16;
-        const scale = 2; // Adjust scale for resolution
-        const canvasWidth = (boundingBox.width + 2 * padding) * scale;
-        const canvasHeight = (boundingBox.height + 2 * padding) * scale;
+        // High-resolution capture
+        const scale = 2;
+        const padding = 40; // Extra padding in pixels for margins
 
-        // Generate PNG
-        const pngDataUrl = await toPng(wrapperEl, {
+        const dataUrl = await toPng(wrapperEl, {
           cacheBust: true,
           quality: 1,
-          canvasWidth,
-          canvasHeight,
+          pixelRatio: scale,
           backgroundColor: "#ffffff",
+          style: {
+            padding: `${padding}px`,
+          },
         });
 
-        // Load the PNG as an array buffer
-        const pngBytes = await fetch(pngDataUrl).then((res) =>
-          res.arrayBuffer()
+        const img = new Image();
+        img.src = dataUrl;
+
+        await new Promise((resolve) => {
+          img.onload = resolve;
+        });
+
+        const imgWidth = img.width;
+        const imgHeight = img.height;
+
+        // A4 dimensions in points (1px = 0.75pt at 72dpi, but jsPDF uses 72dpi by default)
+        const pdf = new jsPDF({
+          orientation: imgWidth > imgHeight ? "landscape" : "portrait",
+          unit: "pt",
+          format: "a4",
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        // Calculate scaling to fit image within page (with margins)
+        const margin = 40; // 40pt margin (~0.5–0.7 inch)
+        const widthRatio = (pageWidth - margin * 2) / imgWidth;
+        const heightRatio = (pageHeight - margin * 2) / imgHeight;
+        const ratio = Math.min(widthRatio, heightRatio);
+
+        const finalWidth = imgWidth * ratio;
+        const finalHeight = imgHeight * ratio;
+
+        // Center the image
+        const x = (pageWidth - finalWidth) / 2;
+        const y = (pageHeight - finalHeight) / 2;
+
+        // Add image to PDF
+        pdf.addImage(
+          dataUrl,
+          "PNG",
+          x,
+          y,
+          finalWidth,
+          finalHeight,
+          undefined,
+          "FAST" // FAST = better performance, still great quality
         );
 
-        // Create a new PDF document
-        const pdfDoc = await PDFDocument.create();
+        // Optional: Add title
+        pdf.setFontSize(16);
+        pdf.setTextColor(80, 80, 80);
+        pdf.text(
+          `${company.company_name} - Organization Chart`,
+          pageWidth / 2,
+          30,
+          {
+            align: "center",
+          }
+        );
 
-        // Embed the PNG image into the PDF
-        const pngImage = await pdfDoc.embedPng(pngBytes);
-
-        // Get image dimensions
-        const pngDims = pngImage.scale(1); // 1x scale
-
-        // Add a page to the PDF document
-        const page = pdfDoc.addPage([pngDims.width, pngDims.height]);
-
-        // Draw the PNG on the page
-        page.drawImage(pngImage, {
-          x: 0,
-          y: 0,
-          width: pngDims.width,
-          height: pngDims.height,
-        });
-
-        // Serialize the PDF document to bytes
-        const pdfBytes = await pdfDoc.save();
-
-        // Trigger download
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `organogram_${Date.now()}.pdf`;
-        link.click();
+        // Save the PDF
+        pdf.save(
+          `organogram_${company.company_name.replace(
+            /[^a-zA-Z0-9]/g,
+            "_"
+          )}_${Date.now()}.pdf`
+        );
       } catch (error) {
-        console.error("Error generating PDF with PDF-lib:", error);
+        console.error("Error generating PDF with jsPDF:", error);
+        throw error;
       }
     },
-    []
+    [company.company_name]
   );
 
   const downloadHighQualityImage = useCallback(
     async (wrapperEl: HTMLDivElement) => {
       try {
-        // Dynamically calculate the dimensions of the content
-        const boundingBox = wrapperEl.getBoundingClientRect();
-        const scale = 8; // Increase scale for higher resolution (e.g., 2x)
-        const padding = 16;
-        const canvasWidth = (boundingBox.width + 2 * padding) * scale;
-        const canvasHeight = (boundingBox.height + 2 * padding) * scale;
+        const scale = 4; // Even higher for PNG export
+        const padding = 40;
 
-        // Generate the image as a PNG with high quality
         const dataUrl = await toPng(wrapperEl, {
           cacheBust: true,
-          quality: 1, // Set quality to maximum
-          canvasWidth,
-          canvasHeight,
-          backgroundColor: "#ffffff", // White background
-          skipFonts: true,
-          preferredFontFormat: "woff2",
+          quality: 1,
+          pixelRatio: scale,
+          backgroundColor: "#ffffff",
+          style: {
+            padding: `${padding}px`,
+          },
         });
 
-        // Create a download link for the image
         const link = document.createElement("a");
         link.href = dataUrl;
-        link.download = `organogram_${Date.now()}.png`;
+        link.download = `organogram_${company.company_name.replace(
+          /[^a-zA-Z0-9]/g,
+          "_"
+        )}_${Date.now()}.png`;
         link.click();
       } catch (error) {
         console.error("Error generating high-quality image:", error);
       }
     },
-    []
+    [company.company_name]
   );
 
   const downloadItem = useCallback(async () => {
-    if (canvasRef && canvasRef.current) {
-      const wrapperEl = canvasRef.current.getElement();
+    if (!canvasRef?.current) {
+      toast({
+        title: "Organogram not ready",
+        description: "Please wait for the chart to fully render.",
+        className: ToastWarn,
+      });
+      return;
+    }
 
-      setLoading(true);
+    const wrapperEl = canvasRef.current.getElement();
+    if (!wrapperEl) {
+      toast({
+        title: "Organogram element not found.",
+        description: "Please ensure the organogram is rendered correctly.",
+        className: ToastWarn,
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await generatePDFWithJsPDF(wrapperEl);
+      toast({
+        title: "PDF generated successfully!",
+        className: ToastSuccess,
+      });
+    } catch (error) {
+      toast({
+        title: "PDF generation failed",
+        description: "Falling back to high-quality PNG download...",
+        className: ToastWarn,
+      });
+
       try {
-        await generatePDFWithPDFLib(wrapperEl);
-      } catch (error) {
-        toast({
-          title: "Failed to generate PDF",
-          description:
-            "Failed to generate PDF. Trying to generate PNG document.",
-          className: ToastWarn,
-        });
         await downloadHighQualityImage(wrapperEl);
-      } finally {
         toast({
-          title: "Document generated!",
+          title: "PNG downloaded instead",
+          description: "High-resolution image saved successfully.",
           className: ToastSuccess,
         });
+      } catch (pngError) {
+        toast({
+          title: "Download failed",
+          description: "Could not generate PDF or PNG.",
+          className: ToastWarn,
+        });
       }
-
+    } finally {
       setLoading(false);
     }
-  }, [canvasRef, downloadHighQualityImage, generatePDFWithPDFLib]);
+  }, [canvasRef, generatePDFWithJsPDF, downloadHighQualityImage]);
 
   return (
     <Button
@@ -145,7 +197,7 @@ export default function OrgChartReportGenerator({
       disabled={loading}
       variant="outline"
       size="icon"
-      title="Download"
+      title="Download as PDF/PNG"
     >
       {loading ? (
         <Icons.spinner className="animate-spin ease-in-out" />

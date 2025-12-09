@@ -24,6 +24,7 @@ import { toYYYYMMDD } from "@/utils/Misc";
 import { IFormFragmentProps } from "@/utils/Types";
 import React, { useCallback, useState } from "react";
 import { IDesignation } from "@/schema/DesignationSchema";
+import extractMarkdown from "@/utils/extract-markdown";
 
 interface Props extends IFormFragmentProps<IJobListing> {
   companyId: number;
@@ -52,7 +53,9 @@ export default function JobListingFormFragment({
     data?.lastDate.toString() ?? ""
   );
 
-  const [jobDesc, setJobDesc] = useState<string>(data?.desc ?? "");
+  const [jobDesc, setJobDesc] = useState<string>(
+    extractMarkdown(data?.desc ?? "") ?? ""
+  );
 
   const onJobDescChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -293,9 +296,11 @@ export default function JobListingFormFragment({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label>Preview</Label>
+        <Label className="h-10">Preview</Label>
         <div className="h-[14.625rem] overflow-scroll border rounded-md p-2">
-          <Markdown className={"prose text-xs"}>{jobDesc}</Markdown>
+          <div className="prose text-xs">
+            <Markdown>{jobDesc}</Markdown>
+          </div>
         </div>
       </div>
     </>

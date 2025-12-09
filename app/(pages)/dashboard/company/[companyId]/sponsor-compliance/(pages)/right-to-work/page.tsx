@@ -25,8 +25,8 @@ export default async function SCRightToWorkPage({
   searchParams,
 }: Props) {
   const sParams = await searchParams;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -35,8 +35,12 @@ export default async function SCRightToWorkPage({
 
   const [company, companyExtra, rtws] = await Promise.all([
     getCompanyDetails(companyId),
-    getCompanyExtraData(companyId),
-    getCompanyRightToWorkChecks({ companyId, page, limit }),
+    getCompanyExtraData(Number.parseInt(companyId)),
+    getCompanyRightToWorkChecks({
+      companyId: Number.parseInt(companyId),
+      page,
+      limit,
+    }),
   ]);
 
   if (company.error || companyExtra.error || rtws.error) {
@@ -60,15 +64,10 @@ export default async function SCRightToWorkPage({
       </p>
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent={"Sponsor Compliance"}
-          title={"Monitoring"}
-        />
+        <MyBreadcrumbs parent={"Sponsor Compliance"} title={"Monitoring"} />
 
         <RTWEditDialog
-          company_id={companyId}
+          company_id={Number.parseInt(companyId)}
           employees={companyExtra.data.employees}
         />
       </div>

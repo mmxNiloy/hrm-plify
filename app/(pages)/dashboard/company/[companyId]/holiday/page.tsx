@@ -29,8 +29,8 @@ import SiteConfig from "@/utils/SiteConfig";
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -42,8 +42,8 @@ export async function generateMetadata({
 export default async function HolidayDashboardPage({
   params,
 }: CompanyByIDPageProps) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const user = JSON.parse(
     (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
   ) as IUser;
@@ -51,10 +51,10 @@ export default async function HolidayDashboardPage({
   const [company, holidayTypes, holidays] = await Promise.all([
     getCompanyData(companyId),
     getHolidayTypes({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
     }),
     getHolidays({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
     }),
   ]);
 
@@ -76,7 +76,7 @@ export default async function HolidayDashboardPage({
       <p className="text-lg sm:text-xl md:text-2xl font-semibold">
         Holiday Management
       </p>
-      <MyBreadcrumbs company={company.data} user={user} title="Holiday" />
+      <MyBreadcrumbs title="Holiday" />
       <Card>
         <CardHeader>
           <CardTitle>All Holidays</CardTitle>

@@ -410,7 +410,7 @@ export const months: string[] = [
   "December",
 ];
 
-export const weekDays: string[] = [
+export const weekDays: [string, ...string[]] = [
   "Sunday",
   "Monday",
   "Tuesday",

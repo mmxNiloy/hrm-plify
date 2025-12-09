@@ -19,17 +19,18 @@ export default async function SCMonitoringPage({
   searchParams,
 }: Props) {
   const sParams = await searchParams;
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
+  const mParams = await params;
+  const companyId = mParams.companyId;
 
   const { limit, page } = getPaginationParams(sParams);
 
   const [company, empDocs] = await Promise.all([
     getCompanyDetails(companyId),
-    getCompanyEmployeeDocuments({ companyId, page, limit }),
+    getCompanyEmployeeDocuments({
+      companyId: Number.parseInt(companyId),
+      page,
+      limit,
+    }),
   ]);
 
   if (company.error || empDocs.error) {
@@ -46,12 +47,7 @@ export default async function SCMonitoringPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Monitoring and Reporting</p>
 
-      <MyBreadcrumbs
-        company={company.data}
-        user={user}
-        parent={"Sponsor Compliance"}
-        title={"Monitoring"}
-      />
+      <MyBreadcrumbs parent={"Sponsor Compliance"} title={"Monitoring"} />
 
       <StaticDataTable
         columns={EmployeeDocumentDataTableColumns}

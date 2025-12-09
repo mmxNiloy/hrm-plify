@@ -1,0 +1,62 @@
+"use server";
+import { IEmployeeVisaBrp } from "@/schema/EmployeeSchema";
+import { IUser } from "@/schema/UserSchema";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import React from "react";
+import { EditEmployeeByIdProps } from "../PageProps";
+import VisaBrpEditDialog from "@/components/custom/Dialog/Employee/VisaBrpEditDialog";
+import VisaBrpFormFragment from "@/components/custom/Form/Fragment/Employee/VisaBrpFormFragment";
+import { getVisaBRPInfo } from "@/app/(server)/actions/employee/getVisaBRPInfo";
+import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
+import AccessDenied from "@/components/custom/AccessDenied";
+import { TPermission } from "@/schema/Permissions";
+import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
+
+export default async function VisaBRPDetailSlot({
+  params,
+}: EditEmployeeByIdProps) {
+  const mCookies = await cookies();
+  const mPermissions = JSON.parse(
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+  ) as TPermission[];
+
+  const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
+  const writeAccess = mPermissions.find((item) => item === "cmp_emp_create");
+  const updateAccess = mPermissions.find((item) => item === "cmp_emp_update");
+
+  // if (!readAccess) {
+  //   return <AccessDenied />;
+  // }
+
+  const emp = await getEmployeeData();
+  const empId = emp.data?.data?.employee_id ?? 0;
+
+  const { data: visaBrp, error } = await getVisaBRPInfo(empId);
+  if (error) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+        <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            VISA/BRP Information
+          </p>
+        </div>
+        <ErrorFallbackCard error={error} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 md:p-8 border rounded-md">
+      <div className="col-span-full w-full flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          VISA/BRP Information
+        </p>
+        {/* {updateAccess && (
+        )} */}
+        <VisaBrpEditDialog data={visaBrp} employee_id={empId} />
+      </div>
+      <VisaBrpFormFragment data={visaBrp} readOnly />
+    </div>
+  );
+}

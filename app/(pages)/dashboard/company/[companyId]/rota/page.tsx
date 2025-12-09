@@ -20,8 +20,8 @@ interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 export async function generateMetadata({
   params,
 }: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const company = await getCompanyDetails(companyId);
   return {
     title: `${SiteConfig.siteName} | ${
@@ -34,8 +34,8 @@ export default async function RotaShiftManagementPage({
   params,
   searchParams,
 }: Props) {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
+  const mParams = await params;
+  const companyId = mParams.companyId;
   const sParams = await searchParams;
   const { limit, page } = getPaginationParams(sParams);
 
@@ -46,7 +46,7 @@ export default async function RotaShiftManagementPage({
   const [company, paginatedShifts] = await Promise.all([
     getCompanyData(companyId),
     getShifts({
-      company_id: companyId,
+      company_id: Number.parseInt(companyId),
       page,
       limit,
     }),
@@ -69,14 +69,9 @@ export default async function RotaShiftManagementPage({
         Shift Management
       </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          company={company.data}
-          user={user}
-          parent="Rota"
-          title="Shift Management"
-        />
+        <MyBreadcrumbs parent="Rota" title="Shift Management" />
 
-        <ShiftManagementEditDialog company_id={companyId} />
+        <ShiftManagementEditDialog company_id={Number.parseInt(companyId)} />
       </div>
 
       <ShiftManagementDataTable data={paginatedShifts.data.data} />

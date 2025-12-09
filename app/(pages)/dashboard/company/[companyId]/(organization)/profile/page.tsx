@@ -1,91 +1,46 @@
 "use server";
 
-import { ICompanyDetails } from "@/schema/CompanySchema";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
-import React from "react";
-import { CompanyByIDPageProps } from "../../PageProps";
-import { redirect } from "next/navigation";
-import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
-import CompanyDetailTabs from "@/components/custom/Tabs/CompanyDetailTabs";
-import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import AccessDenied from "@/components/custom/AccessDenied";
-import { TPermission } from "@/schema/Permissions";
+import React, { Suspense } from "react";
 import { Metadata } from "next";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import SiteConfig from "@/utils/SiteConfig";
+import { SearchParams } from "nuqs";
+import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
+import { CompanyProfilePage } from "./(ui)/features";
+import { CompanyProfilePageSkeleton } from "./(ui)/components";
+import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
+import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
 
 export async function generateMetadata({
   params,
-}: CompanyByIDPageProps): Promise<Metadata> {
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const company = await getCompanyDetails(companyId);
-  return {
-    title: `${SiteConfig.siteName} | ${
-      company.data?.company_name ?? "Company Dashboard"
-    }`,
-  };
+}: CompanyIDURLParamSchema): Promise<Metadata> {
+  const mParams = await params;
+  const companyId = mParams.companyId;
+  return await getCompanyMeta(companyId, "Profile");
 }
 
-export default async function CompanyByIDPage({
+interface Props extends CompanyIDURLParamSchema {
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function CompanyProfileSlot({
   params,
-}: CompanyByIDPageProps) {
-  const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
+  searchParams,
+}: Props) {
+  const [mParams, sParams] = await Promise.all([params, searchParams]);
 
-  const readAccess = mPermissions.find((item) => item === "cmp_mgmt_read");
-  const writeAccess = mPermissions.find((item) => item === "cmp_mgmt_create");
-  const updateAccess = mPermissions.find((item) => item === "cmp_mgmt_update");
+  searchParamsCache.parse(sParams);
+  const companyProfileView =
+    searchParamsCache.get("companyProfileView") ?? "profile";
+  const key = serialize(sParams);
 
-  if (!readAccess) {
-    return <AccessDenied />;
-  }
+  if (companyProfileView !== "profile") return null;
 
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-
-  var company = await getCompanyDetails(companyId);
-
-  // Guard unauthorized access
-  if (
-    user.user_roles?.roles.role_name !== "Super Admin" &&
-    user.user_roles?.roles.role_name !== "Admin" &&
-    user.usercompany?.company_id != Number.parseInt(`${companyId}`)
-  ) {
-    redirect(
-      `/dashboard/company/${user.usercompany?.company_id}/?_ref=unauthorized-access`
-    );
-  }
-
-  if (company.error) {
-    return (
-      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Company Details
-        </p>
-        <ErrorFallbackCard error={company.error} />
-      </main>
-    );
-  }
+  const companyId = mParams.companyId;
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Company Details
-      </p>
-      <MyBreadcrumbs
-        company={company.data}
-        user={user}
-        parent={"Company Dashboard"}
-        title={"Organization Profile"}
-      />
-      <CompanyDetailTabs readOnly={!updateAccess} company={company.data} />
-    </main>
+    <Suspense key={key} fallback={<CompanyProfilePageSkeleton />}>
+      <CompanyProfilePage companyId={companyId} />
+    </Suspense>
   );
 }

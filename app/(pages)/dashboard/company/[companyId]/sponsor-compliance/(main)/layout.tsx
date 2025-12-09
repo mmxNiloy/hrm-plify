@@ -1,62 +1,37 @@
-"use server";
-import React from "react";
-import { CompanyByIDPageProps } from "../../PageProps";
-import { LayoutProps } from "@/utils/Types";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
+import React, { Suspense } from "react";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import SponsorComplianceDashboardSidebar from "@/components/custom/Dashboard/Sidebar/SponsorComplianceDashboardSidebar";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
-import { IUser } from "@/schema/UserSchema";
-import { cookies } from "next/headers";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface Props extends CompanyByIDPageProps, LayoutProps {
+interface Props {
   visaNotif: React.ReactNode;
   passportNotif: React.ReactNode;
   dbsNotif: React.ReactNode;
   eussNotif: React.ReactNode;
   otherDocumentNotif: React.ReactNode;
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
 }
 
-export default async function SponsorComplianceDashboardLayout({
+export default function SponsorComplianceDashboardLayout({
   children,
   visaNotif,
   passportNotif,
   eussNotif,
   dbsNotif,
   otherDocumentNotif,
-  params,
+  sidebar,
 }: Props) {
-  const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-
-  var companyId = (await params).companyId;
-  companyId = Number.parseInt(`${companyId}`);
-
-  const company = await getCompanyData(companyId);
-
-  if (company.error) {
-    return (
-      <main className="container flex flex-col gap-2">
-        <p className="text-xl font-semibold">Payroll</p>
-        <ErrorFallbackCard error={company.error} />
-      </main>
-    );
-  }
-
   return (
     <div>
-      <SponsorComplianceDashboardSidebar company={company.data} />
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
       <SidebarViewport>
         <main className="container flex flex-col gap-2">
           <p className="text-xl font-semibold">Sponsor Compliance</p>
           <div className="flex items-center justify-between">
-            <MyBreadcrumbs
-              company={company.data}
-              user={user}
-              title="Sponsor Compliance"
-            />
+            <MyBreadcrumbs title="Sponsor Compliance" />
 
             {/* Quick Nav */}
             {/* <div className="flex flex-row gap-2">

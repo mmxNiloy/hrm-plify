@@ -44,9 +44,8 @@ const DatePicker = React.forwardRef<HTMLInputElement, InputProps>(
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
-              initialFocus
               mode="single"
-              captionLayout="dropdown-buttons"
+              captionLayout="dropdown"
               selected={date}
               onSelect={setDate}
               numberOfMonths={1}

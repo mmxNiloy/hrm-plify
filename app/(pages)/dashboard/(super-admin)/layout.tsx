@@ -1,26 +1,28 @@
-"use server";
-import { LayoutProps } from "@/utils/Types";
-import React from "react";
-import { cookies } from "next/headers";
-import { IUser } from "@/schema/UserSchema";
-import SuperAdminSidebar from "@/components/custom/Dashboard/Sidebar/SuperAdminSidebar";
+import React, { Suspense } from "react";
 import { SidebarViewport } from "@/components/custom/Dashboard/Sidebar/Sidebar";
-import { TPermission } from "@/schema/Permissions";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import DashboardNavbar from "@/components/custom/Dashboard/Navbar/DashboardNavbar";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default async function DashboardLayout({ children }: LayoutProps) {
-  const mCookies = await cookies();
-  const user = JSON.parse(
-    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
+interface Props {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+}
 
-  const permissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
-
+export default function SuperAdminDashboardLayout({
+  children,
+  sidebar,
+}: Props) {
   return (
-    <div>
-      <SuperAdminSidebar user={user} permissions={permissions} />
-      <SidebarViewport>{children}</SidebarViewport>
-    </div>
+    <SidebarProvider>
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
+
+      <main className="w-screen">
+        <DashboardNavbar />
+        <SidebarViewport>{children}</SidebarViewport>
+      </main>
+    </SidebarProvider>
   );
 }

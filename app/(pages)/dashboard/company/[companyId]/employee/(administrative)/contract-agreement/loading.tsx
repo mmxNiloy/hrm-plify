@@ -1,6 +1,6 @@
 import { CompanyContractAgreementDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyContractAgreementDataTableColumns";
 import ContractAgreementDataTableSkeleton from "@/components/custom/DataTable/Company/Employee/ContractAgreementDataTableSkeleton";
-import { DataTableSkeleton } from "@/components/ui/data-table";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
@@ -14,10 +14,7 @@ export default function EmployeeContractAgreementPageLoading() {
         {/* <EmployeeCreationDialog /> */}
       </div>
 
-      <DataTableSkeleton
-        columns={CompanyContractAgreementDataTableColumns}
-        showOptions
-      />
+      <DataTableSkeleton columns={8} />
     </main>
   );
 }

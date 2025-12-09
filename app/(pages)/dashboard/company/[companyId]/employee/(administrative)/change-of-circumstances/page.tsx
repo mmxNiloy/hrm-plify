@@ -10,8 +10,9 @@ import { getCompanyExtraData } from "@/app/(server)/actions/getCompanyExtraData"
 import { SearchParams } from "nuqs";
 import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
 import EmployeeCombobox from "@/components/custom/Select/EmployeeCombobox";
-import { DataTableSkeleton } from "@/components/ui/data-table";
+import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import { ChangeOfCircumstancesDataTableColumns } from "@/components/custom/DataTable/Columns/Company/ChangeOfCircumstancesDataTableColumns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface IChangeOfCircumstancesPageProps {
   params: Promise<{ companyId: string }>;
@@ -22,23 +23,15 @@ export default async function ChangeOfCircumstancesPage({
   params,
   searchParams,
 }: IChangeOfCircumstancesPageProps) {
-  const [sParams, mParams, mCookies] = await Promise.all([
-    searchParams,
-    params,
-    cookies(),
-  ]);
+  const [sParams, mParams] = await Promise.all([searchParams, params]);
 
   searchParamsCache.parse(sParams);
   const key = serialize({ ...sParams });
 
-  const user = JSON.parse(
-    mCookies.get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
-  ) as IUser;
-
   const cId = Number.parseInt(mParams.companyId);
 
   const [company, companyExtra] = await Promise.all([
-    getCompanyData(cId),
+    getCompanyData(mParams.companyId),
     getCompanyExtraData(cId),
   ]);
 
@@ -55,22 +48,17 @@ export default async function ChangeOfCircumstancesPage({
     <main className="container flex flex-col gap-2">
       <p className="text-xl font-semibold">Change of Circumstances</p>
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs
-          title="Change of Circumstances"
-          parent="Employee Management"
-          company={company.data}
-          user={user}
-        />
+        <Suspense fallback={<Skeleton className="w-32 h-8" />}>
+          <MyBreadcrumbs
+            title="Change of Circumstances"
+            parent="Employee Management"
+          />
+        </Suspense>
 
         <EmployeeCombobox employees={companyExtra.data.employees} />
       </div>
 
-      <Suspense
-        key={key}
-        fallback={
-          <DataTableSkeleton columns={ChangeOfCircumstancesDataTableColumns} />
-        }
-      >
+      <Suspense key={key} fallback={<DataTableSkeleton columns={8} />}>
         <ChangeOfCircumstancesDataTable />
       </Suspense>
     </main>

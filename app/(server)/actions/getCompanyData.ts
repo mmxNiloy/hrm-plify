@@ -3,7 +3,7 @@ import { ICompany } from "@/schema/CompanySchema";
 import { withError } from "@/utils/Debug";
 import { cookies } from "next/headers";
 
-export async function getCompanyData(company_id: number) {
+export async function getCompanyData(company_id: string) {
   // Get company information
   const session =
     (await cookies()).get(process.env.COOKIE_SESSION_KEY!)?.value ?? "";

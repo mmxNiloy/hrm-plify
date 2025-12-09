@@ -3,5 +3,7 @@ export interface CompanyByIDPageParams {
 }
 
 export interface CompanyByIDPageProps {
-  params: Promise<CompanyByIDPageParams>;
+  params: Promise<{
+    companyId: string;
+  }>;
 }

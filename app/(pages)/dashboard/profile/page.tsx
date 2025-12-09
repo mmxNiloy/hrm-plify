@@ -85,17 +85,17 @@ export default async function ProfilePage() {
   ) as IUser;
 
   const hasCompany =
-    user.user_roles?.roles.role_name === "Employee" ||
-    user.user_roles?.roles.role_name === "Company Admin";
+    user.user_roles?.roles?.role_name === "Employee" ||
+    user.user_roles?.roles?.role_name === "Company Admin";
   const isAdmin =
-    user.user_roles?.roles.role_name === "Super Admin" ||
-    user.user_roles?.roles.role_name === "Admin";
+    user.user_roles?.roles?.role_name === "Super Admin" ||
+    user.user_roles?.roles?.role_name === "Admin";
 
   const profileStatus = getProfileCompletion(user);
   const isProfileIncomplete = profileStatus & 0x07ff;
 
   return (
-    <main className="container mx-auto flex flex-col gap-4 px-2 py-4 sm:px-6 lg:px-8">
+    <main className="flex-1 flex flex-col gap-4">
       <JoinOrCreateCompanyDialog
         defaultOpen={!hasCompany && !isAdmin}
         user={user}
@@ -250,7 +250,7 @@ export default async function ProfilePage() {
             <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
               <TextCapsule className="bg-green-500">
                 <Icons.idCard className="size-4" />
-                {user.user_roles?.roles.role_name ?? "Guest"}
+                {user.user_roles?.roles?.role_name ?? "Guest"}
               </TextCapsule>
               <TextCapsule className="bg-blue-500">
                 <Icons.mail className="size-4" />
@@ -355,7 +355,7 @@ export default async function ProfilePage() {
                   <Label>Role</Label>
                   <Input
                     readOnly
-                    defaultValue={user.user_roles?.roles.role_name ?? "Guest"}
+                    defaultValue={user.user_roles?.roles?.role_name ?? "Guest"}
                     placeholder="Role"
                   />
                 </div>

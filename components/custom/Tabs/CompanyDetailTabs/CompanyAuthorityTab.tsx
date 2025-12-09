@@ -1,19 +1,30 @@
-import { ICompanyDetails } from "@/schema/CompanySchema";
+"use server";
 import React from "react";
 import CompanyAuthorityEditDialog from "../../Dialog/Company/CompanyEditDialog/CompanyAuthorityEditDialog";
 import CompanyAuthorityFormFragment from "../../Form/Fragment/Company/CompanyAuthorityFormFragment";
+import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
+import { DataTableError } from "@/components/ui/data-table/data-table-error";
 
-export default function CompanyAuthorityTab({
-  data,
-  company_id,
-  readOnly,
-}: {
-  data?: ICompanyDetails;
+interface Props {
   title?: "Authorised Personnel" | "Key Contact" | "Level 1 User";
-  company_id: number;
+  companyId: string;
   id?: number;
   readOnly?: boolean;
-}) {
+}
+
+export default async function CompanyAuthorityTab({
+  companyId,
+  readOnly,
+}: Props) {
+  // Get Data here
+  const company = await getCompanyDetails(companyId);
+
+  if (company.error) {
+    return <DataTableError errorMessage="Failed to load company details." />;
+  }
+
+  const { data } = company;
+
   return (
     <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 border rounded-md">
       {/* Authorised Personnel Section */}
@@ -26,7 +37,7 @@ export default function CompanyAuthorityTab({
             <div className="w-full sm:w-auto">
               <CompanyAuthorityEditDialog
                 id={data?.company_authorised_details?.authorised_id}
-                company_id={company_id}
+                companyId={companyId}
                 title={"Authorised Personnel"}
                 data={data?.company_authorised_details}
               />
@@ -51,7 +62,7 @@ export default function CompanyAuthorityTab({
             <div className="w-full sm:w-auto">
               <CompanyAuthorityEditDialog
                 id={data?.company_key_contact?.key_contact_id}
-                company_id={company_id}
+                companyId={companyId}
                 title={"Key Contact"}
                 data={data?.company_key_contact}
               />
@@ -76,7 +87,7 @@ export default function CompanyAuthorityTab({
             <div className="w-full sm:w-auto">
               <CompanyAuthorityEditDialog
                 id={data?.company_l1_user?.l1_user_id}
-                company_id={company_id}
+                companyId={companyId}
                 title={"Level 1 User"}
                 data={data?.company_l1_user}
               />
