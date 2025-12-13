@@ -17,6 +17,7 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -93,14 +94,14 @@ export default async function LeaveRequestPage({
 
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Leave Requests
-      </p>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+      <div className="flex flex-col gap-1">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Leave Requests
+        </p>
         <MyBreadcrumbs parent="Leave" title="Leave Requests" />
       </div>
 
-      <StaticDataTable
+      <DataTable
         columns={LeaveRequestDataTableColumns}
         data={leaveRequests.data.data.map((item) => ({
           ...item,

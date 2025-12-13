@@ -3,7 +3,7 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ILeaveApprover } from "@/schema/LeaveSchema";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
@@ -86,11 +86,13 @@ export default async function CompanyLeaveApproverPage({
 
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Leave Approvers
-      </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Leave" title="Leave Approvers" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Leave Approvers
+          </p>
+          <MyBreadcrumbs parent="Leave" title="Leave Approvers" />
+        </div>
 
         {writeAccess && (
           <LeaveApproverEditDialog
@@ -106,6 +108,7 @@ export default async function CompanyLeaveApproverPage({
           ...item,
           updateAccess: updateAccess ? true : false,
         }))}
+        totalItems={leaveApprovers.data.length}
       />
     </main>
   );

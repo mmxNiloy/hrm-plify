@@ -77,7 +77,7 @@ export default async function OrganizationDefaultSidebar({
         },
         {
           href: `/dashboard/company/${id}/user-access`,
-          title: "Employee Access Management",
+          title: "Employee Access Mgmt.",
           icon: "userKey",
         },
         {

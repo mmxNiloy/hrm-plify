@@ -12,16 +12,13 @@ import React from "react";
 
 export default function CompanyLeaveDashboardLoading() {
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Leave Management Dashboard</p>
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
+        <Skeleton className="w-1/2 h-12" />
         <Skeleton className="w-3/5 h-5" />
       </div>
 
-      <div className="flex flex-col w-full h-96 items-center justify-center">
-        <Icons.spinner className="animate-spin ease-in-out" />
-        Loading...
-      </div>
-    </main>
+      <Skeleton className="w-full h-96" />
+    </div>
   );
 }

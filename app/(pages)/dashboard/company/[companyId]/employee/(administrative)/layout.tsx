@@ -32,11 +32,13 @@ export default function EmployeeDashboardLayout({
         <DashboardNavbar />
         <SidebarViewport>
           <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-            {pageTitle}
+            <div className="flex flex-col gap-1">
+              {pageTitle}
 
-            <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
-              {breadcrumbs}
-            </Suspense>
+              <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
+                {breadcrumbs}
+              </Suspense>
+            </div>
 
             <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
               {actions}
