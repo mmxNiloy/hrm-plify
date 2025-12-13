@@ -1,12 +1,10 @@
 "use server";
-import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { StaticDataTable } from "@/components/ui/data-table";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyJobListings } from "@/app/(server)/actions/getCompanyJobListings";
@@ -19,6 +17,7 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -79,9 +78,13 @@ export default async function JobListingsPage({ params, searchParams }: Props) {
 
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">All Jobs</p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Job & Recruitment" title="All Jobs" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            All Jobs
+          </p>
+          <MyBreadcrumbs parent="Job & Recruitment" title="All Jobs" />
+        </div>
         {writeAccess && (
           <div className="w-full sm:w-auto">
             <JobListingEditDialog
@@ -93,7 +96,7 @@ export default async function JobListingsPage({ params, searchParams }: Props) {
         )}
       </div>
 
-      <StaticDataTable
+      <DataTable
         pageCount={jobs.data.total_page}
         data={jobs.data.data.map((item) => ({
           ...item,

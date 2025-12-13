@@ -49,6 +49,7 @@ import {
 } from "./accordion";
 import { IPaginatedResponse } from "@/schema/PaginatedResponse";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ScrollArea } from "./scroll-area";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -712,8 +713,6 @@ interface DataTableSkeletonProps<TValue> {
   showOptions?: boolean;
 }
 
-
-
 export function StaticDataTable<TData, TValue>({
   columns,
   data,
@@ -806,7 +805,7 @@ export function StaticDataTable<TData, TValue>({
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
       {showOptions && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 overflow-x-scroll">
+        <div className="overflow-x-clip flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <Label className="text-sm sm:text-base">Page size</Label>
@@ -884,73 +883,75 @@ export function StaticDataTable<TData, TValue>({
                     <Icons.filter className="size-4 sm:size-5" /> Filters
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[90vw] sm:w-96 max-h-[70vh] p-2">
-                  <Accordion
-                    type="multiple"
-                    defaultValue={columnFilters.map((item) => item.id)}
-                    className="overflow-auto"
-                  >
-                    {table
-                      .getAllColumns()
-                      .filter((column) => column.getCanHide())
-                      .map((item) => (
-                        <AccordionItem
-                          value={item.id}
-                          key={`accordion-${item.id}`}
-                        >
-                          <AccordionTrigger className="capitalize text-sm sm:text-base">
-                            {item.id}
-                          </AccordionTrigger>
-                          <AccordionContent className="flex flex-col gap-2 px-1 py-2">
-                            <Input
-                              placeholder={`Filter ${item.id}`}
-                              value={
-                                (columnFilters.find((f) => f.id === item.id)
-                                  ?.value as string) ?? ""
-                              }
-                              onChange={(e) => {
-                                const text = e.target.value;
-                                if (text.length < 1) {
-                                  setColumnFilters((oldVal) =>
-                                    oldVal.filter((f) => f.id !== item.id)
+                <PopoverContent className="w-[90vw] sm:w-96 p-2">
+                  <ScrollArea className="h-72 p-6">
+                    <Accordion
+                      type="multiple"
+                      defaultValue={columnFilters.map((item) => item.id)}
+                      className="overflow-auto"
+                    >
+                      {table
+                        .getAllColumns()
+                        .filter((column) => column.getCanHide())
+                        .map((item) => (
+                          <AccordionItem
+                            value={item.id}
+                            key={`accordion-${item.id}`}
+                          >
+                            <AccordionTrigger className="capitalize text-sm sm:text-base">
+                              {item.id}
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-2 px-1 py-2">
+                              <Input
+                                placeholder={`Filter ${item.id}`}
+                                value={
+                                  (columnFilters.find((f) => f.id === item.id)
+                                    ?.value as string) ?? ""
+                                }
+                                onChange={(e) => {
+                                  const text = e.target.value;
+                                  if (text.length < 1) {
+                                    setColumnFilters((oldVal) =>
+                                      oldVal.filter((f) => f.id !== item.id)
+                                    );
+                                    return;
+                                  }
+                                  const allColumnFilters = [...columnFilters];
+                                  const filterRef = allColumnFilters.find(
+                                    (f) => f.id === item.id
                                   );
-                                  return;
-                                }
-                                const allColumnFilters = [...columnFilters];
-                                const filterRef = allColumnFilters.find(
-                                  (f) => f.id === item.id
-                                );
-                                if (filterRef) {
-                                  filterRef.value = text;
-                                } else {
-                                  allColumnFilters.push({
-                                    id: item.id,
-                                    value: text,
-                                  });
-                                }
-                                setColumnFilters(allColumnFilters);
-                              }}
-                              className="text-sm sm:text-base"
-                            />
-                            {columnFilters.find((f) => f.id === item.id) && (
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() =>
-                                  setColumnFilters((oldVal) =>
-                                    oldVal.filter((f) => f.id !== item.id)
-                                  )
-                                }
-                                className="text-sm sm:text-base px-3 sm:px-4"
-                              >
-                                <Icons.trash className="size-4 sm:size-5 mr-2" />{" "}
-                                Remove
-                              </Button>
-                            )}
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                  </Accordion>
+                                  if (filterRef) {
+                                    filterRef.value = text;
+                                  } else {
+                                    allColumnFilters.push({
+                                      id: item.id,
+                                      value: text,
+                                    });
+                                  }
+                                  setColumnFilters(allColumnFilters);
+                                }}
+                                className="text-sm sm:text-base"
+                              />
+                              {columnFilters.find((f) => f.id === item.id) && (
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() =>
+                                    setColumnFilters((oldVal) =>
+                                      oldVal.filter((f) => f.id !== item.id)
+                                    )
+                                  }
+                                  className="text-sm sm:text-base px-3 sm:px-4"
+                                >
+                                  <Icons.trash className="size-4 sm:size-5 mr-2" />{" "}
+                                  Remove
+                                </Button>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                    </Accordion>
+                  </ScrollArea>
                 </PopoverContent>
               </Popover>
             </div>

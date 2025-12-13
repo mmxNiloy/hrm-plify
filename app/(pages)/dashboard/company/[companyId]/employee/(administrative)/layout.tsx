@@ -23,35 +23,33 @@ export default function EmployeeDashboardLayout({
   sidebar,
 }: LayoutProps) {
   return (
-    <>
-      <SidebarProvider>
-        <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
-          {sidebar}
-        </Suspense>
+    <SidebarProvider>
+      <Suspense fallback={<Skeleton className="w-16 h-screen" />}>
+        {sidebar}
+      </Suspense>
 
-        <main className="w-screen">
-          <DashboardNavbar />
-          <SidebarViewport>
-            <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-              {pageTitle}
+      <main className="w-screen">
+        <DashboardNavbar />
+        <SidebarViewport>
+          <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+            {pageTitle}
 
-              <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
-                {breadcrumbs}
-              </Suspense>
+            <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
+              {breadcrumbs}
+            </Suspense>
 
-              <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
-                {actions}
-              </Suspense>
+            <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
+              {actions}
+            </Suspense>
 
-              {children}
+            {children}
 
-              <Suspense fallback={<DataTableSkeleton columns={3} />}>
-                {stats}
-              </Suspense>
-            </main>
-          </SidebarViewport>
-        </main>
-      </SidebarProvider>
-    </>
+            <Suspense fallback={<DataTableSkeleton columns={3} />}>
+              {stats}
+            </Suspense>
+          </main>
+        </SidebarViewport>
+      </main>
+    </SidebarProvider>
   );
 }

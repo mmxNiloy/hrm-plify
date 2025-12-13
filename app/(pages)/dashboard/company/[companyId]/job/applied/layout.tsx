@@ -7,9 +7,9 @@ interface Props {
 
 export default function JobAppliedPageLayout({ children, dataSlot }: Props) {
   return (
-    <main className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       {children}
       {dataSlot}
-    </main>
+    </div>
   );
 }

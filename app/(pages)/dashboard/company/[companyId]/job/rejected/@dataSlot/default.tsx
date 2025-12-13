@@ -13,6 +13,7 @@ import { getJobListing } from "@/app/(server)/actions/getJobListing";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { TPermission } from "@/schema/Permissions";
 import { cookies } from "next/headers";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 interface Props extends ISearchParamsProps, CompanyByIDPageProps {}
 
@@ -69,7 +70,7 @@ export default async function JobAppliedPageDataSlot({
     );
   }
   return (
-    <StaticDataTable
+    <DataTable
       data={applicants.data.data.map((item) => ({
         ...item,
         updateAccess: updateAccess || writeAccess ? true : false,
