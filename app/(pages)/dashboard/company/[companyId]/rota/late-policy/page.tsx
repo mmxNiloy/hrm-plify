@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { TPermission } from "@/schema/Permissions";
 import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
@@ -86,12 +86,15 @@ export default async function RotaLatePolicyPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Late Policy
-      </p>
+    <main className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Rota" title="Late Policy" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Late Policy
+          </p>
+
+          <MyBreadcrumbs parent="Rota" title="Late Policy" />
+        </div>
 
         {writeAccess && (
           <LatePolicyEditDialog
@@ -109,6 +112,8 @@ export default async function RotaLatePolicyPage({
           updateAccess: updateAccess ? true : false,
         }))}
         columns={LatePolicyDataTableColumns}
+        pageCount={Math.ceil(paginatedLatePolicies.data.data.length / limit)}
+        totalItems={paginatedLatePolicies.data.data.length}
       />
     </main>
   );

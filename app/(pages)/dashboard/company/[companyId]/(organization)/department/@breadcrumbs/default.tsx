@@ -11,7 +11,7 @@ export default async function PageBreadcrumbs({
   const companyId = mParams.companyId;
   return (
     <Suspense fallback={<Skeleton className="w-3/5 h-10" />}>
-      <MyBreadcrumbs companyId={companyId} title="Departments" />;
+      <MyBreadcrumbs companyId={companyId} title="Departments" />
     </Suspense>
   );
 }

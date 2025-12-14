@@ -9,7 +9,7 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyEmployeeDocuments } from "@/app/(server)/actions/getCompanyEmployeeDocuments";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { EmployeeDocumentDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EmployeeDocumentDataTableColumns";
 import { getCompanyRightToWorkChecks } from "@/app/(server)/actions/getCompanyRightToWorkChecks";
 import { CompanyRTWDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyRTWDataTableColumns";
@@ -58,20 +58,22 @@ export default async function SCRightToWorkPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Right to Work Checks
-      </p>
-
+    <div className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent={"Sponsor Compliance"} title={"Monitoring"} />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Right to Work Checks
+          </p>
+
+          <MyBreadcrumbs parent={"Sponsor Compliance"} title={"Monitoring"} />
+        </div>
 
         <RTWEditDialog
           company_id={Number.parseInt(companyId)}
           employees={companyExtra.data.employees}
         />
       </div>
-      <StaticDataTable
+      <DataTable
         columns={CompanyRTWDataTableColumns}
         data={rtws.data.data.map((item) => ({
           ...item.body,
@@ -80,7 +82,8 @@ export default async function SCRightToWorkPage({
           id: item.id,
         }))}
         pageCount={rtws.data.total_page}
+        totalItems={rtws.data.data_count}
       />
-    </main>
+    </div>
   );
 }

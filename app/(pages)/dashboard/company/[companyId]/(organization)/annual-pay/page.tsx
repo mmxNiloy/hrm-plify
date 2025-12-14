@@ -1,7 +1,7 @@
 "use server";
 import React, { Suspense } from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { IAnnualPay, IPayGroup } from "@/schema/PayGroupSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { CompanyAnnualPayDataTableColumns } from "@/components/custom/DataTable/Columns/Company/CompanyAnnualPayDataTableColumns";

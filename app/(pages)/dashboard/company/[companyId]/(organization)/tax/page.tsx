@@ -1,7 +1,7 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { cookies } from "next/headers";
@@ -32,15 +32,22 @@ export default async function TaxPage({ params }: CompanyByIDPageProps) {
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Tax Management</p>
+    <main className="w-full flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <MyBreadcrumbs title="Tax" />
+        <div className="flex flex-col gap-1">
+          <p className="text-xl font-semibold">Tax Management</p>
+
+          <MyBreadcrumbs title="Tax" />
+        </div>
 
         {/* <TaxEditPopover company_id={companyId} /> */}
       </div>
 
-      <DataTable data={taxes} columns={CompanyTaxDataTableColumns} />
+      <DataTable
+        data={taxes}
+        columns={CompanyTaxDataTableColumns}
+        totalItems={taxes.length}
+      />
     </main>
   );
 }

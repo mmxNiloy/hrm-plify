@@ -4,7 +4,7 @@ import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
 import React from "react";
 import { CompanyByIDPageProps } from "../../../PageProps";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { PassportNotificationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/PassportNotificationDataTableColumns";
 import { EUSSNotificationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EUSSNotificationDataTable";
 import { getCompanyEmployeeDocuments } from "@/app/(server)/actions/getCompanyEmployeeDocuments";
@@ -39,16 +39,16 @@ export default async function EUSSNotificationsSlot({
   }
 
   return (
-    <>
+    <div className="flex flex-col h-96">
       <p id="euss" className="text-lg font-semibold">
         EUSS Notifications
       </p>
-      <StaticDataTable
+      <DataTable
         columns={EUSSNotificationDataTableColumns}
         data={empDocs.data.data}
         pageCount={empDocs.data.total_page}
-        prefix="euss"
+        totalItems={empDocs.data.data_count}
       />
-    </>
+    </div>
   );
 }

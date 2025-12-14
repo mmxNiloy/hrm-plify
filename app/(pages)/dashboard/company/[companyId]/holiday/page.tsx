@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import Icons from "@/components/ui/icons";
 import { ButtonGradient } from "@/styles/button.tailwind";
 import Link from "next/link";
@@ -72,56 +72,61 @@ export default async function HolidayDashboardPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Holiday Management
-      </p>
-      <MyBreadcrumbs title="Holiday" />
+    <main className="w-full flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-1">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Holiday Management
+        </p>
+        <MyBreadcrumbs title="Holiday" />
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>All Holidays</CardTitle>
+          <div className="flex items-center justify-between w-full">
+            <CardTitle>All Holidays</CardTitle>
+
+            <Link href="./holiday/all" passHref>
+              <Button size="sm" className={ButtonGradient}>
+                <Icons.visible />
+                View all
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="flex flex-col h-96">
           <DataTable
             data={holidays.data.map((item) => ({
               ...item,
               company_holiday_types: holidayTypes.data,
             }))}
             columns={HolidayListDataTableColumns}
+            pageCount={1}
+            totalItems={holidays.data.length}
           />
         </CardContent>
-
-        <CardFooter>
-          <Link href="./holiday/all" passHref>
-            <Button className={ButtonGradient}>
-              <Icons.visible />
-              View all
-            </Button>
-          </Link>
-        </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Holiday Types</CardTitle>
+          <div className="flex items-center justify-between w-full">
+            <CardTitle>Holiday Types</CardTitle>
+            <Link href="./holiday/type" passHref>
+              <Button size="sm" className={ButtonGradient}>
+                <Icons.visible />
+                View all
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="flex flex-col h-96">
           <DataTable
             data={holidayTypes.data}
             columns={HolidayTypeDataTableColumns}
+            pageCount={1}
+            totalItems={holidayTypes.data.length}
           />
         </CardContent>
-
-        <CardFooter>
-          <Link href="./holiday/type" passHref>
-            <Button className={ButtonGradient}>
-              <Icons.visible />
-              View all
-            </Button>
-          </Link>
-        </CardFooter>
       </Card>
     </main>
   );

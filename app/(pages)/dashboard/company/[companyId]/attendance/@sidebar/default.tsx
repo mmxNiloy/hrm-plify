@@ -1,12 +1,13 @@
 "use server";
 
-import AttendanceDashboardSidebar from "@/components/custom/Dashboard/Sidebar/AttendanceDashboardSidebar";
 import { notFound } from "next/navigation";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import { TPermission } from "@/schema/Permissions";
 import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
+import { INavItem } from "@/schema/SidebarSchema";
+import AppSidebar from "@/components/custom/Dashboard/Sidebar/app-sidebar";
 
 export default async function AttendanceDashboardSidebarSlot({
   params,
@@ -32,5 +33,21 @@ export default async function AttendanceDashboardSidebarSlot({
   if (company.error) {
     return notFound();
   }
-  return <AttendanceDashboardSidebar user={user} company={company.data} />;
+
+  const navItems: INavItem[] = [
+    {
+      href: `/dashboard/company/${companyId}/attendance`,
+      icon: "note",
+      title: "Attendance Records",
+    },
+    {
+      href: `/dashboard/company/${companyId}/attendance/generate`,
+      icon: "fileCog",
+      title: "Generate Attendance",
+      hidden:
+        user.user_roles?.roles?.role_name !== "Super Admin" &&
+        user.user_roles?.roles?.role_name !== "Admin",
+    },
+  ];
+  return <AppSidebar navItems={navItems} companyId={companyId} />;
 }

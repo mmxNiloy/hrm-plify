@@ -9,7 +9,7 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyEmployeeDocuments } from "@/app/(server)/actions/getCompanyEmployeeDocuments";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { EmployeeDocumentDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EmployeeDocumentDataTableColumns";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
@@ -44,15 +44,18 @@ export default async function SCMonitoringPage({
   }
 
   return (
-    <main className="container flex flex-col gap-2">
-      <p className="text-xl font-semibold">Monitoring and Reporting</p>
+    <main className="w-full flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
+        <p className="text-xl font-semibold">Monitoring and Reporting</p>
 
-      <MyBreadcrumbs parent={"Sponsor Compliance"} title={"Monitoring"} />
+        <MyBreadcrumbs parent={"Sponsor Compliance"} title={"Monitoring"} />
+      </div>
 
-      <StaticDataTable
+      <DataTable
         columns={EmployeeDocumentDataTableColumns}
         data={empDocs.data.data}
         pageCount={empDocs.data.total_page}
+        totalItems={empDocs.data.data_count}
       />
     </main>
   );

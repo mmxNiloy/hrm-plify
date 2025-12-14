@@ -14,6 +14,8 @@ import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { DataTable } from "@/components/ui/data-table/data-table";
+import { ShiftsDataTableColumns } from "@/components/custom/DataTable/Columns/Rota/ShiftsDataTableColumns";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -54,7 +56,7 @@ export default async function RotaShiftManagementPage({
 
   if (company.error || paginatedShifts.error) {
     return (
-      <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
+      <main className="container flex flex-col gap-4 sm:gap-6">
         <p className="text-lg sm:text-xl md:text-2xl font-semibold">
           Shift Management
         </p>
@@ -64,17 +66,25 @@ export default async function RotaShiftManagementPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Shift Management
-      </p>
+    <div className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Rota" title="Shift Management" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Shift Management
+          </p>
+
+          <MyBreadcrumbs parent="Rota" title="Shift Management" />
+        </div>
 
         <ShiftManagementEditDialog company_id={Number.parseInt(companyId)} />
       </div>
 
-      <ShiftManagementDataTable data={paginatedShifts.data.data} />
-    </main>
+      <DataTable
+        columns={ShiftsDataTableColumns}
+        data={paginatedShifts.data.data}
+        totalItems={paginatedShifts.data.data_count}
+        pageCount={paginatedShifts.data.total_page}
+      />
+    </div>
   );
 }

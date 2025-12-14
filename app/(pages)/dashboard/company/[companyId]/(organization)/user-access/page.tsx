@@ -12,7 +12,7 @@ import { ISearchParamsProps } from "@/utils/Types";
 import UserEditDialog from "@/components/custom/Dialog/UserAccess/UserEditDialog";
 import { getCompanyEmployeesWithPermissions } from "@/app/(server)/actions/getCompanyEmployeesWithPermissions";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { UserDataTableColumns } from "@/components/custom/DataTable/Columns/UserAccess/UserDataTableColumns";
 import { EmployeeDataTableColumns } from "@/components/custom/DataTable/Columns/UserAccess/EmployeeDataTableColumns";
 
@@ -78,13 +78,17 @@ export default async function UserAccessDashboardPage({ params }: Props) {
 
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Employee Access Management{" "}
-      </p>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+      <div className="flex flex-col gap-1">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+          Employee Access Management{" "}
+        </p>
         <MyBreadcrumbs title="Employee Access Management" />
       </div>
-      <DataTable data={employees} columns={EmployeeDataTableColumns} />
+      <DataTable
+        data={employees}
+        columns={EmployeeDataTableColumns}
+        totalItems={employees.length}
+      />
     </main>
   );
 }

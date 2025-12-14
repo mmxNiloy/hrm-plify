@@ -11,7 +11,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import React, { useCallback, useEffect, useState } from "react";
 import { ILeaveRequest } from "@/schema/LeaveSchema";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { LeaveRequestDataTableColumns } from "../../DataTable/Columns/Leave/LeaveRequestDataTableColumns";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,6 @@ export default function LeaveRequestsCard({
 
       <CardContent>
         <DataTable
-          showOptions={false}
           columns={LeaveRequestDataTableColumns}
           data={leaveRequests}
         />

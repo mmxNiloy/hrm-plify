@@ -11,7 +11,7 @@ import { CompanyByIDPageProps } from "../PageProps";
 import PayrollEditDialog from "@/components/custom/Dialog/Payroll/PayrollEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getFullNameOfEmployee, getPaginationParams } from "@/utils/Misc";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { PayrollDataTableColumns } from "@/components/custom/DataTable/Columns/Payroll/PayrollDataTableColumns";
 import { Button } from "@/components/ui/button";
 import { ButtonSuccess } from "@/styles/button.tailwind";
@@ -99,10 +99,14 @@ export default async function PayRollManagementPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">Payroll</p>
+    <main className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs title="Payroll" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Payroll
+          </p>
+          <MyBreadcrumbs title="Payroll" />
+        </div>
 
         <PayrollEditDialog
           company_id={Number.parseInt(companyId)}
@@ -158,7 +162,12 @@ export default async function PayRollManagementPage({
       </form>
 
       {selectedEmployee && selectedDate ? (
-        <DataTable columns={PayrollDataTableColumns} data={payroll.data} />
+        <DataTable
+          columns={PayrollDataTableColumns}
+          data={payroll.data}
+          totalItems={payroll.data.length}
+          pageCount={Math.ceil(payroll.data.length / limit)}
+        />
       ) : (
         <div className="flex flex-col gap-4 text-center items-center justify-center h-[calc(100vh-12rem)]">
           <Icons.info className="size-16" />

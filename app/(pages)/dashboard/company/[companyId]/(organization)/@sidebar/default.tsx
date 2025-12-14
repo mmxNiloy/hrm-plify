@@ -77,7 +77,7 @@ export default async function OrganizationDefaultSidebar({
         },
         {
           href: `/dashboard/company/${id}/user-access`,
-          title: "Employee Access Management",
+          title: "Employee Access Mgmt.",
           icon: "userKey",
         },
         {
@@ -94,7 +94,7 @@ export default async function OrganizationDefaultSidebar({
       items: [
         {
           href: `/dashboard/company/${id}/attendance`,
-          title: "Attendance Management",
+          title: "Attendance Mgmt.",
           icon: "usersCheck",
         },
         {
@@ -128,21 +128,25 @@ export default async function OrganizationDefaultSidebar({
           href: `/dashboard/company/${id}/payroll/pay-group`,
           title: "Pay Group",
           icon: "group",
+          hidden: true,
         },
         {
           href: `/dashboard/company/${id}/payroll/annual-pay`,
           title: "Annual Pay",
           icon: "money",
+          hidden: true,
         },
         {
           href: `/dashboard/company/${id}/payroll/payment-type`,
           title: "Payment Type",
           icon: "receipt",
+          hidden: true,
         },
         {
           href: `/dashboard/company/${id}/payroll/wage-payment-mode`,
           title: "Wage Payment Mode",
           icon: "category",
+          hidden: true,
         },
       ],
     },

@@ -70,11 +70,16 @@ export default async function JobHiredPage({ params }: CompanyByIDPageProps) {
 
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Rejected Applicants
-      </p>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Job & Recruitment" title="Rejected Applicants" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Rejected Applicants
+          </p>
+          <MyBreadcrumbs
+            parent="Job & Recruitment"
+            title="Rejected Applicants"
+          />
+        </div>
 
         <CompanyJobListSelect jobs={allJobs.data.data} />
       </div>

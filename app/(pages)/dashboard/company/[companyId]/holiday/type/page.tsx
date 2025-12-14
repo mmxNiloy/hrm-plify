@@ -1,7 +1,7 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
@@ -76,12 +76,15 @@ export default async function HolidayTypesPage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Holiday Types
-      </p>
+    <main className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Holiday" title="Type" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Holiday Types
+          </p>
+
+          <MyBreadcrumbs parent="Holiday" title="Type" />
+        </div>
 
         {writeAccess && (
           <HolidayTypeEditPopover company_id={Number.parseInt(companyId)} />
@@ -94,6 +97,8 @@ export default async function HolidayTypesPage({
           updateAccess: updateAccess ? true : false,
         }))}
         columns={HolidayTypeDataTableColumns}
+        pageCount={Math.ceil(holidayTypes.data.length / limit)}
+        totalItems={holidayTypes.data.length}
       />
     </main>
   );

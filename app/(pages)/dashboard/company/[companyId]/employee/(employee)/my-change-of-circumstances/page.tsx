@@ -7,7 +7,7 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { SearchParams } from "nuqs";
 import { searchParamsCache, serialize } from "@/utils/searchParamsParsers";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ChangeOfCircumstancesDataTableColumns } from "@/components/custom/DataTable/Columns/Company/ChangeOfCircumstancesDataTableColumns";
 import { getEmployeeData } from "@/app/(server)/actions/getEmployeeData";
 import getChangeOfCircumstances from "@/app/(server)/actions/change-of-circumstances/get-change-of-circumstances.controller";

@@ -15,14 +15,16 @@ export default function CompanyAdminPageLayout({
   return (
     <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-          Company Admin
-        </p>
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Company Admin
+          </p>
+          <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
+            {breadcrumbs}
+          </Suspense>
+        </div>
         <Suspense fallback={<ActionsSkeleton />}>{assignDialogSlot}</Suspense>
       </div>
-      <Suspense fallback={<Skeleton className="w-3/5 h-6" />}>
-        {breadcrumbs}
-      </Suspense>
       {children}
     </main>
   );

@@ -9,4 +9,5 @@ export interface INavItem {
   disabled?: boolean;
   open?: boolean;
   items?: INavItem[];
+  target?: "_blank" | "_self" | "_parent" | "_top";
 }

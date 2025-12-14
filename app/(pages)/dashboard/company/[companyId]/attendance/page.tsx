@@ -21,6 +21,7 @@ import AttendanceBulkUpdateDialog from "@/components/custom/Dialog/Company/Atten
 import SiteConfig from "@/utils/SiteConfig";
 import { ESortFilter } from "@/schema/enum/sort-filter";
 import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -94,18 +95,20 @@ export default async function AttendanceReportPage({
   console.log("Data found >", reports.data.data);
 
   return (
-    <main id="pdf-view" className="container flex flex-col gap-2">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Attendance Report
-      </p>
+    <div id="pdf-view" className="w-full flex flex-col gap-2">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          {...{
-            user,
-            company: company.data,
-            title: "Attendance Report",
-          }}
-        />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Attendance Report
+          </p>
+          <MyBreadcrumbs
+            {...{
+              user,
+              company: company.data,
+              title: "Attendance Report",
+            }}
+          />
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
           {updateAccess &&
@@ -125,7 +128,7 @@ export default async function AttendanceReportPage({
         </div>
       </div>
 
-      <StaticDataTable
+      <DataTable
         data={reports.data.data.map((item) => ({
           ...item,
           company_id: Number.parseInt(companyId),
@@ -137,8 +140,9 @@ export default async function AttendanceReportPage({
               : false,
         }))}
         pageCount={reports.data.total_page}
+        totalItems={reports.data.data_count}
         columns={AttendanceReportDataTableColumns}
       />
-    </main>
+    </div>
   );
 }

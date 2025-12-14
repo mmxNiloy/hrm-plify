@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ICompanyTradingHour } from "@/schema/CompanySchema";
 import React from "react";
 import { CompanyTradingHourDataTableColumns } from "../Columns/Company/CompanyTradingHourDataTableColumns";
@@ -8,11 +8,5 @@ export default function CompanyTradingHourDataTable({
 }: {
   data: ICompanyTradingHour[];
 }) {
-  return (
-    <DataTable
-      columns={CompanyTradingHourDataTableColumns}
-      data={data}
-      pageSize={7}
-    />
-  );
+  return <DataTable columns={CompanyTradingHourDataTableColumns} data={data} />;
 }

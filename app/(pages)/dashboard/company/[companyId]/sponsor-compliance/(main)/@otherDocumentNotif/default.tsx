@@ -4,7 +4,7 @@ import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
 import React from "react";
 import { CompanyByIDPageProps } from "../../../PageProps";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { PassportNotificationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/PassportNotificationDataTableColumns";
 import { EUSSNotificationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EUSSNotificationDataTable";
 
@@ -20,15 +20,15 @@ export default async function OtherDocumentNotificationsSlot({
   const { limit, page } = getPaginationParams(sParams, "euss");
 
   return (
-    <>
+    <div className="flex flex-col h-96">
       <p id="other" className="text-lg font-semibold">
-        Other Document Notifications (WIP)
+        Other Document Notifications
       </p>
-      <StaticDataTable
+      <DataTable
         columns={EUSSNotificationDataTableColumns}
         data={[]}
         pageCount={1}
       />
-    </>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { getPaginationParams } from "@/utils/Misc";
 import { ISearchParamsProps } from "@/utils/Types";
 import React from "react";
 import { CompanyByIDPageProps } from "../../../PageProps";
-import { StaticDataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { PassportNotificationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/PassportNotificationDataTableColumns";
 import { DBSNotificationDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/DBSNotificationDataTable";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
@@ -39,16 +39,17 @@ export default async function DBSNotificationsSlot({
   }
 
   return (
-    <>
+    <div className="flex flex-col h-96">
       <p id="dbs" className="text-lg font-semibold">
         DBS Notifications
       </p>
-      <StaticDataTable
+      <DataTable
         columns={DBSNotificationDataTableColumns}
         data={empDocs.data.data}
         pageCount={empDocs.data.total_page}
-        prefix="dbss"
+        totalItems={empDocs.data.data_count}
+        // prefix="dbss"
       />
-    </>
+    </div>
   );
 }

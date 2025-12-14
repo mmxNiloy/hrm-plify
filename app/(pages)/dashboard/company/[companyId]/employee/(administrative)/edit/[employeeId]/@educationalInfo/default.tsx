@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
 import EducationalInfoEditDialog from "@/components/custom/Dialog/Employee/EducationalInfoEditDialog";
 import { getEducationalInfo } from "@/app/(server)/actions/employee/getEducationalInfo";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { EducationalInfoDataTableColumns } from "@/components/custom/DataTable/Columns/Company/Employee/EducationalInfoDataTableColumns";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import AccessDenied from "@/components/custom/AccessDenied";
