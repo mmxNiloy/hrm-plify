@@ -11,7 +11,7 @@ import { CompanyByIDPageProps } from "../PageProps";
 import PayrollEditDialog from "@/components/custom/Dialog/Payroll/PayrollEditDialog";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
 import { getFullNameOfEmployee, getPaginationParams } from "@/utils/Misc";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { PayrollDataTableColumns } from "@/components/custom/DataTable/Columns/Payroll/PayrollDataTableColumns";
 import { Button } from "@/components/ui/button";
 import { ButtonSuccess } from "@/styles/button.tailwind";

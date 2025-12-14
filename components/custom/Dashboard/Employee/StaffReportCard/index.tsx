@@ -11,7 +11,7 @@ import Icons from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import StaffReportDataTable from "../../../DataTable/Company/StaffReportDataTable";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { StaffReportDataTableColumns } from "@/components/custom/DataTable/Columns/Company/StaffReportDataTableColumns";
 import { IEmployeeWithUserMetadata } from "@/schema/EmployeeSchema";
 import { IDesignation } from "@/schema/DesignationSchema";

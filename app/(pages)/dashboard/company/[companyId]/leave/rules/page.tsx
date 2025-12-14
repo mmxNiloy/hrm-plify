@@ -3,7 +3,7 @@ import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
 import { cookies } from "next/headers";
 import { IUser } from "@/schema/UserSchema";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ILeaveRule, ILeaveType } from "@/schema/LeaveSchema";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";

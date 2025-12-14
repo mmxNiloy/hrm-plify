@@ -1,5 +1,5 @@
 "use server";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import React from "react";
 import { ChangeOfCircumstancesDataTableColumns } from "../../Columns/Company/ChangeOfCircumstancesDataTableColumns";
 import { searchParamsCache } from "@/utils/searchParamsParsers";

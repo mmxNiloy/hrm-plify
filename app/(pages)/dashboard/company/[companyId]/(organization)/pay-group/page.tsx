@@ -1,7 +1,7 @@
 "use server";
 import React from "react";
 import { CompanyByIDPageProps } from "../../PageProps";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { IPayGroup } from "@/schema/PayGroupSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import PayGroupEditPopover from "@/components/custom/Popover/Company/PayGroupEditPopover";

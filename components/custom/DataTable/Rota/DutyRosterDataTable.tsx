@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import React from "react";
 import { DutyRosterDataTableColumns } from "../Columns/Rota/DutyRosterDataTableColumns";
 import { IDutyRosterWithEditData } from "@/schema/RotaSchema";

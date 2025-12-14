@@ -1,33 +1,37 @@
 "use server";
 
-import RotaDashboardSidebar from "@/components/custom/Dashboard/Sidebar/RotaDashboardSidebar";
-import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
-import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
-import { TPermission } from "@/schema/Permissions";
 import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
+import { INavItem } from "@/schema/SidebarSchema";
+import AppSidebar from "@/components/custom/Dashboard/Sidebar/app-sidebar";
 
 export default async function RotaPageSidebarSlot({
   params,
 }: CompanyIDURLParamSchema) {
-  const mCookies = await cookies();
-  const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
-  ) as TPermission[];
-
-  const readAccess = mPermissions.find((item) => item === "cmp_rota_read");
-
-  if (!readAccess) {
-    return notFound();
-  }
-  // Get company information
   const mParams = await params;
   const companyId = mParams.companyId;
-  const company = await getCompanyData(companyId);
 
-  if (company.error) {
-    return notFound();
-  }
+  const navItems: INavItem[] = [
+    {
+      href: `/dashboard/company/${companyId}/rota`,
+      title: "Shift Management",
+      icon: "clock",
+    },
+    {
+      href: `/dashboard/company/${companyId}/rota/late-policy`,
+      title: "Late Policy",
+      icon: "late",
+    },
+    {
+      href: `/dashboard/company/${companyId}/rota/off-days`,
+      title: "Off Days",
+      icon: "calendarDays",
+    },
+    {
+      href: `/dashboard/company/${companyId}/rota/duty-roster`,
+      title: "Duty Roster",
+      icon: "calendarClock",
+    },
+  ];
 
-  return <RotaDashboardSidebar company={company.data} />;
+  return <AppSidebar navItems={navItems} companyId={companyId} />;
 }

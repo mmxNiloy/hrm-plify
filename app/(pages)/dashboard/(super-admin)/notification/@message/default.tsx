@@ -3,7 +3,7 @@
 import { getContactDemo } from "@/app/(server)/actions/getContactDemo";
 import { ContactDemoDataTableColumns } from "@/components/custom/DataTable/Columns/ContactDemoDataTableColumns";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import DataTableSkeleton from "@/components/ui/data-table/data-table-skeleton";
 import React, { Suspense } from "react";
 import MessageListTable from "./features/message-list-table";

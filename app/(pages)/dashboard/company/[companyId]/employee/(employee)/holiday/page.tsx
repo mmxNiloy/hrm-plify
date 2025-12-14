@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ISearchParamsProps } from "@/utils/Types";
 import { getPaginationParams } from "@/utils/Misc";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";

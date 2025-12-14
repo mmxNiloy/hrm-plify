@@ -13,7 +13,7 @@ import MyBreadcrumbs from "@/components/custom/Breadcrumbs/MyBreadcrumbs";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import { getHolidays } from "@/app/(server)/actions/getHolidays";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { LeaveTypeDataTableColumns } from "@/components/custom/DataTable/Columns/Leave/LeaveTypeDataTableColumns";
 import { getCompanyLeaveTypes } from "@/app/(server)/actions/getCompanyLeaveTypes";
 import Link from "next/link";

@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { IEmployeePassportDetail } from "@/schema/EmployeeSchema";
 import React from "react";
 import { PassportDetailsDataTableColumns } from "../../Columns/Company/Employee/PassportDetailsDataTableColumns";

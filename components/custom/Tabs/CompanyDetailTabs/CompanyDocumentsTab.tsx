@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { ICompanyDoc } from "@/schema/CompanySchema";
 import React from "react";
 import { CompanyDocumentDataTableColumns } from "../../DataTable/Columns/Company/CompanyDocumentDataTableColumns";

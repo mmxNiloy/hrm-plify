@@ -19,6 +19,7 @@ import AccessDenied from "@/components/custom/AccessDenied";
 import { getCompanyDetails } from "@/app/(server)/actions/getCompanyDetails";
 import { Metadata } from "next";
 import SiteConfig from "@/utils/SiteConfig";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 interface Props extends CompanyByIDPageProps, ISearchParamsProps {}
 
@@ -84,10 +85,15 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">Off Days</p>
+    <main className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs parent="Rota" title="Off Days" />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Off Days
+          </p>
+
+          <MyBreadcrumbs parent="Rota" title="Off Days" />
+        </div>
 
         {writeAccess && (
           <OffDaysEditDialog
@@ -97,8 +103,9 @@ export default async function RotaDayOffPage({ params, searchParams }: Props) {
         )}
       </div>
 
-      <StaticDataTable
-        showOptions={false}
+      <DataTable
+        totalItems={paginatedOffDays.data.data_count}
+        pageCount={paginatedOffDays.data.total_page}
         data={paginatedOffDays.data.data.map((item) => ({
           ...item,
           shifts: allShifts.data.data,
