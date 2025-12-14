@@ -20,6 +20,7 @@ import { getPaginationParams } from "@/utils/Misc";
 import { getAttendanceOfEmployee } from "@/app/(server)/actions/getAttendanceOfEmployee";
 import AttendancePDFGenerator from "@/components/custom/Dashboard/Attendance/AttendancePDFGenerator";
 import getCompanyMeta from "@/app/(server)/actions/company/get-company-meta.controller";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 export async function generateMetadata({
   params,
@@ -89,19 +90,22 @@ export default async function GenerateAttendancePage({
   }
 
   return (
-    <main className="container flex flex-col gap-4 sm:gap-6 py-4 sm:py-6">
-      <p className="text-lg sm:text-xl md:text-2xl font-semibold">
-        Generate Attendance
-      </p>
+    <div className="w-full flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
-        <MyBreadcrumbs
-          {...{
-            user,
-            company: company.data,
-            title: "Generate Attendance",
-            parent: "Attendance Management",
-          }}
-        />
+        <div className="flex flex-col gap-1">
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold">
+            Generate Attendance
+          </p>
+
+          <MyBreadcrumbs
+            {...{
+              user,
+              company: company.data,
+              title: "Generate Attendance",
+              parent: "Attendance Management",
+            }}
+          />
+        </div>
         <div className="flex flex-col sm:flex-row gap-4">
           <AttendanceBulkUpdateDialog
             asGenerator
@@ -118,21 +122,20 @@ export default async function GenerateAttendancePage({
           />
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <StaticDataTable
-          // showOptions={false}
-          data={attendance.data.data.map((item) => ({
-            ...item,
-            employee: companyExtraData.data.employees.find(
-              (emp) => emp.employee_id == employeeId
-            ),
-            employee_id: employeeId,
-            company_id: Number.parseInt(companyId),
-          }))}
-          pageCount={attendance.data.total_page}
-          columns={AttendanceGenerationRecordDataTableColumns}
-        />
-      </div>
-    </main>
+      <DataTable
+        // showOptions={false}
+        data={attendance.data.data.map((item) => ({
+          ...item,
+          employee: companyExtraData.data.employees.find(
+            (emp) => emp.employee_id == employeeId
+          ),
+          employee_id: employeeId,
+          company_id: Number.parseInt(companyId),
+        }))}
+        pageCount={attendance.data.total_page}
+        totalItems={attendance.data.data_count}
+        columns={AttendanceGenerationRecordDataTableColumns}
+      />
+    </div>
   );
 }
