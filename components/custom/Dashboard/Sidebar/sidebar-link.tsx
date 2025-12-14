@@ -75,8 +75,10 @@ export default function SidebarLink({
     );
   }
   return (
-    <span
-      onClick={handleRedirect}
+    <Link
+      href={data.href}
+      target={data.target}
+      // onClick={handleRedirect}
       data-disabled={data.disabled ? "true" : "false"}
       className={cn(
         "cursor-pointer flex-1 flex gap-1 items-center group/sidebar-link hover:bg-muted py-1 px-2 rounded-md data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-muted-foreground",
@@ -109,6 +111,6 @@ export default function SidebarLink({
       >
         &#8226;
       </span>
-    </span>
+    </Link>
   );
 }
