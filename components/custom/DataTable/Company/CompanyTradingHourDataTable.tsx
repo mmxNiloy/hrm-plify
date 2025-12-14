@@ -8,11 +8,5 @@ export default function CompanyTradingHourDataTable({
 }: {
   data: ICompanyTradingHour[];
 }) {
-  return (
-    <DataTable
-      columns={CompanyTradingHourDataTableColumns}
-      data={data}
-      pageSize={7}
-    />
-  );
+  return <DataTable columns={CompanyTradingHourDataTableColumns} data={data} />;
 }

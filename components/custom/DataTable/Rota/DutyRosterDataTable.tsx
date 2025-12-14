@@ -10,11 +10,5 @@ export default function DutyRosterDataTable({
   showOptions?: boolean;
   data?: IDutyRosterWithEditData[];
 }) {
-  return (
-    <DataTable
-      columns={DutyRosterDataTableColumns}
-      data={data}
-      showOptions={showOptions}
-    />
-  );
+  return <DataTable columns={DutyRosterDataTableColumns} data={data} />;
 }

@@ -42,7 +42,6 @@ export default function LeaveRequestsCard({
 
       <CardContent>
         <DataTable
-          showOptions={false}
           columns={LeaveRequestDataTableColumns}
           data={leaveRequests}
         />
