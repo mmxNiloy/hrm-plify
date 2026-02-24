@@ -13,6 +13,10 @@ export default function AppSidebarHeaderLink({
   logoUrl?: string;
   altText?: string;
 }) {
+  if (/^https?:\/\//.test(logoUrl) == false) {
+    logoUrl = "/site-logo-horizontal.svg";
+  }
+
   return (
     <SidebarHeader>
       <Link href={link} passHref className="px-4">

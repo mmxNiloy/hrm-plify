@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { IEmployee } from "@/schema/EmployeeSchema";
 import { searchParamsParsers } from "@/utils/searchParamsParsers";
 import { ChevronsUpDown, Filter } from "lucide-react";
@@ -27,11 +28,11 @@ const EmploymentStatusList: Array<[string, EmployeeStatus | "ALL"]> = [
 export default function Filters() {
   const [isForeign, setIsForeign] = useQueryState(
     "isForeign",
-    searchParamsParsers.isForeign
+    searchParamsParsers.isForeign,
   );
   const [employeeStatus, setEmployeeStatus] = useQueryState(
     "employeeStatus",
-    searchParamsParsers.employeeStatus
+    searchParamsParsers.employeeStatus,
   );
 
   const empOriginKey = useMemo(() => isForeign, [isForeign]);
@@ -56,36 +57,29 @@ export default function Filters() {
       <PopoverContent align="start" className="w-48 flex flex-col gap-4">
         <div className="flex flex-col gap-2" key={empOriginKey}>
           <Label>Employment Origin</Label>
-          {[
-            ["Select All", "all"],
-            ["Domestic Hire", "0"],
-            ["International Hire", "1"],
-          ].map(([label, value]) => (
-            <div
-              key={`emp-origin-${label}`}
-              className="flex gap-2 items-center"
-            >
-              <Checkbox
-                id={`emp-origin-cb-${label}`}
-                defaultChecked={isForeign === value || isForeign === "all"}
-                onCheckedChange={(val) => {
-                  if (val === "indeterminate") return;
-
-                  if (val) {
-                    setIsForeign(value as typeof isForeign);
-                  } else {
-                    setIsForeign(null);
-                  }
-                }}
-              />
-              <Label
-                htmlFor={`emp-origin-cb-${label}`}
-                className="cursor-pointer"
+          <RadioGroup
+            value={isForeign}
+            onValueChange={(val) => setIsForeign(val as typeof isForeign)}
+          >
+            {[
+              ["Select All", "all"],
+              ["Domestic Hire", "0"],
+              ["International Hire", "1"],
+            ].map(([label, value]) => (
+              <div
+                key={`emp-origin-${label}`}
+                className="flex gap-2 items-center"
               >
-                {label}
-              </Label>
-            </div>
-          ))}
+                <RadioGroupItem id={`emp-origin-cb-${label}`} value={value} />
+                <Label
+                  htmlFor={`emp-origin-cb-${label}`}
+                  className="cursor-pointer"
+                >
+                  {label}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
         </div>
         <div className="flex flex-col gap-2" key={empStatusKey}>
           <Label>Employment Status</Label>
