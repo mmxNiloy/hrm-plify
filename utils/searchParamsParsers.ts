@@ -94,12 +94,14 @@ export const searchParamsParsers = {
       shallow: false,
       throttleMs: 300,
     }),
-  isForeign: parseAsStringEnum(["0", "1", "all"]).withDefault("0").withOptions({
-    shallow: false,
-    throttleMs: 1000,
-  }),
+  isForeign: parseAsStringEnum(["0", "1", "all"])
+    .withDefault("all")
+    .withOptions({
+      shallow: false,
+      throttleMs: 1000,
+    }),
   employeeStatus: parseAsArrayOf<EmployeeStatus>(
-    parseAsStringEnum(["ACTIVE", "LEAVE", "TERMINATED", "RESIGNED", "RETIRED"])
+    parseAsStringEnum(["ACTIVE", "LEAVE", "TERMINATED", "RESIGNED", "RETIRED"]),
   )
     .withDefault(["ACTIVE"])
     .withOptions({
