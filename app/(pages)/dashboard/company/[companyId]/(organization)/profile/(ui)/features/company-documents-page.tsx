@@ -38,10 +38,8 @@ export default async function CompanyDocumentsPage({
 
   const docs = documents.payload;
   const meta = documents.meta!;
-
-  const key = `company-profile-key-${Date.now()}`;
   return (
-    <div className="flex min-h-dvh flex-col gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 border rounded-md">
+    <div className="flex min-h-[90vh] flex-col gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 border rounded-md">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <p className="text-base sm:text-lg md:text-xl font-semibold">
           Company Documents
@@ -56,7 +54,6 @@ export default async function CompanyDocumentsPage({
         )}
       </div>
       <DataTable
-        key={key}
         data={docs.map((doc) => ({ ...doc, updateAccess: !!updateAccess }))}
         pageCount={meta.pageCount}
         totalItems={meta.total}

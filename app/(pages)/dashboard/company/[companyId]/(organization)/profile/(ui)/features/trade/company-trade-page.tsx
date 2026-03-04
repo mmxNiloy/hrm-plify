@@ -14,23 +14,16 @@ export default async function CompanyTradePage({
   const mPermissions = await getCurrentUserPermissions();
 
   const updateAccess = mPermissions?.find((item) => item === "cmp_mgmt_update");
-  const key = Date.now().toString();
 
   return (
     <div className="flex flex-col gap-4">
-      <Suspense
-        key={`trade-details-key-${key}`}
-        fallback={<CompanyTradeDetailsSkeleton />}
-      >
+      <Suspense fallback={<CompanyTradeDetailsSkeleton />}>
         <CompanyTradeDetailsCard
           companyId={companyId}
           updateAccess={!!updateAccess}
         />
       </Suspense>
-      <Suspense
-        key={`trading-hours-key-${key}`}
-        fallback={<CompanyTradeDetailsSkeleton />}
-      >
+      <Suspense fallback={<CompanyTradeDetailsSkeleton />}>
         <CompanyTradingHoursCard
           companyId={companyId}
           updateAccess={!!updateAccess}

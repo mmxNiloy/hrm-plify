@@ -24,11 +24,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, defaultValue, ...props }, ref) => {
     const { label, placeholder, items, onValueChange, contentClassName } =
       props;
     const [selectedValue, setSelectedValue] = useState<string>(
-      ((props.value as string) ?? (props.defaultValue as string) ?? "").trim()
+      ((props.value as string) ?? (defaultValue as string) ?? "").trim(),
     );
     const [open, setOpen] = useState<boolean>(false);
 
@@ -48,7 +48,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
               placeholder={
                 selectedValue.length > 0
                   ? selectedValue
-                  : label ?? "Select an option"
+                  : (label ?? "Select an option")
               }
               className="bg-transparent enabled:placeholder:text-foreground hover:bg-transparent cursor-pointer focus:outline-none caret-transparent border-none flex-grow"
               ref={ref}
@@ -65,7 +65,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
           sideOffset={4}
           className={cn(
             "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-            contentClassName
+            contentClassName,
           )}
         >
           <Command className="max-h-72">
@@ -96,7 +96,7 @@ const ComboBox = React.forwardRef<HTMLInputElement, InputProps>(
         </PopoverPrimitive.Content>
       </Popover>
     );
-  }
+  },
 );
 ComboBox.displayName = "Combobox";
 
@@ -110,11 +110,11 @@ interface LabelledInputProps extends Omit<InputProps, "items"> {
 }
 
 const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
-  ({ className, type, onSearchChange, ...props }, ref) => {
+  ({ className, type, onSearchChange, defaultValue, ...props }, ref) => {
     const { label, placeholder, items, onValueChange, contentClassName } =
       props;
     const [selectedValue, setSelectedValue] = useState<string>(
-      ((props.value as string) ?? (props.defaultValue as string) ?? "").trim()
+      ((props.value as string) ?? (defaultValue as string) ?? "").trim(),
     );
     const [open, setOpen] = useState<boolean>(false);
 
@@ -139,9 +139,9 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
                 }
                 placeholder={
                   selectedValue.length > 0
-                    ? items.find((item) => item.value === selectedValue)
-                        ?.label ?? label
-                    : label ?? "Select an option"
+                    ? (items.find((item) => item.value === selectedValue)
+                        ?.label ?? label)
+                    : (label ?? "Select an option")
                 }
               />
               <input
@@ -151,9 +151,9 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
                 value={selectedValue}
                 placeholder={
                   selectedValue.length > 0
-                    ? items.find((item) => item.value === selectedValue)
-                        ?.label ?? label
-                    : label ?? "Select an option"
+                    ? (items.find((item) => item.value === selectedValue)
+                        ?.label ?? label)
+                    : (label ?? "Select an option")
                 }
                 className="sr-only bg-transparent hover:bg-transparent cursor-pointer focus:outline-none caret-transparent border-none flex-grow"
                 ref={ref}
@@ -170,7 +170,7 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
             sideOffset={4}
             className={cn(
               "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-              contentClassName
+              contentClassName,
             )}
           >
             <Command className="max-h-72">
@@ -195,7 +195,7 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
                       className={cn(
                         item.value === selectedValue
                           ? "border border-blue-500 border-dashed"
-                          : ""
+                          : "",
                       )}
                     >
                       {/* {selectedValue === item.value && (
@@ -221,7 +221,7 @@ const LabelledComboBox = React.forwardRef<HTMLInputElement, LabelledInputProps>(
         </Popover>
       </>
     );
-  }
+  },
 );
 LabelledComboBox.displayName = "LabelledCombobox";
 

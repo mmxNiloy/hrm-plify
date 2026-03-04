@@ -25,21 +25,23 @@ export default async function SidebarFooterProfile() {
 
   let companyData: ICompany | undefined = undefined;
   try {
-    const company = await getCompanyData(
-      user.usercompany?.company_id.toString() ?? "0"
-    );
-
-    if (company.data) companyData = company.data;
-    else {
-      console.debug(
-        "[SidebarFooterProfile] Company not found. Error:",
-        company
+    if (!!user.usercompany?.company_id) {
+      const company = await getCompanyData(
+        user.usercompany.company_id.toString(),
       );
+
+      if (company.data) companyData = company.data;
+      else {
+        console.log(
+          "[SidebarFooterProfile] Company not found. Error:",
+          company,
+        );
+      }
     }
   } catch (error) {
-    console.debug(
+    console.log(
       "[SidebarFooterProfile] Failed to fetch company data. Error:",
-      error
+      error,
     );
   }
 

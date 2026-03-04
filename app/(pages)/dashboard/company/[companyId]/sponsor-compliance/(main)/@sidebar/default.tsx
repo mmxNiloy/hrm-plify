@@ -3,7 +3,6 @@
 import { CompanyIDURLParamSchema } from "@/schema/misc/URLParamSchema";
 import { getCompanyData } from "@/app/(server)/actions/getCompanyData";
 import ErrorFallbackCard from "@/components/custom/ErrorFallbackCard";
-import SponsorComplianceDashboardSidebar from "@/components/custom/Dashboard/Sidebar/SponsorComplianceDashboardSidebar";
 import { IUser } from "@/schema/UserSchema";
 import { cookies } from "next/headers";
 import { INavItem } from "@/schema/SidebarSchema";
@@ -13,7 +12,7 @@ export default async function SponsorCompliancePageSidebarSlot({
   params,
 }: CompanyIDURLParamSchema) {
   const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}",
   ) as IUser;
 
   const mParams = await params;
@@ -42,13 +41,13 @@ export default async function SponsorCompliancePageSidebarSlot({
       icon: "company",
     },
     {
-      href: `/dashboard/company/${companyId}/employee/all`,
+      href: `/dashboard/company/${companyId}/employee/list`,
       title: "Employees",
       icon: "employees",
       target: "_blank",
     },
     {
-      href: `/dashboard/company/${companyId}/employee/migrant`,
+      href: `/dashboard/company/${companyId}/employee/list?isForeign=1`,
       title: "Migrant Employees",
       icon: "employee",
       target: "_blank",

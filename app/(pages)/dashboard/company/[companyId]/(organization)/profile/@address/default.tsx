@@ -17,11 +17,7 @@ export default async function CompanyAddressSlot({
   const [mParams, sParams] = await Promise.all([params, searchParams]);
 
   searchParamsCache.parse(sParams);
-  const companyProfileView =
-    searchParamsCache.get("companyProfileView") ?? "profile";
   const key = serialize(sParams);
-
-  if (companyProfileView !== "address") return null;
 
   const companyId = mParams.companyId;
 
