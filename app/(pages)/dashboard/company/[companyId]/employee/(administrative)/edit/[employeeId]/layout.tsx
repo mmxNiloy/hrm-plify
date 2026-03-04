@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Suspense } from "react";
+import ViewHolder from "./components/view-holder";
 
 interface Props {
   children: React.ReactNode;
@@ -22,15 +23,24 @@ export default function EditEmployeeInfoByUserIdPageLayout({
   nidDetails,
 }: Props) {
   return (
-    <>
-      {children}
-      {educationalInfo}
-      {passportInfo}
-      {visaBrpDetails}
-      {eussDbsDetails}
-      {nidDetails}
-      {contactInfo}
-      {emergencyContactInfo}
-    </>
+    <Suspense>
+      <ViewHolder viewKey="personal-info">{children}</ViewHolder>
+
+      <ViewHolder viewKey="education">{educationalInfo}</ViewHolder>
+
+      <ViewHolder viewKey="passport-info">
+        {passportInfo}
+        {visaBrpDetails}
+      </ViewHolder>
+
+      <ViewHolder viewKey="euss">{eussDbsDetails}</ViewHolder>
+
+      <ViewHolder viewKey="nid">{nidDetails}</ViewHolder>
+
+      <ViewHolder viewKey="contact">
+        {contactInfo}
+        {emergencyContactInfo}
+      </ViewHolder>
+    </Suspense>
   );
 }

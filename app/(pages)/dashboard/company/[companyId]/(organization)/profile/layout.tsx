@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { AccessGuardProvider } from "./(ui)/features/";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ViewHolder } from "./(ui)/components";
 
 interface Props {
   children: React.ReactNode;
@@ -35,11 +36,15 @@ export default function OrgProfilePageLayout({
 
       <Suspense fallback={<Skeleton className="w-full flex-1" />}>
         <AccessGuardProvider>
-          {children}
-          {authority}
-          {address}
-          {trade}
-          {documents}
+          <ViewHolder viewKey="profile">{children}</ViewHolder>
+
+          <ViewHolder viewKey="authority">{authority}</ViewHolder>
+
+          <ViewHolder viewKey="address">{address}</ViewHolder>
+
+          <ViewHolder viewKey="trade">{trade}</ViewHolder>
+
+          <ViewHolder viewKey="documents">{documents}</ViewHolder>
         </AccessGuardProvider>
       </Suspense>
     </main>

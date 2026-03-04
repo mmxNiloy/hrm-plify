@@ -16,7 +16,7 @@ import React from "react";
 export default function EditEmployeeActions() {
   const [view, setView] = useQueryState(
     "employeeProfileView",
-    searchParamsParsers.employeeProfileView
+    searchParamsParsers.employeeProfileView,
   );
 
   return (

@@ -16,7 +16,8 @@ export default async function EducationalInfoSlot({
 }: EditEmployeeByIdProps) {
   const mCookies = await cookies();
   const mPermissions = JSON.parse(
-    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ?? "[]"
+    mCookies.get(process.env.NEXT_PUBLIC_COOKIE_USER_ACCESS_KEY!)?.value ??
+      "[]",
   ) as TPermission[];
 
   const readAccess = mPermissions.find((item) => item === "cmp_emp_read");
@@ -28,11 +29,11 @@ export default async function EducationalInfoSlot({
   }
   const { employeeId, companyId } = await params;
   const user = JSON.parse(
-    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}"
+    (await cookies()).get(process.env.COOKIE_USER_KEY!)?.value ?? "{}",
   ) as IUser;
 
   const { data: educationalInfo, error } = await getEducationalInfo(
-    Number.parseInt(employeeId)
+    Number.parseInt(employeeId),
   );
 
   if (error) {
@@ -47,7 +48,7 @@ export default async function EducationalInfoSlot({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-8 border rounded-md">
+    <div className="flex flex-col gap-4 p-8 border rounded-md h-[80dvh]">
       <div className="w-full flex flex-row items-center justify-between">
         <p className="text-lg font-semibold">Educational Information</p>
         {writeAccess && (

@@ -26,8 +26,9 @@ import {
   TradingHourSchema,
   UpdateTradingHoursSchema,
 } from "@/schema/form/company.schema";
+import { weekDays } from "@/utils/Misc";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useCallback, useTransition } from "react";
+import React, { useCallback, useMemo, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -51,11 +52,31 @@ export default function CompanyTradingHoursFormFragment({
   onSuccess,
 }: Props) {
   const [updating, startUpdate] = useTransition();
+  const defaultTradingHours = useMemo(() => {
+    const tradingHours = weekDays.map((day) => ({
+      day_name: day,
+      trade_status: 0,
+      opening_time: "00:00",
+      closing_time: "23:59",
+    }));
+
+    if (data) {
+      data.forEach((data) => {
+        const index = tradingHours.findIndex(
+          (item) => item.day_name === data.day_name,
+        );
+        if (index === -1) return;
+        tradingHours[index] = data;
+      });
+    }
+
+    return tradingHours;
+  }, [data]);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      trading_hours: data ?? [],
+      trading_hours: defaultTradingHours,
     },
     disabled: readOnly,
   });
@@ -85,7 +106,7 @@ export default function CompanyTradingHoursFormFragment({
         }
       });
     },
-    [companyId, onSuccess]
+    [companyId, onSuccess],
   );
 
   return (
@@ -94,7 +115,7 @@ export default function CompanyTradingHoursFormFragment({
         <div
           className={cn(
             "flex flex-col gap-4 p-2",
-            readOnly ? "" : "h-[60vh] sm:h-[70vh] overflow-y-scroll"
+            readOnly ? "" : "h-[60vh] sm:h-[70vh] overflow-y-scroll",
           )}
         >
           {dayFields.fields.map((row, idx) => (
