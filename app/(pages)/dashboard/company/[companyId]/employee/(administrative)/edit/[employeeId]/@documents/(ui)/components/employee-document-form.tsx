@@ -70,7 +70,7 @@ export default function EmployeeDocumentForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       doc_name: data?.doc_name,
-      doc_type: data?.doc_type,
+      doc_type: data?.doc_type || "Other Document",
     },
     disabled: disabled || readOnly,
   });
@@ -159,7 +159,7 @@ export default function EmployeeDocumentForm({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="doc_type"
             render={({ field }) => (
@@ -178,7 +178,7 @@ export default function EmployeeDocumentForm({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
