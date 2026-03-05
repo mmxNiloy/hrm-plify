@@ -15,6 +15,16 @@ interface Props extends IEmployeeWithUserMetadata {
 
 export const columns: ColumnDef<Props>[] = [
   {
+    id: "Row Actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <CellActions
+        updateAccess={row.original.updateAccess}
+        data={row.original}
+      />
+    ),
+  },
+  {
     id: "Avatar",
     accessorKey: "image",
     header: "Avatar",
@@ -89,7 +99,7 @@ export const columns: ColumnDef<Props>[] = [
           "text-white bg-gradient-to-br",
           row.original.is_foreign
             ? "from-purple-300 to-purple-600"
-            : "from-blue-400 to-blue-600"
+            : "from-blue-400 to-blue-600",
         )}
       >
         {row.original.is_foreign ? "International Hire" : "Domestic Hire"}
@@ -108,18 +118,18 @@ export const columns: ColumnDef<Props>[] = [
           row.original.status === "ACTIVE"
             ? "from-lime-500 to-green-600"
             : row.original.status === "LEAVE"
-            ? "from-amber-400 to-yellow-600"
-            : row.original.status === "TERMINATED"
-            ? "from-rose-400 to-red-600"
-            : row.original.status === "RESIGNED"
-            ? "from-fuchsia-400 to-purple-600"
-            : "from-sky-400 to-blue-600"
+              ? "from-amber-400 to-yellow-600"
+              : row.original.status === "TERMINATED"
+                ? "from-rose-400 to-red-600"
+                : row.original.status === "RESIGNED"
+                  ? "from-fuchsia-400 to-purple-600"
+                  : "from-sky-400 to-blue-600",
         )}
       >
         {toCapCase(
           row.original.status === "LEAVE"
             ? "On Leave"
-            : row.original.status.toLowerCase()
+            : row.original.status.toLowerCase(),
         )}
       </TextCapsule>
     ),

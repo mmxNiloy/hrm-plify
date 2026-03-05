@@ -115,6 +115,7 @@ export const searchParamsParsers = {
     "euss",
     "nid",
     "contact",
+    "documents",
   ])
     .withDefault("personal-info")
     .withOptions({ shallow: false, throttleMs: 1000 }),

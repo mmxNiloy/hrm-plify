@@ -41,7 +41,7 @@ export default async function CompanyDocumentsTab({
         )}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="min-h-[90dvh] flex flex-col overflow-x-auto">
         <DataTable
           data={
             data?.map((item) => ({ ...item, updateAccess: !readOnly })) ?? []

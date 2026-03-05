@@ -36,6 +36,7 @@ export default function EditEmployeeActions() {
             <SelectItem value="euss">EUSS & DBS</SelectItem>
             <SelectItem value="nid">NID</SelectItem>
             <SelectItem value="contact">Contact</SelectItem>
+            <SelectItem value="documents">Documents</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
