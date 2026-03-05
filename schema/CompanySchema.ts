@@ -84,14 +84,23 @@ export interface ICompanyAuthorizedDetailsBase {
   is_same_as_key_contact?: boolean;
 }
 
-export interface ICompanyAuthorisedDetails
-  extends ICompanyAuthorizedDetailsBase {
+export interface ICompanyAuthorisedDetails extends ICompanyAuthorizedDetailsBase {
   authorised_id: number;
 }
 
 export interface ICompanyDoc {
   doc_id: number;
   company_id: number;
+  doc_type: string;
+  doc_name: string;
+  doc_link?: string;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface IEmployeeDoc {
+  doc_id: number;
+  employee_id: number;
   doc_type: string;
   doc_name: string;
   doc_link?: string;

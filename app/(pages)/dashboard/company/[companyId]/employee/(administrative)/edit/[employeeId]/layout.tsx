@@ -10,6 +10,7 @@ interface Props {
   visaBrpDetails: React.ReactNode;
   eussDbsDetails: React.ReactNode;
   nidDetails: React.ReactNode;
+  documents: React.ReactNode;
 }
 
 export default function EditEmployeeInfoByUserIdPageLayout({
@@ -21,6 +22,7 @@ export default function EditEmployeeInfoByUserIdPageLayout({
   visaBrpDetails,
   eussDbsDetails,
   nidDetails,
+  documents,
 }: Props) {
   return (
     <Suspense>
@@ -41,6 +43,8 @@ export default function EditEmployeeInfoByUserIdPageLayout({
         {contactInfo}
         {emergencyContactInfo}
       </ViewHolder>
+
+      <ViewHolder viewKey="documents">{documents}</ViewHolder>
     </Suspense>
   );
 }
